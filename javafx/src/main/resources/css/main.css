@@ -1,0 +1,16 @@
+#barBottom {
+    -fx-padding:            5 5 5 5;
+    -fx-background-color: #c2c2c2;
+}
+
+#paneLeft {
+    -fx-background-color:   #838383;
+}
+
+#paneRight {
+    -fx-background-color:   #838383;
+}
+
+#labelLastSave {
+    -fx-font-size:          0.95em;
+}
