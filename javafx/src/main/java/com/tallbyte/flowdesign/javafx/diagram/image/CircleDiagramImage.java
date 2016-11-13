@@ -16,18 +16,37 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx;
+package com.tallbyte.flowdesign.javafx.diagram.image;
+
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-10-26)<br/>
+ * - julian (2016-10-30)<br/>
  */
-public class Main {
+public class CircleDiagramImage extends DiagramImage {
 
-    public static void main(String[] args) {
-        FlowDesignApplication.launch(FlowDesignApplication.class, args);
+    public CircleDiagramImage() {
+        setWidth(100);
+        setHeight(100);
+    }
+
+    @Override
+    public void repaint() {
+        GraphicsContext context = getGraphicsContext2D();
+        double width  = getWidth();
+        double height = getHeight();
+
+        context.clearRect(0, 0, width, height);
+        context.setStroke(Color.BLACK);
+        context.setLineWidth(1.5);
+        context.strokeOval(
+                context.getLineWidth(), context.getLineWidth(),
+                width - 2*context.getLineWidth(), height - 2*context.getLineWidth()
+        );
     }
 
 }

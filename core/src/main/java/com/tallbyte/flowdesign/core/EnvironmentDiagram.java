@@ -16,18 +16,26 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx;
+package com.tallbyte.flowdesign.core;
+
+import com.tallbyte.flowdesign.core.environment.System;
+
+import java.lang.*;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-10-26)<br/>
+ * - julian (2016-11-07)<br/>
  */
-public class Main {
+public class EnvironmentDiagram extends Diagram {
 
-    public static void main(String[] args) {
-        FlowDesignApplication.launch(FlowDesignApplication.class, args);
+    public EnvironmentDiagram(String name) {
+        super(name, new System());
     }
 
+    @Override
+    public System getRoot() {
+        return (System) super.getRoot();
+    }
 }

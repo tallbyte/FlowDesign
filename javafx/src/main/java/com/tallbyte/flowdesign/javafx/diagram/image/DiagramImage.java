@@ -16,18 +16,29 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx;
+package com.tallbyte.flowdesign.javafx.diagram.image;
+
+import javafx.scene.canvas.Canvas;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-10-26)<br/>
+ * - julian (2016-10-30)<br/>
  */
-public class Main {
+public abstract class DiagramImage extends Canvas {
 
-    public static void main(String[] args) {
-        FlowDesignApplication.launch(FlowDesignApplication.class, args);
+    public DiagramImage() {
+        widthProperty().addListener(observable -> {
+            repaint();
+        });
+        heightProperty().addListener(observable -> {
+            repaint();
+        });
+
+        repaint();
     }
+
+    protected abstract void repaint();
 
 }

@@ -17,6 +17,29 @@
 <?import javafx.scene.Group?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.shape.Circle?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.TreeView?>
+<!--
+  ~ FlowDesign
+  ~ Copyright (C) 2016 Tallbyte <copyright at tallbyte.com>
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<?import com.tallbyte.flowdesign.javafx.pane.DiagramPane?>
+<?import com.tallbyte.flowdesign.javafx.pane.FactoryPane?>
 <fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" stylesheets="/css/main.css">
     <top>
         <MenuBar>
@@ -31,26 +54,19 @@
     </top>
 
     <left>
-        <BorderPane fx:id="paneLeft" prefWidth="200">
+        <BorderPane fx:id="paneLeft">
+            <top>
+                <TreeView fx:id="treeProject"/>
+            </top>
+        </BorderPane>
+    </left>
+
+    <right>
+        <BorderPane fx:id="paneRight">
             <center>
                 <VBox>
                     <TitledPane text="Elements">
-                        <VBox>
-                            <Label contentDisplay="TOP" text="blubber">
-                                <graphic>
-                                    <Group>
-                                        <Rectangle width="10" height="10" fill="red"/>
-                                        <Circle radius="5" fill="blue"/>
-                                    </Group>
-                                </graphic>
-                            </Label>
-                            <Button fx:id="buttonTest" text="test"/>
-                            <ImageView fx:id="imageView">
-                                <image>
-                                    <Image url="/test.png"/>
-                                </image>
-                            </ImageView>
-                        </VBox>
+                        <FactoryPane fx:id="paneFactory"/>
                     </TitledPane>
                 </VBox>
             </center>
@@ -60,7 +76,7 @@
                 </TitledPane>
             </bottom>
         </BorderPane>
-    </left>
+    </right>
 
     <bottom>
         <HBox fx:id="barBottom">
@@ -68,14 +84,10 @@
         </HBox>
     </bottom>
 
-    <right>
-        <Pane fx:id="paneRight" prefWidth="200">
-
-        </Pane>
-    </right>
-
     <center>
-        <Label fx:id="labelInfo" textAlignment="LEFT"/>
+        <ScrollPane fx:id="scrollPaneContent" pannable="true">
+            <DiagramPane fx:id="paneDiagram"/>
+        </ScrollPane>
     </center>
 
 </fx:root>

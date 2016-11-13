@@ -16,18 +16,28 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx;
+package com.tallbyte.flowdesign.javafx.layout;
+
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-10-26)<br/>
+ * - julian (2016-11-04)<br/>
  */
-public class Main {
+public class DragPane extends Group {
 
-    public static void main(String[] args) {
-        FlowDesignApplication.launch(FlowDesignApplication.class, args);
+    @Override
+    protected double computePrefWidth(double height) {
+        //double min =
+
+        for (Node node : getChildrenUnmodifiable()) {
+
+        }
+
+        return super.computePrefWidth(height);
     }
-
 }

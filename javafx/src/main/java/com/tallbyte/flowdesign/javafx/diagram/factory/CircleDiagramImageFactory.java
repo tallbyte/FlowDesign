@@ -16,18 +16,27 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx;
+package com.tallbyte.flowdesign.javafx.diagram.factory;
+
+import com.tallbyte.flowdesign.javafx.diagram.image.CircleDiagramImage;
+import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-10-26)<br/>
+ * - julian (2016-11-04)<br/>
  */
-public class Main {
+public class CircleDiagramImageFactory implements DiagramImageFactory {
 
-    public static void main(String[] args) {
-        FlowDesignApplication.launch(FlowDesignApplication.class, args);
+    @Override
+    public String getName() {
+        return "Circle";
+    }
+
+    @Override
+    public DiagramImage createDiagramImage() {
+        return new CircleDiagramImage();
     }
 
 }

@@ -1,3 +1,25 @@
+/*
+ * FlowDesign
+ * Copyright (C) 2016 Tallbyte <copyright at tallbyte.com>
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+Rectangle {
+    -fx-fill:   yellow;
+}
+
 #barBottom {
     -fx-padding:            5 5 5 5;
     -fx-background-color: #c2c2c2;
@@ -13,4 +35,33 @@
 
 #labelLastSave {
     -fx-font-size:          0.95em;
+}
+
+.diagramNodeSpacerVertical {
+    -fx-pref-width:         2px;
+    -fx-background-color:   transparent;
+}
+
+.diagramNodeSpacerHorizontal {
+    -fx-pref-height:        2px;
+    -fx-background-color:   transparent;
+}
+
+DiagramNode {
+    -fx-background-color:   transparent;
+}
+
+NodeModificator {
+    -fx-fill:               #4a60ff;
+}
+
+FactoryNode {
+    -fx-content-display:   TOP;
+}
+
+.nodeTextHolder {
+    -fx-padding:          0;
+    -fx-background-color: transparent;
+    -fx-border-style:     none;
+    -fx-alignment:        center;
 }
