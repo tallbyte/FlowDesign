@@ -31,8 +31,8 @@ import java.util.List;
  */
 public abstract class Diagram {
 
-    protected String                        name;
-    protected List<Element>                 elements;
+    protected ObservableValue<Diagram, String> name;
+    protected List<Element>                    elements;
 
     protected Element                       root;
 
@@ -42,22 +42,45 @@ public abstract class Diagram {
     protected PropertyChangeSupport         changeSupport;
 
     public Diagram(String name, Element root) {
-        this.name = name;
+        this.name = new ObservableValue<>(this, name);
         this.root = root;
 
         this.changeSupport = new PropertyChangeSupport(this);
     }
 
-    public void setName(String name) {
-        if (project != null) {
-            project.notifyNameChange(this, this.name, name);
-        }
-
-        this.name = name;
+    /**
+     * @param name The new name of this {@link Diagram}
+     * @return itself
+     */
+    public Diagram setName(String name) {
+        this.name.setValue(name);
+        return this;
     }
 
+    /**
+     * @return The name of this {@link Diagram}
+     */
     public String getName() {
-        return name;
+        return this.name.getValue();
+    }
+
+    /**
+     * Adds a {@link ValueChangedListener} that is being informed if the name changes
+     *
+     * @param listener {@link ValueChangedListener} to add
+     * @return itself
+     */
+    public Diagram addNameChangedListener(ValueChangedListener<? super Diagram, ? super String> listener) {
+        name.addListener(listener);
+        return this;
+    }
+
+    /**
+     * @param listener The {@link ValueChangedListener} to remove
+     * @return Whether the removal was successfully and therefore the {@link ValueChangedListener} was registered before
+     */
+    public boolean removeNameChangedListener(ValueChangedListener<? super Diagram, ? super String> listener) {
+        return name.removeListener(listener);
     }
 
     public Element getRoot() {
@@ -90,6 +113,6 @@ public abstract class Diagram {
 
     @Override
     public String toString() {
-        return name;
+        return getName();
     }
 }

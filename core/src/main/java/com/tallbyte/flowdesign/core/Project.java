@@ -83,6 +83,7 @@ public class Project {
 
         // set project
         diagram.setProject(this);
+        diagram.addNameChangedListener(this::notifyNameChange);
 
         // call listeners
         callListeners(diagram, true);
@@ -104,6 +105,7 @@ public class Project {
 
         // reset project
         diagram.setProject(null);
+        diagram.removeNameChangedListener(this::notifyNameChange);
 
         // call listeners
         callListeners(diagram, false);
