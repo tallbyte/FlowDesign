@@ -45,7 +45,9 @@ public class StickmanDiagramImage extends DiagramImage {
         double width  = getWidth();
         double height = getHeight();
 
+        context.clearRect(0, 0, width, height);
         context.save();
+
         if (width >= height) {
             width = height*0.6;
             context.translate(((getWidth()-width)*0.5),0);
@@ -61,7 +63,7 @@ public class StickmanDiagramImage extends DiagramImage {
         double footBase  = height*0.6;
         double headBase  = height*0.2;
 
-        context.clearRect(0, 0, width, height);
+
         context.setStroke(Color.BLACK);
         context.setLineWidth(1.5);
 
