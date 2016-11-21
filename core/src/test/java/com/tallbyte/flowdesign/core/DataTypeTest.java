@@ -30,20 +30,20 @@ import static org.junit.Assert.*;
 /**
  * Created by michael on 21.11.16.
  */
-public class DatatypeTest {
+public class DataTypeTest {
 
     @Test
     public void testFullClassName() {
         assertEquals(
                 List.class.getName(),
-                new Datatype(
+                new DataType(
                         List.class
                 ).getFullClassName()
         );
 
         assertEquals(
                 List.class.getName(),
-                new Datatype(
+                new DataType(
                         List.class.getName()
                 ).getFullClassName()
         );
@@ -53,21 +53,21 @@ public class DatatypeTest {
     public void testPackageName() {
         assertEquals(
                 List.class.getPackage().getName(),
-                new Datatype(
+                new DataType(
                         List.class
                 ).getPackageName()
         );
 
         assertEquals(
                 List.class.getPackage().getName(),
-                new Datatype(
+                new DataType(
                         List.class.getName()
                 ).getPackageName()
         );
 
         assertEquals(
                 null,
-                new Datatype(
+                new DataType(
                         List.class.getSimpleName()
                 ).getPackageName()
         );
@@ -77,21 +77,21 @@ public class DatatypeTest {
     public void testClassName() {
         assertEquals(
                 List.class.getSimpleName(),
-                new Datatype(
+                new DataType(
                         List.class
                 ).getClassName()
         );
 
         assertEquals(
                 List.class.getSimpleName(),
-                new Datatype(
+                new DataType(
                         List.class.getName()
                 ).getClassName()
         );
 
         assertEquals(
                 List.class.getSimpleName(),
-                new Datatype(
+                new DataType(
                         List.class.getSimpleName()
                 ).getClassName()
         );
@@ -103,21 +103,21 @@ public class DatatypeTest {
 
         assertEquals(
                 expected,
-                new Datatype(
+                new DataType(
                         List.class
                 ).getDisplayName()
         );
 
         assertEquals(
                 expected,
-                new Datatype(
+                new DataType(
                         List.class.getName()
                 ).getDisplayName()
         );
 
         assertEquals(
                 expected,
-                new Datatype(
+                new DataType(
                         List.class.getSimpleName()
                 ).getDisplayName()
         );
@@ -138,11 +138,11 @@ public class DatatypeTest {
 
     @Test
     public void testEquals() {
-        Datatype list               = new Datatype(List.class);
-        Datatype listInteger        = new Datatype(List.class, Integer.class);
-        Datatype map                = new Datatype(Map.class);
-        Datatype mapInteger         = new Datatype(Map.class, Integer.class);
-        Datatype mapIntegerString   = new Datatype(Map.class, Integer.class, String.class);
+        DataType list               = new DataType(List.class);
+        DataType listInteger        = new DataType(List.class, Integer.class);
+        DataType map                = new DataType(Map.class);
+        DataType mapInteger         = new DataType(Map.class, Integer.class);
+        DataType mapIntegerString   = new DataType(Map.class, Integer.class, String.class);
 
         assertTrue(
                 list.equals(
@@ -233,7 +233,7 @@ public class DatatypeTest {
         assertFalse(mapInteger.equals(mapIntegerString, false, false));
     }
 
-    public void checkEquals(Class<?> clazz, Datatype type) {
+    public void checkEquals(Class<?> clazz, DataType type) {
         assertTrue(type.equals((Object)clazz));
         assertTrue(type.equals(clazz, true));
 
@@ -248,7 +248,7 @@ public class DatatypeTest {
 
         assertEquals(
                 expected,
-                new Datatype(
+                new DataType(
                         base,
                         generics
                 ).getDisplayName(includePackagePrefix)
@@ -256,7 +256,7 @@ public class DatatypeTest {
 
         assertEquals(
                 expected,
-                new Datatype(
+                new DataType(
                         base.getName(),
                         generics
                 ).getDisplayName(includePackagePrefix)
@@ -264,7 +264,7 @@ public class DatatypeTest {
 
         assertEquals(
                 expected,
-                new Datatype(
+                new DataType(
                         base.getName(),
                         Arrays
                                 .stream(generics)
@@ -276,25 +276,25 @@ public class DatatypeTest {
 
         assertEquals(
                 expected,
-                new Datatype(
+                new DataType(
                         base,
                         Arrays
                                 .stream(generics)
-                                .map(Datatype::new)
+                                .map(DataType::new)
                                 .collect(Collectors.toList())
-                                .toArray(new Datatype[generics.length])
+                                .toArray(new DataType[generics.length])
                 ).getDisplayName(includePackagePrefix)
         );
 
         assertEquals(
                 expected,
-                new Datatype(
+                new DataType(
                         base.getName(),
                         Arrays
                                 .stream(generics)
-                                .map(Datatype::new)
+                                .map(DataType::new)
                                 .collect(Collectors.toList())
-                                .toArray(new Datatype[generics.length])
+                                .toArray(new DataType[generics.length])
                 ).getDisplayName(includePackagePrefix)
         );
 
@@ -302,7 +302,7 @@ public class DatatypeTest {
         if (!includePackagePrefix) {
             assertEquals(
                     expected,
-                    new Datatype(
+                    new DataType(
                             base.getSimpleName(),
                             generics
                     ).getDisplayName(false)
@@ -310,7 +310,7 @@ public class DatatypeTest {
 
             assertEquals(
                     expected,
-                    new Datatype(
+                    new DataType(
                             base.getName(),
                             Arrays
                                     .stream(generics)
@@ -322,7 +322,7 @@ public class DatatypeTest {
 
             assertEquals(
                     expected,
-                    new Datatype(
+                    new DataType(
                             base.getSimpleName(),
                             Arrays
                                     .stream(generics)
@@ -334,7 +334,7 @@ public class DatatypeTest {
 
             assertEquals(
                     expected,
-                    new Datatype(
+                    new DataType(
                             base.getSimpleName(),
                             Arrays
                                     .stream(generics)
@@ -347,13 +347,13 @@ public class DatatypeTest {
 
             assertEquals(
                     expected,
-                    new Datatype(
+                    new DataType(
                             base.getSimpleName(),
                             Arrays
                                     .stream(generics)
-                                    .map(Datatype::new)
+                                    .map(DataType::new)
                                     .collect(Collectors.toList())
-                                    .toArray(new Datatype[generics.length])
+                                    .toArray(new DataType[generics.length])
                     ).getDisplayName(false)
             );
         }

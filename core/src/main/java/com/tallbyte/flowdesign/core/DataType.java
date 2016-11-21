@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 /**
  * Created by michael on 21.11.16.
  */
-public class Datatype {
+public class DataType {
 
     public static final char SEPARATOR_PACKAGE          = '.';
     public static final char SEPARATOR_GENERIC_BEGIN    = '<';
@@ -33,47 +33,47 @@ public class Datatype {
 
     protected final String     namePackage;
     protected final String     nameClass;
-    protected final Datatype[] generics;
+    protected final DataType[] generics;
 
-    public Datatype(Class<?> clazz) {
+    public DataType(Class<?> clazz) {
         this(clazz.getName());
     }
 
-    public Datatype(Class<?> clazz, Class<?>...generics) {
+    public DataType(Class<?> clazz, Class<?>...generics) {
         this(clazz.getName(), generics);
     }
 
-    public Datatype(Class<?> clazz, Datatype...generics) {
+    public DataType(Class<?> clazz, DataType...generics) {
         this(clazz.getName(), generics);
     }
 
-    public Datatype(String name) {
-        this(name, new Datatype[0]);
+    public DataType(String name) {
+        this(name, new DataType[0]);
     }
 
-    public Datatype(String name, String...generics) {
+    public DataType(String name, String...generics) {
         this(
                 name,
                 Arrays
                         .stream(generics)
-                        .map(Datatype::new)
+                        .map(DataType::new)
                         .collect(Collectors.toList())
-                        .toArray(new Datatype[generics.length])
+                        .toArray(new DataType[generics.length])
         );
     }
 
-    public Datatype(String name, Class<?>...generics) {
+    public DataType(String name, Class<?>...generics) {
         this(
                 name,
                 Arrays
                         .stream(generics)
-                        .map(Datatype::new)
+                        .map(DataType::new)
                         .collect(Collectors.toList())
-                        .toArray(new Datatype[generics.length])
+                        .toArray(new DataType[generics.length])
         );
     }
 
-    public Datatype(String name, Datatype...generics) {
+    public DataType(String name, DataType...generics) {
         this.namePackage    = getPackage(name);
         this.nameClass      = getClass(name);
         this.generics       = generics;
@@ -104,7 +104,7 @@ public class Datatype {
     }
 
     /**
-     * @return The name of this {@link Datatype} and its generic types without the package prefix
+     * @return The name of this {@link DataType} and its generic types without the package prefix
      */
     public String getDisplayName() {
         return getDisplayName(false);
@@ -112,7 +112,7 @@ public class Datatype {
 
     /**
      * @param includePackagePrefix Whether to include package prefix if available
-     * @return The name of this {@link Datatype} and its generic types
+     * @return The name of this {@link DataType} and its generic types
      */
     public String getDisplayName(boolean includePackagePrefix) {
         StringBuilder builder = new StringBuilder();
@@ -185,9 +185,9 @@ public class Datatype {
             return equals((String)obj, false);
         }
 
-        else if (obj instanceof Datatype) {
+        else if (obj instanceof DataType) {
             // datatype allows full comparision
-            return equals((Datatype)obj, false, false);
+            return equals((DataType)obj, false, false);
         }
 
         return false;
@@ -196,11 +196,11 @@ public class Datatype {
     /**
      * @param name The class to compare to
      * @param ignorePackage Whether to ignore different packages paths
-     * @return Whether the given {@link Class} could be a (simplified) representation of this {@link Datatype}
+     * @return Whether the given {@link Class} could be a (simplified) representation of this {@link DataType}
      */
     public boolean equals(Class<?> name, boolean ignorePackage) {
         return equals(
-                new Datatype(name),
+                new DataType(name),
                 true, // cannot be compared with only the base class
                 ignorePackage
         );
@@ -209,28 +209,28 @@ public class Datatype {
     /**
      * @param name The name of the class to compare to
      * @param ignorePackage Whether to ignore different package paths
-     * @return Whether the given {@link String} could be a (simplified) representation of this {@link Datatype}
+     * @return Whether the given {@link String} could be a (simplified) representation of this {@link DataType}
      */
     public boolean equals(String name, boolean ignorePackage) {
         return equals(
-                new Datatype(name),
+                new DataType(name),
                 true, // cannot be compared with only the base class
                 ignorePackage
         );
     }
 
     /**
-     * @param datatype The {@link Datatype} to compare to
+     * @param dataType The {@link DataType} to compare to
      * @param ignoreGenerics Whether to ignore different generics
      * @param ignorePackage Whether to ignore different package paths
-     * @return Whether the given {@link Datatype} is the same or a (simplified) representation of this {@link Datatype}
+     * @return Whether the given {@link DataType} is the same or a (simplified) representation of this {@link DataType}
      */
-    public boolean equals(Datatype datatype, boolean ignoreGenerics, boolean ignorePackage) {
-        if (datatype == this) {
+    public boolean equals(DataType dataType, boolean ignoreGenerics, boolean ignorePackage) {
+        if (dataType == this) {
             return true;
         }
 
-        if (datatype == null) {
+        if (dataType == null) {
             return false;
         }
 
@@ -239,31 +239,31 @@ public class Datatype {
             if (ignoreGenerics) {
                 // ignorePackage, ignoreGenerics
                 // without package comparision
-                if (!getClassName().equals(datatype.getClassName())) {
+                if (!getClassName().equals(dataType.getClassName())) {
                     return false;
                 }
             } else {
                 // ignorePackage, !ignoreGenerics
                 // the display name contains the generics but not the package path
-                return getDisplayName().equals(datatype.getDisplayName());
+                return getDisplayName().equals(dataType.getDisplayName());
             }
 
         } else {
             // !ignorePackage
             // including package comparision
-            if (!getFullClassName().equals(datatype.getFullClassName())) {
+            if (!getFullClassName().equals(dataType.getFullClassName())) {
                 return false;
             }
         }
 
         if (!ignoreGenerics) {
-            if (generics.length != datatype.generics.length) {
+            if (generics.length != dataType.generics.length) {
                 return false;
             }
 
             // need to check all generics
             for (int i = 0; i < generics.length; ++i) {
-                if (!generics[i].equals(datatype.generics[i], ignoreGenerics, ignorePackage)) {
+                if (!generics[i].equals(dataType.generics[i], ignoreGenerics, ignorePackage)) {
                     return false;
                 }
             }
