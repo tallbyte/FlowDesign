@@ -30,8 +30,8 @@ import javafx.scene.paint.Color;
 public class CircleDiagramImage extends DiagramImage {
 
     public CircleDiagramImage() {
-        setWidth(100);
-        setHeight(100);
+        setWidth(75);
+        setHeight(75);
     }
 
     @Override

@@ -133,8 +133,8 @@ public class DiagramPane extends StackPane {
                             Element element = factory.createElement();
                             element.setX(mouseX-b.getMinX()-event.getDragboard().getDragViewOffsetX());
                             element.setY(mouseY-b.getMinY()-event.getDragboard().getDragViewOffsetY());
-                            element.setWidth(100);
-                            element.setHeight(100);
+                            element.setWidth(75);
+                            element.setHeight(75);
 
                             diagram.addElement(element);
                         }

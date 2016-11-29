@@ -34,8 +34,8 @@ import javafx.scene.transform.Transform;
 public class StickmanDiagramImage extends DiagramImage {
 
     public StickmanDiagramImage() {
-        setWidth(100);
-        setHeight(100);
+        setWidth(75);
+        setHeight(75);
     }
 
     @Override

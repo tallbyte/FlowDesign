@@ -18,7 +18,17 @@
 
 package com.tallbyte.flowdesign.javafx.pane;
 
-import javafx.scene.layout.VBox;
+import com.tallbyte.flowdesign.core.EnvironmentDiagram;
+import com.tallbyte.flowdesign.javafx.diagram.FactoryNode;
+import com.tallbyte.flowdesign.javafx.diagram.factory.ActorDiagramImageFactory;
+import com.tallbyte.flowdesign.javafx.diagram.factory.SystemDiagramImageFactory;
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This file is part of project flowDesign.
@@ -26,12 +36,40 @@ import javafx.scene.layout.VBox;
  * Authors:<br/>
  * - julian (2016-11-05)<br/>
  */
-public class FactoryPane extends VBox {
+public class FactoryPane extends GridPane {
+
+    protected final Map<Class<?>, List<FactoryNode>> factoryNodes = new HashMap<>();
 
     public FactoryPane() {
-
+        getChildren().add(new Label("Please select a diagram"));
     }
 
+    public void setDiagramPane(DiagramPane diagramPane) {
+        factoryNodes.put(EnvironmentDiagram.class, new ArrayList<FactoryNode>() {{
+            add(new FactoryNode(new SystemDiagramImageFactory(), "System"));
+            add(new FactoryNode(new ActorDiagramImageFactory(), "Actor"));
+        }});
+
+        diagramPane.diagramProperty().addListener((observable, oldValue, newValue) -> {
+            getChildren().clear();
+
+            if (newValue != null) {
+                List<FactoryNode> list = factoryNodes.get(newValue.getClass());
+
+                if (list != null) {
+                    for (int i = 0 ; i < list.size() ; ++i) {
+                        FactoryNode child = list.get(i);
+
+                        GridPane.setColumnIndex(child, i % 2);
+                        GridPane.setRowIndex(child, i / 2);
+
+                        getChildren().add(child);
+                    }
+                }
+
+            }
+        });
+    }
 
 
 }
