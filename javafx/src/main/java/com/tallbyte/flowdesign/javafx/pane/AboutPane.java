@@ -48,6 +48,10 @@ import java.io.IOException;
  */
 public class AboutPane extends BorderPane {
 
+    /**
+     * Creates a new {@link AboutPane} by loading from a fxml-file
+     * @throws LoadException Is thrown if the fxml-file could not be loaded.
+     */
     public AboutPane() throws LoadException {
         FXMLLoader loader = new FXMLLoader( getClass().getResource("/fxml/aboutPane.fxml") );
         loader.setController(this);

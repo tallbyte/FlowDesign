@@ -33,6 +33,9 @@ import javafx.scene.transform.Transform;
  */
 public class StickmanDiagramImage extends DiagramImage {
 
+    /**
+     * Creates a new {@link StickmanDiagramImage} with default dimension.
+     */
     public StickmanDiagramImage() {
         setWidth(75);
         setHeight(75);

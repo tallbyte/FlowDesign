@@ -40,10 +40,17 @@ public class FactoryPane extends GridPane {
 
     protected final Map<Class<?>, List<FactoryNode>> factoryNodes = new HashMap<>();
 
+    /**
+     * Creates a new {@link FactoryPane} with a default text.
+     */
     public FactoryPane() {
         getChildren().add(new Label("Please select a diagram"));
     }
 
+    /**
+     * Sets the {@link DiagramPane} this {@link FactoryPane} should reflect.
+     * @param diagramPane the new {@link DiagramPane}
+     */
     public void setDiagramPane(DiagramPane diagramPane) {
         factoryNodes.put(EnvironmentDiagram.class, new ArrayList<FactoryNode>() {{
             add(new FactoryNode(new SystemDiagramImageFactory(), "System"));

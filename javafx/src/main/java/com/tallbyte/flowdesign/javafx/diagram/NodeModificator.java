@@ -41,6 +41,11 @@ public class NodeModificator extends Rectangle {
         BOTTOM_RIGHT
     }
 
+    /**
+     * Creates a new {@link NodeModificator}.
+     * @param image the {@link DiagramImage} that should be resized
+     * @param location the target {@link Location} inside the parent
+     */
     public NodeModificator(DiagramImage image, Location location) {
         setWidth(6);
         setHeight(6);

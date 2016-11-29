@@ -18,6 +18,7 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.factory;
 
+import com.tallbyte.flowdesign.core.Element;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 
 /**
@@ -28,10 +29,23 @@ import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
  */
 public interface DiagramImageFactory {
 
+    /**
+     * Gets the internal reference-name of this {@link DiagramImageFactory}.
+     * @return Returns the name.
+     */
     public String getName();
 
+    /**
+     * Gets the type of {@link Class} that is created, in order to avoid
+     * unnecessary probe-object creations.
+     * @return Returns the type.
+     */
     public Class<?> getTargetClass();
 
+    /**
+     * Creates a new {@link DiagramImage} according to the internal rules.
+     * @return Returns a new instance of an {@link DiagramImage}.
+     */
     public DiagramImage createDiagramImage();
 
 }

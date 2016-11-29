@@ -57,6 +57,9 @@ public class DiagramPane extends StackPane {
 
     protected ElementsChangedListener listener = null;
 
+    /**
+     * Creates a new {@link DiagramPane} with a default set of factories.
+     */
     public DiagramPane() {
         getChildren().add(groupContent);
         setAlignment(groupContent, Pos.TOP_LEFT);
@@ -146,6 +149,11 @@ public class DiagramPane extends StackPane {
         });
     }
 
+    /**
+     * Adds a new {@link DiagramImageFactory}.
+     * @param clazz the {@link Class} of the diagram type
+     * @param factory the factory
+     */
     public void addImageFactory(Class<? extends Diagram> clazz, DiagramImageFactory factory) {
         Map<Class<?>, DiagramImageFactory> map = fullImageFactories.get(clazz);
 
@@ -157,6 +165,11 @@ public class DiagramPane extends StackPane {
         map.put(factory.getTargetClass(), factory);
     }
 
+    /**
+     * Adds a new {@link ElementFactory}.
+     * @param clazz the {@link Class} of the diagram type
+     * @param factory the factory
+     */
     public void addElementFactory(Class<? extends Diagram> clazz, ElementFactory factory) {
         Map<String, ElementFactory> map = fullElementFactories.get(clazz);
 
@@ -168,10 +181,18 @@ public class DiagramPane extends StackPane {
         map.put(factory.getName(), factory);
     }
 
+    /**
+     * Gets the current {@link Diagram}.
+     * @return Returns the {@link Diagram} or null if none is set.
+     */
     public Diagram getDiagram() {
         return diagram.get();
     }
 
+    /**
+     * Sets the current {@link Diagram}.
+     * @param diagram the new {@link Diagram}
+     */
     public void setDiagram(Diagram diagram) {
         this.diagram.set(diagram);
     }

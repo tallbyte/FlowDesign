@@ -28,6 +28,9 @@ import javafx.scene.canvas.Canvas;
  */
 public abstract class DiagramImage extends Canvas {
 
+    /**
+     * Creates a new {@link DiagramImage}.
+     */
     public DiagramImage() {
         widthProperty().addListener(observable -> {
             repaint();
@@ -39,6 +42,9 @@ public abstract class DiagramImage extends Canvas {
         repaint();
     }
 
+    /**
+     * Repaints this {@link DiagramImage}.
+     */
     protected abstract void repaint();
 
 }

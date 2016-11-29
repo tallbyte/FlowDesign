@@ -29,6 +29,9 @@ import javafx.scene.paint.Color;
  */
 public class CircleDiagramImage extends DiagramImage {
 
+    /**
+     * Creates a new {@link CircleDiagramImage} with default dimension.
+     */
     public CircleDiagramImage() {
         setWidth(75);
         setHeight(75);

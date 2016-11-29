@@ -167,6 +167,9 @@ public class ApplicationPane extends BorderPane {
 
     }
 
+    /**
+     * Opens a new {@link Dialog} and creates a new {@link Project}.
+     */
     @FXML
     public void onCreateProject() {
         Dialog<String> dialog = new TextInputDialog();
@@ -176,6 +179,10 @@ public class ApplicationPane extends BorderPane {
         dialog.showAndWait().ifPresent(response -> project.set(new Project(response)));
     }
 
+    /**
+     * Adds a new {@link EnvironmentDiagram} to the {@link Project}.
+     * If no {@link Project} is set, this method will do nothing.
+     */
     @FXML
     public void onAddEnvironment() {
         Dialog<String> dialog = new TextInputDialog();
@@ -190,11 +197,17 @@ public class ApplicationPane extends BorderPane {
         });
     }
 
+    /**
+     * Quits the application.
+     */
     @FXML
     public void onQuit() {
         Platform.exit();
     }
 
+    /**
+     * Shows the about popup.
+     */
     @FXML
     public void onAbout() {
         try  {
@@ -210,10 +223,18 @@ public class ApplicationPane extends BorderPane {
         }
     }
 
+    /**
+     * Gets the current {@link Project}.
+     * @return Returns the current {@link Project} or null if none is set.
+     */
     public Project getProject() {
         return project.get();
     }
 
+    /**
+     * Sets the current {@link Project}.
+     * @param project the new {@link Project}
+     */
     public void setProject(Project project) {
         this.project.set(project);
     }
@@ -222,6 +243,9 @@ public class ApplicationPane extends BorderPane {
         return project;
     }
 
+    /**
+     * Updates the current title using internal data.
+     */
     private void updateTitle() {
         Scene scene = getScene();
         Window window = scene != null ? scene.getWindow() : null;
@@ -247,6 +271,10 @@ public class ApplicationPane extends BorderPane {
 
         protected String name;
 
+        /**
+         * Creates a new {@link TreeEntry} using a static string.
+         * @param name
+         */
         public TreeEntry(String name) {
             this.name = name;
         }
@@ -262,6 +290,12 @@ public class ApplicationPane extends BorderPane {
         private final Diagram                diagram;
         private final PropertyChangeListener listener;
 
+        /**
+         * Creates a new {@link DiagramEntry}.
+         * Make sure to call <code>#remove()</code> before
+         * releasing this object in order to avoid zombie-listeners.
+         * @param diagram the {@link Diagram} to contain
+         */
         public DiagramEntry(Diagram diagram) {
             super(diagram.getName());
             this.diagram  = diagram;
@@ -276,10 +310,17 @@ public class ApplicationPane extends BorderPane {
             diagram.addPropertyChangeListener(listener);
         }
 
+        /**
+         * Opens the containing {@link Diagram} in the {@link DiagramPane}
+         * and updates the title.
+         */
         public void open() {
             paneDiagram.setDiagram(diagram);
         }
 
+        /**
+         * Removes internal listeners.
+         */
         public void remove() {
             diagram.removePropertyChangeListener(listener);
         }

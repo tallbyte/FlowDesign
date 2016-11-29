@@ -37,6 +37,11 @@ public class FactoryNode extends Label {
 
     private final DiagramImageFactory factory;
 
+    /**
+     * Creates a new {@link FactoryNode}
+     * @param factory the {@link DiagramImageFactory} used to create images
+     * @param name the display-name
+     */
     public FactoryNode(DiagramImageFactory factory, String name) {
         this.factory = factory;
         setGraphic(factory.createDiagramImage());

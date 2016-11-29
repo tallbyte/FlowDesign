@@ -82,10 +82,17 @@ public class DiagramNode extends Pane {
         setup();
     }
 
+    /**
+     * Gets the backed {@link Element}.
+     * @return Returns the backed {@link Element}.
+     */
     public Element getElement() {
         return element;
     }
 
+    /**
+     * Adds the according properties to the externally-accessible list.
+     */
     private void addDefaultProperties() {
         properties.add(content.layoutXProperty());
         properties.add(content.layoutYProperty());
@@ -94,6 +101,9 @@ public class DiagramNode extends Pane {
         properties.add(text);
     }
 
+    /**
+     * Setup of bindings and listeners.
+     */
     private void setup() {
 
         setOnMouseMoved(event -> {
