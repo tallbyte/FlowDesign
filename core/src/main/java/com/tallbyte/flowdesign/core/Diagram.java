@@ -41,6 +41,11 @@ public abstract class Diagram {
     protected List<ElementsChangedListener> listeners = new ArrayList<>();
     protected PropertyChangeSupport         changeSupport;
 
+    /**
+     * Creates a new {@link Diagram}
+     * @param name the name
+     * @param root the root {@link Element} required for analysis
+     */
     public Diagram(String name, Element root) {
         this.name = name;
         this.root = root;
@@ -49,6 +54,10 @@ public abstract class Diagram {
         this.changeSupport = new PropertyChangeSupport(this);
     }
 
+    /**
+     * Sets the name.
+     * @param name the new name
+     */
     public void setName(String name) {
         if (project != null) {
             project.notifyNameChange(this, this.name, name);
@@ -57,22 +66,45 @@ public abstract class Diagram {
         this.name = name;
     }
 
+    /**
+     * Gets the name of this {@link Diagram}.
+     * @return Returns the name.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets the root {@link Element} of this {@link Diagram}.
+     * The root may be used for further analysis or reflection.
+     * @return Returns the root {@link Element}.
+     */
     public Element getRoot() {
         return root;
     }
 
+    /**
+     * Sets the {@link Project} of this {@link Diagram}.
+     * For internal use only.
+     * @param project the new {@link Project}
+     */
     void setProject(Project project) {
         this.project = project;
     }
 
+    /**
+     * Gets the {@link Project} of this {@link Diagram}.
+     * @return Returns the {@link Project} or null if none is set.
+     */
     public Project getProject() {
         return project;
     }
 
+    /**
+     * Adds the given {@link Element} to the internal list.
+     * This will also call all {@link ElementsChangedListener}.
+     * @param element the @{link Element} to add
+     */
     public void addElement(Element element) {
         this.elements.add(element);
 
@@ -80,6 +112,11 @@ public abstract class Diagram {
             listener.onElementsChanged(element, true);
         }
     }
+    /**
+     * Removes the given {@link Element} from the internal list.
+     * This will also call all {@link ElementsChangedListener}.
+     * @param element the @{link Element} to remove
+     */
 
     public void removeElement(Element element) {
         this.elements.remove(element);
@@ -89,22 +126,42 @@ public abstract class Diagram {
         }
     }
 
+    /**
+     * Gets all added {@link Element}s.
+     * @return Returns an {@link Iterable} containing the {@link Element}s.
+     */
     public Iterable<Element> getElements() {
         return elements;
     }
 
+    /**
+     * Registers an {@link ElementsChangedListener}.
+     * @param listener the {@link ElementsChangedListener} to register
+     */
     public void addElementsChangedListener(ElementsChangedListener listener) {
         listeners.add(listener);
     }
 
+    /**
+     * Unregisters an {@link ElementsChangedListener}.
+     * @param listener the {@link ElementsChangedListener} to unregister
+     */
     public void removeElementsChangedListener(ElementsChangedListener listener) {
         listeners.remove(listener);
     }
 
+    /**
+     * Registers an {@link PropertyChangeListener}.
+     * @param listener the {@link PropertyChangeListener} to register
+     */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Unregisters an {@link PropertyChangeListener}.
+     * @param listener the {@link PropertyChangeListener} to unregister
+     */
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.removePropertyChangeListener(listener);
     }

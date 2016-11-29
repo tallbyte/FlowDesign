@@ -41,30 +41,55 @@ public class Project {
 
     private PropertyChangeSupport                        changeSupport;
 
+    /**
+     * Creates a new {@link Project} with a default name.
+     */
     public Project() {
         this("default");
     }
 
+    /**
+     * Creates a new {@link Project} with the given name.
+     * @param name the name of the {@link Project}
+     */
     public Project(String name) {
         this.name = name;
 
         this.changeSupport = new PropertyChangeSupport(this);
     }
 
+    /**
+     * Calls all {@link DiagramsChangedListener}s.
+     * @param diagram the {@link Diagram} to call for
+     * @param added was the diagram added or removed?
+     */
     protected void callListeners(Diagram diagram, boolean added) {
         for (DiagramsChangedListener listener : listeners) {
             listener.onDiagramsChanged(diagram, added);
         }
     }
 
+    /**
+     * Gets the name of this {@link Project}.
+     * @return Returns the name.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the name of this {@link Project}.
+     * @param name the new name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Adds a {@link Diagram}.
+     * This will call all {@link DiagramsChangedListener}s.
+     * @param diagram the {@link Diagram} to add
+     */
     public void addDiagram(Diagram diagram) {
         if (diagram == null) {
             return;
@@ -88,6 +113,11 @@ public class Project {
         callListeners(diagram, true);
     }
 
+    /**
+     * Removes a {@link Diagram}.
+     * This will call all {@link DiagramsChangedListener}s.
+     * @param diagram the {@link Diagram} to remove
+     */
     public void removeDiagram(Diagram diagram) {
         if (diagram == null) {
             return;
@@ -109,10 +139,20 @@ public class Project {
         callListeners(diagram, false);
     }
 
+    /**
+     * Gets a {@link Diagram} with a specified name.
+     * @param name the name of this {@link Diagram}
+     * @return
+     */
     public Diagram getDiagram(String name) {
         return nameMap.get(name);
     }
 
+    /**
+     * Gets all {@link Diagram}s of a certain type.
+     * @param diagramType the type
+     * @return Returns an {@link Iterable} containing all {@link Diagram}s with of that type.
+     */
     @SuppressWarnings("unchecked")
     public <T extends Diagram> Iterable<T> getDiagrams(Class<T> diagramType) {
         Iterable<T> list = (Iterable<T>) diagrams.get(diagramType);
@@ -120,22 +160,46 @@ public class Project {
         return list == null ? new ArrayList<>() : list;
     }
 
+    /**
+     * Registers an {@link DiagramsChangedListener}.
+     * @param listener the {@link DiagramsChangedListener} to register
+     */
     public void addDiagramsChangedListener(DiagramsChangedListener listener) {
         listeners.add(listener);
     }
 
+
+    /**
+     * Unregisters an {@link DiagramsChangedListener}.
+     * @param listener the {@link DiagramsChangedListener} to unregister
+     */
     public void removeDiagramsChangedListener(DiagramsChangedListener listener) {
         listeners.remove(listener);
     }
 
+    /**
+     * Registers an {@link PropertyChangeListener}.
+     * @param listener the {@link PropertyChangeListener} to register
+     */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Unregisters an {@link PropertyChangeListener}.
+     * @param listener the {@link PropertyChangeListener} to unregister
+     */
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.removePropertyChangeListener(listener);
     }
 
+    /**
+     * Notifies this {@link Project} that a {@link Diagram}s name was changed
+     * without the need for extra listener objects.
+     * @param diagram the changed {@link Diagram}
+     * @param oldName the old name
+     * @param newName the new name
+     */
     void notifyNameChange(Diagram diagram, String oldName, String newName) {
         nameMap.remove(oldName);
         nameMap.put(newName, diagram);
