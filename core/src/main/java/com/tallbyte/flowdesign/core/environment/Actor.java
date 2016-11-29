@@ -16,22 +16,21 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx.diagram.factory;
+package com.tallbyte.flowdesign.core.environment;
 
-import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
+import com.tallbyte.flowdesign.core.Element;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-11-04)<br/>
+ * - julian (2016-11-07)<br/>
  */
-public interface DiagramImageFactory {
+public class Actor extends Element {
 
-    public String getName();
-
-    public Class<?> getTargetClass();
-
-    public DiagramImage createDiagramImage();
+    private List<Connection> connections = new ArrayList<>();
 
 }

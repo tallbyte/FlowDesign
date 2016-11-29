@@ -32,7 +32,7 @@ import java.util.List;
 public abstract class Diagram {
 
     protected String                        name;
-    protected List<Element>                 elements;
+    protected List<Element>                 elements = new ArrayList<>();
 
     protected Element                       root;
 
@@ -45,6 +45,7 @@ public abstract class Diagram {
         this.name = name;
         this.root = root;
 
+        elements.add(root);
         this.changeSupport = new PropertyChangeSupport(this);
     }
 
@@ -70,6 +71,26 @@ public abstract class Diagram {
 
     public Project getProject() {
         return project;
+    }
+
+    public void addElement(Element element) {
+        this.elements.add(element);
+
+        for (ElementsChangedListener listener : listeners) {
+            listener.onElementsChanged(element, true);
+        }
+    }
+
+    public void removeElement(Element element) {
+        this.elements.remove(element);
+
+        for (ElementsChangedListener listener : listeners) {
+            listener.onElementsChanged(element, false);
+        }
+    }
+
+    public Iterable<Element> getElements() {
+        return elements;
     }
 
     public void addElementsChangedListener(ElementsChangedListener listener) {

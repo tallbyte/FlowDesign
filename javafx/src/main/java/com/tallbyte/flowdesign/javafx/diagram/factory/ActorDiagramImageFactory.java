@@ -18,7 +18,10 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.factory;
 
+import com.tallbyte.flowdesign.core.Element;
+import com.tallbyte.flowdesign.core.environment.Actor;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
+import com.tallbyte.flowdesign.javafx.diagram.image.StickmanDiagramImage;
 
 /**
  * This file is part of project flowDesign.
@@ -26,12 +29,21 @@ import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
  * Authors:<br/>
  * - julian (2016-11-04)<br/>
  */
-public interface DiagramImageFactory {
+public class ActorDiagramImageFactory implements DiagramImageFactory {
 
-    public String getName();
+    @Override
+    public String getName() {
+        return "Actor";
+    }
 
-    public Class<?> getTargetClass();
+    @Override
+    public Class<?> getTargetClass() {
+        return Actor.class;
+    }
 
-    public DiagramImage createDiagramImage();
+    @Override
+    public DiagramImage createDiagramImage() {
+        return new StickmanDiagramImage();
+    }
 
 }

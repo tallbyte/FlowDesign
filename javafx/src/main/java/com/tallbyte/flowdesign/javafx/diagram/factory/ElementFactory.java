@@ -18,25 +18,18 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.factory;
 
-import com.tallbyte.flowdesign.javafx.diagram.image.CircleDiagramImage;
-import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
+import com.tallbyte.flowdesign.core.Element;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-11-04)<br/>
+ * - julian (2016-11-29)<br/>
  */
-public class CircleDiagramImageFactory implements DiagramImageFactory {
+public interface ElementFactory {
 
-    @Override
-    public String getName() {
-        return "Circle";
-    }
+    public String getName();
 
-    @Override
-    public DiagramImage createDiagramImage() {
-        return new CircleDiagramImage();
-    }
+    public Element createElement();
 
 }

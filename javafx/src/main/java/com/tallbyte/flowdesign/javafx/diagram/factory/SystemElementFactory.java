@@ -18,20 +18,24 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.factory;
 
-import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
+import com.tallbyte.flowdesign.core.Element;
+import com.tallbyte.flowdesign.core.environment.System;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-11-04)<br/>
+ * - julian (2016-11-29)<br/>
  */
-public interface DiagramImageFactory {
+public class SystemElementFactory implements ElementFactory {
 
-    public String getName();
+    @Override
+    public String getName() {
+        return "System";
+    }
 
-    public Class<?> getTargetClass();
-
-    public DiagramImage createDiagramImage();
-
+    @Override
+    public Element createElement() {
+        return new System();
+    }
 }

@@ -18,6 +18,9 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.factory;
 
+import com.tallbyte.flowdesign.core.Element;
+import com.tallbyte.flowdesign.core.environment.System;
+import com.tallbyte.flowdesign.javafx.diagram.image.CircleDiagramImage;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 
 /**
@@ -26,12 +29,21 @@ import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
  * Authors:<br/>
  * - julian (2016-11-04)<br/>
  */
-public interface DiagramImageFactory {
+public class SystemDiagramImageFactory implements DiagramImageFactory {
 
-    public String getName();
+    @Override
+    public String getName() {
+        return "System";
+    }
 
-    public Class<?> getTargetClass();
+    @Override
+    public Class<?> getTargetClass() {
+        return System.class;
+    }
 
-    public DiagramImage createDiagramImage();
+    @Override
+    public DiagramImage createDiagramImage() {
+        return new CircleDiagramImage();
+    }
 
 }

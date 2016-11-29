@@ -44,8 +44,10 @@
     <top>
         <MenuBar>
             <Menu text="File">
-                <MenuItem text="New..."/>
+                <MenuItem text="New Project..."/>
                 <MenuItem text="Open..."/>
+                <MenuItem text="Add Environment..." onAction="#addEnvironment"/>
+                <MenuItem text="Add Flow..." onAction="#addFlow"/>
                 <SeparatorMenuItem/>
                 <MenuItem text="Save"/>
                 <MenuItem text="Save as..."/>

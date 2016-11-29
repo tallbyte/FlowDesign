@@ -53,8 +53,6 @@ public class NodeModificator extends Rectangle {
                 double dx = event.getSceneX() - trans.getMinX();
                 double dy = event.getSceneY() - trans.getMinY();
 
-                System.out.println("dx="+dx+" dy="+dy);
-
                 switch (location) {
 
                     case TOP_LEFT:

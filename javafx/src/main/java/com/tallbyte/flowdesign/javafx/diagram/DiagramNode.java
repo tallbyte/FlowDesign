@@ -18,10 +18,11 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
+import com.tallbyte.flowdesign.core.Element;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
+import javafx.beans.property.adapter.JavaBeanDoubleProperty;
+import javafx.beans.property.adapter.JavaBeanDoublePropertyBuilder;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -48,12 +49,41 @@ public class DiagramNode extends Pane {
     protected double            mouseX;
     protected double            mouseY;
 
-    public DiagramNode(DiagramImage content) {
+    protected Element           element;
 
+    protected DoubleProperty    realXProperty;
+    protected DoubleProperty    realYProperty;
+    protected DoubleProperty    realWidthProperty;
+    protected DoubleProperty    realHeightProperty;
+
+    public DiagramNode(Element element, DiagramImage content) {
         this.content = content;
+
+        JavaBeanDoublePropertyBuilder.create().bean(element).name("x");
+
+        this.element = element;
+
+        try {
+            realXProperty = JavaBeanDoublePropertyBuilder.create().bean(element).name("x").build();
+            realYProperty = JavaBeanDoublePropertyBuilder.create().bean(element).name("y").build();
+            realWidthProperty  = JavaBeanDoublePropertyBuilder.create().bean(element).name("width").build();
+            realHeightProperty = JavaBeanDoublePropertyBuilder.create().bean(element).name("height").build();
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException("Could not create properties. This should never happen?!");
+        }
+
+        layoutXProperty().bindBidirectional(realXProperty);
+        layoutYProperty().bindBidirectional(realYProperty);
+
+        content.widthProperty().bindBidirectional(realWidthProperty);
+        content.heightProperty().bindBidirectional(realHeightProperty);
 
         addDefaultProperties();
         setup();
+    }
+
+    public Element getElement() {
+        return element;
     }
 
     private void addDefaultProperties() {

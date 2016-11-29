@@ -19,12 +19,11 @@
 package com.tallbyte.flowdesign.javafx.pane;
 
 import com.tallbyte.flowdesign.core.Diagram;
+import com.tallbyte.flowdesign.core.Element;
+import com.tallbyte.flowdesign.core.ElementsChangedListener;
 import com.tallbyte.flowdesign.core.EnvironmentDiagram;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramNode;
-import com.tallbyte.flowdesign.javafx.diagram.factory.CircleDiagramImageFactory;
-import com.tallbyte.flowdesign.javafx.diagram.factory.DiagramImageFactory;
-import com.tallbyte.flowdesign.javafx.diagram.factory.StickmanDiagramImageFactory;
-import com.tallbyte.flowdesign.javafx.diagram.image.CircleDiagramImage;
+import com.tallbyte.flowdesign.javafx.diagram.factory.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Bounds;
@@ -44,33 +43,57 @@ import java.util.Map;
  */
 public class DiagramPane extends StackPane {
 
-    protected final Group                                           groupContent  = new Group();
-    protected final Map<Class<?>, Map<String, DiagramImageFactory>> fullFactories = new HashMap<>();
-    protected       Map<String, DiagramImageFactory>                factories     = new HashMap<>();
+    protected final Group                                      groupContent  = new Group();
+    protected final Map<Class<?>, Map<Class<?>, DiagramImageFactory>> fullImageFactories = new HashMap<>();
+    protected       Map<Class<?>, DiagramImageFactory>                imageFactories     = new HashMap<>();
+
+    protected final Map<Class<?>, Map<String, ElementFactory>>        fullElementFactories = new HashMap<>();
+    protected       Map<String, ElementFactory>                       elementFactories     = new HashMap<>();
 
     protected final ObjectProperty<Diagram> diagram = new SimpleObjectProperty<>(this, "diagram", null);
 
     protected double mouseX;
     protected double mouseY;
 
+    protected ElementsChangedListener listener = null;
+
     public DiagramPane() {
         getChildren().add(groupContent);
         setAlignment(groupContent, Pos.TOP_LEFT);
 
-        addFactory(EnvironmentDiagram.class, new CircleDiagramImageFactory());
-        addFactory(EnvironmentDiagram.class, new StickmanDiagramImageFactory());
+        addImageFactory(EnvironmentDiagram.class, new SystemDiagramImageFactory());
+        addImageFactory(EnvironmentDiagram.class, new ActorDiagramImageFactory());
 
-        factories = fullFactories.get(EnvironmentDiagram.class);
+        addElementFactory(EnvironmentDiagram.class, new ActorElementFactory());
+        addElementFactory(EnvironmentDiagram.class, new SystemElementFactory());
 
         diagram.addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+                oldValue.removeElementsChangedListener(listener);
+            }
+
             // remove all existing entries
-            //groupContent.getChildren().clear();
+            groupContent.getChildren().clear();
+            groupContent.getChildren().add(new Rectangle());
 
             // add new
             if (newValue != null) {
-                factories = fullFactories.get(newValue.getClass());
+                imageFactories = fullImageFactories.get(newValue.getClass());
+                imageFactories = imageFactories == null ? new HashMap<>() : imageFactories;
 
-                factories = factories == null ? new HashMap<>() : factories;
+                elementFactories = fullElementFactories.get(newValue.getClass());
+                elementFactories = elementFactories == null ? new HashMap<>() : elementFactories;
+
+                listener = (element, added) -> {
+                    if (added) {
+                        DiagramImageFactory factory = imageFactories.get(element.getClass());
+
+                        if (factory != null) {
+                            groupContent.getChildren().add(new DiagramNode(element, factory.createDiagramImage()));
+                        }
+                    }
+                };
+                newValue.addElementsChangedListener(listener);
             }
         });
 
@@ -99,36 +122,47 @@ public class DiagramPane extends StackPane {
                 });
 
                 newValue.setOnDragExited(event -> {
-                    DiagramImageFactory factory = factories.get(event.getDragboard().getString());
+                    Diagram diagram = this.diagram.get();
 
-                    if (factory != null) {
-                        Bounds b = newValue.localToScene(newValue.getBoundsInLocal());
+                    if (diagram != null) {
+                        ElementFactory factory = elementFactories.get(event.getDragboard().getString());
 
-                        DiagramNode node = new DiagramNode(factory.createDiagramImage());
-                        node.setLayoutX(mouseX-b.getMinX()-event.getDragboard().getDragViewOffsetX());
-                        node.setLayoutY(mouseY-b.getMinY()-event.getDragboard().getDragViewOffsetY());
+                        if (factory != null) {
+                            Bounds b = newValue.localToScene(newValue.getBoundsInLocal());
 
-                        System.out.println("x="+(mouseX-b.getMinX())+" y="+(mouseY-b.getMinY())+" mx="+event.getDragboard().getDragViewOffsetX()+" my="+event.getDragboard().getDragViewOffsetY()+" b="+ b.getMinX());
+                            Element element = factory.createElement();
+                            element.setX(mouseX-b.getMinX()-event.getDragboard().getDragViewOffsetX());
+                            element.setY(mouseY-b.getMinY()-event.getDragboard().getDragViewOffsetY());
+                            element.setWidth(100);
+                            element.setHeight(100);
 
-                        groupContent.getChildren().add(node);
+                            diagram.addElement(element);
+                        }
+
+                        event.consume();
                     }
-
-                    event.consume();
                 });
             }
         });
-
-
-        groupContent.getChildren().add(new Rectangle()); // upper left border
-        groupContent.getChildren().add(new DiagramNode(new CircleDiagramImage()));
     }
 
-    public void addFactory(Class<? extends Diagram> clazz, DiagramImageFactory factory) {
-        Map<String, DiagramImageFactory> map = fullFactories.get(clazz);
+    public void addImageFactory(Class<? extends Diagram> clazz, DiagramImageFactory factory) {
+        Map<Class<?>, DiagramImageFactory> map = fullImageFactories.get(clazz);
 
         if (map == null) {
             map = new HashMap<>();
-            fullFactories.put(clazz, map);
+            fullImageFactories.put(clazz, map);
+        }
+
+        map.put(factory.getTargetClass(), factory);
+    }
+
+    public void addElementFactory(Class<? extends Diagram> clazz, ElementFactory factory) {
+        Map<String, ElementFactory> map = fullElementFactories.get(clazz);
+
+        if (map == null) {
+            map = new HashMap<>();
+            fullElementFactories.put(clazz, map);
         }
 
         map.put(factory.getName(), factory);

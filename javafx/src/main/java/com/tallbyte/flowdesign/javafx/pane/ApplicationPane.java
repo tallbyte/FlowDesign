@@ -19,25 +19,23 @@
 package com.tallbyte.flowdesign.javafx.pane;
 
 import com.tallbyte.flowdesign.core.Diagram;
+import com.tallbyte.flowdesign.core.DiagramsChangedListener;
 import com.tallbyte.flowdesign.core.EnvironmentDiagram;
 import com.tallbyte.flowdesign.core.Project;
-import com.tallbyte.flowdesign.javafx.diagram.DiagramNode;
 import com.tallbyte.flowdesign.javafx.diagram.FactoryNode;
-import com.tallbyte.flowdesign.javafx.diagram.factory.CircleDiagramImageFactory;
-import com.tallbyte.flowdesign.javafx.diagram.factory.StickmanDiagramImageFactory;
-import com.tallbyte.flowdesign.javafx.diagram.image.CircleDiagramImage;
+import com.tallbyte.flowdesign.javafx.diagram.factory.SystemDiagramImageFactory;
+import com.tallbyte.flowdesign.javafx.diagram.factory.ActorDiagramImageFactory;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.LoadException;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
 /**
@@ -48,11 +46,12 @@ import java.io.IOException;
  */
 public class ApplicationPane extends BorderPane {
 
-    @FXML private TreeView<String>  treeProject;
-    @FXML private VBox              paneFactory;
-    @FXML private DiagramPane       paneDiagram;
+    @FXML private TreeView<TreeEntry> treeProject;
+    @FXML private VBox                paneFactory;
+    @FXML private DiagramPane         paneDiagram;
 
-    private ObjectProperty<Project> project = new SimpleObjectProperty<>(this, "project", null);
+    private ObjectProperty<Project> project  = new SimpleObjectProperty<>(this, "project", null);
+    private DiagramsChangedListener listener = null;
 
     public ApplicationPane() throws LoadException {
         FXMLLoader loader = new FXMLLoader( getClass().getResource("/fxml/applicationPane.fxml") );
@@ -69,28 +68,71 @@ public class ApplicationPane extends BorderPane {
          * Add listeners
          */
 
+        treeProject.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                TreeItem<TreeEntry> item = treeProject.getSelectionModel().getSelectedItem();
+                if (item != null) {
+                    TreeEntry value = item.getValue();
+                    if (value instanceof DiagramEntry) {
+                        ((DiagramEntry) value).open();
+                    }
+                }
+            }
+        });
+
         project.addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+                oldValue.removeDiagramsChangedListener(listener);
+            }
+
             if (newValue != null) {
-                TreeItem<String> root           = new TreeItem<>(newValue.getName());
-                TreeItem<String> environment    = new TreeItem<>("Environment");
-                TreeItem<String> mask           = new TreeItem<>("Mask");
-                TreeItem<String> flow           = new TreeItem<>("Flow");
+                TreeItem<TreeEntry> root           = new TreeItem<>(new TreeEntry(newValue.getName()));
+                TreeItem<TreeEntry> environment    = new TreeItem<>(new TreeEntry("Environment"));
+                TreeItem<TreeEntry> mask           = new TreeItem<>(new TreeEntry("Mask"));
+                TreeItem<TreeEntry> flow           = new TreeItem<>(new TreeEntry("Flow"));
 
                 root.getChildren().add(environment);
                 root.getChildren().add(mask);
                 root.getChildren().add(flow);
 
                 root.setExpanded(true);
+                environment.setExpanded(true);
+                mask.setExpanded(true);
+                flow.setExpanded(true);
                 treeProject.setRoot(root);
 
                 for (Diagram d : newValue.getDiagrams(EnvironmentDiagram.class)) {
-                    TreeItem<Diagram> item = new TreeItem<Diagram>();
+                    TreeItem<TreeEntry> item = new TreeItem<>();
+                    item.setValue(new DiagramEntry(d));
+                    environment.getChildren().add(item);
                 }
+
+                listener = (diagram, added) -> {
+                    if (added) {
+                        TreeItem<TreeEntry> item = new TreeItem<>();
+                        item.setValue(new DiagramEntry(diagram));
+                        environment.getChildren().add(item);
+                    } else {
+                        TreeItem<TreeEntry> remove = null;
+                        for (TreeItem<TreeEntry> item : environment.getChildren()) {
+                            TreeEntry value = item.getValue();
+
+                            if (value instanceof DiagramEntry) {
+                                ((DiagramEntry) value).remove();
+                                remove = item;
+                            }
+                        }
+                        if (remove != null) {
+                            environment.getChildren().remove(remove);
+                        }
+                    }
+                };
+                newValue.addDiagramsChangedListener(listener);
             }
         });
 
-        paneFactory.getChildren().add(new FactoryNode(new CircleDiagramImageFactory(), "System"));
-        paneFactory.getChildren().add(new FactoryNode(new StickmanDiagramImageFactory(), "Actor"));
+        paneFactory.getChildren().add(new FactoryNode(new SystemDiagramImageFactory(), "System"));
+        paneFactory.getChildren().add(new FactoryNode(new ActorDiagramImageFactory(), "Actor"));
 
         /*
          * Other
@@ -100,6 +142,27 @@ public class ApplicationPane extends BorderPane {
 
         // initialize focus
         Platform.runLater(() -> paneDiagram.requestFocus());
+
+    }
+
+    @FXML
+    public void addEnvironment() {
+        Dialog<String> dialog = new TextInputDialog();
+        dialog.setTitle("Create new Environment-Diagram");
+        dialog.setContentText("Name");
+        dialog.setHeaderText(null);
+        dialog.showAndWait().ifPresent(response -> {
+            Project project = getProject();
+            if (project != null) {
+                project.addDiagram(new EnvironmentDiagram(response));
+            }
+        });
+
+
+    }
+
+    @FXML
+    public void addFlow() {
 
     }
 
@@ -113,6 +176,47 @@ public class ApplicationPane extends BorderPane {
 
     public ObjectProperty<Project> projectProperty() {
         return project;
+    }
+
+    private class TreeEntry {
+
+        protected String name;
+
+        public TreeEntry(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
+
+    private class DiagramEntry extends TreeEntry {
+
+        private final Diagram                diagram;
+        private final PropertyChangeListener listener;
+
+        public DiagramEntry(Diagram diagram) {
+            super(diagram.getName());
+            this.diagram  = diagram;
+            this.listener = evt -> {
+                if (evt.getPropertyName().equals("name")) {
+                    name = evt.getNewValue().toString();
+                    treeProject.refresh();
+                }
+            };
+
+            diagram.addPropertyChangeListener(listener);
+        }
+
+        public void open() {
+            paneDiagram.setDiagram(diagram);
+        }
+
+        public void remove() {
+            diagram.removePropertyChangeListener(listener);
+        }
     }
 
 }
