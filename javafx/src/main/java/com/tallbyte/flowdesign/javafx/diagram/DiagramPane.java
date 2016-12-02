@@ -199,6 +199,32 @@ public class DiagramPane extends StackPane {
     }
 
     /**
+     * Adds an (temporary) {@link Node} to the drawing board.
+     * This will refuse {@link DiagramNode}s.
+     * @param node the {@link Node} to add
+     */
+    void addGroupNode(Node node) {
+        if (node instanceof DiagramNode) {
+            return;
+        }
+
+        groupContent.getChildren().add(node);
+    }
+
+    /**
+     * Removes an (temporary) {@link Node} from the drawing board.
+     * This will refuse {@link DiagramNode}s.
+     * @param node the {@link Node} to remove
+     */
+    void removeGroupNode(Node node) {
+        if (node instanceof DiagramNode) {
+            return;
+        }
+
+        groupContent.getChildren().remove(node);
+    }
+
+    /**
      * Adds a new {@link DiagramImageFactory}.
      * @param clazz the {@link Class} of the diagram type
      * @param factory the factory
