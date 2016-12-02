@@ -18,8 +18,8 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<?import com.tallbyte.flowdesign.javafx.pane.DiagramPane?>
-<?import com.tallbyte.flowdesign.javafx.pane.FactoryPane?>
+<?import com.tallbyte.flowdesign.javafx.diagram.DiagramPane?>
+<?import com.tallbyte.flowdesign.javafx.diagram.FactoryPane?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" stylesheets="/css/main.css">

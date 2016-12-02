@@ -60,6 +60,10 @@ NodeModificator {
     -fx-fill:               #4a60ff;
 }
 
+.nodeConnectionBlob {
+    -fx-fill:               #4a60ff;
+}
+
 FactoryNode {
     -fx-content-display:   TOP;
 }

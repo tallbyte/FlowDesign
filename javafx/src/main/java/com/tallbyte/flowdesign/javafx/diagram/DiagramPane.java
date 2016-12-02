@@ -28,6 +28,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 
@@ -166,6 +167,35 @@ public class DiagramPane extends StackPane {
                 ).forEach(node
                         -> ((DiagramNode) node).selectedProperty().set(false)
         );
+    }
+
+    /**
+     * Notifies all selected @{@link DiagramNode} to move.
+     * @param dx the x delta
+     * @param dy the y delta
+     */
+    void moveAllSelected(double dx, double dy) {
+        groupContent.getChildrenUnmodifiable()
+                .stream()
+                .filter(node
+                        -> node instanceof DiagramNode && ((DiagramNode) node).selectedProperty().get()
+                ).forEach(node
+                        -> ((DiagramNode) node).move(dx, dy)
+        );
+    }
+
+    /**
+     * Checks if any {@link DiagramNode} is selected.
+     * @return True if one is selected, else false.
+     */
+    boolean hasSelectedNodes() {
+        for (Node node : groupContent.getChildrenUnmodifiable()) {
+            if (node instanceof DiagramNode && ((DiagramNode) node).selectedProperty().get()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -21,15 +21,17 @@ package com.tallbyte.flowdesign.javafx.diagram;
 import com.tallbyte.flowdesign.core.Element;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import javafx.beans.property.*;
-import javafx.beans.property.adapter.JavaBeanDoubleProperty;
 import javafx.beans.property.adapter.JavaBeanDoublePropertyBuilder;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Circle;
 
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,9 +43,8 @@ import java.util.List;
  */
 public class DiagramNode extends Pane {
 
-    protected StringProperty    text       = new SimpleStringProperty(this, "text", "hey");
-
     protected List<Property<?>> properties = new ArrayList<>();
+    protected DiagramPane       diagramPane;
     protected DiagramImage      content;
 
     protected double            mouseX;
@@ -56,12 +57,15 @@ public class DiagramNode extends Pane {
     protected DoubleProperty    realWidthProperty;
     protected DoubleProperty    realHeightProperty;
 
-    public DiagramNode(Element element, DiagramImage content) {
-        this.content = content;
+    protected StringProperty    text     = new SimpleStringProperty(this, "text", "");
+    protected BooleanProperty   selected = new SimpleBooleanProperty(this, "selected", false);
 
-        JavaBeanDoublePropertyBuilder.create().bean(element).name("x");
+    private   boolean           release  = true;
 
-        this.element = element;
+    public DiagramNode(DiagramPane diagramPane, Element element, DiagramImage content) {
+        this.diagramPane = diagramPane;
+        this.content     = content;
+        this.element     = element;
 
         try {
             realXProperty = JavaBeanDoublePropertyBuilder.create().bean(element).name("x").build();
@@ -71,12 +75,6 @@ public class DiagramNode extends Pane {
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("Could not create properties. This should never happen?!");
         }
-
-        layoutXProperty().bindBidirectional(realXProperty);
-        layoutYProperty().bindBidirectional(realYProperty);
-
-        content.widthProperty().bindBidirectional(realWidthProperty);
-        content.heightProperty().bindBidirectional(realHeightProperty);
 
         addDefaultProperties();
         setup();
@@ -91,13 +89,73 @@ public class DiagramNode extends Pane {
     }
 
     /**
+     * Gets the real x property
+     * @return Returns the property.
+     */
+    public DoubleProperty realXPropertyProperty() {
+        return realXProperty;
+    }
+
+    /**
+     * Gets the real y property
+     * @return Returns the property.
+     */
+    public DoubleProperty realYPropertyProperty() {
+        return realYProperty;
+    }
+
+    /**
+     * Gets the real width property
+     * @return Returns the property.
+     */
+    public DoubleProperty realWidthPropertyProperty() {
+        return realWidthProperty;
+    }
+
+    /**
+     * Gets the real height property
+     * @return Returns the property.
+     */
+    public DoubleProperty realHeightPropertyProperty() {
+        return realHeightProperty;
+    }
+
+    /**
+     * Gets the text property
+     * @return Returns the property.
+     */
+    public StringProperty textProperty() {
+        return text;
+    }
+
+    /**
+     * Gets the selected property
+     * @return Returns the property.
+     */
+    public BooleanProperty selectedProperty() {
+        return selected;
+    }
+
+    /**
+     * Moves this {@link DiagramNode}.
+     * @param dx the delta x
+     * @param dy the delta y
+     */
+    void move(double dx, double dy) {
+        setLayoutX(getLayoutX() + dx);
+        setLayoutY(getLayoutY() + dy);
+
+        release = false;
+    }
+
+    /**
      * Adds the according properties to the externally-accessible list.
      */
     private void addDefaultProperties() {
-        properties.add(content.layoutXProperty());
-        properties.add(content.layoutYProperty());
-        properties.add(content.heightProperty());
-        properties.add(content.widthProperty());
+        properties.add(realXProperty);
+        properties.add(realYProperty);
+        properties.add(realWidthProperty);
+        properties.add(realHeightProperty);
         properties.add(text);
     }
 
@@ -105,26 +163,9 @@ public class DiagramNode extends Pane {
      * Setup of bindings and listeners.
      */
     private void setup() {
-
-        setOnMouseMoved(event -> {
-            mouseX = event.getSceneX();
-            mouseY = event.getSceneY();
-
-            event.consume();
-        });
-
-        setOnMouseDragged(event -> {
-            double dx = event.getSceneX() - mouseX;
-            double dy = event.getSceneY() - mouseY;
-
-            setLayoutX(getLayoutX() + dx);
-            setLayoutY(getLayoutY() + dy);
-
-            mouseX = event.getSceneX();
-            mouseY = event.getSceneY();
-
-            event.consume();
-        });
+        /*
+         * Basic layout
+         */
 
         getChildren().add(content);
         StackPane.setMargin(content, new Insets(3, 3, 3, 3));
@@ -143,12 +184,14 @@ public class DiagramNode extends Pane {
         getChildren().add(topRight);
         StackPane.setAlignment(topRight, Pos.TOP_RIGHT);
         topRight.layoutXProperty().bind(widthProperty().subtract(topRight.widthProperty()));
+        topRight.visibleProperty().bind(selected);
         topRight.setLayoutY(0);
 
         NodeModificator topLeft = new NodeModificator(content, NodeModificator.Location.TOP_LEFT);
         topLeft.setCursor(Cursor.NW_RESIZE);
         getChildren().add(topLeft);
         StackPane.setAlignment(topLeft, Pos.TOP_LEFT);
+        topLeft.visibleProperty().bind(selected);
         topLeft.setLayoutX(0);
         topLeft.setLayoutY(0);
 
@@ -156,6 +199,7 @@ public class DiagramNode extends Pane {
         bottomRight.setCursor(Cursor.SE_RESIZE);
         getChildren().add(bottomRight);
         StackPane.setAlignment(bottomRight, Pos.BOTTOM_RIGHT);
+        bottomRight.visibleProperty().bind(selected);
         bottomRight.layoutXProperty().bind(widthProperty().subtract(bottomRight.widthProperty()));
         bottomRight.layoutYProperty().bind(heightProperty().subtract(bottomRight.heightProperty()));
 
@@ -163,13 +207,89 @@ public class DiagramNode extends Pane {
         bottomLeft.setCursor(Cursor.SW_RESIZE);
         getChildren().add(bottomLeft);
         StackPane.setAlignment(bottomLeft, Pos.BOTTOM_LEFT);
+        bottomLeft.visibleProperty().bind(selected);
         bottomLeft.setLayoutX(0);
         bottomLeft.layoutYProperty().bind(heightProperty().subtract(bottomLeft.heightProperty()));
+
+        Circle circle = new Circle();
+        circle.getStyleClass().add("nodeConnectionBlob");
+        circle.setRadius(3);
+        circle.visibleProperty().bind(selected);
+        circle.centerXProperty().bind(widthProperty().multiply(0.5));
+        circle.centerYProperty().bind(heightProperty().multiply(1.0));
+        getChildren().add(circle);
+
+
+        /*
+         * Basic settings
+         */
+
+        selected.set(true);
+
+        layoutXProperty().bindBidirectional(realXProperty);
+        layoutYProperty().bindBidirectional(realYProperty);
+
+        content.widthProperty().bindBidirectional(realWidthProperty);
+        content.heightProperty().bindBidirectional(realHeightProperty);
 
         prefWidthProperty().bind(content.widthProperty());
         prefHeightProperty().bind(content.heightProperty());
 
         setCursor(Cursor.MOVE);
+
+        /*
+         * Handlers
+         */
+
+        setOnMouseMoved(event -> {
+            mouseX = event.getSceneX();
+            mouseY = event.getSceneY();
+
+            event.consume();
+        });
+
+        setOnMouseDragged(event -> {
+            double dx = event.getSceneX() - mouseX;
+            double dy = event.getSceneY() - mouseY;
+
+            diagramPane.moveAllSelected(dx, dy);
+
+            mouseX = event.getSceneX();
+            mouseY = event.getSceneY();
+
+            event.consume();
+        });
+
+        EventHandler<? super javafx.scene.input.MouseEvent> handlerClickedPre = event -> {
+            if (!diagramPane.hasSelectedNodes()) {
+                if (!event.isShiftDown()) {
+                    diagramPane.setAllUnselected();
+                }
+
+                selected.set(true);
+            }
+
+            release = true;
+            event.consume();
+        };
+
+        EventHandler<? super javafx.scene.input.MouseEvent> handlerClickedAfter = event -> {
+            if (release) {
+                if (!event.isShiftDown()) {
+                    diagramPane.setAllUnselected();
+                }
+
+                selected.set(true);
+
+                event.consume();
+            }
+        };
+
+        setOnMousePressed(handlerClickedPre);
+        textFieldText.setOnMousePressed(handlerClickedPre);
+
+        setOnMouseClicked(handlerClickedAfter);
+        textFieldText.setOnMouseClicked(handlerClickedAfter);
     }
 
 

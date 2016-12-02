@@ -22,9 +22,8 @@ import com.tallbyte.flowdesign.core.Diagram;
 import com.tallbyte.flowdesign.core.DiagramsChangedListener;
 import com.tallbyte.flowdesign.core.EnvironmentDiagram;
 import com.tallbyte.flowdesign.core.Project;
-import com.tallbyte.flowdesign.javafx.diagram.FactoryNode;
-import com.tallbyte.flowdesign.javafx.diagram.factory.SystemDiagramImageFactory;
-import com.tallbyte.flowdesign.javafx.diagram.factory.ActorDiagramImageFactory;
+import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
+import com.tallbyte.flowdesign.javafx.diagram.FactoryPane;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -34,7 +33,6 @@ import javafx.fxml.LoadException;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -51,8 +49,8 @@ import java.io.IOException;
 public class ApplicationPane extends BorderPane {
 
     @FXML private TreeView<TreeEntry> treeProject;
-    @FXML private FactoryPane         paneFactory;
-    @FXML private DiagramPane         paneDiagram;
+    @FXML private FactoryPane paneFactory;
+    @FXML private DiagramPane paneDiagram;
     @FXML private MenuItem            menuItemAddEnvironment;
 
     private ObjectProperty<Project> project  = new SimpleObjectProperty<>(this, "project", null);
