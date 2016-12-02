@@ -16,13 +16,12 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx.pane;
+package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.core.Diagram;
 import com.tallbyte.flowdesign.core.Element;
 import com.tallbyte.flowdesign.core.ElementsChangedListener;
 import com.tallbyte.flowdesign.core.EnvironmentDiagram;
-import com.tallbyte.flowdesign.javafx.diagram.DiagramNode;
 import com.tallbyte.flowdesign.javafx.diagram.factory.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -43,7 +42,7 @@ import java.util.Map;
  */
 public class DiagramPane extends StackPane {
 
-    protected final Group                                      groupContent  = new Group();
+    protected final Group                                             groupContent       = new Group();
     protected final Map<Class<?>, Map<Class<?>, DiagramImageFactory>> fullImageFactories = new HashMap<>();
     protected       Map<Class<?>, DiagramImageFactory>                imageFactories     = new HashMap<>();
 
@@ -92,7 +91,7 @@ public class DiagramPane extends StackPane {
                         DiagramImageFactory factory = imageFactories.get(element.getClass());
 
                         if (factory != null) {
-                            groupContent.getChildren().add(new DiagramNode(element, factory.createDiagramImage()));
+                            groupContent.getChildren().add(new DiagramNode(this, element, factory.createDiagramImage()));
                         }
                     }
                 };
@@ -102,10 +101,11 @@ public class DiagramPane extends StackPane {
 
         parentProperty().addListener((observable, oldValue, newValue) -> {
             if (oldValue != null) {
-                newValue.setOnMouseMoved(null);
-                newValue.setOnMouseDragged(null);
-                newValue.setOnDragOver(null);
+                oldValue.setOnMouseMoved(null);
+                oldValue.setOnMouseDragged(null);
+                oldValue.setOnDragOver(null);
                 oldValue.setOnDragExited(null);
+                oldValue.setOnMousePressed(null);
             }
 
             if (newValue != null) {
@@ -139,14 +139,33 @@ public class DiagramPane extends StackPane {
                             element.setWidth(75);
                             element.setHeight(75);
 
+                            setAllUnselected();
                             diagram.addElement(element);
                         }
 
                         event.consume();
                     }
                 });
+
+                newValue.setOnMousePressed(event -> {
+                    setAllUnselected();
+                    event.consume();
+                });
             }
         });
+    }
+
+    /**
+     * Marks all {@link DiagramNode}s as unselected.
+     */
+    void setAllUnselected() {
+        groupContent.getChildrenUnmodifiable()
+                .stream()
+                .filter(node
+                        -> node instanceof DiagramNode
+                ).forEach(node
+                        -> ((DiagramNode) node).selectedProperty().set(false)
+        );
     }
 
     /**

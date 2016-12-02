@@ -16,19 +16,18 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core.environment;
+package com.tallbyte.flowdesign.core;
 
-import com.tallbyte.flowdesign.core.Element;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.tallbyte.flowdesign.core.environment.Connection;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-11-07)<br/>
+ * - julian (2016-11-10)<br/>
  */
-public class System extends Element {
+public interface ConnectionsChangedListener {
+
+    public void onConnectionsChanged(Connection connection, boolean added);
 
 }

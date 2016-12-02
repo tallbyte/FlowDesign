@@ -31,28 +31,24 @@ import java.beans.PropertyChangeSupport;
  */
 public class Connection {
 
-    private boolean toSystem;
+    private Element target;
     private Element element;
 
     private PropertyChangeSupport changeSupport;
 
-    public Connection(Element element) {
-        this(false, element);
-    }
-
-    public Connection(boolean toSystem, Element element) {
-        this.toSystem = toSystem;
-        this.element  = element;
+    public Connection(Element element, Element target) {
+        this.target  = target;
+        this.element = element;
 
         this.changeSupport = new PropertyChangeSupport(this);
     }
 
-    public boolean isToSystem() {
-        return toSystem;
+    public Element getTarget() {
+        return target;
     }
 
-    public void setToSystem(boolean toSystem) {
-        this.toSystem = toSystem;
+    public void setTarget(Element target) {
+        this.target = target;
     }
 
     public Element getElement() {
@@ -66,4 +62,9 @@ public class Connection {
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.addPropertyChangeListener(listener);
     }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.removePropertyChangeListener(listener);
+    }
+
 }

@@ -18,6 +18,8 @@
 
 package com.tallbyte.flowdesign.core;
 
+import com.tallbyte.flowdesign.core.environment.Connection;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
@@ -31,15 +33,17 @@ import java.util.List;
  */
 public abstract class Diagram {
 
-    protected String                        name;
-    protected List<Element>                 elements = new ArrayList<>();
+    protected String                           name;
+    protected List<Element>                    elements    = new ArrayList<>();
+    protected List<Connection>                 connections = new ArrayList<>();
 
-    protected Element                       root;
+    protected Element                          root;
 
-    protected Project                       project = null;
+    protected Project                          project = null;
 
-    protected List<ElementsChangedListener> listeners = new ArrayList<>();
-    protected PropertyChangeSupport         changeSupport;
+    protected List<ElementsChangedListener>    listenersElements    = new ArrayList<>();
+    protected List<ConnectionsChangedListener> listenersConnections = new ArrayList<>();
+    protected PropertyChangeSupport            changeSupport;
 
     /**
      * Creates a new {@link Diagram}
@@ -108,7 +112,7 @@ public abstract class Diagram {
     public void addElement(Element element) {
         this.elements.add(element);
 
-        for (ElementsChangedListener listener : listeners) {
+        for (ElementsChangedListener listener : listenersElements) {
             listener.onElementsChanged(element, true);
         }
     }
@@ -121,8 +125,34 @@ public abstract class Diagram {
     public void removeElement(Element element) {
         this.elements.remove(element);
 
-        for (ElementsChangedListener listener : listeners) {
+        for (ElementsChangedListener listener : listenersElements) {
             listener.onElementsChanged(element, false);
+        }
+    }
+
+    /**
+     * Adds the given {@link Connection} to the internal list.
+     * This will also call all {@link ConnectionsChangedListener}.
+     * @param connection the @{link Connection} to add
+     */
+    public void addConnection(Connection connection) {
+        this.connections.add(connection);
+
+        for (ConnectionsChangedListener listener : listenersConnections) {
+            listener.onConnectionsChanged(connection, true);
+        }
+    }
+    /**
+     * Removes the given {@link Connection} from the internal list.
+     * This will also call all {@link ConnectionsChangedListener}.
+     * @param connection the @{link Connection} to remove
+     */
+
+    public void removeConnection(Connection connection) {
+        this.connections.remove(connection);
+
+        for (ConnectionsChangedListener listener : listenersConnections) {
+            listener.onConnectionsChanged(connection, false);
         }
     }
 
@@ -139,7 +169,7 @@ public abstract class Diagram {
      * @param listener the {@link ElementsChangedListener} to register
      */
     public void addElementsChangedListener(ElementsChangedListener listener) {
-        listeners.add(listener);
+        listenersElements.add(listener);
     }
 
     /**
@@ -147,7 +177,23 @@ public abstract class Diagram {
      * @param listener the {@link ElementsChangedListener} to unregister
      */
     public void removeElementsChangedListener(ElementsChangedListener listener) {
-        listeners.remove(listener);
+        listenersElements.remove(listener);
+    }
+
+    /**
+     * Registers an {@link ConnectionsChangedListener}.
+     * @param listener the {@link ConnectionsChangedListener} to register
+     */
+    public void addElementsChangedListener(ConnectionsChangedListener listener) {
+        listenersConnections.add(listener);
+    }
+
+    /**
+     * Unregisters an {@link ConnectionsChangedListener}.
+     * @param listener the {@link ConnectionsChangedListener} to unregister
+     */
+    public void removeElementsChangedListener(ConnectionsChangedListener listener) {
+        listenersConnections.remove(listener);
     }
 
     /**
@@ -171,3 +217,4 @@ public abstract class Diagram {
         return name;
     }
 }
+

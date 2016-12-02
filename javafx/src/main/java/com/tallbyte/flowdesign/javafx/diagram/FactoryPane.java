@@ -16,10 +16,9 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx.pane;
+package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.core.EnvironmentDiagram;
-import com.tallbyte.flowdesign.javafx.diagram.FactoryNode;
 import com.tallbyte.flowdesign.javafx.diagram.factory.ActorDiagramImageFactory;
 import com.tallbyte.flowdesign.javafx.diagram.factory.SystemDiagramImageFactory;
 import javafx.scene.control.Label;

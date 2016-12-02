@@ -31,6 +31,4 @@ import java.util.List;
  */
 public class Actor extends Element {
 
-    private List<Connection> connections = new ArrayList<>();
-
 }
