@@ -27,11 +27,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -260,7 +260,7 @@ public class DiagramNode extends Pane {
             event.consume();
         });
 
-        EventHandler<? super javafx.scene.input.MouseEvent> handlerClickedPre = event -> {
+        EventHandler<? super MouseEvent> handlerClickedPre = event -> {
             if (!diagramPane.hasSelectedNodes()) {
                 if (!event.isShiftDown()) {
                     diagramPane.setAllUnselected();
@@ -273,7 +273,7 @@ public class DiagramNode extends Pane {
             event.consume();
         };
 
-        EventHandler<? super javafx.scene.input.MouseEvent> handlerClickedAfter = event -> {
+        EventHandler<? super MouseEvent> handlerClickedAfter = event -> {
             if (release) {
                 if (!event.isShiftDown()) {
                     diagramPane.setAllUnselected();
