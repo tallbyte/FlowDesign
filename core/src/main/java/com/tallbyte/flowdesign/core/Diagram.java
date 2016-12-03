@@ -189,7 +189,7 @@ public abstract class Diagram {
      * Registers an {@link ConnectionsChangedListener}.
      * @param listener the {@link ConnectionsChangedListener} to register
      */
-    public void addElementsChangedListener(ConnectionsChangedListener listener) {
+    public void addConnectionsChangedListener(ConnectionsChangedListener listener) {
         listenersConnections.add(listener);
     }
 
@@ -197,7 +197,7 @@ public abstract class Diagram {
      * Unregisters an {@link ConnectionsChangedListener}.
      * @param listener the {@link ConnectionsChangedListener} to unregister
      */
-    public void removeElementsChangedListener(ConnectionsChangedListener listener) {
+    public void removeConnectionsChangedListener(ConnectionsChangedListener listener) {
         listenersConnections.remove(listener);
     }
 

@@ -18,10 +18,7 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
-import com.tallbyte.flowdesign.core.Diagram;
-import com.tallbyte.flowdesign.core.Element;
-import com.tallbyte.flowdesign.core.ElementsChangedListener;
-import com.tallbyte.flowdesign.core.EnvironmentDiagram;
+import com.tallbyte.flowdesign.core.*;
 import com.tallbyte.flowdesign.javafx.diagram.factory.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -58,10 +55,11 @@ public class DiagramPane extends StackPane {
     protected double mouseX;
     protected double mouseY;
 
-    protected ElementsChangedListener          listenerElements  = null;
-    protected EventHandler<? super MouseEvent> listenerRelease   = null;
+    protected ElementsChangedListener          listenerElements    = null;
+    protected ConnectionsChangedListener       listenerConnections = null;
+    protected EventHandler<? super MouseEvent> listenerRelease     = null;
 
-    protected ConnectionRequest                connectionRequest = null;
+    protected ConnectionRequest                connectionRequest   = null;
 
     /**
      * Creates a new {@link DiagramPane} with a default set of factories.
@@ -79,6 +77,7 @@ public class DiagramPane extends StackPane {
         diagram.addListener((observable, oldValue, newValue) -> {
             if (oldValue != null) {
                 oldValue.removeElementsChangedListener(listenerElements);
+                oldValue.removeConnectionsChangedListener(listenerConnections);
             }
 
             // remove all existing entries
@@ -102,7 +101,11 @@ public class DiagramPane extends StackPane {
                         }
                     }
                 };
+                listenerConnections = (connection, added) -> {
+                    // TODO actualy show the connection
+                };
                 newValue.addElementsChangedListener(listenerElements);
+                newValue.addConnectionsChangedListener(listenerConnections);
             }
         });
 
