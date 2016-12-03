@@ -25,14 +25,17 @@ import com.tallbyte.flowdesign.core.EnvironmentDiagram;
 import com.tallbyte.flowdesign.javafx.diagram.factory.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -55,7 +58,10 @@ public class DiagramPane extends StackPane {
     protected double mouseX;
     protected double mouseY;
 
-    protected ElementsChangedListener listener = null;
+    protected ElementsChangedListener          listenerElements  = null;
+    protected EventHandler<? super MouseEvent> listenerRelease   = null;
+
+    protected ConnectionRequest                connectionRequest = null;
 
     /**
      * Creates a new {@link DiagramPane} with a default set of factories.
@@ -72,7 +78,7 @@ public class DiagramPane extends StackPane {
 
         diagram.addListener((observable, oldValue, newValue) -> {
             if (oldValue != null) {
-                oldValue.removeElementsChangedListener(listener);
+                oldValue.removeElementsChangedListener(listenerElements);
             }
 
             // remove all existing entries
@@ -87,7 +93,7 @@ public class DiagramPane extends StackPane {
                 elementFactories = fullElementFactories.get(newValue.getClass());
                 elementFactories = elementFactories == null ? new HashMap<>() : elementFactories;
 
-                listener = (element, added) -> {
+                listenerElements = (element, added) -> {
                     if (added) {
                         DiagramImageFactory factory = imageFactories.get(element.getClass());
 
@@ -96,7 +102,7 @@ public class DiagramPane extends StackPane {
                         }
                     }
                 };
-                newValue.addElementsChangedListener(listener);
+                newValue.addElementsChangedListener(listenerElements);
             }
         });
 
@@ -107,6 +113,7 @@ public class DiagramPane extends StackPane {
                 oldValue.setOnDragOver(null);
                 oldValue.setOnDragExited(null);
                 oldValue.setOnMousePressed(null);
+                oldValue.removeEventFilter(MouseEvent.MOUSE_RELEASED, listenerRelease);
             }
 
             if (newValue != null) {
@@ -152,6 +159,19 @@ public class DiagramPane extends StackPane {
                     setAllUnselected();
                     event.consume();
                 });
+
+                listenerRelease = event -> {
+                    Iterator<Node> iterator = groupContent.getChildren().iterator();
+                    while(iterator.hasNext()) {
+                        Node node = iterator.next();
+
+                        if (node instanceof MarkerNode) {
+                            iterator.remove();
+                        }
+                    }
+                };
+
+                newValue.addEventFilter(MouseEvent.MOUSE_RELEASED, listenerRelease);
             }
         });
     }
@@ -203,7 +223,7 @@ public class DiagramPane extends StackPane {
      * This will refuse {@link DiagramNode}s.
      * @param node the {@link Node} to add
      */
-    void addGroupNode(Node node) {
+    void addDisplayNode(Node node) {
         if (node instanceof DiagramNode) {
             return;
         }
@@ -216,12 +236,32 @@ public class DiagramPane extends StackPane {
      * This will refuse {@link DiagramNode}s.
      * @param node the {@link Node} to remove
      */
-    void removeGroupNode(Node node) {
+    void removeDisplayNode(Node node) {
         if (node instanceof DiagramNode) {
             return;
         }
 
         groupContent.getChildren().remove(node);
+    }
+
+    /**
+     * Sets the current {@link ConnectionRequest}.
+     * @return Returns the request or null if none is set.
+     */
+    public ConnectionRequest getConnectionRequest() {
+        return connectionRequest;
+    }
+
+    /**
+     * Gets the current {@link ConnectionRequest}.
+     * @param connectionRequest the new request
+     */
+    public void setConnectionRequest(ConnectionRequest connectionRequest, Node display) {
+        this.connectionRequest = connectionRequest;
+
+        if (display != null) {
+            addDisplayNode(display);
+        }
     }
 
     /**

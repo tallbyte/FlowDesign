@@ -19,18 +19,27 @@
 package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.core.Element;
+import com.tallbyte.flowdesign.core.environment.Connection;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import javafx.beans.property.*;
 import javafx.beans.property.adapter.JavaBeanDoublePropertyBuilder;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.TextField;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -285,11 +294,53 @@ public class DiagramNode extends Pane {
             }
         };
 
+        content.setMouseTransparent(true);
+
+        EventHandler<? super MouseEvent> handlerReleased = event -> {
+            ConnectionRequest request = diagramPane.getConnectionRequest();
+            if (request != null && request.getSource() != element) {
+                diagramPane.getDiagram().addConnection(
+                        new Connection(
+                                request.getSource(),
+                                element
+                        )
+                );
+
+                /*System.out.println(request.getSource());
+                System.out.println(element);*/
+            }
+            diagramPane.setConnectionRequest(null, null);
+        };
+
         setOnMousePressed(handlerClickedPre);
         textFieldText.setOnMousePressed(handlerClickedPre);
 
+        setOnMouseDragReleased(handlerReleased);
+        textFieldText.setOnMouseDragReleased(handlerReleased);
+
         setOnMouseClicked(handlerClickedAfter);
         textFieldText.setOnMouseClicked(handlerClickedAfter);
+
+        circle.setCursor(Cursor.CROSSHAIR);
+        circle.setOnMouseDragged(Event::consume);
+        circle.setOnDragDetected(event -> {
+            ConnectionLine line = new ConnectionLine();
+            line.startXProperty().bind(realXProperty.add(widthProperty().multiply(0.5)));
+            line.startYProperty().bind(realYProperty.add(heightProperty().multiply(1).subtract(circle.radiusProperty().multiply(0.5).multiply(0))));
+            line.setEndX(line.getStartX());
+            line.setEndY(line.getStartY());
+            line.setMouseTransparent(true);
+
+            circle.startFullDrag();
+
+            diagramPane.addEventFilter(MouseEvent.MOUSE_DRAGGED, eventDrag -> {
+                line.setEndX(eventDrag.getX());
+                line.setEndY(eventDrag.getY());
+            });
+
+            diagramPane.setConnectionRequest(new ConnectionRequest(element), line);
+            event.consume();
+        });
     }
 
 

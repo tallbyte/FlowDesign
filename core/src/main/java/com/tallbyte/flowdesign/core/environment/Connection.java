@@ -67,4 +67,15 @@ public class Connection {
         changeSupport.removePropertyChangeListener(listener);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Connection) {
+            Connection con = (Connection) obj;
+
+            return (con.getTarget() == getTarget() && con.getElement() == getElement())
+                    || (con.getTarget() == getElement() && con.getElement() == getTarget());
+        }
+
+        return false;
+    }
 }

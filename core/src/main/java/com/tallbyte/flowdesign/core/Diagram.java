@@ -136,10 +136,15 @@ public abstract class Diagram {
      * @param connection the @{link Connection} to add
      */
     public void addConnection(Connection connection) {
-        this.connections.add(connection);
+        // some pre-checking
+        if (!connections.contains(connection)
+                && connection.getTarget() != connection.getElement()) {
 
-        for (ConnectionsChangedListener listener : listenersConnections) {
-            listener.onConnectionsChanged(connection, true);
+            this.connections.add(connection);
+
+            for (ConnectionsChangedListener listener : listenersConnections) {
+                listener.onConnectionsChanged(connection, true);
+            }
         }
     }
     /**
