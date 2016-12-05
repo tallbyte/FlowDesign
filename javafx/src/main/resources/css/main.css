@@ -56,6 +56,12 @@ NodeModificator {
     -fx-fill:               #4a60ff;
 }
 
+NodeJoint {
+    -fx-fill:               red;
+    -fx-min-width:          3px;
+    -fx-min-height:         3px;
+}
+
 .nodeConnectionBlob {
     -fx-fill:               #4a60ff;
 }

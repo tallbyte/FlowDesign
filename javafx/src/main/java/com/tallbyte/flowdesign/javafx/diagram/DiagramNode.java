@@ -19,6 +19,7 @@
 package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.core.Element;
+import com.tallbyte.flowdesign.core.Joint;
 import com.tallbyte.flowdesign.core.environment.Connection;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import javafx.beans.binding.Bindings;
@@ -112,7 +113,7 @@ public class DiagramNode extends Pane {
      * Gets the real x property
      * @return Returns the property.
      */
-    public DoubleProperty realXPropertyProperty() {
+    public DoubleProperty realXProperty() {
         return realXProperty;
     }
 
@@ -120,7 +121,7 @@ public class DiagramNode extends Pane {
      * Gets the real y property
      * @return Returns the property.
      */
-    public DoubleProperty realYPropertyProperty() {
+    public DoubleProperty realYProperty() {
         return realYProperty;
     }
 
@@ -128,7 +129,7 @@ public class DiagramNode extends Pane {
      * Gets the real width property
      * @return Returns the property.
      */
-    public DoubleProperty realWidthPropertyProperty() {
+    public DoubleProperty realWidthProperty() {
         return realWidthProperty;
     }
 
@@ -136,7 +137,7 @@ public class DiagramNode extends Pane {
      * Gets the real height property
      * @return Returns the property.
      */
-    public DoubleProperty realHeightPropertyProperty() {
+    public DoubleProperty realHeightProperty() {
         return realHeightProperty;
     }
 
@@ -214,8 +215,34 @@ public class DiagramNode extends Pane {
         return element;
     }
 
-    private NodeJoint addJoint() {
-        return null;
+    private NodeJoint addJoint(Joint joint) {
+        NodeJoint element = new NodeJoint(joint, this);
+        switch (joint.getLocation()) {
+            case NORTH:
+                element.centerXProperty().bind(widthProperty().multiply(0.5));
+                element.centerYProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
+                break;
+
+            case EAST:
+                element.centerXProperty().bind(widthProperty());
+                element.centerYProperty().bind(heightProperty().multiply(0.5));
+                break;
+
+            case SOUTH:
+                element.centerXProperty().bind(widthProperty().multiply(0.5));
+                element.centerYProperty().bind(heightProperty());
+                break;
+
+            case WEST:
+                element.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
+                element.centerYProperty().bind(heightProperty().multiply(0.5));
+                break;
+        }
+        element.visibleProperty().bind(selected.or(hoverProperty()).and(Bindings.createBooleanBinding(joint::isOutput)));
+        element.setRadius(3);
+        getChildren().add(element);
+
+        return element;
     }
 
     /**
@@ -288,14 +315,7 @@ public class DiagramNode extends Pane {
                 true
         );
 
-        Circle circle = new Circle();
-        circle.getStyleClass().add("nodeConnectionBlob");
-        circle.setRadius(3);
-        circle.visibleProperty().bind(selected);
-        circle.centerXProperty().bind(widthProperty().multiply(0.5));
-        circle.centerYProperty().bind(heightProperty().multiply(1.0));
-        getChildren().add(circle);
-
+        element.getJoints().forEach(this::addJoint);
 
         /*
          * Basic settings
@@ -395,7 +415,7 @@ public class DiagramNode extends Pane {
         setOnMouseClicked(handlerClickedAfter);
         textFieldText.setOnMouseClicked(handlerClickedAfter);
 
-        circle.setCursor(Cursor.CROSSHAIR);
+        /*circle.setCursor(Cursor.CROSSHAIR);
         circle.setOnMouseDragged(Event::consume);
         circle.setOnDragDetected(event -> {
             ConnectionLine line = new ConnectionLine();
@@ -414,7 +434,7 @@ public class DiagramNode extends Pane {
 
             diagramPane.setConnectionRequest(new ConnectionRequest(element), line);
             event.consume();
-        });
+        });*/
     }
 
 

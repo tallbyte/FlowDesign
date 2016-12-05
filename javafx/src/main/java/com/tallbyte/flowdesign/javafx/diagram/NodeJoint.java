@@ -55,8 +55,8 @@ public class NodeJoint extends Circle {
         setOnMouseDragged(Event::consume);
         setOnDragDetected(event -> {
             ConnectionLine line = new ConnectionLine();
-            line.startXProperty().bind(centerXProperty());
-            line.startYProperty().bind(centerYProperty());
+            line.startXProperty().bind(centerXProperty().add(node.realXProperty()));
+            line.startYProperty().bind(centerYProperty().add(node.realYProperty()));
             line.setEndX(line.getStartX());
             line.setEndY(line.getStartY());
             line.setMouseTransparent(true);

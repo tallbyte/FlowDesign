@@ -33,16 +33,19 @@ public class Joint {
     private final Class<? extends Element>      baseClass;
     private final Set<JointLocation>            acceptedLocations;
     private final Set<Class<? extends Element>> acceptedElements;
+    private final boolean                       forceOut;
 
     public Joint(JointLocation location,
                  Class<? extends Element> baseClass,
                  Set<JointLocation> acceptedLocations,
-                 Set<Class<? extends Element>> acceptedElements) {
+                 Set<Class<? extends Element>> acceptedElements,
+                 boolean forceOut) {
 
         this.location           = location;
         this.baseClass          = baseClass;
         this.acceptedLocations  = new HashSet<>(acceptedLocations);
         this.acceptedElements   = new HashSet<>(acceptedElements);
+        this.forceOut           = forceOut;
     }
 
     public Class<? extends Element> getBaseClass() {
@@ -54,7 +57,7 @@ public class Joint {
     }
 
     public boolean isOutput() {
-        return acceptedLocations.size() == 0;
+        return forceOut || acceptedLocations.size() == 0;
     }
 
     public boolean canJoin(Joint remote) {

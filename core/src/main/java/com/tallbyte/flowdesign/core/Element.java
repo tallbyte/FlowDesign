@@ -181,7 +181,7 @@ public class Element {
         }
 
         for (JointLocation loc : JointLocation.values()) {
-            list.add(new Joint(loc, baseClass, acceptedLocations, new HashSet<>()));
+            list.add(new Joint(loc, baseClass, acceptedLocations, new HashSet<>(), true));
         }
 
         return list;
