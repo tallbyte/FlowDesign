@@ -138,7 +138,7 @@ public abstract class Diagram {
     public void addConnection(Connection connection) {
         // some pre-checking
         if (!connections.contains(connection)
-                && connection.getTarget() != connection.getElement()) {
+                && connection.getTarget() != connection.getSource()) {
 
             this.connections.add(connection);
 

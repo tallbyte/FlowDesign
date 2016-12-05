@@ -19,6 +19,7 @@
 package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.core.Joint;
+import com.tallbyte.flowdesign.core.environment.Connection;
 import javafx.event.Event;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
@@ -30,12 +31,12 @@ import javafx.scene.shape.Circle;
  * Authors:<br/>
  * - julian (2016-12-05)<br/>
  */
-public class NodeJoint extends Circle {
+public class JointNode extends Circle {
 
     private final Joint       joint;
     private final DiagramNode node;
 
-    public NodeJoint(Joint joint, DiagramNode node) {
+    public JointNode(Joint joint, DiagramNode node) {
         this.joint = joint;
         this.node  = node;
 
@@ -53,6 +54,11 @@ public class NodeJoint extends Circle {
     private void setup() {
         setCursor(Cursor.CROSSHAIR);
         setOnMouseDragged(Event::consume);
+
+        setOnMousePressed(event -> node.getDiagramPane().setJoint(joint));
+        setOnMouseReleased(event -> node.getDiagramPane().setJoint(null));
+
+        DiagramPane diagramPane = node.getDiagramPane();
         setOnDragDetected(event -> {
             ConnectionLine line = new ConnectionLine();
             line.startXProperty().bind(centerXProperty().add(node.realXProperty()));
@@ -63,13 +69,29 @@ public class NodeJoint extends Circle {
 
             startFullDrag();
 
-            node.getDiagramPane().addEventFilter(MouseEvent.MOUSE_DRAGGED, eventDrag -> {
+            diagramPane.addEventFilter(MouseEvent.MOUSE_DRAGGED, eventDrag -> {
                 line.setEndX(eventDrag.getX());
                 line.setEndY(eventDrag.getY());
             });
 
-            node.getDiagramPane().setConnectionRequest(new ConnectionRequest(node.getElement()), line);
+            diagramPane.addDisplayNode(line);
             event.consume();
+        });
+
+        setOnMouseDragReleased(event -> {
+            Joint source = diagramPane.getJoint();
+            if (source != null && source != joint) {
+                diagramPane.getDiagram().addConnection(
+                        new Connection(
+                                source,
+                                joint
+                        )
+                );
+
+                System.out.println(source);
+                System.out.println(joint);
+            }
+            diagramPane.setJoint(null);
         });
     }
 

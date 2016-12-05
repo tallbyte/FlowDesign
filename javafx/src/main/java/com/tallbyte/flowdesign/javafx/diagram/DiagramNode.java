@@ -20,29 +20,20 @@ package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.core.Element;
 import com.tallbyte.flowdesign.core.Joint;
-import com.tallbyte.flowdesign.core.environment.Connection;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.*;
 import javafx.beans.property.adapter.JavaBeanDoublePropertyBuilder;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.control.TextField;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
@@ -215,8 +206,8 @@ public class DiagramNode extends Pane {
         return element;
     }
 
-    private NodeJoint addJoint(Joint joint) {
-        NodeJoint element = new NodeJoint(joint, this);
+    private JointNode addJoint(Joint joint) {
+        JointNode element = new JointNode(joint, this);
         switch (joint.getLocation()) {
             case NORTH:
                 element.centerXProperty().bind(widthProperty().multiply(0.5));
@@ -238,9 +229,18 @@ public class DiagramNode extends Pane {
                 element.centerYProperty().bind(heightProperty().multiply(0.5));
                 break;
         }
-        element.visibleProperty().bind(selected.or(hoverProperty()).and(Bindings.createBooleanBinding(joint::isOutput)));
-        element.setRadius(3);
+        element.visibleProperty().bind(
+                selected.or(hoverProperty())
+                        .and(Bindings.createBooleanBinding(joint::isOutput))
+                        .or(Bindings.createBooleanBinding(() -> {
+                            Joint j = diagramPane.getJoint();
+
+                            return j != null && j.canJoin(joint);
+                        }, diagramPane.jointProperty()))
+        );
+        element.setRadius(4);
         getChildren().add(element);
+        diagramPane.registerJointNode(element);
 
         return element;
     }
@@ -390,7 +390,7 @@ public class DiagramNode extends Pane {
 
         content.setMouseTransparent(true);
 
-        EventHandler<? super MouseEvent> handlerReleased = event -> {
+        /*EventHandler<? super MouseEvent> handlerReleased = event -> {
             ConnectionRequest request = diagramPane.getConnectionRequest();
             if (request != null && request.getSource() != element) {
                 diagramPane.getDiagram().addConnection(
@@ -402,15 +402,15 @@ public class DiagramNode extends Pane {
 
                 /*System.out.println(request.getSource());
                 System.out.println(element);*/
-            }
+            /*}
             diagramPane.setConnectionRequest(null, null);
         };
 
+        setOnMouseDragReleased(handlerReleased);
+        textFieldText.setOnMouseDragReleased(handlerReleased);*/
+
         setOnMousePressed(handlerClickedPre);
         textFieldText.setOnMousePressed(handlerClickedPre);
-
-        setOnMouseDragReleased(handlerReleased);
-        textFieldText.setOnMouseDragReleased(handlerReleased);
 
         setOnMouseClicked(handlerClickedAfter);
         textFieldText.setOnMouseClicked(handlerClickedAfter);
