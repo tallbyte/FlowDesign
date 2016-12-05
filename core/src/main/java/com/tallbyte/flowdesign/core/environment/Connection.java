@@ -18,10 +18,7 @@
 
 package com.tallbyte.flowdesign.core.environment;
 
-import com.tallbyte.flowdesign.core.Element;
-
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+import com.tallbyte.flowdesign.core.Joint;
 
 /**
  * This file is part of project flowDesign.
@@ -31,40 +28,21 @@ import java.beans.PropertyChangeSupport;
  */
 public class Connection {
 
-    private Element target;
-    private Element element;
+    private final Joint source;
+    private final Joint target;
 
-    private PropertyChangeSupport changeSupport;
-
-    public Connection(Element element, Element target) {
-        this.target  = target;
-        this.element = element;
-
-        this.changeSupport = new PropertyChangeSupport(this);
-    }
-
-    public Element getTarget() {
-        return target;
-    }
-
-    public void setTarget(Element target) {
+    public Connection(Joint source, Joint target) {
+        this.source = source;
         this.target = target;
+
     }
 
-    public Element getElement() {
-        return element;
+    public Joint getSource() {
+        return source;
     }
 
-    public void setElement(Element element) {
-        this.element = element;
-    }
-
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.addPropertyChangeListener(listener);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.removePropertyChangeListener(listener);
+    public Joint getTarget() {
+        return target;
     }
 
     @Override
@@ -72,8 +50,8 @@ public class Connection {
         if (obj instanceof Connection) {
             Connection con = (Connection) obj;
 
-            return (con.getTarget() == getTarget() && con.getElement() == getElement())
-                    || (con.getTarget() == getElement() && con.getElement() == getTarget());
+            return (con.getTarget() == getTarget() && con.getSource() == getSource())
+                    || (con.getTarget() == getSource() && con.getSource() == getTarget());
         }
 
         return false;

@@ -20,7 +20,6 @@ package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.core.*;
 import com.tallbyte.flowdesign.javafx.diagram.factory.*;
-import com.tallbyte.flowdesign.javafx.pane.PropertyPane;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
@@ -30,6 +29,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 import java.util.HashMap;
@@ -51,8 +51,11 @@ public class DiagramPane extends StackPane {
     protected final Map<Class<?>, Map<String, ElementFactory>>        fullElementFactories = new HashMap<>();
     protected       Map<String, ElementFactory>                       elementFactories     = new HashMap<>();
 
+    protected final Map<Joint, JointNode>       jointNodes                                 = new HashMap<>();
+
     protected final ObjectProperty<Diagram>     diagram = new SimpleObjectProperty<>(this, "diagram", null);
     protected final ObjectProperty<DiagramNode> node    = new SimpleObjectProperty<>(this, "node", null);
+    protected final ObjectProperty<Joint>       joint   = new SimpleObjectProperty<>(this, "joint", null);
 
     protected double mouseX;
     protected double mouseY;
@@ -61,7 +64,6 @@ public class DiagramPane extends StackPane {
     protected ConnectionsChangedListener       listenerConnections = null;
     protected EventHandler<? super MouseEvent> listenerRelease     = null;
 
-    protected ConnectionRequest                connectionRequest   = null;
 
     /**
      * Creates a new {@link DiagramPane} with a default set of factories.
@@ -104,7 +106,7 @@ public class DiagramPane extends StackPane {
                     }
                 };
                 listenerConnections = (connection, added) -> {
-                    // TODO actualy show the connection
+                    groupContent.getChildren().add(new ConnectionNode(connection, this));
                 };
                 newValue.addElementsChangedListener(listenerElements);
                 newValue.addConnectionsChangedListener(listenerConnections);
@@ -181,6 +183,18 @@ public class DiagramPane extends StackPane {
         });
     }
 
+    void registerJointNode(JointNode jointNode) {
+        jointNodes.put(jointNode.getJoint(), jointNode);
+    }
+
+    void unregisterJointNode(JointNode jointNode) {
+        jointNodes.remove(jointNode.getJoint(), jointNode);
+    }
+
+    JointNode getJointNode(Joint joint) {
+        return jointNodes.get(joint);
+    }
+
     /**
      * Marks all {@link DiagramNode}s as unselected.
      */
@@ -250,26 +264,6 @@ public class DiagramPane extends StackPane {
     }
 
     /**
-     * Sets the current {@link ConnectionRequest}.
-     * @return Returns the request or null if none is set.
-     */
-    public ConnectionRequest getConnectionRequest() {
-        return connectionRequest;
-    }
-
-    /**
-     * Gets the current {@link ConnectionRequest}.
-     * @param connectionRequest the new request
-     */
-    public void setConnectionRequest(ConnectionRequest connectionRequest, Node display) {
-        this.connectionRequest = connectionRequest;
-
-        if (display != null) {
-            addDisplayNode(display);
-        }
-    }
-
-    /**
      * Adds a new {@link DiagramImageFactory}.
      * @param clazz the {@link Class} of the diagram type
      * @param factory the factory
@@ -331,5 +325,17 @@ public class DiagramPane extends StackPane {
 
     public ObjectProperty<DiagramNode> nodeProperty() {
         return node;
+    }
+
+    public Joint getJoint() {
+        return joint.get();
+    }
+
+    void setJoint(Joint joint) {
+        this.joint.set(joint);
+    }
+
+    ObjectProperty<Joint> jointProperty() {
+        return joint;
     }
 }
