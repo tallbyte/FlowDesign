@@ -238,7 +238,7 @@ public class DiagramNode extends Pane {
                             return j != null && j.canJoin(joint);
                         }, diagramPane.jointProperty()))
         );
-        element.setRadius(4);
+        element.setRadius(3);
         getChildren().add(element);
         diagramPane.registerJointNode(element);
 

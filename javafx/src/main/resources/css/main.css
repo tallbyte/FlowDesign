@@ -49,6 +49,7 @@
 }
 
 DiagramNode {
+    -fx-insets:             5px;
     -fx-background-color:   transparent;
 }
 
@@ -57,9 +58,13 @@ NodeModificator {
 }
 
 JointNode {
-    -fx-fill:               #4a60ff;
+    -fx-fill:               #3d3d3d;
     -fx-min-width:          3px;
     -fx-min-height:         3px;
+}
+
+ConnectionNode {
+    -fx-stroke:             #3d3d3d;
 }
 
 .nodeConnectionBlob {
@@ -99,6 +104,7 @@ PropertyPane > TextField {
 
 .nodeBorderRectangle {
     -fx-stroke:           #4a60ff;
+    -fx-stroke:           transparent;
     -fx-fill:             transparent;
     -fx-stroke-width:     1.5px;
 }

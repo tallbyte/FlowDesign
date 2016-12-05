@@ -106,30 +106,7 @@ public class DiagramPane extends StackPane {
                     }
                 };
                 listenerConnections = (connection, added) -> {
-                    Line line = new Line();
-
-                    Joint source = connection.getSource();
-                    Joint target = connection.getTarget();
-
-                    JointNode sourceNode = jointNodes.get(source);
-                    JointNode targetNode = jointNodes.get(target);
-
-                    line.startXProperty().bind(sourceNode.layoutXProperty()
-                            .add(sourceNode.centerXProperty())
-                            .add(sourceNode.getNode().realXProperty()));
-                    line.startYProperty().bind(sourceNode.layoutYProperty()
-                            .add(sourceNode.centerYProperty())
-                            .add(sourceNode.getNode().realYProperty()));
-
-                    line.endXProperty().bind(targetNode.layoutXProperty()
-                            .add(targetNode.centerXProperty())
-                            .add(targetNode.getNode().realXProperty()));
-                    line.endYProperty().bind(targetNode.layoutYProperty()
-                            .add(targetNode.centerYProperty())
-                            .add(targetNode.getNode().realYProperty()));
-
-                    line.setStrokeWidth(1.5);
-                    groupContent.getChildren().add(line);
+                    groupContent.getChildren().add(new ConnectionNode(connection, this));
                 };
                 newValue.addElementsChangedListener(listenerElements);
                 newValue.addConnectionsChangedListener(listenerConnections);
@@ -212,6 +189,10 @@ public class DiagramPane extends StackPane {
 
     void unregisterJointNode(JointNode jointNode) {
         jointNodes.remove(jointNode.getJoint(), jointNode);
+    }
+
+    JointNode getJointNode(Joint joint) {
+        return jointNodes.get(joint);
     }
 
     /**
