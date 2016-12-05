@@ -56,8 +56,8 @@ NodeModificator {
     -fx-fill:               #4a60ff;
 }
 
-NodeJoint {
-    -fx-fill:               red;
+JointNode {
+    -fx-fill:               #4a60ff;
     -fx-min-width:          3px;
     -fx-min-height:         3px;
 }
