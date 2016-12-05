@@ -22,6 +22,7 @@
 <?import com.tallbyte.flowdesign.javafx.diagram.FactoryPane?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import com.tallbyte.flowdesign.javafx.pane.PropertyPane?>
 <fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" stylesheets="/css/main.css">
     <top>
         <MenuBar>
@@ -59,7 +60,7 @@
                         <FactoryPane fx:id="paneFactory"/>
                     </TitledPane>
                     <TitledPane collapsible="false" text="Properties">
-                        <Button text="test"/>
+                        <PropertyPane fx:id="paneProperty"/>
                     </TitledPane>
                 </VBox>
             </top>

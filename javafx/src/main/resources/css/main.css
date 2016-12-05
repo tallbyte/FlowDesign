@@ -21,10 +21,6 @@
     -fx-background-radius: 0px;
 }
 
-Rectangle {
-    -fx-fill:   yellow;
-}
-
 #barBottom {
     -fx-padding:            5 5 5 5;
     -fx-background-color: #c2c2c2;
@@ -69,10 +65,23 @@ FactoryNode {
 }
 
 FactoryPane {
-    -fx-padding:           5px;
+    -fx-alignment:         center;
+    -fx-padding:           10px;
     -fx-vgap:              3px;
     -fx-hgap:              3px;
     -fx-min-height:        200px;
+}
+
+PropertyPane {
+    -fx-alignment:         center;
+    -fx-padding:           10px;
+    -fx-vgap:              3px;
+    -fx-hgap:              10px;
+    -fx-min-height:        200px;
+}
+
+PropertyPane > TextField {
+    -fx-pref-width:       100px;
 }
 
 .nodeTextHolder {
@@ -80,6 +89,12 @@ FactoryPane {
     -fx-background-color: transparent;
     -fx-border-style:     none;
     -fx-alignment:        center;
+}
+
+.nodeBorderRectangle {
+    -fx-stroke:           #4a60ff;
+    -fx-fill:             transparent;
+    -fx-stroke-width:     1.5px;
 }
 
 .headerLabel {

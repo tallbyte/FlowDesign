@@ -21,6 +21,8 @@ package com.tallbyte.flowdesign.javafx.diagram;
 import com.tallbyte.flowdesign.core.Element;
 import com.tallbyte.flowdesign.core.environment.Connection;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.*;
 import javafx.beans.property.adapter.JavaBeanDoublePropertyBuilder;
 import javafx.event.Event;
@@ -40,6 +42,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +90,14 @@ public class DiagramNode extends Pane {
 
         addDefaultProperties();
         setup();
+    }
+
+    /**
+     * Gets the containing {@link DiagramPane}.
+     * @return Returns the pane
+     */
+    public DiagramPane getDiagramPane() {
+        return diagramPane;
     }
 
     /**
@@ -146,6 +157,14 @@ public class DiagramNode extends Pane {
     }
 
     /**
+     * Gets the modifiable properties
+     * @return Returns a list of such properties.
+     */
+    public Iterable<Property<?>> getElementProperties() {
+        return properties;
+    }
+
+    /**
      * Moves this {@link DiagramNode}.
      * @param dx the delta x
      * @param dy the delta y
@@ -168,6 +187,37 @@ public class DiagramNode extends Pane {
         properties.add(text);
     }
 
+    private NodeModificator addModificator(NodeModificator.Location modLoc,
+                                           Cursor cursor,
+                                           Pos locStack,
+                                           DoubleBinding bindingX,
+                                           boolean subtractX,
+                                           DoubleBinding bindingY,
+                                           boolean subtractY) {
+        NodeModificator element = new NodeModificator(content, modLoc);
+
+        if (subtractX) {
+            bindingX = bindingX.subtract(element.widthProperty());
+        }
+
+        if (subtractY) {
+            bindingY = bindingY.subtract(element.heightProperty());
+        }
+
+        element.setCursor(cursor);
+        getChildren().add(element);
+        StackPane.setAlignment(element, locStack);
+        element.visibleProperty().bind(selected.or(hoverProperty()));
+        element.layoutXProperty().bind(bindingX);
+        element.layoutYProperty().bind(bindingY);
+
+        return element;
+    }
+
+    private NodeJoint addJoint() {
+        return null;
+    }
+
     /**
      * Setup of bindings and listeners.
      */
@@ -175,6 +225,16 @@ public class DiagramNode extends Pane {
         /*
          * Basic layout
          */
+
+        Rectangle border = new Rectangle();
+        border.getStyleClass().add("nodeBorderRectangle");
+        getChildren().add(border);
+        border.widthProperty().bind(widthProperty());
+        border.heightProperty().bind(heightProperty());
+        border.setStrokeWidth(2);
+        border.setMouseTransparent(true);
+        border.setFill(Color.TRANSPARENT);
+        border.visibleProperty().bind(selected);
 
         getChildren().add(content);
         StackPane.setMargin(content, new Insets(3, 3, 3, 3));
@@ -188,37 +248,45 @@ public class DiagramNode extends Pane {
         textFieldText.setLayoutX(0);
         textFieldText.layoutYProperty().bind(heightProperty().divide(2).subtract(textFieldText.heightProperty().divide(2)));
 
-        NodeModificator topRight = new NodeModificator(content, NodeModificator.Location.TOP_RIGHT);
-        topRight.setCursor(Cursor.NE_RESIZE);
-        getChildren().add(topRight);
-        StackPane.setAlignment(topRight, Pos.TOP_RIGHT);
-        topRight.layoutXProperty().bind(widthProperty().subtract(topRight.widthProperty()));
-        topRight.visibleProperty().bind(selected);
-        topRight.setLayoutY(0);
+        NodeModificator topRight = addModificator(
+                NodeModificator.Location.TOP_RIGHT,
+                Cursor.NE_RESIZE,
+                Pos.TOP_RIGHT,
+                widthProperty().subtract(0),
+                true,
+                Bindings.createDoubleBinding(() -> 0.0),
+                false
+        );
 
-        NodeModificator topLeft = new NodeModificator(content, NodeModificator.Location.TOP_LEFT);
-        topLeft.setCursor(Cursor.NW_RESIZE);
-        getChildren().add(topLeft);
-        StackPane.setAlignment(topLeft, Pos.TOP_LEFT);
-        topLeft.visibleProperty().bind(selected);
-        topLeft.setLayoutX(0);
-        topLeft.setLayoutY(0);
+        NodeModificator topLeft = addModificator(
+                NodeModificator.Location.TOP_LEFT,
+                Cursor.NW_RESIZE,
+                Pos.TOP_LEFT,
+                Bindings.createDoubleBinding(() -> 0.0),
+                false,
+                Bindings.createDoubleBinding(() -> 0.0),
+                false
+        );
 
-        NodeModificator bottomRight = new NodeModificator(content, NodeModificator.Location.BOTTOM_RIGHT);
-        bottomRight.setCursor(Cursor.SE_RESIZE);
-        getChildren().add(bottomRight);
-        StackPane.setAlignment(bottomRight, Pos.BOTTOM_RIGHT);
-        bottomRight.visibleProperty().bind(selected);
-        bottomRight.layoutXProperty().bind(widthProperty().subtract(bottomRight.widthProperty()));
-        bottomRight.layoutYProperty().bind(heightProperty().subtract(bottomRight.heightProperty()));
+        NodeModificator bottomRight = addModificator(
+                NodeModificator.Location.BOTTOM_RIGHT,
+                Cursor.SE_RESIZE,
+                Pos.BOTTOM_RIGHT,
+                widthProperty().subtract(0),
+                true,
+                heightProperty().subtract(0),
+                true
+        );
 
-        NodeModificator bottomLeft = new NodeModificator(content, NodeModificator.Location.BOTTOM_LEFT);
-        bottomLeft.setCursor(Cursor.SW_RESIZE);
-        getChildren().add(bottomLeft);
-        StackPane.setAlignment(bottomLeft, Pos.BOTTOM_LEFT);
-        bottomLeft.visibleProperty().bind(selected);
-        bottomLeft.setLayoutX(0);
-        bottomLeft.layoutYProperty().bind(heightProperty().subtract(bottomLeft.heightProperty()));
+        NodeModificator bottomLeft = addModificator(
+                NodeModificator.Location.BOTTOM_LEFT,
+                Cursor.SW_RESIZE,
+                Pos.BOTTOM_LEFT,
+                Bindings.createDoubleBinding(() -> 0.0),
+                false,
+                heightProperty().subtract(0),
+                true
+        );
 
         Circle circle = new Circle();
         circle.getStyleClass().add("nodeConnectionBlob");
@@ -249,6 +317,12 @@ public class DiagramNode extends Pane {
         /*
          * Handlers
          */
+
+        selected.addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                diagramPane.setNode(this);
+            }
+        });
 
         setOnMouseMoved(event -> {
             mouseX = event.getSceneX();

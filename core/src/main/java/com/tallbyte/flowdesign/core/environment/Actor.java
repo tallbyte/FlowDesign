@@ -31,4 +31,8 @@ import java.util.List;
  */
 public class Actor extends Element {
 
+    public Actor() {
+        super(generateDefaultJoints(Actor.class));
+    }
+
 }

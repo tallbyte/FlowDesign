@@ -49,8 +49,9 @@ import java.io.IOException;
 public class ApplicationPane extends BorderPane {
 
     @FXML private TreeView<TreeEntry> treeProject;
-    @FXML private FactoryPane paneFactory;
-    @FXML private DiagramPane paneDiagram;
+    @FXML private FactoryPane         paneFactory;
+    @FXML private DiagramPane         paneDiagram;
+    @FXML private PropertyPane        paneProperty;
     @FXML private MenuItem            menuItemAddEnvironment;
 
     private ObjectProperty<Project> project  = new SimpleObjectProperty<>(this, "project", null);
@@ -75,6 +76,7 @@ public class ApplicationPane extends BorderPane {
          */
 
         paneFactory.setDiagramPane(paneDiagram);
+        paneProperty.setDiagramPane(paneDiagram);
         menuItemAddEnvironment.disableProperty().bind(projectProperty().isNull());
 
         /*

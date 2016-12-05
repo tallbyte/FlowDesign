@@ -16,23 +16,19 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core.environment;
-
-import com.tallbyte.flowdesign.core.Element;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.tallbyte.flowdesign.core;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-11-07)<br/>
+ * - julian (2016-12-05)<br/>
  */
-public class System extends Element {
+public enum  JointLocation {
 
-    public System() {
-        super(generateDefaultJoints(System.class));
-    }
+    NORTH,
+    EAST,
+    SOUTH,
+    WEST
 
 }

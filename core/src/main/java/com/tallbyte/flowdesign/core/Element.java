@@ -20,6 +20,7 @@ package com.tallbyte.flowdesign.core;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.*;
 
 /**
  * This file is part of project flowDesign.
@@ -36,12 +37,34 @@ public class Element {
 
     private boolean deletable = true;
 
+    private final List<Joint> joints;
+
     private PropertyChangeSupport changeSupport;
 
     /**
      * Creates a new {@link Element}.
      */
     public Element() {
+        this(new ArrayList<>());
+    }
+
+    /**
+     * Creats a new {@link Element} with a given set of {@link Joint}s.
+     * @param joints the available {@link Joint}s
+     */
+    public Element(List<Joint> joints) {
+        this.joints   = Collections.unmodifiableList(new ArrayList<>(joints));
+
+        changeSupport = new PropertyChangeSupport(this);
+    }
+
+    /**
+     * Creats a new {@link Element} with a given set of {@link Joint}s.
+     * @param joints the available {@link Joint}s
+     */
+    public Element(Joint... joints) {
+        this.joints   = Collections.unmodifiableList(Arrays.asList(joints));
+
         changeSupport = new PropertyChangeSupport(this);
     }
 
@@ -126,6 +149,14 @@ public class Element {
     }
 
     /**
+     * Gets the registered {@link Joint}s. The returned list is unmodifiable.
+     * @return Returns a list containing the {@link Joint}s.
+     */
+    public List<Joint> getJoints() {
+        return joints;
+    }
+
+    /**
      * Registers an {@link PropertyChangeListener}.
      * @param listener the {@link PropertyChangeListener} to register
      */
@@ -139,6 +170,21 @@ public class Element {
      */
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.removePropertyChangeListener(listener);
+    }
+
+    protected static List<Joint> generateDefaultJoints(Class<? extends Element> baseClass) {
+        List<Joint> list = new ArrayList<>();
+
+        Set<JointLocation> acceptedLocations = new HashSet<>();
+        for (JointLocation loc : JointLocation.values()) {
+            acceptedLocations.add(loc);
+        }
+
+        for (JointLocation loc : JointLocation.values()) {
+            list.add(new Joint(loc, baseClass, acceptedLocations, new HashSet<>()));
+        }
+
+        return list;
     }
 
 }

@@ -20,6 +20,7 @@ package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.core.*;
 import com.tallbyte.flowdesign.javafx.diagram.factory.*;
+import com.tallbyte.flowdesign.javafx.pane.PropertyPane;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
@@ -50,7 +51,8 @@ public class DiagramPane extends StackPane {
     protected final Map<Class<?>, Map<String, ElementFactory>>        fullElementFactories = new HashMap<>();
     protected       Map<String, ElementFactory>                       elementFactories     = new HashMap<>();
 
-    protected final ObjectProperty<Diagram> diagram = new SimpleObjectProperty<>(this, "diagram", null);
+    protected final ObjectProperty<Diagram>     diagram = new SimpleObjectProperty<>(this, "diagram", null);
+    protected final ObjectProperty<DiagramNode> node    = new SimpleObjectProperty<>(this, "node", null);
 
     protected double mouseX;
     protected double mouseY;
@@ -319,4 +321,15 @@ public class DiagramPane extends StackPane {
         return diagram;
     }
 
+    public DiagramNode getNode() {
+        return node.get();
+    }
+
+    public void setNode(DiagramNode node) {
+        this.node.set(node);
+    }
+
+    public ObjectProperty<DiagramNode> nodeProperty() {
+        return node;
+    }
 }
