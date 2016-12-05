@@ -69,6 +69,7 @@ public class JointNode extends Circle {
 
             startFullDrag();
 
+            // TODO listener leak
             diagramPane.addEventFilter(MouseEvent.MOUSE_DRAGGED, eventDrag -> {
                 line.setEndX(eventDrag.getX());
                 line.setEndY(eventDrag.getY());
