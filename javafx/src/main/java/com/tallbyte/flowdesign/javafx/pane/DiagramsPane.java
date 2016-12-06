@@ -49,7 +49,11 @@ public class DiagramsPane extends TabPane {
     }
 
     public void addDiagram(Diagram diagram) {
-        diagrams.add(diagram);
+        if (diagrams.contains(diagram)) {
+            getSelectionModel().select(tabMap.get(diagram));
+        } else {
+            diagrams.add(diagram);
+        }
     }
 
     public void removeDiagram(Diagram diagram) {
@@ -66,7 +70,6 @@ public class DiagramsPane extends TabPane {
 
     private void setup() {
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("new tab "+paneMap.get(newValue));
             diagram.setValue(paneMap.get(newValue));
         });
 
@@ -87,6 +90,7 @@ public class DiagramsPane extends TabPane {
                         tabMap.remove(d);
                         paneMap.remove(tab);
                     });
+                    getSelectionModel().select(tab);
                 }
 
                 for (Diagram d : c.getRemoved()) {
