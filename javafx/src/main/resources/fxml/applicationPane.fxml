@@ -65,6 +65,9 @@
                     </TitledPane>
                 </VBox>
             </top>
+            <center>
+                <TitledPane collapsible="false" text="Info" maxHeight="65536"/>
+            </center>
         </BorderPane>
     </right>
 
