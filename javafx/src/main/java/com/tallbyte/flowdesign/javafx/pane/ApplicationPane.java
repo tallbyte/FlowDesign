@@ -23,7 +23,6 @@ import com.tallbyte.flowdesign.core.DiagramsChangedListener;
 import com.tallbyte.flowdesign.core.EnvironmentDiagram;
 import com.tallbyte.flowdesign.core.Project;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
-import com.tallbyte.flowdesign.javafx.diagram.FactoryPane;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -50,7 +49,7 @@ public class ApplicationPane extends BorderPane {
 
     @FXML private TreeView<TreeEntry> treeProject;
     @FXML private FactoryPane         paneFactory;
-    @FXML private DiagramPane         paneDiagram;
+    @FXML private DiagramsPane        paneDiagrams;
     @FXML private PropertyPane        paneProperty;
     @FXML private MenuItem            menuItemAddEnvironment;
 
@@ -75,15 +74,15 @@ public class ApplicationPane extends BorderPane {
          * Prepare
          */
 
-        paneFactory.setDiagramPane(paneDiagram);
-        paneProperty.setDiagramPane(paneDiagram);
+        paneFactory.setup(paneDiagrams);
+        paneProperty.setup(paneDiagrams);
         menuItemAddEnvironment.disableProperty().bind(projectProperty().isNull());
 
         /*
          * Add listeners
          */
 
-        paneDiagram.diagramProperty().addListener((observable, oldValue, newValue) -> {
+        paneDiagrams.diagramProperty().addListener((observable, oldValue, newValue) -> {
             updateTitle();
         });
 
@@ -163,7 +162,7 @@ public class ApplicationPane extends BorderPane {
          */
 
         // initialize focus
-        Platform.runLater(() -> paneDiagram.requestFocus());
+        Platform.runLater(() -> paneDiagrams.requestFocus());
 
     }
 
@@ -257,7 +256,7 @@ public class ApplicationPane extends BorderPane {
             if (project != null) {
                 title = project.getName();
 
-                Diagram diagram = paneDiagram.getDiagram();
+                DiagramPane diagram = paneDiagrams.getDiagram();
                 if (diagram != null) {
                     title += " - ["+diagram.getClass().getSimpleName()+"] - "+diagram.getName();
                 }
@@ -315,7 +314,7 @@ public class ApplicationPane extends BorderPane {
          * and updates the title.
          */
         public void open() {
-            paneDiagram.setDiagram(diagram);
+            paneDiagrams.addDiagram(diagram);
         }
 
         /**

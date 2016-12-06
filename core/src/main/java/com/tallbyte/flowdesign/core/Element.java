@@ -35,8 +35,8 @@ public class Element {
 
     private double x          = 0;
     private double y          = 0;
-    private double width      = 0;
-    private double height     = 0;
+    private double width      = 100;
+    private double height     = 100;
     private boolean deletable = true;
 
     private PropertyChangeSupport changeSupport;

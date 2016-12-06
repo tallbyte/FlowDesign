@@ -16,11 +16,14 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx.diagram;
+package com.tallbyte.flowdesign.javafx.pane;
 
+import com.tallbyte.flowdesign.core.Diagram;
 import com.tallbyte.flowdesign.core.EnvironmentDiagram;
+import com.tallbyte.flowdesign.javafx.diagram.FactoryNode;
 import com.tallbyte.flowdesign.javafx.diagram.factory.ActorDiagramImageFactory;
 import com.tallbyte.flowdesign.javafx.diagram.factory.SystemDiagramImageFactory;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
@@ -39,6 +42,8 @@ public class FactoryPane extends GridPane {
 
     protected final Map<Class<?>, List<FactoryNode>> factoryNodes = new HashMap<>();
 
+    protected       ChangeListener<Diagram>          listener     = null;
+
     /**
      * Creates a new {@link FactoryPane} with a default text.
      */
@@ -46,36 +51,43 @@ public class FactoryPane extends GridPane {
         getChildren().add(new Label("Please select a diagram"));
     }
 
-    /**
-     * Sets the {@link DiagramPane} this {@link FactoryPane} should reflect.
-     * @param diagramPane the new {@link DiagramPane}
-     */
-    public void setDiagramPane(DiagramPane diagramPane) {
+    public void setup(DiagramsPane pane) {
         factoryNodes.put(EnvironmentDiagram.class, new ArrayList<FactoryNode>() {{
             add(new FactoryNode(new SystemDiagramImageFactory(), "System"));
             add(new FactoryNode(new ActorDiagramImageFactory(), "Actor"));
         }});
 
-        diagramPane.diagramProperty().addListener((observable, oldValue, newValue) -> {
-            getChildren().clear();
+        pane.diagramProperty().addListener((o, oldPane, newPane) -> {
+            if (listener != null && oldPane != null) {
+                oldPane.diagramProperty().removeListener(listener);
+            }
 
-            if (newValue != null) {
-                List<FactoryNode> list = factoryNodes.get(newValue.getClass());
+            if (newPane != null) {
+                listener = (observable, oldValue, newValue) -> {
+                    getChildren().clear();
 
-                if (list != null) {
-                    for (int i = 0 ; i < list.size() ; ++i) {
-                        FactoryNode child = list.get(i);
+                    if (newValue != null) {
+                        List<FactoryNode> list = factoryNodes.get(newValue.getClass());
 
-                        GridPane.setColumnIndex(child, i % 2);
-                        GridPane.setRowIndex(child, i / 2);
+                        if (list != null) {
+                            for (int i = 0 ; i < list.size() ; ++i) {
+                                FactoryNode child = list.get(i);
 
-                        getChildren().add(child);
+                                GridPane.setColumnIndex(child, i % 2);
+                                GridPane.setRowIndex(child, i / 2);
+
+                                getChildren().add(child);
+                            }
+                        }
+
                     }
-                }
+                };
 
+                listener.changed(newPane.diagramProperty(), null, newPane.getDiagram());
+
+                newPane.diagramProperty().addListener(listener);
             }
         });
     }
-
 
 }

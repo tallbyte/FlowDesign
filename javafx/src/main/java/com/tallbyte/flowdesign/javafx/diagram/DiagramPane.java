@@ -19,9 +19,13 @@
 package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.core.*;
+import com.tallbyte.flowdesign.core.environment.Connection;
 import com.tallbyte.flowdesign.javafx.diagram.factory.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.property.adapter.JavaBeanDoublePropertyBuilder;
+import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
@@ -29,7 +33,6 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 import java.util.HashMap;
@@ -53,6 +56,7 @@ public class DiagramPane extends StackPane {
 
     protected final Map<Joint, JointNode>       jointNodes                                 = new HashMap<>();
 
+    protected       StringProperty              name;
     protected final ObjectProperty<Diagram>     diagram = new SimpleObjectProperty<>(this, "diagram", null);
     protected final ObjectProperty<DiagramNode> node    = new SimpleObjectProperty<>(this, "node", null);
     protected final ObjectProperty<Joint>       joint   = new SimpleObjectProperty<>(this, "joint", null);
@@ -90,6 +94,12 @@ public class DiagramPane extends StackPane {
 
             // add new
             if (newValue != null) {
+                try {
+                    name = JavaBeanStringPropertyBuilder.create().bean(newValue).name("name").build();
+                } catch (NoSuchMethodException e) {
+                    throw new RuntimeException("Could not create properties. This should never happen?!");
+                }
+
                 imageFactories = fullImageFactories.get(newValue.getClass());
                 imageFactories = imageFactories == null ? new HashMap<>() : imageFactories;
 
@@ -98,16 +108,23 @@ public class DiagramPane extends StackPane {
 
                 listenerElements = (element, added) -> {
                     if (added) {
-                        DiagramImageFactory factory = imageFactories.get(element.getClass());
-
-                        if (factory != null) {
-                            groupContent.getChildren().add(new DiagramNode(this, element, factory.createDiagramImage()));
-                        }
+                        addElement(element);
                     }
                 };
                 listenerConnections = (connection, added) -> {
-                    groupContent.getChildren().add(new ConnectionNode(connection, this));
+                    if (added) {
+                        addConnection(connection);
+                    }
                 };
+
+                for (Element element : newValue.getElements()) {
+                    addElement(element);
+                }
+
+                for (Connection connection : newValue.getConnections()) {
+                    addConnection(connection);
+                }
+
                 newValue.addElementsChangedListener(listenerElements);
                 newValue.addConnectionsChangedListener(listenerConnections);
             }
@@ -181,6 +198,24 @@ public class DiagramPane extends StackPane {
                 newValue.addEventFilter(MouseEvent.MOUSE_RELEASED, listenerRelease);
             }
         });
+    }
+
+    public DiagramPane(Diagram diagram) {
+        this();
+
+        this.diagram.setValue(diagram);
+    }
+
+    private void addElement(Element element) {
+        DiagramImageFactory factory = imageFactories.get(element.getClass());
+
+        if (factory != null) {
+            groupContent.getChildren().add(new DiagramNode(this, element, factory.createDiagramImage()));
+        }
+    }
+
+    private void addConnection(Connection connection) {
+        groupContent.getChildren().add(new ConnectionNode(connection, this));
     }
 
     void registerJointNode(JointNode jointNode) {
@@ -293,6 +328,18 @@ public class DiagramPane extends StackPane {
         }
 
         map.put(factory.getName(), factory);
+    }
+
+    public String getName() {
+        return name.get();
+    }
+
+    public void setName(String name) {
+        this.name.set(name);
+    }
+
+    public StringProperty nameProperty() {
+        return name;
     }
 
     /**

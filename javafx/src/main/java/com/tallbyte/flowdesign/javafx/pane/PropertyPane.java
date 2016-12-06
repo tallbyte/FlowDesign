@@ -18,11 +18,12 @@
 
 package com.tallbyte.flowdesign.javafx.pane;
 
-import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
+import com.tallbyte.flowdesign.javafx.diagram.DiagramNode;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -37,16 +38,30 @@ import javafx.util.converter.NumberStringConverter;
  */
 public class PropertyPane extends GridPane {
 
-    public void setDiagramPane(DiagramPane pane) {
-        pane.nodeProperty().addListener((observable, oldValue, newValue) -> {
-            // remove all existing childs
-            getChildren().clear();
+    protected ChangeListener<DiagramNode> listener = null;
 
-            if (newValue != null) {
-                int row = 0;
-                for (Property<?> property : newValue.getElementProperties()) {
-                    row += addProperty(property, row) ? 1 : 0;
-                }
+    public void setup(DiagramsPane pane) {
+        pane.diagramProperty().addListener((o, oldPane, newPane) -> {
+            if (listener != null && oldPane != null) {
+                oldPane.nodeProperty().removeListener(listener);
+            }
+
+            if (newPane != null) {
+                listener = (observable, oldValue, newValue) -> {
+                    // remove all existing childs
+                    getChildren().clear();
+
+                    if (newValue != null) {
+                        int row = 0;
+                        for (Property<?> property : newValue.getElementProperties()) {
+                            row += addProperty(property, row) ? 1 : 0;
+                        }
+                    }
+                };
+
+                listener.changed(newPane.nodeProperty(), null, newPane.nodeProperty().get());
+
+                newPane.nodeProperty().addListener(listener);
             }
         });
     }

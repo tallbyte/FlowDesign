@@ -19,10 +19,11 @@
   -->
 
 <?import com.tallbyte.flowdesign.javafx.diagram.DiagramPane?>
-<?import com.tallbyte.flowdesign.javafx.diagram.FactoryPane?>
+<?import com.tallbyte.flowdesign.javafx.pane.FactoryPane?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import com.tallbyte.flowdesign.javafx.pane.PropertyPane?>
+<?import com.tallbyte.flowdesign.javafx.pane.DiagramsPane?>
 <fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" stylesheets="/css/main.css">
     <top>
         <MenuBar>
@@ -74,9 +75,7 @@
     </bottom>
 
     <center>
-        <ScrollPane fx:id="scrollPaneContent" pannable="true">
-            <DiagramPane fx:id="paneDiagram"/>
-        </ScrollPane>
+        <DiagramsPane fx:id="paneDiagrams"/>
     </center>
 
 </fx:root>

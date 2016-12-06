@@ -27,11 +27,11 @@
 }
 
 #paneLeft {
-    /*-fx-background-color:   #838383;*/
+    -fx-background-color:   white;
 }
 
 #paneRight {
-    /*-fx-background-color:   #838383;*/
+    -fx-background-color:   white;
 }
 
 #labelLastSave {

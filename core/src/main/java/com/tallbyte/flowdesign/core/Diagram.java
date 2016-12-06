@@ -54,7 +54,7 @@ public abstract class Diagram {
         this.name = name;
         this.root = root;
 
-        elements.add(root);
+        addElement(root);
         this.changeSupport = new PropertyChangeSupport(this);
     }
 
@@ -166,6 +166,14 @@ public abstract class Diagram {
         for (ConnectionsChangedListener listener : listenersConnections) {
             listener.onConnectionsChanged(connection, false);
         }
+    }
+
+    /**
+     * Gets all added {@link Connection}s.
+     * @return Returns an {@link Iterable} containing the {@link Connection}s.
+     */
+    public Iterable<Connection> getConnections() {
+        return connections;
     }
 
     /**
