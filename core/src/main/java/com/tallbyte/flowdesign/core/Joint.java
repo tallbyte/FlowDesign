@@ -18,6 +18,8 @@
 
 package com.tallbyte.flowdesign.core;
 
+import com.tallbyte.flowdesign.core.environment.Connection;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,6 +30,9 @@ import java.util.Set;
  * - julian (2016-12-05)<br/>
  */
 public class Joint {
+
+    private       Element                       element;
+    private       Joint                         remote;
 
     private final JointLocation                 location;
     private final Class<? extends Element>      baseClass;
@@ -48,6 +53,14 @@ public class Joint {
         this.forceOut           = forceOut;
     }
 
+    public Element getElement() {
+        return element;
+    }
+
+    void setElement(Element element) {
+        this.element = element;
+    }
+
     public Class<? extends Element> getBaseClass() {
         return baseClass;
     }
@@ -63,5 +76,30 @@ public class Joint {
     public boolean canJoin(Joint remote) {
         return acceptedLocations.contains(remote.getLocation())
                 && (acceptedElements.size() == 0 || acceptedElements.contains(remote.getBaseClass()));
+    }
+
+    public Connection join(Joint remote) throws JointJoinException {
+        if (!canJoin(remote)) {
+            throw new JointJoinException("can not join " + remote + " and " + this);
+        }
+
+        Connection connection = new Connection(this, remote);
+
+        if (element != null) {
+            element.getDiagram().addConnection(connection);
+
+            this.remote = remote;
+
+            return connection;
+        }
+
+        return null;
+    }
+
+    public void disjoin() {
+        if (remote != null) {
+            element.getDiagram().removeConnection(new Connection(this, remote));
+            remote = null;
+        }
     }
 }

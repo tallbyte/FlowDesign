@@ -30,14 +30,14 @@ import java.util.*;
  */
 public class Element {
 
-    private double x = 0;
-    private double y = 0;
-    private double width  = 0;
-    private double height = 0;
-
-    private boolean deletable = true;
-
+    private       Diagram diagram;
     private final List<Joint> joints;
+
+    private double x          = 0;
+    private double y          = 0;
+    private double width      = 0;
+    private double height     = 0;
+    private boolean deletable = true;
 
     private PropertyChangeSupport changeSupport;
 
@@ -54,6 +54,7 @@ public class Element {
      */
     public Element(List<Joint> joints) {
         this.joints   = Collections.unmodifiableList(new ArrayList<>(joints));
+        this.joints.forEach(joint -> joint.setElement(this));
 
         changeSupport = new PropertyChangeSupport(this);
     }
@@ -64,6 +65,7 @@ public class Element {
      */
     public Element(Joint... joints) {
         this.joints   = Collections.unmodifiableList(Arrays.asList(joints));
+        this.joints.forEach(joint -> joint.setElement(this));
 
         changeSupport = new PropertyChangeSupport(this);
     }
@@ -146,6 +148,14 @@ public class Element {
      */
     public void setDeletable(boolean deletable) {
         this.deletable = deletable;
+    }
+
+    public Diagram getDiagram() {
+        return diagram;
+    }
+
+    void setDiagram(Diagram diagram) {
+        this.diagram = diagram;
     }
 
     /**

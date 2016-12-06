@@ -19,6 +19,7 @@
 package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.core.Joint;
+import com.tallbyte.flowdesign.core.JointJoinException;
 import com.tallbyte.flowdesign.core.environment.Connection;
 import javafx.event.Event;
 import javafx.scene.Cursor;
@@ -82,12 +83,12 @@ public class JointNode extends Circle {
         setOnMouseDragReleased(event -> {
             Joint source = diagramPane.getJoint();
             if (source != null && source != joint) {
-                diagramPane.getDiagram().addConnection(
-                        new Connection(
-                                source,
-                                joint
-                        )
-                );
+                try {
+                    source.join(joint);
+                } catch (JointJoinException e) {
+                    // this should never happen
+                    e.printStackTrace();
+                }
 
                 System.out.println(source);
                 System.out.println(joint);

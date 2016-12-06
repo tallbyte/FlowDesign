@@ -111,6 +111,7 @@ public abstract class Diagram {
      */
     public void addElement(Element element) {
         this.elements.add(element);
+        element.setDiagram(this);
 
         for (ElementsChangedListener listener : listenersElements) {
             listener.onElementsChanged(element, true);
@@ -124,6 +125,7 @@ public abstract class Diagram {
 
     public void removeElement(Element element) {
         this.elements.remove(element);
+        element.setDiagram(null);
 
         for (ElementsChangedListener listener : listenersElements) {
             listener.onElementsChanged(element, false);
@@ -135,7 +137,7 @@ public abstract class Diagram {
      * This will also call all {@link ConnectionsChangedListener}.
      * @param connection the @{link Connection} to add
      */
-    public void addConnection(Connection connection) {
+    void addConnection(Connection connection) {
         // some pre-checking
         if (!connections.contains(connection)
                 && connection.getTarget() != connection.getSource()) {
@@ -147,13 +149,14 @@ public abstract class Diagram {
             }
         }
     }
+
     /**
      * Removes the given {@link Connection} from the internal list.
      * This will also call all {@link ConnectionsChangedListener}.
      * @param connection the @{link Connection} to remove
      */
 
-    public void removeConnection(Connection connection) {
+    void removeConnection(Connection connection) {
         this.connections.remove(connection);
 
         for (ConnectionsChangedListener listener : listenersConnections) {
