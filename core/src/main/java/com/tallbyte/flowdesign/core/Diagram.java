@@ -137,7 +137,7 @@ public abstract class Diagram {
      * This will also call all {@link ConnectionsChangedListener}.
      * @param connection the @{link Connection} to add
      */
-    void addConnection(Connection connection) {
+    boolean addConnection(Connection connection) {
         // some pre-checking
         if (!connections.contains(connection)
                 && connection.getTarget() != connection.getSource()) {
@@ -147,7 +147,11 @@ public abstract class Diagram {
             for (ConnectionsChangedListener listener : listenersConnections) {
                 listener.onConnectionsChanged(connection, true);
             }
+
+            return true;
         }
+
+        return false;
     }
 
     /**

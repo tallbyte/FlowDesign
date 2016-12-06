@@ -83,14 +83,14 @@ public class JointNode extends Circle {
             Joint source = diagramPane.getJoint();
             if (source != null && source != joint) {
                 try {
-                    source.join(joint);
+                    if (source.join(joint) != null) {
+                        System.out.println(source);
+                        System.out.println(joint);
+                    }
                 } catch (JointJoinException e) {
                     // this should never happen
                     e.printStackTrace();
                 }
-
-                System.out.println(source);
-                System.out.println(joint);
             }
             diagramPane.setJoint(null);
         });

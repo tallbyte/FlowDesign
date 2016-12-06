@@ -86,11 +86,11 @@ public class Joint {
         Connection connection = new Connection(this, remote);
 
         if (element != null) {
-            element.getDiagram().addConnection(connection);
+            if (element.getDiagram().addConnection(connection)) {
+                this.remote = remote;
 
-            this.remote = remote;
-
-            return connection;
+                return connection;
+            }
         }
 
         return null;
