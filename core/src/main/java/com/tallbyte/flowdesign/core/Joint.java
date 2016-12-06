@@ -83,6 +83,10 @@ public class Joint {
             throw new JointJoinException("can not join " + remote + " and " + this);
         }
 
+        if (this.remote != null) {
+            throw new JointJoinException("joint already joined");
+        }
+
         Connection connection = new Connection(this, remote);
 
         if (element != null) {
