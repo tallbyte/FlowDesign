@@ -40,7 +40,7 @@ public interface DiagramImageFactory {
      * unnecessary probe-object creations.
      * @return Returns the type.
      */
-    public Class<?> getTargetClass();
+    public Class<? extends Element> getTargetClass();
 
     /**
      * Creates a new {@link DiagramImage} according to the internal rules.

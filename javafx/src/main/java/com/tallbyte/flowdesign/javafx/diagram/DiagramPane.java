@@ -48,12 +48,15 @@ import java.util.Map;
  */
 public class DiagramPane extends StackPane {
 
-    protected final Group                                             groupContent       = new Group();
-    protected final Map<Class<?>, Map<Class<?>, DiagramImageFactory>> fullImageFactories = new HashMap<>();
-    protected       Map<Class<?>, DiagramImageFactory>                imageFactories     = new HashMap<>();
+    protected final Group                                             groupContent         = new Group();
+    protected final Map<Class<?>, Map<Class<?>, DiagramImageFactory>> fullImageFactories   = new HashMap<>();
+    protected       Map<Class<?>, DiagramImageFactory>                imageFactories       = new HashMap<>();
 
     protected final Map<Class<?>, Map<String, ElementFactory>>        fullElementFactories = new HashMap<>();
     protected       Map<String, ElementFactory>                       elementFactories     = new HashMap<>();
+
+    protected final Map<Class<?>, Map<Class<?>, DiagramNodeFactory>>  fullNodeFactories    = new HashMap<>();
+    protected       Map<Class<?>, DiagramNodeFactory>                 nodeFactories        = new HashMap<>();
 
     protected final Map<Joint, JointNode>       jointNodes                                 = new HashMap<>();
 
@@ -106,6 +109,9 @@ public class DiagramPane extends StackPane {
 
                 elementFactories = fullElementFactories.get(newValue.getClass());
                 elementFactories = elementFactories == null ? new HashMap<>() : elementFactories;
+
+                nodeFactories = fullNodeFactories.get(newValue.getClass());
+                nodeFactories = nodeFactories == null ? new HashMap<>() : nodeFactories;
 
                 listenerElements = (element, added) -> {
                     if (added) {
@@ -338,6 +344,22 @@ public class DiagramPane extends StackPane {
         }
 
         map.put(factory.getName(), factory);
+    }
+
+    /**
+     * Adds a new {@link DiagramNodeFactory}.
+     * @param clazz the {@link Class} of the diagram type
+     * @param factory the factory
+     */
+    public void addNodeFactory(Class<? extends Diagram> clazz, DiagramNodeFactory factory) {
+        Map<Class<?>, DiagramNodeFactory> map = fullNodeFactories.get(clazz);
+
+        if (map == null) {
+            map = new HashMap<>();
+            fullNodeFactories.put(clazz, map);
+        }
+
+        map.put(factory.getTargetClass(), factory);
     }
 
     public String getName() {

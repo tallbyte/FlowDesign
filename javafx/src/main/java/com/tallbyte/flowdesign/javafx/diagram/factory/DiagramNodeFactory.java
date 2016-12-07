@@ -18,7 +18,10 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.factory;
 
+import com.tallbyte.flowdesign.core.Element;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramNode;
+import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
+import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 
 /**
  * This file is part of project flowDesign.
@@ -35,9 +38,16 @@ public interface DiagramNodeFactory {
     public String getName();
 
     /**
+     * Gets the type of {@link Class} that is created, in order to avoid
+     * unnecessary probe-object creations.
+     * @return Returns the type.
+     */
+    public Class<? extends Element> getTargetClass();
+
+    /**
      * Creates a new {@link DiagramNode} according to the internal rules.
      * @return Returns a new instance of an {@link DiagramNode}.
      */
-    public DiagramNode createDiagramNode();
+    public DiagramNode createDiagramNode(DiagramPane pane, Element element, DiagramImage image);
 
 }

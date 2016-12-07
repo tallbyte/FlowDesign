@@ -37,7 +37,7 @@ public class ActorDiagramImageFactory implements DiagramImageFactory {
     }
 
     @Override
-    public Class<?> getTargetClass() {
+    public Class<? extends Element> getTargetClass() {
         return Actor.class;
     }
 
