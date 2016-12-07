@@ -390,51 +390,11 @@ public class DiagramNode extends Pane {
 
         content.setMouseTransparent(true);
 
-        /*EventHandler<? super MouseEvent> handlerReleased = event -> {
-            ConnectionRequest request = diagramPane.getConnectionRequest();
-            if (request != null && request.getSource() != element) {
-                diagramPane.getDiagram().addConnection(
-                        new Connection(
-                                request.getSource(),
-                                element
-                        )
-                );
-
-                /*System.out.println(request.getSource());
-                System.out.println(element);*/
-            /*}
-            diagramPane.setConnectionRequest(null, null);
-        };
-
-        setOnMouseDragReleased(handlerReleased);
-        textFieldText.setOnMouseDragReleased(handlerReleased);*/
-
         setOnMousePressed(handlerClickedPre);
         textFieldText.setOnMousePressed(handlerClickedPre);
 
         setOnMouseClicked(handlerClickedAfter);
         textFieldText.setOnMouseClicked(handlerClickedAfter);
-
-        /*circle.setCursor(Cursor.CROSSHAIR);
-        circle.setOnMouseDragged(Event::consume);
-        circle.setOnDragDetected(event -> {
-            ConnectionLine line = new ConnectionLine();
-            line.startXProperty().bind(realXProperty.add(widthProperty().multiply(0.5)));
-            line.startYProperty().bind(realYProperty.add(heightProperty().multiply(1).subtract(circle.radiusProperty().multiply(0.5).multiply(0))));
-            line.setEndX(line.getStartX());
-            line.setEndY(line.getStartY());
-            line.setMouseTransparent(true);
-
-            circle.startFullDrag();
-
-            diagramPane.addEventFilter(MouseEvent.MOUSE_DRAGGED, eventDrag -> {
-                line.setEndX(eventDrag.getX());
-                line.setEndY(eventDrag.getY());
-            });
-
-            diagramPane.setConnectionRequest(new ConnectionRequest(element), line);
-            event.consume();
-        });*/
     }
 
 
