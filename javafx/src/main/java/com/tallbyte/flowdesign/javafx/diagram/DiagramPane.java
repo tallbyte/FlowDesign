@@ -21,6 +21,7 @@ package com.tallbyte.flowdesign.javafx.diagram;
 import com.tallbyte.flowdesign.core.*;
 import com.tallbyte.flowdesign.core.environment.Connection;
 import com.tallbyte.flowdesign.javafx.diagram.factory.*;
+import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
@@ -168,8 +169,17 @@ public class DiagramPane extends StackPane {
                             Element element = factory.createElement();
                             element.setX(mouseX-b.getMinX()-event.getDragboard().getDragViewOffsetX());
                             element.setY(mouseY-b.getMinY()-event.getDragboard().getDragViewOffsetY());
-                            element.setWidth(75);
-                            element.setHeight(75);
+                            DiagramImageFactory imageFactory = imageFactories.get(element.getClass());
+
+                            if (imageFactory != null) {
+                                DiagramImage image = imageFactory.createDiagramImage();
+
+                                element.setWidth(image.getWidth());
+                                element.setHeight(image.getHeight());
+                            } else {
+                                element.setWidth(75);
+                                element.setHeight(75);
+                            }
 
                             setAllUnselected();
                             diagram.addElement(element);
