@@ -43,10 +43,10 @@ public class NodeModificator extends Rectangle {
 
     /**
      * Creates a new {@link NodeModificator}.
-     * @param image the {@link DiagramImage} that should be resized
+     * @param node the {@link DiagramNode} that should be resized
      * @param location the target {@link Location} inside the parent
      */
-    public NodeModificator(DiagramImage image, Location location) {
+    public NodeModificator(DiagramNode node, Location location) {
         setWidth(6);
         setHeight(6);
 
@@ -64,39 +64,39 @@ public class NodeModificator extends Rectangle {
                         dx = Math.min(trans.getMaxX()-20, trans.getMinX()+dx) - trans.getMinX();
                         dy = Math.min(trans.getMaxY()-20, trans.getMinY()+dy) - trans.getMinY();
 
-                        parent.setLayoutX(parent.getLayoutX()+dx);
-                        parent.setLayoutY(parent.getLayoutY()+dy);
+                        node.setRealX(node.getRealX()+dx);
+                        node.setRealY(node.getRealY()+dy);
 
-                        image.setWidth(image.getWidth()-dx);
-                        image.setHeight(image.getHeight()-dy);
+                        node.setRealWidth(node.getRealWidth()-dx);
+                        node.setRealHeight(node.getRealHeight()-dy);
                         break;
 
                     case TOP_RIGHT:
                         dx = Math.max(trans.getMinX()+20, trans.getMaxX()+dx-trans.getWidth()) - trans.getMaxX();
                         dy = Math.min(trans.getMaxY()-20, trans.getMinY()+dy) - trans.getMinY();
 
-                        parent.setLayoutY(parent.getLayoutY()+dy);
+                        node.setRealY(node.getRealY()+dy);
 
-                        image.setWidth(image.getWidth()+dx);
-                        image.setHeight(image.getHeight()-dy);
+                        node.setRealWidth(node.getRealWidth()+dx);
+                        node.setRealHeight(node.getRealHeight()-dy);
                         break;
 
                     case BOTTOM_LEFT:
                         dx = Math.min(trans.getMaxX()-20, trans.getMinX()+dx) - trans.getMinX();
                         dy = Math.max(trans.getMinY()+20, trans.getMaxY()+dy-trans.getHeight()) - trans.getMaxY();
 
-                        parent.setLayoutX(parent.getLayoutX()+dx);
+                        node.setRealX(node.getRealX()+dx);
 
-                        image.setWidth(image.getWidth()-dx);
-                        image.setHeight(image.getHeight()+dy);
+                        node.setRealWidth(node.getRealWidth()-dx);
+                        node.setRealHeight(node.getRealHeight()+dy);
                         break;
 
                     case BOTTOM_RIGHT:
                         dx = Math.max(trans.getMinX()+20, trans.getMaxX()+dx-trans.getWidth()) - trans.getMaxX();
                         dy = Math.max(trans.getMinY()+20, trans.getMaxY()+dy-trans.getHeight()) - trans.getMaxY();
 
-                        image.setWidth(image.getWidth()+dx);
-                        image.setHeight(image.getHeight()+dy);
+                        node.setRealWidth(node.getRealWidth()+dx);
+                        node.setRealHeight(node.getRealHeight()+dy);
                         break;
                 }
             }

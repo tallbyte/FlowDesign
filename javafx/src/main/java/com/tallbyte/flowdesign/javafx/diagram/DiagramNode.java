@@ -26,7 +26,6 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.*;
 import javafx.beans.property.adapter.JavaBeanDoublePropertyBuilder;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.TextField;
@@ -56,10 +55,13 @@ public class DiagramNode extends Pane {
 
     protected Element           element;
 
-    protected DoubleProperty    realXProperty;
-    protected DoubleProperty    realYProperty;
-    protected DoubleProperty    realWidthProperty;
-    protected DoubleProperty    realHeightProperty;
+    protected DoubleProperty    realX;
+    protected DoubleProperty    realY;
+    protected DoubleProperty    realWidth;
+    protected DoubleProperty    realHeight;
+
+    protected DoubleBinding     widthExtend  = Bindings.createDoubleBinding(() -> 0.0);
+    protected DoubleBinding     heightExtend = Bindings.createDoubleBinding(() -> 0.0);
 
     protected StringProperty    text     = new SimpleStringProperty(this, "text", "");
     protected BooleanProperty   selected = new SimpleBooleanProperty(this, "selected", false);
@@ -72,10 +74,10 @@ public class DiagramNode extends Pane {
         this.element     = element;
 
         try {
-            realXProperty = JavaBeanDoublePropertyBuilder.create().bean(element).name("x").build();
-            realYProperty = JavaBeanDoublePropertyBuilder.create().bean(element).name("y").build();
-            realWidthProperty  = JavaBeanDoublePropertyBuilder.create().bean(element).name("width").build();
-            realHeightProperty = JavaBeanDoublePropertyBuilder.create().bean(element).name("height").build();
+            realX      = JavaBeanDoublePropertyBuilder.create().bean(element).name("x").build();
+            realY      = JavaBeanDoublePropertyBuilder.create().bean(element).name("y").build();
+            realWidth  = JavaBeanDoublePropertyBuilder.create().bean(element).name("width").build();
+            realHeight = JavaBeanDoublePropertyBuilder.create().bean(element).name("height").build();
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("Could not create properties. This should never happen?!");
         }
@@ -100,12 +102,28 @@ public class DiagramNode extends Pane {
         return element;
     }
 
+    public void setRealX(double realX) {
+        this.realX.set(realX);
+    }
+
+    public double getRealX() {
+        return realX.get();
+    }
+
     /**
      * Gets the real x property
      * @return Returns the property.
      */
     public DoubleProperty realXProperty() {
-        return realXProperty;
+        return realX;
+    }
+
+    public void setRealY(double realY) {
+        this.realY.set(realY);
+    }
+
+    public double getRealY() {
+        return realY.get();
     }
 
     /**
@@ -113,7 +131,15 @@ public class DiagramNode extends Pane {
      * @return Returns the property.
      */
     public DoubleProperty realYProperty() {
-        return realYProperty;
+        return realY;
+    }
+
+    public void setRealWidth(double realWidth) {
+        this.realWidth.set(realWidth);
+    }
+
+    public double getRealWidth() {
+        return realWidth.get();
     }
 
     /**
@@ -121,7 +147,15 @@ public class DiagramNode extends Pane {
      * @return Returns the property.
      */
     public DoubleProperty realWidthProperty() {
-        return realWidthProperty;
+        return realWidth;
+    }
+
+    public void setRealHeight(double realHeight) {
+        this.realHeight.set(realHeight);
+    }
+
+    public double getRealHeight() {
+        return realHeight.get();
     }
 
     /**
@@ -129,7 +163,15 @@ public class DiagramNode extends Pane {
      * @return Returns the property.
      */
     public DoubleProperty realHeightProperty() {
-        return realHeightProperty;
+        return realHeight;
+    }
+
+    public void setText(String text) {
+        this.text.set(text);
+    }
+
+    public String getText() {
+        return text.get();
     }
 
     /**
@@ -172,61 +214,77 @@ public class DiagramNode extends Pane {
      * Adds the according properties to the externally-accessible list.
      */
     private void addDefaultProperties() {
-        properties.add(realXProperty);
-        properties.add(realYProperty);
-        properties.add(realWidthProperty);
-        properties.add(realHeightProperty);
+        properties.add(realX);
+        properties.add(realY);
+        properties.add(realWidth);
+        properties.add(realHeight);
         properties.add(text);
     }
 
-    private NodeModificator addModificator(NodeModificator.Location modLoc,
-                                           Cursor cursor,
-                                           Pos locStack,
-                                           DoubleBinding bindingX,
-                                           boolean subtractX,
-                                           DoubleBinding bindingY,
-                                           boolean subtractY) {
-        NodeModificator element = new NodeModificator(content, modLoc);
+    private NodeModificator addModificator(NodeModificator.Location modLoc) {
+        NodeModificator element = new NodeModificator(this, modLoc);
 
-        if (subtractX) {
-            bindingX = bindingX.subtract(element.widthProperty());
+        switch (modLoc) {
+            case TOP_LEFT:
+                element.setCursor(Cursor.NW_RESIZE);
+                getChildren().add(element);
+                StackPane.setAlignment(element, Pos.TOP_LEFT);
+                element.layoutXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
+                element.layoutYProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
+                break;
+
+            case TOP_RIGHT:
+                element.setCursor(Cursor.NE_RESIZE);
+                getChildren().add(element);
+                StackPane.setAlignment(element, Pos.TOP_RIGHT);
+                element.layoutXProperty().bind(widthProperty().subtract(element.widthProperty()));
+                element.layoutYProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
+                break;
+
+            case BOTTOM_LEFT:
+                element.setCursor(Cursor.SW_RESIZE);
+                getChildren().add(element);
+                StackPane.setAlignment(element, Pos.BOTTOM_LEFT);
+                element.layoutXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
+                element.layoutYProperty().bind(heightProperty().subtract(element.heightProperty()));
+                break;
+
+            case BOTTOM_RIGHT:
+                element.setCursor(Cursor.SE_RESIZE);
+                getChildren().add(element);
+                StackPane.setAlignment(element, Pos.BOTTOM_RIGHT);
+                element.layoutXProperty().bind(widthProperty().subtract(element.widthProperty()));
+                element.layoutYProperty().bind(heightProperty().subtract(element.heightProperty()));
+                break;
         }
 
-        if (subtractY) {
-            bindingY = bindingY.subtract(element.heightProperty());
-        }
-
-        element.setCursor(cursor);
-        getChildren().add(element);
-        StackPane.setAlignment(element, locStack);
         element.visibleProperty().bind(selected.or(hoverProperty()));
-        element.layoutXProperty().bind(bindingX);
-        element.layoutYProperty().bind(bindingY);
 
         return element;
     }
 
     private JointNode addJoint(Joint joint) {
         JointNode element = new JointNode(joint, this);
+        element.setRadius(3);
         switch (joint.getLocation()) {
             case NORTH:
-                element.centerXProperty().bind(widthProperty().multiply(0.5));
-                element.centerYProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
+                element.centerXProperty().bind(widthProperty().subtract(widthExtend).multiply(0.5));
+                element.centerYProperty().bind(Bindings.createDoubleBinding(() -> 0.0).add(element.radiusProperty()));
                 break;
 
             case EAST:
-                element.centerXProperty().bind(widthProperty());
-                element.centerYProperty().bind(heightProperty().multiply(0.5));
+                element.centerXProperty().bind(widthProperty().subtract(element.radiusProperty()).subtract(widthExtend));
+                element.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
                 break;
 
             case SOUTH:
-                element.centerXProperty().bind(widthProperty().multiply(0.5));
-                element.centerYProperty().bind(heightProperty());
+                element.centerXProperty().bind(widthProperty().subtract(widthExtend).multiply(0.5));
+                element.centerYProperty().bind(heightProperty().subtract(element.radiusProperty()).subtract(heightExtend));
                 break;
 
             case WEST:
-                element.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
-                element.centerYProperty().bind(heightProperty().multiply(0.5));
+                element.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0).add(element.radiusProperty()));
+                element.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
                 break;
         }
         element.visibleProperty().bind(
@@ -238,11 +296,60 @@ public class DiagramNode extends Pane {
                             return j != null && j.canJoin(joint);
                         }, diagramPane.jointProperty()))
         );
-        element.setRadius(3);
         getChildren().add(element);
         diagramPane.registerJointNode(element);
 
         return element;
+    }
+
+    private TextField addText(StringProperty bind, String cssClass, Pos position, boolean extend) {
+
+        TextField element = new TextField();
+        getChildren().add(element);
+        layout();
+        element.setPrefHeight(15);
+        element.applyCss();
+        element.layout();
+
+        switch (position) {
+            case BOTTOM_CENTER:
+                element.layoutXProperty().bind(widthProperty().divide(2).subtract(element.widthProperty().divide(2)));
+                element.layoutYProperty().bind(heightProperty().subtract(element.heightProperty()));
+
+                if (extend) {
+                    heightExtend = heightExtend.add(element.prefHeightProperty().multiply(1.1));
+                }
+                break;
+
+            case CENTER:
+            default:
+                element.layoutXProperty().bind(widthProperty().divide(2).subtract(element.widthProperty().divide(2)));
+                element.layoutYProperty().bind(heightProperty().divide(2).subtract(element.heightProperty().divide(2)));
+        }
+
+        element.textProperty().bindBidirectional(bind);
+        element.getStyleClass().add(cssClass);
+        StackPane.setAlignment(element, position);
+        element.minWidthProperty().bind(Bindings.createDoubleBinding(() -> 10.0));
+        element.maxWidthProperty().bind(widthProperty().divide(2));
+
+        return element;
+    }
+
+    private void addBorder() {
+        Rectangle border = new Rectangle();
+        border.getStyleClass().add("nodeBorderRectangle");
+        getChildren().add(border);
+        border.widthProperty().bind(widthProperty());
+        border.heightProperty().bind(heightProperty());
+        border.setStrokeWidth(2);
+        border.setMouseTransparent(true);
+        border.setFill(Color.TRANSPARENT);
+        border.visibleProperty().bind(selected);
+    }
+
+    private void addContent() {
+        getChildren().add(content);
     }
 
     /**
@@ -253,67 +360,16 @@ public class DiagramNode extends Pane {
          * Basic layout
          */
 
-        Rectangle border = new Rectangle();
-        border.getStyleClass().add("nodeBorderRectangle");
-        getChildren().add(border);
-        border.widthProperty().bind(widthProperty());
-        border.heightProperty().bind(heightProperty());
-        border.setStrokeWidth(2);
-        border.setMouseTransparent(true);
-        border.setFill(Color.TRANSPARENT);
-        border.visibleProperty().bind(selected);
+        addContent();
+        addBorder();
 
-        getChildren().add(content);
-        StackPane.setMargin(content, new Insets(3, 3, 3, 3));
+        TextField textFieldText     = addText(text, "nodeTextHolder", Pos.BOTTOM_CENTER, true);
 
-        TextField textFieldText = new TextField();
-        textFieldText.textProperty().bindBidirectional(text);
-        getChildren().add(textFieldText);
-        textFieldText.getStyleClass().add("nodeTextHolder");
-        StackPane.setAlignment(textFieldText, Pos.CENTER);
-        textFieldText.prefWidthProperty().bind(widthProperty());
-        textFieldText.setLayoutX(0);
-        textFieldText.layoutYProperty().bind(heightProperty().divide(2).subtract(textFieldText.heightProperty().divide(2)));
+        NodeModificator topRight    = addModificator(NodeModificator.Location.TOP_RIGHT);
+        NodeModificator topLeft     = addModificator(NodeModificator.Location.TOP_LEFT);
 
-        NodeModificator topRight = addModificator(
-                NodeModificator.Location.TOP_RIGHT,
-                Cursor.NE_RESIZE,
-                Pos.TOP_RIGHT,
-                widthProperty().subtract(0),
-                true,
-                Bindings.createDoubleBinding(() -> 0.0),
-                false
-        );
-
-        NodeModificator topLeft = addModificator(
-                NodeModificator.Location.TOP_LEFT,
-                Cursor.NW_RESIZE,
-                Pos.TOP_LEFT,
-                Bindings.createDoubleBinding(() -> 0.0),
-                false,
-                Bindings.createDoubleBinding(() -> 0.0),
-                false
-        );
-
-        NodeModificator bottomRight = addModificator(
-                NodeModificator.Location.BOTTOM_RIGHT,
-                Cursor.SE_RESIZE,
-                Pos.BOTTOM_RIGHT,
-                widthProperty().subtract(0),
-                true,
-                heightProperty().subtract(0),
-                true
-        );
-
-        NodeModificator bottomLeft = addModificator(
-                NodeModificator.Location.BOTTOM_LEFT,
-                Cursor.SW_RESIZE,
-                Pos.BOTTOM_LEFT,
-                Bindings.createDoubleBinding(() -> 0.0),
-                false,
-                heightProperty().subtract(0),
-                true
-        );
+        NodeModificator bottomRight = addModificator(NodeModificator.Location.BOTTOM_RIGHT);
+        NodeModificator bottomLeft  = addModificator(NodeModificator.Location.BOTTOM_LEFT);
 
         element.getJoints().forEach(this::addJoint);
 
@@ -322,15 +378,19 @@ public class DiagramNode extends Pane {
          */
 
         selected.set(true);
+        content.setMouseTransparent(true);
 
-        layoutXProperty().bindBidirectional(realXProperty);
-        layoutYProperty().bindBidirectional(realYProperty);
+        layoutXProperty().bindBidirectional(realX);
+        layoutYProperty().bindBidirectional(realY);
 
-        content.widthProperty().bindBidirectional(realWidthProperty);
-        content.heightProperty().bindBidirectional(realHeightProperty);
+        realWidth.setValue(realWidth.getValue()+widthExtend.get());
+        realHeight.setValue(realHeight.getValue()+heightExtend.get());
 
-        prefWidthProperty().bind(content.widthProperty());
-        prefHeightProperty().bind(content.heightProperty());
+        content.widthProperty().bind(realWidth.subtract(widthExtend));
+        content.heightProperty().bind(realHeight.subtract(heightExtend));
+
+        prefWidthProperty().bind(realWidth);
+        prefHeightProperty().bind(realHeight);
 
         setCursor(Cursor.MOVE);
 
@@ -387,8 +447,6 @@ public class DiagramNode extends Pane {
                 event.consume();
             }
         };
-
-        content.setMouseTransparent(true);
 
         setOnMousePressed(handlerClickedPre);
         textFieldText.setOnMousePressed(handlerClickedPre);
