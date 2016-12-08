@@ -35,8 +35,6 @@ import javafx.scene.paint.Color;
  */
 public class FactoryNode extends Label {
 
-    private final DiagramImageFactory factory;
-
     /**
      * Creates a new {@link FactoryNode}
      * @param factory the {@link DiagramImageFactory} used to create images
@@ -44,7 +42,6 @@ public class FactoryNode extends Label {
      * @param text the display text
      */
     public FactoryNode(DiagramImageFactory factory, String name, String text) {
-        this.factory = factory;
         setGraphic(factory.createDiagramImage());
         setText(text);
 
