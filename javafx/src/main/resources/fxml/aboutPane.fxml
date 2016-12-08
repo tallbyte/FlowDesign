@@ -34,7 +34,7 @@
                 <Label text="%popup.about.data.version"  GridPane.columnIndex="1" GridPane.rowIndex="1"/>
             </GridPane>
 
-            <Label styleClass="headerLabel" text="License"/>
+            <Label styleClass="headerLabel" text="%popup.about.license"/>
         </VBox>
     </top>
 
