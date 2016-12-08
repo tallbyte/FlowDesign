@@ -21,19 +21,18 @@ package com.tallbyte.flowdesign.javafx.diagram.factory;
 import com.tallbyte.flowdesign.core.Element;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
+import javafx.geometry.Pos;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-12-06)<br/>
+ * - julian (2016-12-08)<br/>
  */
-public interface DiagramNodeFactory<T extends Element> {
+public class BottomElementNodeFactory<T extends Element> implements ElementNodeFactory<T> {
 
-    /**
-     * Creates a new {@link ElementNode} according to the internal rules.
-     * @return Returns a new instance of an {@link ElementNode}.
-     */
-    public ElementNode createDiagramNode(T element, DiagramImage image);
-
+    @Override
+    public ElementNode createDiagramNode(Element element, DiagramImage image) {
+        return new ElementNode(element, image, Pos.BOTTOM_CENTER);
+    }
 }

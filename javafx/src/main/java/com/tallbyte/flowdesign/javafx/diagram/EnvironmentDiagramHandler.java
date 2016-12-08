@@ -36,12 +36,12 @@ public class EnvironmentDiagramHandler extends DiagramHandlerBase<EnvironmentDia
         addEntries("System", System.class,
                 new SystemElementFactory(),
                 new SystemDiagramImageFactory(),
-                new CenteredDiagramNodeFactory<>()
+                new CenteredElementNodeFactory<>()
         );
         addEntries("Actor", Actor.class,
                 new ActorElementFactory(),
                 new ActorDiagramImageFactory(),
-                new BottomDiagramNodeFactory<>()
+                new BottomElementNodeFactory<>()
         );
     }
 }

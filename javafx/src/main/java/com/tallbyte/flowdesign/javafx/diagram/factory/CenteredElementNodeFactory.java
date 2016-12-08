@@ -29,10 +29,10 @@ import javafx.geometry.Pos;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class BottomDiagramNodeFactory<T extends Element> implements DiagramNodeFactory<T> {
+public class CenteredElementNodeFactory<T extends Element> implements ElementNodeFactory<T> {
 
     @Override
     public ElementNode createDiagramNode(Element element, DiagramImage image) {
-        return new ElementNode(element, image, Pos.BOTTOM_CENTER);
+        return new ElementNode(element, image, Pos.CENTER);
     }
 }

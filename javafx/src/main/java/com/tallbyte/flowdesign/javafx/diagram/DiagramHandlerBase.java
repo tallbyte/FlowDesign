@@ -37,13 +37,13 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
 
     protected final Map<String, ElementFactory<? extends S>>                       elementFactories = new HashMap<>();
     protected final Map<Class<? extends Element>, DiagramImageFactory>             imageFactories   = new HashMap<>();
-    protected final Map<Class<? extends Element>, DiagramNodeFactory<? extends S>> nodeFactories    = new HashMap<>();
+    protected final Map<Class<? extends Element>, ElementNodeFactory<? extends S>> nodeFactories    = new HashMap<>();
     protected final Map<String, DiagramImageFactory>                               supportedElements= new HashMap<>();
 
     protected <E extends S> void addEntries(String string, Class<E> clazz,
                                             ElementFactory<E> elementFactory,
                                             DiagramImageFactory imageFactory,
-                                            DiagramNodeFactory<E> nodeFactory) {
+                                            ElementNodeFactory<E> nodeFactory) {
 
         elementFactories.put(string, elementFactory);
         imageFactories.put(clazz, imageFactory);
@@ -80,7 +80,7 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
     @SuppressWarnings("unchecked") // should be safe because of addEntries()
     public ElementNode createNode(Element element) {
         DiagramImageFactory    imageFactory = imageFactories.get(element.getClass());
-        DiagramNodeFactory<S>  nodeFactory  = (DiagramNodeFactory<S>) nodeFactories.get(element.getClass());
+        ElementNodeFactory<S> nodeFactory  = (ElementNodeFactory<S>) nodeFactories.get(element.getClass());
 
         if (imageFactory != null && nodeFactory != null) {
             /*

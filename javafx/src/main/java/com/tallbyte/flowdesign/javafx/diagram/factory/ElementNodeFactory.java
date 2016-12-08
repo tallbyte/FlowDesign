@@ -21,18 +21,19 @@ package com.tallbyte.flowdesign.javafx.diagram.factory;
 import com.tallbyte.flowdesign.core.Element;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
-import javafx.geometry.Pos;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-12-08)<br/>
+ * - julian (2016-12-06)<br/>
  */
-public class CenteredDiagramNodeFactory<T extends Element> implements DiagramNodeFactory<T> {
+public interface ElementNodeFactory<T extends Element> {
 
-    @Override
-    public ElementNode createDiagramNode(Element element, DiagramImage image) {
-        return new ElementNode(element, image, Pos.CENTER);
-    }
+    /**
+     * Creates a new {@link ElementNode} according to the internal rules.
+     * @return Returns a new instance of an {@link ElementNode}.
+     */
+    public ElementNode createDiagramNode(T element, DiagramImage image);
+
 }
