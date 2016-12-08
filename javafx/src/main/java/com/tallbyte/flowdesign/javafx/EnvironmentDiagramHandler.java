@@ -16,40 +16,31 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx.diagram.image;
+package com.tallbyte.flowdesign.javafx;
 
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
+import com.tallbyte.flowdesign.core.Element;
+import com.tallbyte.flowdesign.core.EnvironmentDiagram;
+import com.tallbyte.flowdesign.javafx.diagram.DiagramNode;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-10-30)<br/>
+ * - julian (2016-12-08)<br/>
  */
-public class ImageDiagramImage extends DiagramImage {
+public class EnvironmentDiagramHandler extends DiagramHandlerBase<EnvironmentDiagram> {
 
-    private Image image;
+    public EnvironmentDiagramHandler() {
 
-    /**
-     * Creates a new {@link ImageDiagramImage} with default dimension.
-     * @param url the url where the image can be found
-     */
-    public ImageDiagramImage(String url) {
-        this.image = new Image(url);
-        setWidth(image.getWidth()/5);
-        setHeight(image.getHeight()/5);
     }
 
     @Override
-    public void repaint() {
-        GraphicsContext context = getGraphicsContext2D();
-        double width  = getWidth();
-        double height = getHeight();
+    public void createElement(String element, int x, int y) {
 
-        context.clearRect(0, 0, width, height);
-        context.drawImage(image, 0, 0, width, height);
     }
 
+    @Override
+    public DiagramNode createNode(Element element) {
+        return null;
+    }
 }
