@@ -26,9 +26,24 @@ package com.tallbyte.flowdesign.core;
  */
 public enum  JointLocation {
 
-    NORTH,
-    EAST,
-    SOUTH,
-    WEST
+    TOP_LEFT,
+    TOP_CENTER,
+    TOP_RIGHT,
+
+    TOPLINE_LEFT,
+    TOPLINE_CENTER,
+    TOPLINE_RIGHT,
+
+    CENTER_LEFT,
+    CENTER,
+    CENTER_RIGHT,
+
+    BOTTOMLINE_LEFT,
+    BOTTOMLINE_CENTER,
+    BOTTOMLINE_RIGHT,
+
+    BOTTOM_LEFT,
+    BOTTOM_CENTER,
+    BOTTOM_RIGHT,
 
 }

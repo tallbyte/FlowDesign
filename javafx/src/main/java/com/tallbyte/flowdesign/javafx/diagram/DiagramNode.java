@@ -279,22 +279,22 @@ public class DiagramNode extends Pane {
         JointNode element = new JointNode(joint, this);
         element.setRadius(3);
         switch (joint.getLocation()) {
-            case NORTH:
+            case TOP_CENTER:
                 element.centerXProperty().bind(widthProperty().subtract(widthExtend).multiply(0.5));
                 element.centerYProperty().bind(Bindings.createDoubleBinding(() -> 0.0).add(element.radiusProperty()));
                 break;
 
-            case EAST:
+            case CENTER_RIGHT:
                 element.centerXProperty().bind(widthProperty().subtract(element.radiusProperty()).subtract(widthExtend));
                 element.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
                 break;
 
-            case SOUTH:
+            case BOTTOM_CENTER:
                 element.centerXProperty().bind(widthProperty().subtract(widthExtend).multiply(0.5));
                 element.centerYProperty().bind(heightProperty().subtract(element.radiusProperty()).subtract(heightExtend));
                 break;
 
-            case WEST:
+            case CENTER_LEFT:
                 element.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0).add(element.radiusProperty()));
                 element.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
                 break;
