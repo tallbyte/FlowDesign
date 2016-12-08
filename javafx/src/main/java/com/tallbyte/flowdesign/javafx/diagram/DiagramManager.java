@@ -82,4 +82,8 @@ public class DiagramManager {
             throw new IllegalStateException("unsupported diagram type");
         }
     }
+
+    public Iterable<Class<? extends Diagram>> getSupportedDiagramTypes() {
+        return HANDLERS.keySet();
+    }
 }
