@@ -18,6 +18,7 @@
 
 package com.tallbyte.flowdesign.javafx.pane;
 
+import com.tallbyte.flowdesign.javafx.ResourceUtils;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramNode;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -29,6 +30,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.util.converter.NumberStringConverter;
+
+import static com.tallbyte.flowdesign.javafx.ResourceUtils.*;
 
 /**
  * This file is part of project flowDesign.
@@ -67,7 +70,7 @@ public class PropertyPane extends GridPane {
     }
 
     private boolean addProperty(Property<?> property, int row) {
-        Label label = new Label(property.getName());
+        Label label = new Label(getResourceString("pane.properties.property."+property.getName(), property.getName()));
         Node  data  = null;
 
         if (property instanceof StringProperty) {

@@ -35,6 +35,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.tallbyte.flowdesign.javafx.ResourceUtils.getResourceString;
+import static com.tallbyte.flowdesign.javafx.pane.ApplicationPane.*;
+
 /**
  * This file is part of project flowDesign.
  * <p/>
@@ -49,7 +52,7 @@ public class FactoryPane extends GridPane {
      * Creates a new {@link FactoryPane} with a default text.
      */
     public FactoryPane() {
-        getChildren().add(new Label("Please select a diagram"));
+        getChildren().add(new Label(getResourceString("pane.factory.default")));
     }
 
     public void setup(DiagramsPane pane) {
@@ -73,7 +76,7 @@ public class FactoryPane extends GridPane {
                                             -> new FactoryNode(
                                                 factory.getValue(),
                                                 factory.getKey(),
-                                                factory.getKey()
+                                                getResourceString("pane.factory.node."+factory.getKey(), factory.getKey())
                                             )
                                     ).collect(Collectors.toList());
 
@@ -86,10 +89,10 @@ public class FactoryPane extends GridPane {
                                 getChildren().add(child);
                             }
                         } else {
-                            getChildren().add(new Label("Unsupported diagram type"));
+                            getChildren().add(new Label(getResourceString("pane.factory.unsupported")));
                         }
                     } else {
-                        getChildren().add(new Label("Please select a diagram"));
+                        getChildren().add(new Label(getResourceString("pane.factory.default")));
                     }
                 };
 

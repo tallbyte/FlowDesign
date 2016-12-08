@@ -22,6 +22,7 @@ import com.tallbyte.flowdesign.core.Diagram;
 import com.tallbyte.flowdesign.core.DiagramsChangedListener;
 import com.tallbyte.flowdesign.core.EnvironmentDiagram;
 import com.tallbyte.flowdesign.core.Project;
+import com.tallbyte.flowdesign.javafx.ResourceUtils;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -40,6 +41,8 @@ import javafx.stage.Window;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
+import static com.tallbyte.flowdesign.javafx.ResourceUtils.*;
+
 /**
  * This file is part of project flowDesign.
  * <p/>
@@ -56,6 +59,7 @@ public class AboutPane extends BorderPane {
         FXMLLoader loader = new FXMLLoader( getClass().getResource("/fxml/aboutPane.fxml") );
         loader.setController(this);
         loader.setRoot(this);
+        loader.setResources(getResourceBundle());
 
         try {
             loader.load();

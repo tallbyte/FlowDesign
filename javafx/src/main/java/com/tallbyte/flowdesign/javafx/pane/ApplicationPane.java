@@ -23,6 +23,7 @@ import com.tallbyte.flowdesign.core.DiagramsChangedListener;
 import com.tallbyte.flowdesign.core.EnvironmentDiagram;
 import com.tallbyte.flowdesign.core.Project;
 import com.tallbyte.flowdesign.core.environment.System;
+import com.tallbyte.flowdesign.javafx.ResourceUtils;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -39,6 +40,10 @@ import javafx.stage.Window;
 
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
+import static com.tallbyte.flowdesign.javafx.ResourceUtils.*;
 
 /**
  * This file is part of project flowDesign.
@@ -62,6 +67,7 @@ public class ApplicationPane extends BorderPane {
         FXMLLoader loader = new FXMLLoader( getClass().getResource("/fxml/applicationPane.fxml") );
         loader.setController(this);
         loader.setRoot(this);
+        loader.setResources(getResourceBundle());
 
         updateTitle();
 
@@ -107,7 +113,7 @@ public class ApplicationPane extends BorderPane {
 
             if (newValue != null) {
                 TreeItem<TreeEntry> root           = new TreeItem<>(new TreeEntry(newValue.getName()));
-                TreeItem<TreeEntry> environment    = new TreeItem<>(new TreeEntry("Environment"));
+                TreeItem<TreeEntry> environment    = new TreeItem<>(new TreeEntry(getResourceString("tree.overview.EnvironmentDiagram", "Environment")));
                 //TreeItem<TreeEntry> mask           = new TreeItem<>(new TreeEntry("Mask"));
                 //TreeItem<TreeEntry> flow           = new TreeItem<>(new TreeEntry("Flow"));
 
@@ -173,8 +179,8 @@ public class ApplicationPane extends BorderPane {
     @FXML
     public void onCreateProject() {
         Dialog<String> dialog = new TextInputDialog();
-        dialog.setTitle("Create Project");
-        dialog.setContentText("Name");
+        dialog.setTitle(getResourceString("popup.newProject.title"));
+        dialog.setContentText(getResourceString("popup.newProject.field.name"));
         dialog.setHeaderText(null);
         dialog.showAndWait().ifPresent(response -> project.set(new Project(response)));
     }
@@ -186,8 +192,8 @@ public class ApplicationPane extends BorderPane {
     @FXML
     public void onAddEnvironment() {
         Dialog<String> dialog = new TextInputDialog();
-        dialog.setTitle("Create new Environment-Diagram");
-        dialog.setContentText("Name");
+        dialog.setTitle(getResourceString("popup.newEnvironment.title"));
+        dialog.setContentText(getResourceString("popup.newEnvironment.field.name"));
         dialog.setHeaderText(null);
         dialog.showAndWait().ifPresent(response -> {
             Project project = getProject();
@@ -215,7 +221,7 @@ public class ApplicationPane extends BorderPane {
             stage.setScene(new Scene(new AboutPane()));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setHeight(400);
-            stage.setTitle("About FlowDesign");
+            stage.setTitle(getResourceString("popup.about.title"));
             stage.show();
         } catch (LoadException e) {
             // TODO

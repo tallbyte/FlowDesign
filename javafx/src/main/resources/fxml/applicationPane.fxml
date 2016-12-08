@@ -18,29 +18,28 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<?import com.tallbyte.flowdesign.javafx.diagram.DiagramPane?>
+<?import com.tallbyte.flowdesign.javafx.pane.DiagramsPane?>
 <?import com.tallbyte.flowdesign.javafx.pane.FactoryPane?>
+<?import com.tallbyte.flowdesign.javafx.pane.PropertyPane?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import com.tallbyte.flowdesign.javafx.pane.PropertyPane?>
-<?import com.tallbyte.flowdesign.javafx.pane.DiagramsPane?>
 <fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" stylesheets="/css/main.css">
     <top>
         <MenuBar>
-            <Menu text="File">
-                <MenuItem text="New Project..." onAction="#onCreateProject"/>
+            <Menu text="%menu.file">
+                <MenuItem text="%menu.file.newProject" onAction="#onCreateProject"/>
                 <!--<SeparatorMenuItem/>
                 <MenuItem text="Save"/>
                 <MenuItem text="Save as..."/>
                 -->
                 <SeparatorMenuItem/>
-                <MenuItem text="Quit" onAction="#onQuit"/>
+                <MenuItem text="%menu.file.quit" onAction="#onQuit"/>
             </Menu>
-            <Menu text="Edit">
-                <MenuItem fx:id="menuItemAddEnvironment" text="Add Environment..." onAction="#onAddEnvironment"/>
+            <Menu text="%menu.edit">
+                <MenuItem fx:id="menuItemAddEnvironment" text="%menu.edit.newEnvironment" onAction="#onAddEnvironment"/>
             </Menu>
-            <Menu text="Help">
-                <MenuItem text="About" onAction="#onAbout"/>
+            <Menu text="%menu.help">
+                <MenuItem text="%menu.help.about" onAction="#onAbout"/>
             </Menu>
         </MenuBar>
     </top>
@@ -57,23 +56,23 @@
         <BorderPane fx:id="paneRight">
             <top>
                 <VBox>
-                    <TitledPane collapsible="false" text="Elements">
+                    <TitledPane collapsible="false" text="%pane.title.elements">
                         <FactoryPane fx:id="paneFactory"/>
                     </TitledPane>
-                    <TitledPane collapsible="false" text="Properties">
+                    <TitledPane collapsible="false" text="%pane.title.properties">
                         <PropertyPane fx:id="paneProperty"/>
                     </TitledPane>
                 </VBox>
             </top>
             <center>
-                <TitledPane collapsible="false" text="Info" maxHeight="65536"/>
+                <TitledPane collapsible="false" text="%pane.title.info" maxHeight="65536"/>
             </center>
         </BorderPane>
     </right>
 
     <bottom>
         <HBox fx:id="barBottom">
-            <Label fx:id="labelLastSave" text="never"/>
+            <Label fx:id="labelLastSave" text="%bar.bottom.save.never"/>
         </HBox>
     </bottom>
 

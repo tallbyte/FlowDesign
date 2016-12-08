@@ -28,10 +28,10 @@
     <top>
         <VBox fx:id="boxAboutHeader">
             <GridPane fx:id="paneAboutInfo">
-                <Label text="Name"       GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                <Label text="FlowDesign" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-                <Label text="Version"    GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                <Label text="0.1"        GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <Label text="%popup.about.field.name"    GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <Label text="%popup.about.data.name"     GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <Label text="%popup.about.field.version" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <Label text="%popup.about.data.version"  GridPane.columnIndex="1" GridPane.rowIndex="1"/>
             </GridPane>
 
             <Label styleClass="headerLabel" text="License"/>
