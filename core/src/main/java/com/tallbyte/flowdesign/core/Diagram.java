@@ -18,8 +18,6 @@
 
 package com.tallbyte.flowdesign.core;
 
-import com.tallbyte.flowdesign.core.environment.Connection;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
@@ -31,13 +29,13 @@ import java.util.List;
  * Authors:<br/>
  * - julian (2016-11-07)<br/>
  */
-public abstract class Diagram {
+public abstract class Diagram<E extends Element> {
 
     protected String                           name;
-    protected List<Element>                    elements    = new ArrayList<>();
+    protected List<E>                          elements    = new ArrayList<>();
     protected List<Connection>                 connections = new ArrayList<>();
 
-    protected Element                          root;
+    protected E                                root;
 
     protected Project                          project = null;
 
@@ -50,7 +48,7 @@ public abstract class Diagram {
      * @param name the name
      * @param root the root {@link Element} required for analysis
      */
-    public Diagram(String name, Element root) {
+    public Diagram(String name, E root) {
         this.name = name;
         this.root = root;
 
@@ -109,7 +107,7 @@ public abstract class Diagram {
      * This will also call all {@link ElementsChangedListener}.
      * @param element the @{link Element} to add
      */
-    public void addElement(Element element) {
+    public void addElement(E element) {
         this.elements.add(element);
         element.setDiagram(this);
 
@@ -180,7 +178,7 @@ public abstract class Diagram {
      * Gets all added {@link Element}s.
      * @return Returns an {@link Iterable} containing the {@link Element}s.
      */
-    public Iterable<Element> getElements() {
+    public Iterable<E> getElements() {
         return elements;
     }
 

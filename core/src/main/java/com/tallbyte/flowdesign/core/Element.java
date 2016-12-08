@@ -28,7 +28,7 @@ import java.util.*;
  * Authors:<br/>
  * - julian (2016-11-07)<br/>
  */
-public class Element {
+public abstract class Element {
 
     private       Diagram diagram;
     private final List<Joint> joints;

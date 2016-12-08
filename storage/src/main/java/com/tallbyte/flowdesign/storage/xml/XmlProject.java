@@ -99,7 +99,7 @@ public class XmlProject implements ProjectSerializer<XMLStreamReader, XMLStreamW
      * @param diagram {@link Diagram} to serialize
      * @throws IOException If serialization failed
      */
-    protected void writeDiagram(XMLStreamWriter writer, Diagram diagram) throws IOException {
+    protected void writeDiagram(XMLStreamWriter writer, Diagram<?> diagram) throws IOException {
         // retrieve the serializer for the given diagram
         String                                                       type       = diagram.getClass().getSimpleName();
         DiagramSerializer<Diagram, XMLStreamReader, XMLStreamWriter> serializer = diagramSerializer.get(type);

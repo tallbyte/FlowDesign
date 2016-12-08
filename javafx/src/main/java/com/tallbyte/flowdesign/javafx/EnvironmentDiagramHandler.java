@@ -18,9 +18,11 @@
 
 package com.tallbyte.flowdesign.javafx;
 
-import com.tallbyte.flowdesign.core.Element;
 import com.tallbyte.flowdesign.core.EnvironmentDiagram;
-import com.tallbyte.flowdesign.javafx.diagram.DiagramNode;
+import com.tallbyte.flowdesign.core.environment.Actor;
+import com.tallbyte.flowdesign.core.environment.EnvironmentDiagramElement;
+import com.tallbyte.flowdesign.core.environment.System;
+import com.tallbyte.flowdesign.javafx.diagram.factory.*;
 
 /**
  * This file is part of project flowDesign.
@@ -28,19 +30,18 @@ import com.tallbyte.flowdesign.javafx.diagram.DiagramNode;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class EnvironmentDiagramHandler extends DiagramHandlerBase<EnvironmentDiagram> {
+public class EnvironmentDiagramHandler extends DiagramHandlerBase<EnvironmentDiagram, EnvironmentDiagramElement> {
 
     public EnvironmentDiagramHandler() {
-
-    }
-
-    @Override
-    public void createElement(String element, int x, int y) {
-
-    }
-
-    @Override
-    public DiagramNode createNode(Element element) {
-        return null;
+        addEntries("System", System.class,
+                new SystemElementFactory(),
+                new SystemDiagramImageFactory(),
+                new CenteredDiagramNodeFactory<>()
+        );
+        addEntries("Actor", Actor.class,
+                new ActorElementFactory(),
+                new ActorDiagramImageFactory(),
+                new CenteredDiagramNodeFactory<>()
+        );
     }
 }

@@ -19,7 +19,7 @@
 package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.core.Element;
-import com.tallbyte.flowdesign.core.environment.Connection;
+import com.tallbyte.flowdesign.core.Connection;
 
 /**
  * This file is part of project flowDesign.

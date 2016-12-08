@@ -16,25 +16,29 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx.diagram.factory;
+package com.tallbyte.flowdesign.core.environment;
 
-import com.tallbyte.flowdesign.core.environment.System;
+import com.tallbyte.flowdesign.core.Element;
+import com.tallbyte.flowdesign.core.Joint;
+
+import java.util.List;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-11-29)<br/>
+ * - julian (2016-12-08)<br/>
  */
-public class SystemElementFactory implements ElementFactory<System> {
+public abstract class EnvironmentDiagramElement extends Element{
 
-    @Override
-    public String getName() {
-        return "System";
+    protected EnvironmentDiagramElement() {
     }
 
-    @Override
-    public System createElement() {
-        return new System();
+    protected EnvironmentDiagramElement(List<Joint> joints) {
+        super(joints);
+    }
+
+    protected EnvironmentDiagramElement(Joint... joints) {
+        super(joints);
     }
 }

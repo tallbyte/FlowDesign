@@ -18,8 +18,6 @@
 
 package com.tallbyte.flowdesign.core;
 
-import com.tallbyte.flowdesign.core.environment.Connection;
-
 import java.util.HashSet;
 import java.util.Set;
 

@@ -21,6 +21,7 @@ package com.tallbyte.flowdesign.javafx;
 import com.tallbyte.flowdesign.core.Diagram;
 import com.tallbyte.flowdesign.core.Element;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramNode;
+import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
 import javafx.beans.property.ObjectProperty;
 
 /**
@@ -37,8 +38,8 @@ public interface DiagramHandler<T extends Diagram> {
 
     ObjectProperty<T> diagramProperty();
 
-    void createElement(String element, int x, int y);
+    void createElement(String element, double x, double y);
 
-    DiagramNode createNode(Element element);
+    DiagramNode createNode(DiagramPane pane, Element element);
 
 }

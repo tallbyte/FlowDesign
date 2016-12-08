@@ -29,7 +29,7 @@ import java.util.List;
  * Authors:<br/>
  * - julian (2016-11-07)<br/>
  */
-public class System extends Element {
+public class System extends EnvironmentDiagramElement {
 
     public System() {
         super(generateDefaultJoints(System.class));

@@ -22,6 +22,7 @@ import com.tallbyte.flowdesign.core.Diagram;
 import com.tallbyte.flowdesign.core.Element;
 import com.tallbyte.flowdesign.core.EnvironmentDiagram;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramNode;
+import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -36,44 +37,46 @@ import java.util.Map;
  */
 public class DiagramManager {
 
-    private final Map<Class<? extends Diagram>, DiagramHandler<? extends Diagram>> handlers = new HashMap<>();
-    private final ObjectProperty<Diagram> diagram = new SimpleObjectProperty<>(this, "diagram", null);
+    private final static Map<Class<? extends Diagram>, DiagramHandler<? extends Diagram>> HANDLERS = new HashMap<>();
 
+    static {
+        addHandler(EnvironmentDiagram.class, new EnvironmentDiagramHandler());
+    }
+
+    private final ObjectProperty<Diagram<?>> diagram = new SimpleObjectProperty<>(this, "diagram", null);
     private       DiagramHandler<?>       handler = null;
 
     public DiagramManager() {
-        addHandler(EnvironmentDiagram.class, new EnvironmentDiagramHandler());
-
         diagramProperty().addListener((observable, oldValue, newValue) -> {
             setHandler(newValue);
         });
     }
 
-    public <T extends Diagram> void addHandler(Class<T> clazz, DiagramHandler<T> handler) {
-        handlers.put(clazz, handler);
+    public static <T extends Diagram> void addHandler(Class<T> clazz, DiagramHandler<T> handler) {
+        HANDLERS.put(clazz, handler);
     }
 
     @SuppressWarnings("unchecked") // this is safe, as we only allow altering of the handler map trough addHandler()
     private <T extends Diagram> void setHandler(Diagram diagram) {
-        DiagramHandler<T> handler = (DiagramHandler<T>) handlers.get(diagram.getClass());
+        DiagramHandler<T> handler = (DiagramHandler<T>) HANDLERS.get(diagram.getClass());
         handler.setDiagram((T) diagram);
 
         this.handler = handler;
     }
 
-    public void setDiagram(Diagram diagram) {
+    public void setDiagram(Diagram<?> diagram) {
         this.diagram.set(diagram);
     }
 
-    public Diagram getDiagram() {
+    public Diagram<?> getDiagram() {
         return diagram.get();
     }
 
-    public ObjectProperty<Diagram> diagramProperty() {
+    public ObjectProperty<Diagram<?>> diagramProperty() {
         return diagram;
     }
 
-    public void createElement(String element, int x, int y) {
+    public void createElement(String element, double x, double y) {
         if (handler != null) {
             handler.createElement(element, x, y);
         } else {
@@ -81,9 +84,9 @@ public class DiagramManager {
         }
     }
 
-    public DiagramNode createNode(Element element) {
+    public DiagramNode createNode(DiagramPane pane, Element element) {
         if (handler != null) {
-            return createNode(element);
+            return handler.createNode(pane, element);
         } else {
             throw new IllegalStateException("unsupported diagram type");
         }

@@ -19,13 +19,13 @@
 package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.core.*;
-import com.tallbyte.flowdesign.core.environment.Connection;
+import com.tallbyte.flowdesign.core.Connection;
+import com.tallbyte.flowdesign.javafx.DiagramManager;
 import com.tallbyte.flowdesign.javafx.diagram.factory.*;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.property.adapter.JavaBeanDoublePropertyBuilder;
 import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
@@ -48,20 +48,13 @@ import java.util.Map;
  */
 public class DiagramPane extends StackPane {
 
-    protected final Group                                             groupContent         = new Group();
-    protected final Map<Class<?>, Map<Class<?>, DiagramImageFactory>> fullImageFactories   = new HashMap<>();
-    protected       Map<Class<?>, DiagramImageFactory>                imageFactories       = new HashMap<>();
+    protected final DiagramManager              diagramManager= new DiagramManager();
+    protected final Group                       groupContent  = new Group();
+    protected final Map<Joint, JointNode>       jointNodes    = new HashMap<>();
 
-    protected final Map<Class<?>, Map<String, ElementFactory>>        fullElementFactories = new HashMap<>();
-    protected       Map<String, ElementFactory>                       elementFactories     = new HashMap<>();
-
-    protected final Map<Class<?>, Map<Class<?>, DiagramNodeFactory>>  fullNodeFactories    = new HashMap<>();
-    protected       Map<Class<?>, DiagramNodeFactory>                 nodeFactories        = new HashMap<>();
-
-    protected final Map<Joint, JointNode>       jointNodes                                 = new HashMap<>();
+    protected final ObjectProperty<Diagram<?>>  diagram = new SimpleObjectProperty<>(this, "diagram", null);
 
     protected       StringProperty              name;
-    protected final ObjectProperty<Diagram>     diagram = new SimpleObjectProperty<>(this, "diagram", null);
     protected final ObjectProperty<DiagramNode> node    = new SimpleObjectProperty<>(this, "node", null);
     protected final ObjectProperty<Joint>       joint   = new SimpleObjectProperty<>(this, "joint", null);
 
@@ -80,11 +73,7 @@ public class DiagramPane extends StackPane {
         getChildren().add(groupContent);
         setAlignment(groupContent, Pos.TOP_LEFT);
 
-        addImageFactory(EnvironmentDiagram.class, new SystemDiagramImageFactory());
-        addImageFactory(EnvironmentDiagram.class, new ActorDiagramImageFactory());
-
-        addElementFactory(EnvironmentDiagram.class, new ActorElementFactory());
-        addElementFactory(EnvironmentDiagram.class, new SystemElementFactory());
+        diagramManager.diagramProperty().bindBidirectional(this.diagramProperty());
 
         diagram.addListener((observable, oldValue, newValue) -> {
             if (oldValue != null) {
@@ -103,15 +92,6 @@ public class DiagramPane extends StackPane {
                 } catch (NoSuchMethodException e) {
                     throw new RuntimeException("Could not create properties. This should never happen?!");
                 }
-
-                imageFactories = fullImageFactories.get(newValue.getClass());
-                imageFactories = imageFactories == null ? new HashMap<>() : imageFactories;
-
-                elementFactories = fullElementFactories.get(newValue.getClass());
-                elementFactories = elementFactories == null ? new HashMap<>() : elementFactories;
-
-                nodeFactories = fullNodeFactories.get(newValue.getClass());
-                nodeFactories = nodeFactories == null ? new HashMap<>() : nodeFactories;
 
                 listenerElements = (element, added) -> {
                     if (added) {
@@ -167,29 +147,12 @@ public class DiagramPane extends StackPane {
                     Diagram diagram = this.diagram.get();
 
                     if (diagram != null) {
-                        ElementFactory factory = elementFactories.get(event.getDragboard().getString());
+                        Bounds b = newValue.localToScene(newValue.getBoundsInLocal());
 
-                        if (factory != null) {
-                            Bounds b = newValue.localToScene(newValue.getBoundsInLocal());
-
-                            Element element = factory.createElement();
-                            element.setX(mouseX-b.getMinX()-event.getDragboard().getDragViewOffsetX());
-                            element.setY(mouseY-b.getMinY()-event.getDragboard().getDragViewOffsetY());
-                            DiagramImageFactory imageFactory = imageFactories.get(element.getClass());
-
-                            if (imageFactory != null) {
-                                DiagramImage image = imageFactory.createDiagramImage();
-
-                                element.setWidth(image.getWidth());
-                                element.setHeight(image.getHeight());
-                            } else {
-                                element.setWidth(75);
-                                element.setHeight(75);
-                            }
-
-                            setAllUnselected();
-                            diagram.addElement(element);
-                        }
+                        diagramManager.createElement(event.getDragboard().getString(),
+                                mouseX-b.getMinX()-event.getDragboard().getDragViewOffsetX(),
+                                mouseY-b.getMinY()-event.getDragboard().getDragViewOffsetY()
+                        );
 
                         event.consume();
                     }
@@ -223,10 +186,9 @@ public class DiagramPane extends StackPane {
     }
 
     private void addElement(Element element) {
-        DiagramImageFactory factory = imageFactories.get(element.getClass());
-
-        if (factory != null) {
-            groupContent.getChildren().add(new DiagramNode(this, element, factory.createDiagramImage()));
+        DiagramNode node = diagramManager.createNode(this, element);
+        if (node != null) {
+            groupContent.getChildren().add(node);
         }
     }
 
@@ -314,54 +276,6 @@ public class DiagramPane extends StackPane {
         groupContent.getChildren().remove(node);
     }
 
-    /**
-     * Adds a new {@link DiagramImageFactory}.
-     * @param clazz the {@link Class} of the diagram type
-     * @param factory the factory
-     */
-    public void addImageFactory(Class<? extends Diagram> clazz, DiagramImageFactory factory) {
-        Map<Class<?>, DiagramImageFactory> map = fullImageFactories.get(clazz);
-
-        if (map == null) {
-            map = new HashMap<>();
-            fullImageFactories.put(clazz, map);
-        }
-
-        map.put(factory.getTargetClass(), factory);
-    }
-
-    /**
-     * Adds a new {@link ElementFactory}.
-     * @param clazz the {@link Class} of the diagram type
-     * @param factory the factory
-     */
-    public void addElementFactory(Class<? extends Diagram> clazz, ElementFactory factory) {
-        Map<String, ElementFactory> map = fullElementFactories.get(clazz);
-
-        if (map == null) {
-            map = new HashMap<>();
-            fullElementFactories.put(clazz, map);
-        }
-
-        map.put(factory.getName(), factory);
-    }
-
-    /**
-     * Adds a new {@link DiagramNodeFactory}.
-     * @param clazz the {@link Class} of the diagram type
-     * @param factory the factory
-     */
-    public void addNodeFactory(Class<? extends Diagram> clazz, DiagramNodeFactory factory) {
-        Map<Class<?>, DiagramNodeFactory> map = fullNodeFactories.get(clazz);
-
-        if (map == null) {
-            map = new HashMap<>();
-            fullNodeFactories.put(clazz, map);
-        }
-
-        map.put(factory.getTargetClass(), factory);
-    }
-
     public String getName() {
         return name.get();
     }
@@ -378,7 +292,7 @@ public class DiagramPane extends StackPane {
      * Gets the current {@link Diagram}.
      * @return Returns the {@link Diagram} or null if none is set.
      */
-    public Diagram getDiagram() {
+    public Diagram<?> getDiagram() {
         return diagram.get();
     }
 
@@ -386,11 +300,11 @@ public class DiagramPane extends StackPane {
      * Sets the current {@link Diagram}.
      * @param diagram the new {@link Diagram}
      */
-    public void setDiagram(Diagram diagram) {
+    public void setDiagram(Diagram<?> diagram) {
         this.diagram.set(diagram);
     }
 
-    public ObjectProperty<Diagram> diagramProperty() {
+    public ObjectProperty<Diagram<?>> diagramProperty() {
         return diagram;
     }
 

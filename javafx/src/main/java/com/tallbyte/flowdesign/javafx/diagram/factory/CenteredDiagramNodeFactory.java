@@ -27,27 +27,21 @@ import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-12-06)<br/>
+ * - julian (2016-12-08)<br/>
  */
-public interface DiagramNodeFactory<T extends Element> {
+public class CenteredDiagramNodeFactory<T extends Element> implements DiagramNodeFactory<T> {
+    @Override
+    public String getName() {
+        return null; // TODO
+    }
 
-    /**
-     * Gets the internal reference-name of this {@link DiagramNodeFactory}.
-     * @return Returns the name.
-     */
-    public String getName();
+    @Override
+    public Class<? extends Element> getTargetClass() {
+        return null; // TODO
+    }
 
-    /**
-     * Gets the type of {@link Class} that is created, in order to avoid
-     * unnecessary probe-object creations.
-     * @return Returns the type.
-     */
-    public Class<? extends Element> getTargetClass();
-
-    /**
-     * Creates a new {@link DiagramNode} according to the internal rules.
-     * @return Returns a new instance of an {@link DiagramNode}.
-     */
-    public DiagramNode createDiagramNode(DiagramPane pane, T element, DiagramImage image);
-
+    @Override
+    public DiagramNode createDiagramNode(DiagramPane pane, Element element, DiagramImage image) {
+        return new DiagramNode(pane, element, image);
+    }
 }

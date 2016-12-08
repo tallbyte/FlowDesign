@@ -18,6 +18,7 @@
 
 package com.tallbyte.flowdesign.core;
 
+import com.tallbyte.flowdesign.core.environment.EnvironmentDiagramElement;
 import com.tallbyte.flowdesign.core.environment.System;
 
 import java.lang.*;
@@ -28,7 +29,7 @@ import java.lang.*;
  * Authors:<br/>
  * - julian (2016-11-07)<br/>
  */
-public class EnvironmentDiagram extends Diagram {
+public class EnvironmentDiagram extends Diagram<EnvironmentDiagramElement> {
 
     public EnvironmentDiagram(String name) {
         super(name, new System());

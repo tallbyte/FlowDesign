@@ -16,9 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core.environment;
-
-import com.tallbyte.flowdesign.core.Joint;
+package com.tallbyte.flowdesign.core;
 
 /**
  * This file is part of project flowDesign.

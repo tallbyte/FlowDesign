@@ -18,8 +18,6 @@
 
 package com.tallbyte.flowdesign.core;
 
-import com.tallbyte.flowdesign.core.environment.Connection;
-
 /**
  * This file is part of project flowDesign.
  * <p/>

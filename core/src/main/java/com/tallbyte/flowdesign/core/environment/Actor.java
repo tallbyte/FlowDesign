@@ -29,7 +29,7 @@ import java.util.List;
  * Authors:<br/>
  * - julian (2016-11-07)<br/>
  */
-public class Actor extends Element {
+public class Actor extends EnvironmentDiagramElement {
 
     public Actor() {
         super(generateDefaultJoints(Actor.class));
