@@ -76,10 +76,11 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
 
         if (factory != null) {
             S e = factory.createElement();
+            // set location
             e.setX(x);
             e.setY(y);
-            getDiagram().addElement(e);
 
+            // set dimension
             DiagramImageFactory imageFactory = imageFactories.get(e.getClass());
             if (imageFactory != null) {
                 DiagramImage image = imageFactory.createDiagramImage();
@@ -90,6 +91,7 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
                 e.setHeight(75);
             }
 
+            getDiagram().addElement(e);
         }
     }
 
