@@ -94,7 +94,7 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
 
     @Override
     @SuppressWarnings("unchecked") // should be safe because of addEntries()
-    public DiagramNode createNode(DiagramPane pane, Element element) {
+    public DiagramNode createNode(Element element) {
         DiagramImageFactory    imageFactory = imageFactories.get(element.getClass());
         DiagramNodeFactory<S>  nodeFactory  = (DiagramNodeFactory<S>) nodeFactories.get(element.getClass());
 
@@ -103,7 +103,7 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
              * The following cast should be safe as well, as unsupported elements would
              * result in a null-value for nodeFactory
              */
-            return nodeFactory.createDiagramNode(pane, (S) element, imageFactory.createDiagramImage());
+            return nodeFactory.createDiagramNode((S) element, imageFactory.createDiagramImage());
         }
 
         return null;

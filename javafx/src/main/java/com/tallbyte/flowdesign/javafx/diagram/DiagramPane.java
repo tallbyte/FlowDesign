@@ -183,8 +183,9 @@ public class DiagramPane extends StackPane {
     }
 
     private void addElement(Element element) {
-        DiagramNode node = diagramManager.createNode(this, element);
+        DiagramNode node = diagramManager.createNode(element);
         if (node != null) {
+            node.setDiagramPane(this);
             groupContent.getChildren().add(node);
         }
     }

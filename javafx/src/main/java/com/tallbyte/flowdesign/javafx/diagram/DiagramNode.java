@@ -46,8 +46,8 @@ import java.util.List;
  */
 public class DiagramNode extends Pane {
 
-    protected List<Property<?>> properties = new ArrayList<>();
-    protected DiagramPane       diagramPane;
+    protected List<Property<?>> properties  = new ArrayList<>();
+    protected DiagramPane       diagramPane = null;
     protected DiagramImage      content;
 
     protected double            mouseX;
@@ -68,8 +68,7 @@ public class DiagramNode extends Pane {
 
     private   boolean           release  = true;
 
-    public DiagramNode(DiagramPane diagramPane, Element element, DiagramImage content) {
-        this.diagramPane = diagramPane;
+    public DiagramNode(Element element, DiagramImage content) {
         this.content     = content;
         this.element     = element;
 
@@ -83,7 +82,6 @@ public class DiagramNode extends Pane {
         }
 
         addDefaultProperties();
-        setup();
     }
 
     /**
@@ -92,6 +90,18 @@ public class DiagramNode extends Pane {
      */
     public DiagramPane getDiagramPane() {
         return diagramPane;
+    }
+
+    /**
+     * Sest the containing {@link DiagramPane}
+     * @param diagramPane the new pane
+     */
+    void setDiagramPane(DiagramPane diagramPane) {
+        this.diagramPane = diagramPane;
+
+        if (diagramPane != null) {
+            setup();
+        }
     }
 
     /**

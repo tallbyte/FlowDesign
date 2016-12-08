@@ -32,16 +32,6 @@ import com.tallbyte.flowdesign.javafx.diagram.image.StickmanDiagramImage;
 public class ActorDiagramImageFactory implements DiagramImageFactory {
 
     @Override
-    public String getName() {
-        return "Actor";
-    }
-
-    @Override
-    public Class<? extends Element> getTargetClass() {
-        return Actor.class;
-    }
-
-    @Override
     public DiagramImage createDiagramImage() {
         return new StickmanDiagramImage();
     }

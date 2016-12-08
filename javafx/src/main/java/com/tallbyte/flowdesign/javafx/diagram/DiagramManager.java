@@ -82,9 +82,9 @@ public class DiagramManager {
         }
     }
 
-    public DiagramNode createNode(DiagramPane pane, Element element) {
+    public DiagramNode createNode(Element element) {
         if (handler != null) {
-            return handler.createNode(pane, element);
+            return handler.createNode(element);
         } else {
             throw new IllegalStateException("unsupported diagram type");
         }

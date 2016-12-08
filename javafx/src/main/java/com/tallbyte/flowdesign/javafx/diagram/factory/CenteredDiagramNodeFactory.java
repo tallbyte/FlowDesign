@@ -32,7 +32,7 @@ import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 public class CenteredDiagramNodeFactory<T extends Element> implements DiagramNodeFactory<T> {
 
     @Override
-    public DiagramNode createDiagramNode(DiagramPane pane, Element element, DiagramImage image) {
-        return new DiagramNode(pane, element, image);
+    public DiagramNode createDiagramNode(Element element, DiagramImage image) {
+        return new DiagramNode(element, image);
     }
 }

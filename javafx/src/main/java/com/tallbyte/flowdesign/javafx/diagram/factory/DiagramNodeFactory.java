@@ -35,6 +35,6 @@ public interface DiagramNodeFactory<T extends Element> {
      * Creates a new {@link DiagramNode} according to the internal rules.
      * @return Returns a new instance of an {@link DiagramNode}.
      */
-    public DiagramNode createDiagramNode(DiagramPane pane, T element, DiagramImage image);
+    public DiagramNode createDiagramNode(T element, DiagramImage image);
 
 }
