@@ -20,9 +20,6 @@ package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.core.*;
 import com.tallbyte.flowdesign.core.Connection;
-import com.tallbyte.flowdesign.javafx.DiagramManager;
-import com.tallbyte.flowdesign.javafx.diagram.factory.*;
-import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;

@@ -16,14 +16,11 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx;
+package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.core.Diagram;
 import com.tallbyte.flowdesign.core.Element;
-import com.tallbyte.flowdesign.javafx.diagram.DiagramNode;
-import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
 import com.tallbyte.flowdesign.javafx.diagram.factory.*;
-import com.tallbyte.flowdesign.javafx.diagram.image.CircleDiagramImage;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
