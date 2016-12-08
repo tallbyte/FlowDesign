@@ -73,6 +73,24 @@ public class DiagramPane extends ScrollPane {
 
         setContent(groupContent);
 
+        setup();
+    }
+
+    public DiagramPane(Diagram diagram, DiagramManager diagramManager) {
+        this(diagramManager);
+
+        this.diagram.setValue(diagram);
+    }
+
+    private void addElement(Element element) {
+        DiagramNode node = diagramManager.createNode(getDiagram(), element);
+        if (node != null) {
+            node.setDiagramPane(this);
+            groupContent.getChildren().add(node);
+        }
+    }
+
+    private void setup() {
         diagram.addListener((observable, oldValue, newValue) -> {
             if (oldValue != null) {
                 oldValue.removeElementsChangedListener(listenerElements);
@@ -162,20 +180,6 @@ public class DiagramPane extends ScrollPane {
         };
 
         addEventFilter(MouseEvent.MOUSE_RELEASED, listenerRelease);
-    }
-
-    public DiagramPane(Diagram diagram, DiagramManager diagramManager) {
-        this(diagramManager);
-
-        this.diagram.setValue(diagram);
-    }
-
-    private void addElement(Element element) {
-        DiagramNode node = diagramManager.createNode(getDiagram(), element);
-        if (node != null) {
-            node.setDiagramPane(this);
-            groupContent.getChildren().add(node);
-        }
     }
 
     private void addConnection(Connection connection) {
