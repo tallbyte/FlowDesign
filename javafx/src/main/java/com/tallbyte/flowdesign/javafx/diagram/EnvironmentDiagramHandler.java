@@ -41,7 +41,7 @@ public class EnvironmentDiagramHandler extends DiagramHandlerBase<EnvironmentDia
         addEntries("Actor", Actor.class,
                 new ActorElementFactory(),
                 new ActorDiagramImageFactory(),
-                new CenteredDiagramNodeFactory<>()
+                new BottomDiagramNodeFactory<>()
         );
     }
 }

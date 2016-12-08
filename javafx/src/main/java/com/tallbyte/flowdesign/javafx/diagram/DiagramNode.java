@@ -48,6 +48,7 @@ public class DiagramNode extends Pane {
 
     protected List<Property<?>> properties  = new ArrayList<>();
     protected DiagramPane       diagramPane = null;
+    protected Pos               posLabel;
     protected DiagramImage      content;
 
     protected double            mouseX;
@@ -68,9 +69,10 @@ public class DiagramNode extends Pane {
 
     private   boolean           release  = true;
 
-    public DiagramNode(Element element, DiagramImage content) {
+    public DiagramNode(Element element, DiagramImage content, Pos posLabel) {
         this.content     = content;
         this.element     = element;
+        this.posLabel    = posLabel;
 
         try {
             realX      = JavaBeanDoublePropertyBuilder.create().bean(element).name("x").build();
@@ -373,7 +375,7 @@ public class DiagramNode extends Pane {
         addContent();
         addBorder();
 
-        TextField textFieldText     = addText(text, "nodeTextHolder", Pos.BOTTOM_CENTER, true);
+        TextField textFieldText     = addText(text, "nodeTextHolder", posLabel, true);
 
         NodeModificator topRight    = addModificator(NodeModificator.Location.TOP_RIGHT);
         NodeModificator topLeft     = addModificator(NodeModificator.Location.TOP_LEFT);
