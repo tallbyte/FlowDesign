@@ -20,6 +20,7 @@ package com.tallbyte.flowdesign.javafx;
 
 import com.tallbyte.flowdesign.core.Diagram;
 import com.tallbyte.flowdesign.core.Element;
+import com.tallbyte.flowdesign.javafx.diagram.factory.DiagramImageFactory;
 import com.tallbyte.flowdesign.javafx.diagram.factory.DiagramNodeFactory;
 import com.tallbyte.flowdesign.javafx.diagram.factory.ElementFactory;
 import javafx.beans.property.ObjectProperty;
@@ -36,9 +37,9 @@ import java.util.Map;
  */
 public abstract class DiagramHandlerBase<T extends Diagram> implements DiagramHandler<T> {
 
-    protected final Map<String, ElementFactory>                       elementFactories = new HashMap<>();
-    protected final Map<Class<? extends Element>, DiagramNodeFactory> imageFactories   = new HashMap<>();
-    protected final Map<Class<? extends Element>, DiagramNodeFactory> nodeFactories    = new HashMap<>();
+    protected final Map<String, ElementFactory>                        elementFactories = new HashMap<>();
+    protected final Map<Class<? extends Element>, DiagramImageFactory> imageFactories   = new HashMap<>();
+    protected final Map<Class<? extends Element>, DiagramNodeFactory>  nodeFactories    = new HashMap<>();
 
     protected final ObjectProperty<T> diagram = new SimpleObjectProperty<>(this, "diagram", null);
 
