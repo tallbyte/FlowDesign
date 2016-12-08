@@ -30,11 +30,6 @@ import com.tallbyte.flowdesign.core.environment.Actor;
 public class ActorElementFactory implements ElementFactory<Actor> {
 
     @Override
-    public String getName() {
-        return "Actor";
-    }
-
-    @Override
     public Actor createElement() {
         return new Actor();
     }

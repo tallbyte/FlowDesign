@@ -52,7 +52,7 @@ public class FactoryNode extends Label {
 
             Dragboard        db      = startDragAndDrop(TransferMode.COPY);
             ClipboardContent content = new ClipboardContent();
-            content.putString(factory.getName());
+            content.putString(name);
             SnapshotParameters params = new SnapshotParameters();
             params.setFill(Color.TRANSPARENT);
 

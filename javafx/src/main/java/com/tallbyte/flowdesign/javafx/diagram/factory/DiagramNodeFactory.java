@@ -32,19 +32,6 @@ import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 public interface DiagramNodeFactory<T extends Element> {
 
     /**
-     * Gets the internal reference-name of this {@link DiagramNodeFactory}.
-     * @return Returns the name.
-     */
-    public String getName();
-
-    /**
-     * Gets the type of {@link Class} that is created, in order to avoid
-     * unnecessary probe-object creations.
-     * @return Returns the type.
-     */
-    public Class<? extends Element> getTargetClass();
-
-    /**
      * Creates a new {@link DiagramNode} according to the internal rules.
      * @return Returns a new instance of an {@link DiagramNode}.
      */

@@ -32,16 +32,6 @@ import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 public class SystemDiagramImageFactory implements DiagramImageFactory {
 
     @Override
-    public String getName() {
-        return "System";
-    }
-
-    @Override
-    public Class<? extends Element> getTargetClass() {
-        return System.class;
-    }
-
-    @Override
     public DiagramImage createDiagramImage() {
         return new CircleDiagramImage();
     }

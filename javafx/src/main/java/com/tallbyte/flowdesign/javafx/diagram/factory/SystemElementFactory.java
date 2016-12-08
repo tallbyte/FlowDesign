@@ -29,11 +29,6 @@ import com.tallbyte.flowdesign.core.environment.System;
 public class SystemElementFactory implements ElementFactory<System> {
 
     @Override
-    public String getName() {
-        return "System";
-    }
-
-    @Override
     public System createElement() {
         return new System();
     }

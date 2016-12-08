@@ -29,12 +29,6 @@ import com.tallbyte.flowdesign.core.Element;
 public interface ElementFactory<T extends Element> {
 
     /**
-     * Gets the internal reference-name of this {@link ElementFactory}.
-     * @return Returns the name.
-     */
-    public String getName();
-
-    /**
      * Creates a new {@link Element} according to the internal rules.
      * @return Returns a new instance of an {@link Element}.
      */
