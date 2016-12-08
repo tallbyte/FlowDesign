@@ -19,7 +19,7 @@
 package com.tallbyte.flowdesign.javafx.diagram.factory;
 
 import com.tallbyte.flowdesign.core.Element;
-import com.tallbyte.flowdesign.javafx.diagram.DiagramNode;
+import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import javafx.geometry.Pos;
 
@@ -32,7 +32,7 @@ import javafx.geometry.Pos;
 public class BottomDiagramNodeFactory<T extends Element> implements DiagramNodeFactory<T> {
 
     @Override
-    public DiagramNode createDiagramNode(Element element, DiagramImage image) {
-        return new DiagramNode(element, image, Pos.BOTTOM_CENTER);
+    public ElementNode createDiagramNode(Element element, DiagramImage image) {
+        return new ElementNode(element, image, Pos.BOTTOM_CENTER);
     }
 }

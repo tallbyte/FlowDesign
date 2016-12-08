@@ -34,9 +34,9 @@ import javafx.scene.shape.Circle;
 public class JointNode extends Circle {
 
     private final Joint       joint;
-    private final DiagramNode node;
+    private final ElementNode node;
 
-    public JointNode(Joint joint, DiagramNode node) {
+    public JointNode(Joint joint, ElementNode node) {
         this.joint = joint;
         this.node  = node;
 
@@ -47,7 +47,7 @@ public class JointNode extends Circle {
         return joint;
     }
 
-    public DiagramNode getNode() {
+    public ElementNode getNode() {
         return node;
     }
 

@@ -22,8 +22,6 @@ import com.tallbyte.flowdesign.core.Diagram;
 import com.tallbyte.flowdesign.core.Element;
 import com.tallbyte.flowdesign.javafx.diagram.factory.*;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -80,7 +78,7 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
 
     @Override
     @SuppressWarnings("unchecked") // should be safe because of addEntries()
-    public DiagramNode createNode(Element element) {
+    public ElementNode createNode(Element element) {
         DiagramImageFactory    imageFactory = imageFactories.get(element.getClass());
         DiagramNodeFactory<S>  nodeFactory  = (DiagramNodeFactory<S>) nodeFactories.get(element.getClass());
 

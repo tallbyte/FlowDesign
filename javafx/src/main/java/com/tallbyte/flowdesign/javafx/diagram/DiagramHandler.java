@@ -34,7 +34,7 @@ public interface DiagramHandler<T extends Diagram> {
 
     void createElement(T diagram, String element, double x, double y);
 
-    DiagramNode createNode(Element element);
+    ElementNode createNode(Element element);
 
     public Map<String, DiagramImageFactory> getSupportedElements();
 

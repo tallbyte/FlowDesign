@@ -44,7 +44,7 @@ import java.util.List;
  * Authors:<br/>
  * - julian (2016-10-28)<br/>
  */
-public class DiagramNode extends Pane {
+public class ElementNode extends Pane {
 
     protected List<Property<?>> properties  = new ArrayList<>();
     protected DiagramPane       diagramPane = null;
@@ -69,7 +69,7 @@ public class DiagramNode extends Pane {
 
     private   boolean           release  = true;
 
-    public DiagramNode(Element element, DiagramImage content, Pos posLabel) {
+    public ElementNode(Element element, DiagramImage content, Pos posLabel) {
         this.content     = content;
         this.element     = element;
         this.posLabel    = posLabel;
@@ -211,7 +211,7 @@ public class DiagramNode extends Pane {
     }
 
     /**
-     * Moves this {@link DiagramNode}.
+     * Moves this {@link ElementNode}.
      * @param dx the delta x
      * @param dy the delta y
      */

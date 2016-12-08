@@ -18,8 +18,7 @@
 
 package com.tallbyte.flowdesign.javafx.pane;
 
-import com.tallbyte.flowdesign.javafx.ResourceUtils;
-import com.tallbyte.flowdesign.javafx.diagram.DiagramNode;
+import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
@@ -41,7 +40,7 @@ import static com.tallbyte.flowdesign.javafx.ResourceUtils.*;
  */
 public class PropertyPane extends GridPane {
 
-    protected ChangeListener<DiagramNode> listener = null;
+    protected ChangeListener<ElementNode> listener = null;
 
     public void setup(DiagramsPane pane) {
         pane.diagramProperty().addListener((o, oldPane, newPane) -> {

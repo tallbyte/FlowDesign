@@ -18,12 +18,8 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
-import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Bounds;
 import javafx.scene.Parent;
-import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 
 /**
@@ -43,10 +39,10 @@ public class NodeModificator extends Rectangle {
 
     /**
      * Creates a new {@link NodeModificator}.
-     * @param node the {@link DiagramNode} that should be resized
+     * @param node the {@link ElementNode} that should be resized
      * @param location the target {@link Location} inside the parent
      */
-    public NodeModificator(DiagramNode node, Location location) {
+    public NodeModificator(ElementNode node, Location location) {
         setWidth(6);
         setHeight(6);
 

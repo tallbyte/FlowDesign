@@ -63,7 +63,7 @@ public class DiagramManager {
         }
     }
 
-    public DiagramNode createNode(Diagram diagram, Element element) {
+    public ElementNode createNode(Diagram diagram, Element element) {
         DiagramHandler<?> handler = getHandler(diagram);
 
         if (handler != null) {

@@ -26,12 +26,10 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 
 import java.util.HashMap;
@@ -53,7 +51,7 @@ public class DiagramPane extends ScrollPane {
     protected final ObjectProperty<Diagram<?>>  diagram = new SimpleObjectProperty<>(this, "diagram", null);
 
     protected       StringProperty              name;
-    protected final ObjectProperty<DiagramNode> node    = new SimpleObjectProperty<>(this, "node", null);
+    protected final ObjectProperty<ElementNode> node    = new SimpleObjectProperty<>(this, "node", null);
     protected final ObjectProperty<Joint>       joint   = new SimpleObjectProperty<>(this, "joint", null);
 
     protected double mouseX;
@@ -83,7 +81,7 @@ public class DiagramPane extends ScrollPane {
     }
 
     private void addElement(Element element) {
-        DiagramNode node = diagramManager.createNode(getDiagram(), element);
+        ElementNode node = diagramManager.createNode(getDiagram(), element);
         if (node != null) {
             node.setDiagramPane(this);
             groupContent.getChildren().add(node);
@@ -199,20 +197,20 @@ public class DiagramPane extends ScrollPane {
     }
 
     /**
-     * Marks all {@link DiagramNode}s as unselected.
+     * Marks all {@link ElementNode}s as unselected.
      */
     void setAllUnselected() {
         groupContent.getChildrenUnmodifiable()
                 .stream()
                 .filter(node
-                        -> node instanceof DiagramNode
+                        -> node instanceof ElementNode
                 ).forEach(node
-                        -> ((DiagramNode) node).selectedProperty().set(false)
+                        -> ((ElementNode) node).selectedProperty().set(false)
         );
     }
 
     /**
-     * Notifies all selected @{@link DiagramNode} to move.
+     * Notifies all selected @{@link ElementNode} to move.
      * @param dx the x delta
      * @param dy the y delta
      */
@@ -220,19 +218,19 @@ public class DiagramPane extends ScrollPane {
         groupContent.getChildrenUnmodifiable()
                 .stream()
                 .filter(node
-                        -> node instanceof DiagramNode && ((DiagramNode) node).selectedProperty().get()
+                        -> node instanceof ElementNode && ((ElementNode) node).selectedProperty().get()
                 ).forEach(node
-                        -> ((DiagramNode) node).move(dx, dy)
+                        -> ((ElementNode) node).move(dx, dy)
         );
     }
 
     /**
-     * Checks if any {@link DiagramNode} is selected.
+     * Checks if any {@link ElementNode} is selected.
      * @return True if one is selected, else false.
      */
     boolean hasSelectedNodes() {
         for (Node node : groupContent.getChildrenUnmodifiable()) {
-            if (node instanceof DiagramNode && ((DiagramNode) node).selectedProperty().get()) {
+            if (node instanceof ElementNode && ((ElementNode) node).selectedProperty().get()) {
                 return true;
             }
         }
@@ -242,11 +240,11 @@ public class DiagramPane extends ScrollPane {
 
     /**
      * Adds an (temporary) {@link Node} to the drawing board.
-     * This will refuse {@link DiagramNode}s.
+     * This will refuse {@link ElementNode}s.
      * @param node the {@link Node} to add
      */
     void addDisplayNode(Node node) {
-        if (node instanceof DiagramNode) {
+        if (node instanceof ElementNode) {
             return;
         }
 
@@ -255,11 +253,11 @@ public class DiagramPane extends ScrollPane {
 
     /**
      * Removes an (temporary) {@link Node} from the drawing board.
-     * This will refuse {@link DiagramNode}s.
+     * This will refuse {@link ElementNode}s.
      * @param node the {@link Node} to remove
      */
     void removeDisplayNode(Node node) {
-        if (node instanceof DiagramNode) {
+        if (node instanceof ElementNode) {
             return;
         }
 
@@ -298,15 +296,15 @@ public class DiagramPane extends ScrollPane {
         return diagram;
     }
 
-    public DiagramNode getNode() {
+    public ElementNode getNode() {
         return node.get();
     }
 
-    public void setNode(DiagramNode node) {
+    public void setNode(ElementNode node) {
         this.node.set(node);
     }
 
-    public ObjectProperty<DiagramNode> nodeProperty() {
+    public ObjectProperty<ElementNode> nodeProperty() {
         return node;
     }
 
