@@ -21,6 +21,7 @@ package com.tallbyte.flowdesign.core;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -171,7 +172,7 @@ public abstract class Diagram<E extends Element> {
      * @return Returns an {@link Iterable} containing the {@link Connection}s.
      */
     public Iterable<Connection> getConnections() {
-        return connections;
+        return Collections.unmodifiableCollection(connections);
     }
 
     /**
@@ -179,7 +180,7 @@ public abstract class Diagram<E extends Element> {
      * @return Returns an {@link Iterable} containing the {@link Element}s.
      */
     public Iterable<E> getElements() {
-        return elements;
+        return Collections.unmodifiableCollection(elements);
     }
 
     /**
