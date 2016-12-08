@@ -20,7 +20,6 @@ package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.core.Diagram;
 import com.tallbyte.flowdesign.core.Element;
-import javafx.beans.property.ObjectProperty;
 
 /**
  * This file is part of project flowDesign.
@@ -30,13 +29,7 @@ import javafx.beans.property.ObjectProperty;
  */
 public interface DiagramHandler<T extends Diagram> {
 
-    void setDiagram(T diagram);
-
-    T getDiagram();
-
-    ObjectProperty<T> diagramProperty();
-
-    void createElement(String element, double x, double y);
+    void createElement(T diagram, String element, double x, double y);
 
     DiagramNode createNode(Element element);
 

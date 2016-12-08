@@ -40,8 +40,6 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
     protected final Map<Class<? extends Element>, DiagramImageFactory>             imageFactories   = new HashMap<>();
     protected final Map<Class<? extends Element>, DiagramNodeFactory<? extends S>> nodeFactories    = new HashMap<>();
 
-    protected final ObjectProperty<T> diagram = new SimpleObjectProperty<>(this, "diagram", null);
-
     protected <E extends S> void addEntries(String string, Class<E> clazz,
                                             ElementFactory<E> elementFactory,
                                             DiagramImageFactory imageFactory,
@@ -53,22 +51,7 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
     }
 
     @Override
-    public void setDiagram(T diagram) {
-        this.diagram.set(diagram);
-    }
-
-    @Override
-    public T getDiagram() {
-        return diagram.get();
-    }
-
-    @Override
-    public ObjectProperty<T> diagramProperty() {
-        return diagram;
-    }
-
-    @Override
-    public void createElement(String element, double x, double y) {
+    public void createElement(T diagram, String element, double x, double y) {
         ElementFactory<? extends S> factory = elementFactories.get(element);
 
         if (factory != null) {
@@ -88,7 +71,7 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
                 e.setHeight(75);
             }
 
-            getDiagram().addElement(e);
+            diagram.addElement(e);
         }
     }
 

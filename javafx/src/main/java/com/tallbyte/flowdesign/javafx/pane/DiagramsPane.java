@@ -19,6 +19,7 @@
 package com.tallbyte.flowdesign.javafx.pane;
 
 import com.tallbyte.flowdesign.core.Diagram;
+import com.tallbyte.flowdesign.javafx.diagram.DiagramManager;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -38,9 +39,10 @@ import java.util.Map;
  */
 public class DiagramsPane extends TabPane {
 
-    private final ListProperty<Diagram> diagrams = new SimpleListProperty<>(this, "diagram", FXCollections.observableArrayList());
-    private final Map<Diagram, Tab>     tabMap   = new HashMap<>();
-    private final Map<Tab, DiagramPane> paneMap  = new HashMap<>();
+    private final ListProperty<Diagram> diagrams        = new SimpleListProperty<>(this, "diagram", FXCollections.observableArrayList());
+    private final Map<Diagram, Tab>     tabMap          = new HashMap<>();
+    private final Map<Tab, DiagramPane> paneMap         = new HashMap<>();
+    private final DiagramManager        diagramManager  = new DiagramManager();
 
     private final ObjectProperty<DiagramPane> diagram = new SimpleObjectProperty<>(this, "diagram", null);
 
@@ -77,7 +79,7 @@ public class DiagramsPane extends TabPane {
             while(c.next()) {
                 for (Diagram d : c.getAddedSubList()) {
                     Tab         tab  = new Tab();
-                    DiagramPane pane = new DiagramPane(d);
+                    DiagramPane pane = new DiagramPane(d, diagramManager);
 
                     tab.textProperty().bindBidirectional(pane.nameProperty());
                     tab.setContent(new ScrollPane(pane));

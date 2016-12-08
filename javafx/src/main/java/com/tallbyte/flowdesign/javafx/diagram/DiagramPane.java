@@ -45,7 +45,7 @@ import java.util.Map;
  */
 public class DiagramPane extends StackPane {
 
-    protected final DiagramManager              diagramManager= new DiagramManager();
+    protected final DiagramManager              diagramManager;
     protected final Group                       groupContent  = new Group();
     protected final Map<Joint, JointNode>       jointNodes    = new HashMap<>();
 
@@ -65,12 +65,13 @@ public class DiagramPane extends StackPane {
 
     /**
      * Creates a new {@link DiagramPane} with a default set of factories.
+     * @param diagramManager the {@link DiagramManager} used for e.g. element creation
      */
-    public DiagramPane() {
+    public DiagramPane(DiagramManager diagramManager) {
+        this.diagramManager = diagramManager;
+
         getChildren().add(groupContent);
         setAlignment(groupContent, Pos.TOP_LEFT);
-
-        diagramManager.diagramProperty().bindBidirectional(this.diagramProperty());
 
         diagram.addListener((observable, oldValue, newValue) -> {
             if (oldValue != null) {
@@ -146,7 +147,7 @@ public class DiagramPane extends StackPane {
                     if (diagram != null) {
                         Bounds b = newValue.localToScene(newValue.getBoundsInLocal());
 
-                        diagramManager.createElement(event.getDragboard().getString(),
+                        diagramManager.createElement(getDiagram(), event.getDragboard().getString(),
                                 mouseX-b.getMinX()-event.getDragboard().getDragViewOffsetX(),
                                 mouseY-b.getMinY()-event.getDragboard().getDragViewOffsetY()
                         );
@@ -176,14 +177,14 @@ public class DiagramPane extends StackPane {
         });
     }
 
-    public DiagramPane(Diagram diagram) {
-        this();
+    public DiagramPane(Diagram diagram, DiagramManager diagramManager) {
+        this(diagramManager);
 
         this.diagram.setValue(diagram);
     }
 
     private void addElement(Element element) {
-        DiagramNode node = diagramManager.createNode(element);
+        DiagramNode node = diagramManager.createNode(getDiagram(), element);
         if (node != null) {
             node.setDiagramPane(this);
             groupContent.getChildren().add(node);

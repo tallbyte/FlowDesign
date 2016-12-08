@@ -21,8 +21,6 @@ package com.tallbyte.flowdesign.javafx.diagram;
 import com.tallbyte.flowdesign.core.Diagram;
 import com.tallbyte.flowdesign.core.Element;
 import com.tallbyte.flowdesign.core.EnvironmentDiagram;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,48 +39,28 @@ public class DiagramManager {
         addHandler(EnvironmentDiagram.class, new EnvironmentDiagramHandler());
     }
 
-    private final ObjectProperty<Diagram<?>> diagram = new SimpleObjectProperty<>(this, "diagram", null);
-    private       DiagramHandler<?>       handler = null;
-
-    public DiagramManager() {
-        diagramProperty().addListener((observable, oldValue, newValue) -> {
-            setHandler(newValue);
-        });
-    }
-
     public static <T extends Diagram> void addHandler(Class<T> clazz, DiagramHandler<T> handler) {
         HANDLERS.put(clazz, handler);
     }
 
     @SuppressWarnings("unchecked") // this is safe, as we only allow altering of the handler map trough addHandler()
-    private <T extends Diagram> void setHandler(Diagram diagram) {
-        DiagramHandler<T> handler = (DiagramHandler<T>) HANDLERS.get(diagram.getClass());
-        handler.setDiagram((T) diagram);
-
-        this.handler = handler;
+    private <T extends Diagram> DiagramHandler<T> getHandler(T diagram) {
+        return (DiagramHandler<T>) HANDLERS.get(diagram.getClass());
     }
 
-    public void setDiagram(Diagram<?> diagram) {
-        this.diagram.set(diagram);
-    }
+    public <T extends Diagram> void createElement(T diagram, String element, double x, double y) {
+        DiagramHandler<T> handler = getHandler(diagram);
 
-    public Diagram<?> getDiagram() {
-        return diagram.get();
-    }
-
-    public ObjectProperty<Diagram<?>> diagramProperty() {
-        return diagram;
-    }
-
-    public void createElement(String element, double x, double y) {
         if (handler != null) {
-            handler.createElement(element, x, y);
+            handler.createElement(diagram, element, x, y);
         } else {
             throw new IllegalStateException("unsupported diagram type");
         }
     }
 
-    public DiagramNode createNode(Element element) {
+    public DiagramNode createNode(Diagram diagram, Element element) {
+        DiagramHandler<?> handler = getHandler(diagram);
+
         if (handler != null) {
             return handler.createNode(element);
         } else {
