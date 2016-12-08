@@ -41,11 +41,12 @@ public class FactoryNode extends Label {
      * Creates a new {@link FactoryNode}
      * @param factory the {@link DiagramImageFactory} used to create images
      * @param name the display-name
+     * @param text the display text
      */
-    public FactoryNode(DiagramImageFactory factory, String name) {
+    public FactoryNode(DiagramImageFactory factory, String name, String text) {
         this.factory = factory;
         setGraphic(factory.createDiagramImage());
-        setText(name);
+        setText(text);
 
         setOnDragDetected(event -> {
             startFullDrag();

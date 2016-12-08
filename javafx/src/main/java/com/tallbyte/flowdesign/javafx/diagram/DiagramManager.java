@@ -21,6 +21,7 @@ package com.tallbyte.flowdesign.javafx.diagram;
 import com.tallbyte.flowdesign.core.Diagram;
 import com.tallbyte.flowdesign.core.Element;
 import com.tallbyte.flowdesign.core.EnvironmentDiagram;
+import com.tallbyte.flowdesign.javafx.diagram.factory.DiagramImageFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -67,6 +68,16 @@ public class DiagramManager {
 
         if (handler != null) {
             return handler.createNode(element);
+        } else {
+            throw new IllegalStateException("unsupported diagram type");
+        }
+    }
+
+    public Map<String, DiagramImageFactory> getSupportedElements(Diagram diagram) {
+        DiagramHandler<?> handler = getHandler(diagram);
+
+        if (handler != null) {
+            return handler.getSupportedElements();
         } else {
             throw new IllegalStateException("unsupported diagram type");
         }

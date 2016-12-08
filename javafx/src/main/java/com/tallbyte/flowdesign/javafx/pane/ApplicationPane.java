@@ -22,6 +22,7 @@ import com.tallbyte.flowdesign.core.Diagram;
 import com.tallbyte.flowdesign.core.DiagramsChangedListener;
 import com.tallbyte.flowdesign.core.EnvironmentDiagram;
 import com.tallbyte.flowdesign.core.Project;
+import com.tallbyte.flowdesign.core.environment.System;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;

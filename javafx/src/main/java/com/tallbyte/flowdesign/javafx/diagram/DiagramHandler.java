@@ -20,6 +20,9 @@ package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.core.Diagram;
 import com.tallbyte.flowdesign.core.Element;
+import com.tallbyte.flowdesign.javafx.diagram.factory.DiagramImageFactory;
+
+import java.util.Map;
 
 /**
  * This file is part of project flowDesign.
@@ -32,5 +35,7 @@ public interface DiagramHandler<T extends Diagram> {
     void createElement(T diagram, String element, double x, double y);
 
     DiagramNode createNode(Element element);
+
+    public Map<String, DiagramImageFactory> getSupportedElements();
 
 }

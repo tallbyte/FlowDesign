@@ -70,6 +70,10 @@ public class DiagramsPane extends TabPane {
         return diagram;
     }
 
+    public DiagramManager getDiagramManager() {
+        return diagramManager;
+    }
+
     private void setup() {
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             diagram.setValue(paneMap.get(newValue));

@@ -20,8 +20,10 @@ package com.tallbyte.flowdesign.javafx.pane;
 
 import com.tallbyte.flowdesign.core.Diagram;
 import com.tallbyte.flowdesign.core.EnvironmentDiagram;
+import com.tallbyte.flowdesign.javafx.diagram.DiagramManager;
 import com.tallbyte.flowdesign.javafx.diagram.FactoryNode;
 import com.tallbyte.flowdesign.javafx.diagram.factory.ActorDiagramImageFactory;
+import com.tallbyte.flowdesign.javafx.diagram.factory.DiagramImageFactory;
 import com.tallbyte.flowdesign.javafx.diagram.factory.SystemDiagramImageFactory;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.Label;
@@ -31,6 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * This file is part of project flowDesign.
@@ -40,9 +43,7 @@ import java.util.Map;
  */
 public class FactoryPane extends GridPane {
 
-    protected final Map<Class<?>, List<FactoryNode>> factoryNodes = new HashMap<>();
-
-    protected       ChangeListener<Diagram>          listener     = null;
+    protected ChangeListener<Diagram> listener = null;
 
     /**
      * Creates a new {@link FactoryPane} with a default text.
@@ -52,10 +53,7 @@ public class FactoryPane extends GridPane {
     }
 
     public void setup(DiagramsPane pane) {
-        factoryNodes.put(EnvironmentDiagram.class, new ArrayList<FactoryNode>() {{
-            add(new FactoryNode(new SystemDiagramImageFactory(), "System"));
-            add(new FactoryNode(new ActorDiagramImageFactory(), "Actor"));
-        }});
+        DiagramManager diagramManager = pane.getDiagramManager();
 
         pane.diagramProperty().addListener((o, oldPane, newPane) -> {
             if (listener != null && oldPane != null) {
@@ -67,9 +65,18 @@ public class FactoryPane extends GridPane {
                     getChildren().clear();
 
                     if (newValue != null) {
-                        List<FactoryNode> list = factoryNodes.get(newValue.getClass());
+                        if (diagramManager.isSupporting(newValue)) {
+                            List<FactoryNode> list = diagramManager
+                                    .getSupportedElements(newValue)
+                                    .entrySet().stream()
+                                    .map(factory
+                                            -> new FactoryNode(
+                                                factory.getValue(),
+                                                factory.getKey(),
+                                                factory.getKey()
+                                            )
+                                    ).collect(Collectors.toList());
 
-                        if (list != null) {
                             for (int i = 0 ; i < list.size() ; ++i) {
                                 FactoryNode child = list.get(i);
 
@@ -78,8 +85,11 @@ public class FactoryPane extends GridPane {
 
                                 getChildren().add(child);
                             }
+                        } else {
+                            getChildren().add(new Label("Unsupported diagram type"));
                         }
-
+                    } else {
+                        getChildren().add(new Label("Please select a diagram"));
                     }
                 };
 

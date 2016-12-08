@@ -25,6 +25,7 @@ import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +40,7 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
     protected final Map<String, ElementFactory<? extends S>>                       elementFactories = new HashMap<>();
     protected final Map<Class<? extends Element>, DiagramImageFactory>             imageFactories   = new HashMap<>();
     protected final Map<Class<? extends Element>, DiagramNodeFactory<? extends S>> nodeFactories    = new HashMap<>();
+    protected final Map<String, DiagramImageFactory>                               supportedElements= new HashMap<>();
 
     protected <E extends S> void addEntries(String string, Class<E> clazz,
                                             ElementFactory<E> elementFactory,
@@ -48,6 +50,7 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
         elementFactories.put(string, elementFactory);
         imageFactories.put(clazz, imageFactory);
         nodeFactories.put(clazz, nodeFactory);
+        supportedElements.put(string, imageFactory);
     }
 
     @Override
@@ -90,6 +93,11 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
         }
 
         return null;
+    }
+
+    @Override
+    public Map<String, DiagramImageFactory> getSupportedElements() {
+        return Collections.unmodifiableMap(supportedElements);
     }
 
 }
