@@ -29,6 +29,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
@@ -43,7 +44,7 @@ import java.util.Map;
  * Authors:<br/>
  * - julian (2016-11-05)<br/>
  */
-public class DiagramPane extends StackPane {
+public class DiagramPane extends ScrollPane {
 
     protected final DiagramManager              diagramManager;
     protected final Group                       groupContent  = new Group();
@@ -70,8 +71,7 @@ public class DiagramPane extends StackPane {
     public DiagramPane(DiagramManager diagramManager) {
         this.diagramManager = diagramManager;
 
-        getChildren().add(groupContent);
-        setAlignment(groupContent, Pos.TOP_LEFT);
+        setContent(groupContent);
 
         diagram.addListener((observable, oldValue, newValue) -> {
             if (oldValue != null) {
@@ -84,7 +84,7 @@ public class DiagramPane extends StackPane {
             groupContent.getChildren().add(new Rectangle());
 
             // add new
-            if (newValue != null) {
+            if (newValue != null && diagramManager.isSupporting(newValue)) {
                 try {
                     name = JavaBeanStringPropertyBuilder.create().bean(newValue).name("name").build();
                 } catch (NoSuchMethodException e) {
@@ -115,66 +115,53 @@ public class DiagramPane extends StackPane {
             }
         });
 
-        parentProperty().addListener((observable, oldValue, newValue) -> {
-            if (oldValue != null) {
-                oldValue.setOnMouseMoved(null);
-                oldValue.setOnMouseDragged(null);
-                oldValue.setOnDragOver(null);
-                oldValue.setOnDragExited(null);
-                oldValue.setOnMousePressed(null);
-                oldValue.removeEventFilter(MouseEvent.MOUSE_RELEASED, listenerRelease);
-            }
+        setOnMouseMoved(event -> {
+            mouseX = event.getSceneX();
+            mouseY = event.getSceneY();
+        });
 
-            if (newValue != null) {
-                newValue.setOnMouseMoved(event -> {
-                    mouseX = event.getSceneX();
-                    mouseY = event.getSceneY();
-                });
+        setOnMouseDragged(event -> {
+            mouseX = event.getSceneX();
+            mouseY = event.getSceneY();
+        });
 
-                newValue.setOnMouseDragged(event -> {
-                    mouseX = event.getSceneX();
-                    mouseY = event.getSceneY();
-                });
+        setOnDragOver(event -> {
+            mouseX = event.getSceneX();
+            mouseY = event.getSceneY();
+        });
 
-                newValue.setOnDragOver(event -> {
-                    mouseX = event.getSceneX();
-                    mouseY = event.getSceneY();
-                });
+        setOnDragExited(event -> {
+            Diagram diagram = this.diagram.get();
 
-                newValue.setOnDragExited(event -> {
-                    Diagram diagram = this.diagram.get();
+            if (diagram != null) {
+                Bounds b = localToScene(getBoundsInLocal());
 
-                    if (diagram != null) {
-                        Bounds b = newValue.localToScene(newValue.getBoundsInLocal());
+                diagramManager.createElement(getDiagram(), event.getDragboard().getString(),
+                        mouseX-b.getMinX()-event.getDragboard().getDragViewOffsetX(),
+                        mouseY-b.getMinY()-event.getDragboard().getDragViewOffsetY()
+                );
 
-                        diagramManager.createElement(getDiagram(), event.getDragboard().getString(),
-                                mouseX-b.getMinX()-event.getDragboard().getDragViewOffsetX(),
-                                mouseY-b.getMinY()-event.getDragboard().getDragViewOffsetY()
-                        );
-
-                        event.consume();
-                    }
-                });
-
-                newValue.setOnMousePressed(event -> {
-                    setAllUnselected();
-                    event.consume();
-                });
-
-                listenerRelease = event -> {
-                    Iterator<Node> iterator = groupContent.getChildren().iterator();
-                    while(iterator.hasNext()) {
-                        Node node = iterator.next();
-
-                        if (node instanceof MarkerNode) {
-                            iterator.remove();
-                        }
-                    }
-                };
-
-                newValue.addEventFilter(MouseEvent.MOUSE_RELEASED, listenerRelease);
+                event.consume();
             }
         });
+
+        setOnMousePressed(event -> {
+            setAllUnselected();
+            event.consume();
+        });
+
+        listenerRelease = event -> {
+            Iterator<Node> iterator = groupContent.getChildren().iterator();
+            while(iterator.hasNext()) {
+                Node node = iterator.next();
+
+                if (node instanceof MarkerNode) {
+                    iterator.remove();
+                }
+            }
+        };
+
+        addEventFilter(MouseEvent.MOUSE_RELEASED, listenerRelease);
     }
 
     public DiagramPane(Diagram diagram, DiagramManager diagramManager) {

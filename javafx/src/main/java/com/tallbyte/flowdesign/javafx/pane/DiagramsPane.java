@@ -82,7 +82,7 @@ public class DiagramsPane extends TabPane {
                     DiagramPane pane = new DiagramPane(d, diagramManager);
 
                     tab.textProperty().bindBidirectional(pane.nameProperty());
-                    tab.setContent(new ScrollPane(pane));
+                    tab.setContent(pane);
 
                     paneMap.put(tab, pane);
                     tabMap.put(d, tab);

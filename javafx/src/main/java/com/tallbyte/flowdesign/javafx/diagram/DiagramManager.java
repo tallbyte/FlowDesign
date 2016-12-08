@@ -48,6 +48,10 @@ public class DiagramManager {
         return (DiagramHandler<T>) HANDLERS.get(diagram.getClass());
     }
 
+    public <T extends Diagram> boolean isSupporting(T diagram) {
+        return getHandler(diagram) != null;
+    }
+
     public <T extends Diagram> void createElement(T diagram, String element, double x, double y) {
         DiagramHandler<T> handler = getHandler(diagram);
 
