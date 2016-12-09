@@ -20,7 +20,8 @@ package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.core.Diagram;
 import com.tallbyte.flowdesign.core.Element;
-import com.tallbyte.flowdesign.core.EnvironmentDiagram;
+import com.tallbyte.flowdesign.core.environment.EnvironmentDiagram;
+import com.tallbyte.flowdesign.core.flow.FlowDiagram;
 import com.tallbyte.flowdesign.javafx.diagram.factory.DiagramImageFactory;
 
 import java.util.HashMap;
@@ -38,6 +39,7 @@ public class DiagramManager {
 
     static {
         addHandler(EnvironmentDiagram.class, new EnvironmentDiagramHandler());
+        addHandler(FlowDiagram.class       , new FlowDiagramHandler()       );
     }
 
     public static <T extends Diagram> void addHandler(Class<T> clazz, DiagramHandler<T> handler) {

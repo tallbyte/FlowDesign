@@ -19,24 +19,16 @@
 package com.tallbyte.flowdesign.javafx.pane;
 
 import com.tallbyte.flowdesign.core.Diagram;
-import com.tallbyte.flowdesign.core.EnvironmentDiagram;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramManager;
 import com.tallbyte.flowdesign.javafx.diagram.FactoryNode;
-import com.tallbyte.flowdesign.javafx.diagram.factory.ActorDiagramImageFactory;
-import com.tallbyte.flowdesign.javafx.diagram.factory.DiagramImageFactory;
-import com.tallbyte.flowdesign.javafx.diagram.factory.SystemDiagramImageFactory;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.tallbyte.flowdesign.javafx.ResourceUtils.getResourceString;
-import static com.tallbyte.flowdesign.javafx.pane.ApplicationPane.*;
 
 /**
  * This file is part of project flowDesign.

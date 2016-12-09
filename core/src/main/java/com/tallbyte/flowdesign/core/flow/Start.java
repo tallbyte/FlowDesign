@@ -16,23 +16,26 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core.environment;
+package com.tallbyte.flowdesign.core.flow;
 
-import com.tallbyte.flowdesign.core.Element;
+import com.tallbyte.flowdesign.core.Joint;
+import com.tallbyte.flowdesign.core.JointType;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-12-08)<br/>
- * <br/>
- * An {@link Element} for usage in {@link EnvironmentDiagram}.
+ * - julian (2016-12-09)<br/>
  */
-public abstract class EnvironmentDiagramElement extends Element {
+public class Start extends FlowDiagramElement {
+
+    public static final String JOINT_OUTPUT = "output";
 
     /**
-     * Creates an new {@link EnvironmentDiagramElement}.
+     * Creats an new {@link Start}.
      */
-    protected EnvironmentDiagramElement() {
+    public Start() {
+        addJoint(new Joint(this, JOINT_OUTPUT, JointType.OUTPUT, 0));
     }
+
 }

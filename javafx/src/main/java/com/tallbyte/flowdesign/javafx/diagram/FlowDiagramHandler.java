@@ -18,10 +18,11 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
-import com.tallbyte.flowdesign.core.environment.EnvironmentDiagram;
 import com.tallbyte.flowdesign.core.environment.Actor;
-import com.tallbyte.flowdesign.core.environment.EnvironmentDiagramElement;
-import com.tallbyte.flowdesign.core.environment.System;
+import com.tallbyte.flowdesign.core.flow.FlowDiagram;
+import com.tallbyte.flowdesign.core.flow.FlowDiagramElement;
+import com.tallbyte.flowdesign.core.flow.Join;
+import com.tallbyte.flowdesign.core.flow.Start;
 import com.tallbyte.flowdesign.javafx.diagram.factory.*;
 
 /**
@@ -30,18 +31,18 @@ import com.tallbyte.flowdesign.javafx.diagram.factory.*;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class EnvironmentDiagramHandler extends DiagramHandlerBase<EnvironmentDiagram, EnvironmentDiagramElement> {
+public class FlowDiagramHandler extends DiagramHandlerBase<FlowDiagram, FlowDiagramElement> {
 
-    public EnvironmentDiagramHandler() {
-        addEntries("System", System.class,
-                new SystemElementFactory(),
+    public FlowDiagramHandler() {
+        addEntries("Start", Start.class,
+                new StartElementFactory(),
                 new EllipseDiagramImageFactory(),
-                new SystemElementNodeFactory()
+                new StartElementNodeFactory()
         );
-        addEntries("Actor", Actor.class,
-                new ActorElementFactory(),
-                new StickmanDiagramImageFactory(),
-                new ActorElementNodeFactory()
+        addEntries("Join", Join.class,
+                new JoinElementFactory(),
+                new VerticalStickDiagramImageFactory(),
+                new JoinElementNodeFactory()
         );
     }
 }

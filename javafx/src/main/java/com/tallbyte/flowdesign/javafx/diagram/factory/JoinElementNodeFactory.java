@@ -16,40 +16,25 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx.diagram.image;
+package com.tallbyte.flowdesign.javafx.diagram.factory;
 
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
+import com.tallbyte.flowdesign.core.flow.Join;
+import com.tallbyte.flowdesign.core.flow.Start;
+import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
+import com.tallbyte.flowdesign.javafx.diagram.element.JoinElementNode;
+import com.tallbyte.flowdesign.javafx.diagram.element.StartElementNode;
+import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-10-30)<br/>
+ * - julian (2016-12-08)<br/>
  */
-public class CircleDiagramImage extends DiagramImage {
-
-    /**
-     * Creates a new {@link CircleDiagramImage} with default dimension.
-     */
-    public CircleDiagramImage() {
-        setWidth(75);
-        setHeight(75);
-    }
+public class JoinElementNodeFactory implements ElementNodeFactory<Join> {
 
     @Override
-    public void repaint() {
-        GraphicsContext context = getGraphicsContext2D();
-        double width  = getWidth();
-        double height = getHeight();
-
-        context.clearRect(0, 0, width, height);
-        context.setStroke(Color.BLACK);
-        context.setLineWidth(1.5);
-        context.strokeOval(
-                context.getLineWidth(), context.getLineWidth(),
-                width - 2*context.getLineWidth(), height - 2*context.getLineWidth()
-        );
+    public ElementNode createDiagramNode(Join element, DiagramImage image) {
+        return new JoinElementNode(element, image);
     }
-
 }

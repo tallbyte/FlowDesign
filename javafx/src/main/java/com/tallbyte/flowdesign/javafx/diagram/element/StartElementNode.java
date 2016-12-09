@@ -16,13 +16,15 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx.diagram;
+package com.tallbyte.flowdesign.javafx.diagram.element;
 
-import com.tallbyte.flowdesign.core.environment.EnvironmentDiagram;
 import com.tallbyte.flowdesign.core.environment.Actor;
-import com.tallbyte.flowdesign.core.environment.EnvironmentDiagramElement;
-import com.tallbyte.flowdesign.core.environment.System;
-import com.tallbyte.flowdesign.javafx.diagram.factory.*;
+import com.tallbyte.flowdesign.core.flow.Start;
+import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
+import com.tallbyte.flowdesign.javafx.diagram.JointNode;
+import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
+import javafx.beans.binding.Bindings;
+import javafx.geometry.Pos;
 
 /**
  * This file is part of project flowDesign.
@@ -30,18 +32,22 @@ import com.tallbyte.flowdesign.javafx.diagram.factory.*;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class EnvironmentDiagramHandler extends DiagramHandlerBase<EnvironmentDiagram, EnvironmentDiagramElement> {
+public class StartElementNode extends ElementNode {
 
-    public EnvironmentDiagramHandler() {
-        addEntries("System", System.class,
-                new SystemElementFactory(),
-                new EllipseDiagramImageFactory(),
-                new SystemElementNodeFactory()
-        );
-        addEntries("Actor", Actor.class,
-                new ActorElementFactory(),
-                new StickmanDiagramImageFactory(),
-                new ActorElementNodeFactory()
-        );
+    private final Start start;
+
+    public StartElementNode(Start element, DiagramImage content) {
+        super(element, content, Pos.BOTTOM_CENTER);
+
+        this.start = element;
+    }
+
+    @Override
+    protected void setup() {
+        super.setup();
+
+        JointNode output = addJoint(start.getJoint(Start.JOINT_OUTPUT));
+        output.centerXProperty().bind(widthProperty().subtract(output.radiusProperty()).subtract(widthExtend));
+        output.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
     }
 }

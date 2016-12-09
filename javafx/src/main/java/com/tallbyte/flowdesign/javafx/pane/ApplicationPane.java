@@ -20,10 +20,9 @@ package com.tallbyte.flowdesign.javafx.pane;
 
 import com.tallbyte.flowdesign.core.Diagram;
 import com.tallbyte.flowdesign.core.DiagramsChangedListener;
-import com.tallbyte.flowdesign.core.EnvironmentDiagram;
+import com.tallbyte.flowdesign.core.environment.EnvironmentDiagram;
 import com.tallbyte.flowdesign.core.Project;
-import com.tallbyte.flowdesign.core.environment.System;
-import com.tallbyte.flowdesign.javafx.ResourceUtils;
+import com.tallbyte.flowdesign.core.flow.FlowDiagram;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -40,8 +39,8 @@ import javafx.stage.Window;
 
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.tallbyte.flowdesign.javafx.ResourceUtils.*;
 
@@ -59,9 +58,9 @@ public class ApplicationPane extends BorderPane {
     @FXML private PropertyPane        paneProperty;
     @FXML private MenuItem            menuItemAddEnvironment;
 
-    private ObjectProperty<Project> project  = new SimpleObjectProperty<>(this, "project", null);
-    private DiagramsChangedListener listenerDiagrams = null;
-    private PropertyChangeListener  listenerName     = null;
+    private ObjectProperty<Project>        project           = new SimpleObjectProperty<>(this, "project", null);
+    private List<DiagramsChangedListener>  listenersDiagrams = new ArrayList<>();
+    private PropertyChangeListener         listenerName     = null;
 
     public ApplicationPane() throws LoadException {
         FXMLLoader loader = new FXMLLoader( getClass().getResource("/fxml/applicationPane.fxml") );
@@ -107,53 +106,21 @@ public class ApplicationPane extends BorderPane {
 
         project.addListener((observable, oldValue, newValue) -> {
             if (oldValue != null) {
-                oldValue.removeDiagramsChangedListener(listenerDiagrams);
+                listenersDiagrams.forEach(oldValue::removeDiagramsChangedListener);
                 oldValue.removePropertyChangeListener(listenerName);
             }
 
             if (newValue != null) {
-                TreeItem<TreeEntry> root           = new TreeItem<>(new TreeEntry(newValue.getName()));
-                TreeItem<TreeEntry> environment    = new TreeItem<>(new TreeEntry(getResourceString("tree.overview.EnvironmentDiagram", "Environment")));
-                //TreeItem<TreeEntry> mask           = new TreeItem<>(new TreeEntry("Mask"));
-                //TreeItem<TreeEntry> flow           = new TreeItem<>(new TreeEntry("Flow"));
-
-                root.getChildren().add(environment);
-                //root.getChildren().add(mask);
-                //root.getChildren().add(flow);
+                TreeItem<TreeEntry> root = new TreeItem<>(new TreeEntry(newValue.getName()));
 
                 root.setExpanded(true);
-                environment.setExpanded(true);
-                //mask.setExpanded(true);
-                //flow.setExpanded(true);
                 treeProject.setRoot(root);
 
-                for (Diagram d : newValue.getDiagrams(EnvironmentDiagram.class)) {
-                    TreeItem<TreeEntry> item = new TreeItem<>();
-                    item.setValue(new DiagramEntry(d));
-                    environment.getChildren().add(item);
+                for (Class<? extends Diagram> supported : paneDiagrams.getDiagramManager().getSupportedDiagramTypes()) {
+                    registerForDiagram(root, supported, newValue, listenersDiagrams);
                 }
 
-                listenerDiagrams = (diagram, added) -> {
-                    if (added) {
-                        TreeItem<TreeEntry> item = new TreeItem<>();
-                        item.setValue(new DiagramEntry(diagram));
-                        environment.getChildren().add(item);
-                    } else {
-                        TreeItem<TreeEntry> remove = null;
-                        for (TreeItem<TreeEntry> item : environment.getChildren()) {
-                            TreeEntry value = item.getValue();
-
-                            if (value instanceof DiagramEntry) {
-                                ((DiagramEntry) value).remove();
-                                remove = item;
-                            }
-                        }
-                        if (remove != null) {
-                            environment.getChildren().remove(remove);
-                        }
-                    }
-                };
-                newValue.addDiagramsChangedListener(listenerDiagrams);
+                listenersDiagrams.forEach(newValue::addDiagramsChangedListener);
 
                 listenerName = evt -> {
                     if (evt.getPropertyName().equals("name")) {
@@ -171,6 +138,48 @@ public class ApplicationPane extends BorderPane {
         // initialize focus
         Platform.runLater(() -> paneDiagrams.requestFocus());
 
+    }
+
+    private void registerForDiagram(TreeItem<TreeEntry> root,
+                                    Class<? extends Diagram> diagramClazz,
+                                    Project project,
+                                    List<DiagramsChangedListener> listeners) {
+        TreeItem<TreeEntry> overview = new TreeItem<>(
+                new TreeEntry(getResourceString("tree.overview."+diagramClazz.getSimpleName(), diagramClazz.getSimpleName()))
+        );
+        overview.setExpanded(true);
+        root.getChildren().add(overview);
+
+        for (Diagram d : project.getDiagrams(diagramClazz)) {
+            TreeItem<TreeEntry> item = new TreeItem<>();
+            item.setValue(new DiagramEntry(d));
+            overview.getChildren().add(item);
+        }
+
+        DiagramsChangedListener listenerDiagrams = (diagram, added) -> {
+            if (diagram.getClass() == diagramClazz) {
+                if (added) {
+                    TreeItem<TreeEntry> item = new TreeItem<>();
+                    item.setValue(new DiagramEntry(diagram));
+                    overview.getChildren().add(item);
+                } else {
+                    TreeItem<TreeEntry> remove = null;
+                    for (TreeItem<TreeEntry> item : overview.getChildren()) {
+                        TreeEntry value = item.getValue();
+
+                        if (value instanceof DiagramEntry) {
+                            ((DiagramEntry) value).remove();
+                            remove = item;
+                        }
+                    }
+                    if (remove != null) {
+                        overview.getChildren().remove(remove);
+                    }
+                }
+            }
+
+        };
+        listeners.add(listenerDiagrams);
     }
 
     /**
@@ -199,6 +208,24 @@ public class ApplicationPane extends BorderPane {
             Project project = getProject();
             if (project != null) {
                 project.addDiagram(new EnvironmentDiagram(response));
+            }
+        });
+    }
+
+    /**
+     * Adds a new {@link com.tallbyte.flowdesign.core.flow.FlowDiagram} to the {@link Project}.
+     * If no {@link Project} is set, this method will do nothing.
+     */
+    @FXML
+    public void onAddFlow() {
+        Dialog<String> dialog = new TextInputDialog();
+        dialog.setTitle(getResourceString("popup.newFlow.title"));
+        dialog.setContentText(getResourceString("popup.newFlow.field.name"));
+        dialog.setHeaderText(null);
+        dialog.showAndWait().ifPresent(response -> {
+            Project project = getProject();
+            if (project != null) {
+                project.addDiagram(new FlowDiagram(response));
             }
         });
     }

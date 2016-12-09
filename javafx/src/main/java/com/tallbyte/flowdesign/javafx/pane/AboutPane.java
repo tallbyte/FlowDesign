@@ -18,27 +18,10 @@
 
 package com.tallbyte.flowdesign.javafx.pane;
 
-import com.tallbyte.flowdesign.core.Diagram;
-import com.tallbyte.flowdesign.core.DiagramsChangedListener;
-import com.tallbyte.flowdesign.core.EnvironmentDiagram;
-import com.tallbyte.flowdesign.core.Project;
-import com.tallbyte.flowdesign.javafx.ResourceUtils;
-import javafx.application.Platform;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.LoadException;
-import javafx.scene.Scene;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.TextInputDialog;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
-import javafx.stage.Window;
 
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
 import static com.tallbyte.flowdesign.javafx.ResourceUtils.*;

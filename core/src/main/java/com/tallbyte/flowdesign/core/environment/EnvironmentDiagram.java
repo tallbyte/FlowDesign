@@ -16,10 +16,9 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core;
+package com.tallbyte.flowdesign.core.environment;
 
-import com.tallbyte.flowdesign.core.environment.EnvironmentDiagramElement;
-import com.tallbyte.flowdesign.core.environment.System;
+import com.tallbyte.flowdesign.core.Diagram;
 
 import java.lang.*;
 
@@ -35,7 +34,7 @@ import java.lang.*;
 public class EnvironmentDiagram extends Diagram<EnvironmentDiagramElement> {
 
     /**
-     * Creatss a new {@link EnvironmentDiagram} using name only.
+     * Creates a new {@link EnvironmentDiagram} using name only.
      * @param name the desired name
      */
     public EnvironmentDiagram(String name) {

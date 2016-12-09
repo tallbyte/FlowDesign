@@ -16,32 +16,24 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx.diagram;
+package com.tallbyte.flowdesign.javafx.diagram.factory;
 
-import com.tallbyte.flowdesign.core.environment.EnvironmentDiagram;
+import com.tallbyte.flowdesign.core.Element;
 import com.tallbyte.flowdesign.core.environment.Actor;
-import com.tallbyte.flowdesign.core.environment.EnvironmentDiagramElement;
-import com.tallbyte.flowdesign.core.environment.System;
-import com.tallbyte.flowdesign.javafx.diagram.factory.*;
+import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
+import com.tallbyte.flowdesign.javafx.diagram.image.StickmanDiagramImage;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-12-08)<br/>
+ * - julian (2016-11-04)<br/>
  */
-public class EnvironmentDiagramHandler extends DiagramHandlerBase<EnvironmentDiagram, EnvironmentDiagramElement> {
+public class StickmanDiagramImageFactory implements DiagramImageFactory {
 
-    public EnvironmentDiagramHandler() {
-        addEntries("System", System.class,
-                new SystemElementFactory(),
-                new EllipseDiagramImageFactory(),
-                new SystemElementNodeFactory()
-        );
-        addEntries("Actor", Actor.class,
-                new ActorElementFactory(),
-                new StickmanDiagramImageFactory(),
-                new ActorElementNodeFactory()
-        );
+    @Override
+    public DiagramImage createDiagramImage() {
+        return new StickmanDiagramImage();
     }
+
 }
