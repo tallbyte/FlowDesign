@@ -28,10 +28,12 @@
         <MenuBar>
             <Menu text="%menu.file">
                 <MenuItem text="%menu.file.newProject" onAction="#onCreateProject"/>
-                <!--<SeparatorMenuItem/>
-                <MenuItem text="Save"/>
-                <MenuItem text="Save as..."/>
-                -->
+
+                <SeparatorMenuItem/>
+
+                <MenuItem text="%menu.file.save"   onAction="#onSave"   disable="true"/>
+                <MenuItem text="%menu.file.saveAs" onAction="#onSaveAs" disable="true"/>
+
                 <SeparatorMenuItem/>
                 <MenuItem text="%menu.file.quit" onAction="#onQuit"/>
             </Menu>

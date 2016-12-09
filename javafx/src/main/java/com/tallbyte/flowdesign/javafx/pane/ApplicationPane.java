@@ -195,6 +195,22 @@ public class ApplicationPane extends BorderPane {
     }
 
     /**
+     * Saves the {@link Project}.
+     */
+    @FXML
+    public void onSave() {
+
+    }
+
+    /**
+     * Saves the {@link Project} in a user-defined location.
+     */
+    @FXML
+    public void onSaveAs() {
+
+    }
+
+    /**
      * Adds a new {@link EnvironmentDiagram} to the {@link Project}.
      * If no {@link Project} is set, this method will do nothing.
      */
