@@ -24,6 +24,7 @@ import com.tallbyte.flowdesign.core.environment.EnvironmentDiagram;
 import com.tallbyte.flowdesign.core.Project;
 import com.tallbyte.flowdesign.core.flow.FlowDiagram;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
+import com.tallbyte.flowdesign.storage.xml.XmlStorage;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -38,6 +39,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +59,12 @@ public class ApplicationPane extends BorderPane {
     @FXML private DiagramsPane        paneDiagrams;
     @FXML private PropertyPane        paneProperty;
     @FXML private MenuItem            menuItemAddEnvironment;
+    @FXML private MenuItem            menuItemLoad;
+    @FXML private MenuItem            menuItemSave;
+    @FXML private MenuItem            menuItemSaveAs;
+
+    // TODO temporary
+    private final XmlStorage               storage = new XmlStorage();
 
     private ObjectProperty<Project>        project           = new SimpleObjectProperty<>(this, "project", null);
     private List<DiagramsChangedListener>  listenersDiagrams = new ArrayList<>();
@@ -83,6 +91,9 @@ public class ApplicationPane extends BorderPane {
         paneFactory.setup(paneDiagrams);
         paneProperty.setup(paneDiagrams);
         menuItemAddEnvironment.disableProperty().bind(projectProperty().isNull());
+        menuItemLoad.disableProperty().bind(projectProperty().isNull());
+        menuItemSave.disableProperty().bind(projectProperty().isNull());
+        menuItemSaveAs.disableProperty().bind(projectProperty().isNull());
 
         /*
          * Add listeners
@@ -195,11 +206,29 @@ public class ApplicationPane extends BorderPane {
     }
 
     /**
+     * Loads the {@link Project}.
+     */
+    @FXML
+    public void onLoad() {
+        try {
+            project.set(storage.deserialize(new File("/tmp/test.xml"), Project.class));
+        } catch (IOException e) {
+            e.printStackTrace();
+            // TODO temporary
+        }
+    }
+
+    /**
      * Saves the {@link Project}.
      */
     @FXML
     public void onSave() {
-
+        try {
+            storage.serialize(project.get(), new File("/tmp/test.xml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+            // TODO temporary
+        }
     }
 
     /**
