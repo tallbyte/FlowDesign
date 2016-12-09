@@ -25,6 +25,7 @@ import com.tallbyte.flowdesign.core.Project;
 import com.tallbyte.flowdesign.core.environment.Actor;
 import com.tallbyte.flowdesign.core.environment.System;
 import com.tallbyte.flowdesign.storage.Serializer;
+import com.tallbyte.flowdesign.storage.Storage;
 import com.tallbyte.flowdesign.storage.UnknownIdentifierException;
 
 import javax.xml.stream.*;
@@ -38,7 +39,7 @@ import java.util.Map;
 /**
  * Created by michael on 09.12.16.
  */
-public class XmlStorage {
+public class XmlStorage implements Storage<XmlStorage, OutputStream, InputStream, IOException, IOException, XMLStreamReader, XMLStreamWriter, XmlDeserializationHelper, XmlSerializationHelper> {
 
     protected Map<String, Serializer<?, XMLStreamReader, XMLStreamWriter, XmlDeserializationHelper, XmlSerializationHelper>> serializers = new HashMap<>();
     protected Map<Class, String> identifiers = new HashMap<>();
@@ -68,22 +69,35 @@ public class XmlStorage {
         register(System             .class, new XmlSystemSerializer());
     }
 
-    protected String toTagName(Class<?> type) {
+    /**
+     * @param type The class to get the identifier for
+     * @return The identifier for the given class
+     */
+    protected String getIdentifier(Class<?> type) {
         char[] name = type.getSimpleName().toCharArray();
         name[0] = Character.toLowerCase(name[0]);
         return new String(name);
     }
 
+    @Override
     public <T> XmlStorage register(Class<T> type, Serializer<T, XMLStreamReader, XMLStreamWriter, XmlDeserializationHelper, XmlSerializationHelper> serializer) {
-        return register(type, toTagName(type), serializer);
+        return register(type, getIdentifier(type), serializer);
     }
 
-    public <T> XmlStorage register(Class<T> type, String tagName, Serializer<T, XMLStreamReader, XMLStreamWriter, XmlDeserializationHelper, XmlSerializationHelper> serializer) {
-        this.identifiers.put(type, tagName);
-        this.serializers.put(tagName, serializer);
+    /**
+     * @param type The type to register the identifier for
+     * @param identifier The identifier to register the {@link Serializer} for
+     * @param serializer The {@link Serializer} to register
+     * @param <T> Type being registered
+     * @return itself
+     */
+    public <T> XmlStorage register(Class<T> type, String identifier, Serializer<T, XMLStreamReader, XMLStreamWriter, XmlDeserializationHelper, XmlSerializationHelper> serializer) {
+        this.identifiers.put(type, identifier);
+        this.serializers.put(identifier, serializer);
         return this;
     }
 
+    @Override
     public void serialize(Object serializable, OutputStream outputStream) throws IOException {
         try {
             XMLOutputFactory factory = XMLOutputFactory.newInstance();
@@ -104,6 +118,22 @@ public class XmlStorage {
 
     }
 
+    @Override
+    public <T> T deserialize(InputStream input, Class<T> type) throws IOException {
+        Object value = deserialize(input);
+
+        if (type.isInstance(value)) {
+            return type.cast(value);
+
+        } else {
+            throw new IOException(
+                    "Type enforcement failed, expected "+type +
+                            " but got "+(value != null ? value.getClass():null)
+            );
+        }
+    }
+
+    @Override
     public Object deserialize(InputStream inputStream) throws IOException {
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -121,12 +151,29 @@ public class XmlStorage {
         }
     }
 
+    /**
+     * @param serializable The serializable to resolve the identifier for
+     * @return The identifier for the given serializable or null
+     */
     protected String resolveIdentifier(Object serializable) {
         return identifiers.get(serializable.getClass());
     }
 
+    /**
+     * Tries to retrieve the matching serializer for the given serializable
+     * and writes preparation data to the {@link XMLStreamWriter} before
+     * letting the {@link Serializer} serialize the serializable
+     *
+     * @param writer {@link XMLStreamWriter} to write to
+     * @param serializable Serializable to find the {@link Serializer} for and to serialize
+     * @param helper {@link XmlSerializationHelper} assisting
+     * @param <T> Type of the serializable
+     * @throws IOException If serialization failed
+     */
     protected <T> void resolvedSerialization(XMLStreamWriter writer, T serializable, XmlSerializationHelper helper) throws IOException {
         String identifier = helper.getIdentifierResolver().resolveIdentifier(serializable);
+
+        @SuppressWarnings("unchecked") // legit cast
         Serializer<T, XMLStreamReader, XMLStreamWriter, XmlDeserializationHelper, XmlSerializationHelper>
                 serializer = (Serializer<T, XMLStreamReader, XMLStreamWriter, XmlDeserializationHelper, XmlSerializationHelper>)
                 serializers.get(identifier);
@@ -153,6 +200,11 @@ public class XmlStorage {
         }
     }
 
+    /**
+     * @param identifier The identifier to instantiate for
+     * @return A new instance for the given identifier
+     * @throws UnknownIdentifierException If there is no such given identifier
+     */
     protected Object instantiate(String identifier) throws UnknownIdentifierException {
         Serializer serializer = serializers.get(identifier);
 
@@ -163,12 +215,26 @@ public class XmlStorage {
         return serializer.instantiate();
     }
 
+    /**
+     * Tries to retrieve the {@link Serializer} for the current tag on the given
+     * {@link XMLStreamReader}, then lets the {@link Serializer} deserialize the
+     * current tag
+     *
+     * @param reader {@link XMLStreamReader} to deserialize from
+     * @param emptyInstance Optional empty instance to fill with deserialized data or null to create a new instance
+     * @param type Type to enforce the deserialized instance to be
+     * @param helper {@link XmlDeserializationHelper} assisting
+     * @param <T> Type of the serializable
+     * @return The deserialized serializable
+     * @throws IOException If deserialization failed
+     */
     protected <T> T deserialize(XMLStreamReader reader, T emptyInstance, Class<T> type, XmlDeserializationHelper helper) throws IOException {
         // since its optional, one needs to check whether to instantiate one
         if (emptyInstance == null) {
             emptyInstance = helper.getInstantiationResolver().instantiate(reader.getLocalName(), type);
         }
 
+        @SuppressWarnings("unchecked") // legit cast
         Serializer<T, XMLStreamReader, XMLStreamWriter, XmlDeserializationHelper, XmlSerializationHelper>
                 serializer = (Serializer<T, XMLStreamReader, XMLStreamWriter, XmlDeserializationHelper, XmlSerializationHelper>)
                 serializers.get(reader.getLocalName());
