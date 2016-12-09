@@ -35,6 +35,10 @@ public class EnvironmentDiagram extends Diagram<EnvironmentDiagramElement> {
         super(name, new System());
     }
 
+    public EnvironmentDiagram(String name, System root) {
+        super(name, root);
+    }
+
     @Override
     public System getRoot() {
         return (System) super.getRoot();
