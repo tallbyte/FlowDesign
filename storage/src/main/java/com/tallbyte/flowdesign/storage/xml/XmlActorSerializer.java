@@ -27,11 +27,11 @@ import java.io.IOException;
 /**
  * Created by michael on 09.12.16.
  */
-public class XmlActorSerializer implements XmlSerializer<Actor> {
+public class XmlActorSerializer extends XmlElementSerializer<Actor> {
 
     @Override
     public void serialize(XMLStreamWriter writer, Actor serializable, XmlSerializationHelper helper) throws IOException {
-
+        super.serialize(writer, serializable, helper);
     }
 
     @Override
@@ -41,6 +41,7 @@ public class XmlActorSerializer implements XmlSerializer<Actor> {
 
     @Override
     public Actor deserialize(XMLStreamReader reader, Actor actor, XmlDeserializationHelper helper) throws IOException {
+        super.deserialize(reader, actor, helper);
         return actor;
     }
 }

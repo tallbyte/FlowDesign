@@ -28,8 +28,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by michael on 09.12.16.
@@ -46,27 +45,27 @@ public abstract class XmlDiagramSerializer {
 
     /**
      * Writes a xml-tag named {@value #ELEMENT_NAME_TYPES} to the {@link XMLStreamWriter},
-     * having a id to type-identifier pair for each given {@link Element}. The returned {@link Map}
-     * hold all assigned ids. The {@link #deserializeTypes(XMLStreamReader, Class, InstantiationResolver)}
+     * having a id to type-identifier pair for each given {@link Element}. The returned {@link Queue}
+     * hold all assigned ids. The {@link #deserializeTypes(XMLStreamReader, Class, XmlDeserializationHelper)}
      * is the counter part of this method, allowing one to deserialize and instantiate those given {@link Element}s
      *
      * @param writer {@link XMLStreamWriter} to write to
      * @param elements {@link Element}s to write the type-identifier for
      * @param identifierResolver {@link IdentifierResolver} to use to resolve the type-identifiers
      * @param <E> Type of {@link Element}s to write
-     * @return A {@link Map} holding all assigned ids
+     * @return A {@link Queue} holding all assigned ids in their respective order
      * @throws XMLStreamException If writing failed
      */
-    protected <E extends Element> Map<E, String> serializeTypes(XMLStreamWriter writer, Iterable<? extends E> elements, IdentifierResolver identifierResolver) throws XMLStreamException {
+    protected <E extends Element> Queue<Map.Entry<String, E>> serializeTypes(XMLStreamWriter writer, Iterable<? extends E> elements, IdentifierResolver identifierResolver) throws XMLStreamException {
         // map holding the given indices
-        Map<E, String> map = new HashMap<>();
+        Queue<Map.Entry<String, E>> map = new LinkedList<>();
 
         writer.writeStartElement(ELEMENT_NAME_TYPES);
 
         int index = 0;
         for (E e : elements) {
             String indexString = ""+(index++);
-            map.put(e, indexString);
+            map.add(new AbstractMap.SimpleEntry<>(indexString, e));
 
             /*
              * actually writing the id is not required, since the index inside the types-tag is the same,
@@ -95,75 +94,44 @@ public abstract class XmlDiagramSerializer {
      * @param type Type of {@link Element} to ensure compatibility for
      * @param helper {@link XmlDeserializationHelper} to use
      * @param <E> Type of {@link Element}
-     * @return {@link Map} with instantiated {@link Element}s accessible through their assigned id
+     * @return A new {@link Queue} with instantiated {@link Element}s accessible through their assigned id in their respective order
      * @throws IOException If there was an error while deserialization
      * @throws XMLStreamException If reading failed
      */
-    protected <E extends Element> Map<String, E> deserializeTypes(XMLStreamReader reader, Class<E> type, XmlDeserializationHelper helper) throws IOException, XMLStreamException {
-        Map<String, E> map = new HashMap<>();
+    protected <E extends Element> Queue<Map.Entry<String, E>> deserializeTypes(XMLStreamReader reader, Class<E> type, XmlDeserializationHelper helper) throws IOException, XMLStreamException {
+        Queue<Map.Entry<String, E>> queue = new LinkedList<>();
 
         // current tag required to be the types-tag
-        if (reader.getEventType() != XMLStreamConstants.START_ELEMENT || !ELEMENT_NAME_TYPES.equals(reader.getLocalName())) {
-            throw new IOException(
-                    "Required element: "+ELEMENT_NAME_TYPES +
-                            " but found: "+reader.getLocalName() +
-                            " at line: "+reader.getLocation().getLineNumber()
-            );
-        }
+        helper.fastForwardToElementStart(reader, ELEMENT_NAME_TYPES);
+        // helper.fastForwardToElementStart(reader, ELEMENT_NAME_TYPE);
+        helper.foreachElementStartUntil(reader, ELEMENT_NAME_TYPES, () -> {
+            try {
+                // load all the attributes
+                Map<String, String> attributes = helper.getAttributes(reader);
 
-        nextLoop:
-        while (reader.hasNext()) {
-            switch (reader.next()) {
-                // the only allowed element to start is the type definition tag
-                case XMLStreamConstants.START_ELEMENT:
-                    if (!ELEMENT_NAME_TYPE.equals(reader.getLocalName())) {
-                        throw new IOException(
-                                "Unexpected element, expected "+ELEMENT_NAME_TYPE +
-                                        " but found: "+reader.getLocalName() +
-                                        " at line: "+reader.getLocation().getLineNumber()
-                        );
-                    }
-                    break;
-
+                // load the map with the type
                 /*
                  * Load the identifier and index, instantiate the Element and check for
                  * compatibility before adding it to the map
                  */
-                case XMLStreamConstants.ATTRIBUTE:
-                    try {
-                        // load all the attributes
-                        Map<String, String> attributes = helper.getAttributes(reader);
-
-                        // load the map with the type
-                        map.put(
+                queue.add(
+                        new AbstractMap.SimpleEntry<>(
                                 attributes.get(ATTRIBUTE_ELEMENT_IDENTIFIER),
                                 helper.getInstantiationResolver().instantiate(
                                         attributes.get(ATTRIBUTE_ELEMENT_TYPE),
                                         type
                                 )
-                        );
+                        )
+                );
 
-                    } catch (UnknownIdentifierException e) {
-                        throw new IOException("Failed to instantiate element at line: "+reader.getLocation().getLineNumber());
-                    }
+            } catch (UnknownIdentifierException e) {
+                throw new IOException("Failed to instantiate element at line: "+reader.getLocation().getLineNumber());
 
-                    break;
-
-
-                case XMLStreamConstants.END_ELEMENT:
-                    if (ELEMENT_NAME_TYPES.equals(reader.getLocalName())) {
-                        // done with reading
-                        break nextLoop;
-                    }
-
-                default:
-                    // nothing to do?
+            } catch (XMLStreamException e) {
+                throw new IOException(e);
             }
-        }
+        });
 
-
-        // end the types-tag
-        reader.next();
-        return map;
+        return queue;
     }
 }
