@@ -117,13 +117,24 @@ public class XmlDeserializationHelper {
             switch (reader.next()) {
                 case XMLStreamConstants.START_ELEMENT:
                     // inform about the element start
+                    System.out.flush();
                     callback.call();
 
+                    // for unknown reason, this is also called in the middle of the document... me does not understand
+                    // but at least reader.hasNext() returns only false on the read document end - I believe
+                    /*
                 case XMLStreamConstants.END_DOCUMENT:
+                    System.out.println("foreachElementStartUntil: END_DOCUMENT for localName="+reader.getLocalName());
+                    System.out.flush();
                     break connectionLoop;
+                    */
 
                 case XMLStreamConstants.END_ELEMENT:
                     if (localNameEnd.equals(reader.getLocalName())) {
+                        /*
+                        System.out.println("foreachElementStartUntil: break for localName="+reader.getLocalName());
+                        System.out.flush();
+                        */
                         // list processed
                         break connectionLoop;
                     }
@@ -133,6 +144,10 @@ public class XmlDeserializationHelper {
                     break;
             }
         }
+        /*
+        System.out.println("foreachElementStartUntil: while ended, localName="+reader.getLocalName()+", hasNext="+reader.hasNext());
+        System.out.flush();
+        */
     }
 
     /**
