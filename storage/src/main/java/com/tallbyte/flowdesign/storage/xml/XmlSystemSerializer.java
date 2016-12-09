@@ -27,10 +27,10 @@ import java.io.IOException;
 /**
  * Created by michael on 09.12.16.
  */
-public class XmlSystemSerializer implements XmlSerializer<System> {
+public class XmlSystemSerializer extends XmlElementSerializer<System> {
     @Override
     public void serialize(XMLStreamWriter writer, System serializable, XmlSerializationHelper helper) throws IOException {
-
+        super.serialize(writer, serializable, helper);
     }
 
     @Override
@@ -40,6 +40,7 @@ public class XmlSystemSerializer implements XmlSerializer<System> {
 
     @Override
     public System deserialize(XMLStreamReader reader, System system, XmlDeserializationHelper helper) throws IOException {
+        super.deserialize(reader, system, helper);
         return system;
     }
 }
