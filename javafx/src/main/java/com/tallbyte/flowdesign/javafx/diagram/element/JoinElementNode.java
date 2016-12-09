@@ -49,7 +49,7 @@ public class JoinElementNode extends ElementNode {
         input0.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0).add(input0.radiusProperty()));
         input0.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.1));
 
-        JointNode input1 = addJoint(join.getJoint(Join.JOINT_INPUT0));
+        JointNode input1 = addJoint(join.getJoint(Join.JOINT_INPUT1));
         input1.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0).add(input1.radiusProperty()));
         input1.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.9));
 
