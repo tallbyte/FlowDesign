@@ -29,6 +29,9 @@ import com.tallbyte.flowdesign.storage.Storage;
 import com.tallbyte.flowdesign.storage.UnknownIdentifierException;
 
 import javax.xml.stream.*;
+import javax.xml.transform.*;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -45,7 +48,15 @@ public class XmlStorage implements Storage<XmlStorage, OutputStream, InputStream
     protected XmlSerializationHelper   helperSerialization;
     protected XmlDeserializationHelper helperDeserialization;
 
+    protected boolean indentation;
+
     public XmlStorage() {
+        this(true);
+    }
+
+    public XmlStorage(boolean indentation) {
+        this.indentation = indentation;
+
         this.helperSerialization = new XmlSerializationHelper(
                 this::resolveIdentifier,
                 this::resolvedSerialization
@@ -108,6 +119,38 @@ public class XmlStorage implements Storage<XmlStorage, OutputStream, InputStream
 
     @Override
     public void serialize(Object serializable, OutputStream outputStream) throws IOException {
+        if (indentation) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            serializeImpl(serializable, baos);
+
+            try {
+                Transformer transformer;
+                transformer = TransformerFactory.newInstance().newTransformer();
+                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                transformer.transform(
+                        new StreamSource(
+                                new ByteArrayInputStream(baos.toByteArray())
+                        ),
+                        new StreamResult(
+                                outputStream
+                        )
+                );
+            } catch (TransformerException e) {
+                throw new IOException(e);
+            }
+
+        } else {
+            serializeImpl(serializable, outputStream);
+        }
+    }
+
+    /**
+     * @param serializable The serializable to serialize
+     * @param outputStream The {@link OutputStream} to to write to
+     * @throws IOException If serialization failed
+     */
+    private void serializeImpl(Object serializable, OutputStream outputStream) throws IOException {
         try {
             XMLOutputFactory factory = XMLOutputFactory.newInstance();
             XMLStreamWriter  writer  = factory.createXMLStreamWriter(outputStream, StandardCharsets.UTF_8.name());
