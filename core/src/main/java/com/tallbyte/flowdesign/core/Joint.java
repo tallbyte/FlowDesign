@@ -72,7 +72,7 @@ public class Joint {
     }
 
     public boolean canJoin(Joint remote) {
-        return outgoing.size() < maxOut
+        return (outgoing.size() < maxOut || maxOut == 0)
                 && (
                         (type == JointType.DEPENDENCY && remote.type == JointType.DEPENDENCY)
                     ||  (type == JointType.OUTPUT     && remote.type == JointType.INPUT     )
