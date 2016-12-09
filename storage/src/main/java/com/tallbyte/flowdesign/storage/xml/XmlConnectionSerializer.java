@@ -22,6 +22,7 @@ import com.tallbyte.flowdesign.core.Connection;
 import com.tallbyte.flowdesign.core.Joint;
 import com.tallbyte.flowdesign.core.JointJoinException;
 
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
@@ -57,12 +58,18 @@ public class XmlConnectionSerializer implements XmlSerializer<Connection> {
     @Override
     public Connection deserialize(XMLStreamReader reader, Connection serializable, XmlDeserializationHelper helper) throws IOException {
         try {
+            helper.fastForwardToElementStart(reader);
             Joint source = helper.getDeserializationResolver().deserialize(reader, Joint.class, helper);
+
+            helper.fastForwardToElementStart(reader);
             Joint target = helper.getDeserializationResolver().deserialize(reader, Joint.class, helper);
 
             return source.join(target);
         } catch (JointJoinException e) {
             throw new IOException("Cannot joint target on source at line: "+reader.getLocation().getLineNumber(), e);
+
+        } catch (XMLStreamException e) {
+            throw new IOException(e);
         }
     }
 }
