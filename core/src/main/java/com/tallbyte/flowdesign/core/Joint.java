@@ -18,7 +18,9 @@
 
 package com.tallbyte.flowdesign.core;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -29,68 +31,73 @@ import java.util.Set;
  */
 public class Joint {
 
-    private       Element                       element;
-    private       Joint                         remote;
+    private final Element                       element;
 
-    private final JointLocation                 location;
-    private final Class<? extends Element>      baseClass;
-    private final Set<JointLocation>            acceptedLocations;
-    private final Set<Class<? extends Element>> acceptedElements;
-    private final boolean                       forceOut;
+    private final List<Joint>                   outgoing = new ArrayList<>();
+    private       Joint                         incoming;
 
-    public Joint(JointLocation location,
-                 Class<? extends Element> baseClass,
-                 Set<JointLocation> acceptedLocations,
-                 Set<Class<? extends Element>> acceptedElements,
-                 boolean forceOut) {
+    private final String                        location;
+    private final JointType                     type;
+    private final int                           maxOut;
 
-        this.location           = location;
-        this.baseClass          = baseClass;
-        this.acceptedLocations  = new HashSet<>(acceptedLocations);
-        this.acceptedElements   = new HashSet<>(acceptedElements);
-        this.forceOut           = forceOut;
+    public Joint(Element element,
+                 String location,
+                 JointType type,
+                 int maxOut) {
+
+        this.element  = element;
+        this.location = location;
+        this.type     = type;
+        this.maxOut   = maxOut;
     }
 
-    public Element getElement() {
-        return element;
-    }
-
-    void setElement(Element element) {
-        this.element = element;
-    }
-
-    public Class<? extends Element> getBaseClass() {
-        return baseClass;
-    }
-
-    public JointLocation getLocation() {
+    public String getLocation() {
         return location;
     }
 
+    public boolean isInput() {
+        return type == JointType.INPUT || type == JointType.DEPENDENCY;
+    }
+
     public boolean isOutput() {
-        return forceOut || acceptedLocations.size() == 0;
+        return type == JointType.OUTPUT || type == JointType.DEPENDENCY;
     }
 
     public boolean canJoin(Joint remote) {
-        return acceptedLocations.contains(remote.getLocation())
-                && (acceptedElements.size() == 0 || acceptedElements.contains(remote.getBaseClass()));
+        return outgoing.size() < maxOut
+                && (
+                        (type == JointType.DEPENDENCY && remote.type == JointType.DEPENDENCY)
+                    ||  (type == JointType.OUTPUT     && remote.type == JointType.INPUT     )
+                );
     }
 
-    public Connection join(Joint remote) throws JointJoinException {
-        if (!canJoin(remote)) {
-            throw new JointJoinException("can not join " + remote + " and " + this);
+    private void notifyJoin(Joint source) throws JointJoinException {
+        if (this.incoming != null) {
+            throw new JointJoinException("can not join " + this + " and " + source + ": target already joined");
         }
 
-        if (this.remote != null) {
-            throw new JointJoinException("joint already joined");
+        this.incoming = source;
+    }
+
+    public Connection join(Joint target) throws JointJoinException {
+        if (!isOutput()) {
+            throw new JointJoinException("can not join " + target + " and " + this + ": source no output");
         }
 
-        Connection connection = new Connection(this, remote);
+        if (!target.isInput()) {
+            throw new JointJoinException("can not join " + target + " and " + this + ": target no input");
+        }
+
+        if (!canJoin(target)) {
+            throw new JointJoinException("can not join " + target + " and " + this + ": joints do not match");
+        }
+
+        Connection connection = new Connection(this, target);
 
         if (element != null) {
             if (element.getDiagram().addConnection(connection)) {
-                this.remote = remote;
-
+                target.notifyJoin(this);
+                outgoing.add(target);
                 return connection;
             }
         }
@@ -98,10 +105,15 @@ public class Joint {
         return null;
     }
 
+    private void notifyDisjoin(Joint target) {
+        outgoing.remove(target);
+    }
+
     public void disjoin() {
-        if (remote != null) {
-            element.getDiagram().removeConnection(new Connection(this, remote));
-            remote = null;
+        if (incoming != null) {
+            element.getDiagram().removeConnection(new Connection(this, incoming));
+            notifyDisjoin(incoming);
+            incoming = null;
         }
     }
 }

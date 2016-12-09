@@ -30,44 +30,30 @@ import java.util.*;
  */
 public abstract class Element {
 
-    private       Diagram diagram;
-    private final List<Joint> joints;
+    protected       Diagram            diagram;
+    protected final Map<String, Joint> joints = new HashMap<>();
 
-    private double x          = 0;
-    private double y          = 0;
-    private double width      = 100;
-    private double height     = 100;
-    private boolean deletable = true;
+    protected double x          = 0;
+    protected double y          = 0;
+    protected double width      = 100;
+    protected double height     = 100;
+    protected boolean deletable = true;
 
     private PropertyChangeSupport changeSupport;
 
     /**
-     * Creates a new {@link Element}.
+     * Creats a new {@link Element} with a given set of {@link Joint}s.
      */
     public Element() {
-        this(new ArrayList<>());
-    }
-
-    /**
-     * Creats a new {@link Element} with a given set of {@link Joint}s.
-     * @param joints the available {@link Joint}s
-     */
-    public Element(List<Joint> joints) {
-        this.joints   = Collections.unmodifiableList(new ArrayList<>(joints));
-        this.joints.forEach(joint -> joint.setElement(this));
-
         changeSupport = new PropertyChangeSupport(this);
     }
 
     /**
-     * Creats a new {@link Element} with a given set of {@link Joint}s.
-     * @param joints the available {@link Joint}s
+     * Adds a {@link Joint}.
+     * @param joint the {@link Joint} to add
      */
-    public Element(Joint... joints) {
-        this.joints   = Collections.unmodifiableList(Arrays.asList(joints));
-        this.joints.forEach(joint -> joint.setElement(this));
-
-        changeSupport = new PropertyChangeSupport(this);
+    protected void addJoint(Joint joint) {
+        joints.put(joint.getLocation(), joint);
     }
 
     /**
@@ -150,20 +136,38 @@ public abstract class Element {
         this.deletable = deletable;
     }
 
+    /**
+     * Gets the {@link Diagram} this {@link Element} is in.
+     * @return Returns the {@link Diagram}.
+     */
     public Diagram getDiagram() {
         return diagram;
     }
 
+    /**
+     * Sets the {@link Diagram} of this {@link Element}. For internal use only.
+     * @param diagram the new {@link Diagram}
+     */
     void setDiagram(Diagram diagram) {
         this.diagram = diagram;
     }
 
     /**
-     * Gets the registered {@link Joint}s. The returned list is unmodifiable.
-     * @return Returns a list containing the {@link Joint}s.
+     * Gets a specific {@link Joint} based on his location. The available locations
+     * are usually defined as constants in the corresponding {@link Element} class.
+     * @param location the location of the {@link Joint}
+     * @return Returns the {@link Joint} or null if none exists for the specified location.
      */
-    public List<Joint> getJoints() {
-        return joints;
+    public Joint getJoint(String location) {
+        return joints.get(location);
+    }
+
+    /**
+     * Gets the registered {@link Joint}s. The returned list is unmodifiable.
+     * @return Returns an {@link Iterable} containing the {@link Joint}s.
+     */
+    public Iterable<Joint> getJoints() {
+        return joints.values();
     }
 
     /**
@@ -181,20 +185,4 @@ public abstract class Element {
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.removePropertyChangeListener(listener);
     }
-
-    protected static List<Joint> generateDefaultJoints(Class<? extends Element> baseClass) {
-        List<Joint> list = new ArrayList<>();
-
-        Set<JointLocation> acceptedLocations = new HashSet<>();
-        for (JointLocation loc : JointLocation.values()) {
-            acceptedLocations.add(loc);
-        }
-
-        for (JointLocation loc : JointLocation.values()) {
-            list.add(new Joint(loc, baseClass, acceptedLocations, new HashSet<>(), true));
-        }
-
-        return list;
-    }
-
 }
