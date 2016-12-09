@@ -16,7 +16,11 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core;
+package com.tallbyte.flowdesign.core.flow;
+
+import com.tallbyte.flowdesign.core.DataType;
+import com.tallbyte.flowdesign.core.DeclinedFlowException;
+import com.tallbyte.flowdesign.core.Element;
 
 import java.util.Collections;
 import java.util.List;
