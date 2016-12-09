@@ -20,17 +20,19 @@ package com.tallbyte.flowdesign.storage;
 
 import com.tallbyte.flowdesign.core.Element;
 
-import java.io.IOException;
-
 /**
- * Created by michael on 05.12.16.
+ * Created by michael on 09.12.16.
+ *
+ * Resolves the type-identifier for the given serializable for serialization.
+ * The type-identifier is later used in {@link InstantiationResolver}
+ * to instantiate the same type of serializable on deserialization
  */
-public interface ElementSerializationResolver<W> {
+@FunctionalInterface
+public interface IdentifierResolver {
 
     /**
-     * @param write The write handle to write to
-     * @param element The {@link Element} to resolve the {@link ElementSerializer} for
-     * @throws IOException If writing failed
+     * @param serializable The serializable to resolve the identifier for
+     * @return The identifier for the given {@link Element}
      */
-    void serialize(W write, Element element) throws IOException;
+    String resolveIdentifier(Object serializable);
 }

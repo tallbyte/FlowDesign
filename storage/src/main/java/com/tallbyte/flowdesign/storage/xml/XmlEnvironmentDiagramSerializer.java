@@ -18,32 +18,65 @@
 
 package com.tallbyte.flowdesign.storage.xml;
 
+import com.tallbyte.flowdesign.core.Connection;
 import com.tallbyte.flowdesign.core.Element;
 import com.tallbyte.flowdesign.core.EnvironmentDiagram;
-import com.tallbyte.flowdesign.storage.DiagramSerializer;
-import com.tallbyte.flowdesign.storage.ElementDeserializationResolver;
-import com.tallbyte.flowdesign.storage.ElementSerializationResolver;
+import com.tallbyte.flowdesign.core.environment.EnvironmentDiagramElement;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Created by michael on 05.12.16.
  */
-public class XmlEnvironmentDiagramSerializer implements DiagramSerializer<EnvironmentDiagram, XMLStreamReader, XMLStreamWriter> {
+public class XmlEnvironmentDiagramSerializer extends XmlDiagramSerializer implements XmlSerializer<EnvironmentDiagram> {
 
-    public static final String ATTRIBUTE_NAME   = "name";
+
+    public static final String ELEMENT_NAME_ELEMENTS    = "elements";
+    public static final String ELEMENT_NAME_CONNECTIONS = "connections";
+    public static final String ATTRIBUTE_NAME           = "name";
+
 
     @Override
-    public void serialize(XMLStreamWriter write, EnvironmentDiagram diagram, ElementSerializationResolver<XMLStreamWriter> elementSerializer) throws IOException {
+    public void serialize(XMLStreamWriter writer, EnvironmentDiagram diagram, XmlSerializationHelper helper) throws IOException {
         try {
-            write.writeAttribute(ATTRIBUTE_NAME, diagram.getName());
+            // write diagram related attributes
+            writer.writeAttribute(ATTRIBUTE_NAME, diagram.getName());
 
+            // update the id map
+            helper.getAssignedIdMap().putAll(
+                    serializeTypes(
+                            writer,
+                            diagram.getElements(),
+                            helper.getIdentifierResolver()
+                    )
+            );
+
+            // write elements
+            writer.writeStartElement(ELEMENT_NAME_ELEMENTS);
             for (Element element : diagram.getElements()) {
-                elementSerializer.serialize(write, element);
+                helper.getSerializationResolver().serialize(
+                        writer,
+                        element,
+                        helper
+                );
             }
+            writer.writeEndElement();
+
+
+            // write connections
+            writer.writeStartElement(ELEMENT_NAME_CONNECTIONS);
+            for (Connection connection : diagram.getConnections()) {
+                helper.getSerializationResolver().serialize(
+                        writer,
+                        connection,
+                        helper
+                );
+            }
+            writer.writeEndElement();
 
         } catch (XMLStreamException e) {
             throw new IOException(e);
@@ -51,7 +84,57 @@ public class XmlEnvironmentDiagramSerializer implements DiagramSerializer<Enviro
     }
 
     @Override
-    public EnvironmentDiagram deserialize(XMLStreamReader read, ElementDeserializationResolver<XMLStreamReader> elementDeserializer) throws IOException {
+    public EnvironmentDiagram instantiate() {
+        // not happening here
         return null;
+    }
+
+    @Override
+    public EnvironmentDiagram deserialize(XMLStreamReader reader, EnvironmentDiagram serializable, XmlDeserializationHelper helper) throws IOException {
+        try {
+            // load the diagram attributes
+            Map<String, String> attributes = helper.getAttributes(reader);
+            EnvironmentDiagram  diagram    = new EnvironmentDiagram(
+                    attributes.get(ATTRIBUTE_NAME)
+            );
+
+            // instantiate all the entities
+            helper.getAssignedIdMap().putAll(
+                    deserializeTypes(
+                            reader,
+                            EnvironmentDiagramElement.class,
+                            helper
+                    )
+            );
+
+
+            // load all the elements
+            helper.fastForwardToElementStart(reader, ELEMENT_NAME_ELEMENTS);
+            helper.foreachElementStartUntil (reader, ELEMENT_NAME_ELEMENTS, () -> {
+                diagram.addElement(
+                        helper.getDeserializationResolver().deserialize(
+                                reader,
+                                EnvironmentDiagramElement.class,
+                                helper
+                        )
+                );
+            });
+
+            // build all the connections
+            helper.fastForwardToElementStart(reader, ELEMENT_NAME_CONNECTIONS);
+            helper.foreachElementStartUntil (reader, ELEMENT_NAME_CONNECTIONS, () -> {
+                // the deserialize call alone does all the work, nothing to do anymore
+                helper.getDeserializationResolver().deserialize(
+                        reader,
+                        Connection.class,
+                        helper
+                );
+            });
+
+            return diagram;
+
+        } catch (XMLStreamException e) {
+            throw new IOException(e);
+        }
     }
 }

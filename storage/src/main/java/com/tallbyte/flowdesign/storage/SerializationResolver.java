@@ -18,22 +18,19 @@
 
 package com.tallbyte.flowdesign.storage;
 
-import com.tallbyte.flowdesign.core.Element;
-
 import java.io.IOException;
 
 /**
  * Created by michael on 05.12.16.
  */
-public interface ElementDeserializationResolver<R> {
+@FunctionalInterface
+public interface SerializationResolver<W, WH> {
 
     /**
-     * Resolves the {@link ElementSerializer} and deserializes
-     * the next {@link Element}
-     *
-     * @param read The read handle to read from
-     * @return The deserialized {@link Element}
-     * @throws IOException If reading failed
+     * @param write The write handle to write to
+     * @param serializable The serializable to resolve the {@link Serializer} for
+     * @param helper Implementation specific helper class
+     * @throws IOException If writing failed
      */
-    Element deserialize(R read) throws IOException;
+    void serialize(W write, Object serializable, WH helper) throws IOException;
 }
