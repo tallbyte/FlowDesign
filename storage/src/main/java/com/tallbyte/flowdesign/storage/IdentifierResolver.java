@@ -18,29 +18,21 @@
 
 package com.tallbyte.flowdesign.storage;
 
-import com.tallbyte.flowdesign.core.Diagram;
 import com.tallbyte.flowdesign.core.Element;
 
-import java.io.IOException;
-
 /**
- * Created by michael on 05.12.16.
+ * Created by michael on 09.12.16.
+ *
+ * Resolves the type-identifier for the given serializable for serialization.
+ * The type-identifier is later used in {@link InstantiationResolver}
+ * to instantiate the same type of serializable on deserialization
  */
-public interface DiagramSerializer<D extends Diagram, R, W, RH, WH> {
+@FunctionalInterface
+public interface IdentifierResolver {
 
     /**
-     * @param writer The write handle to use for writing
-     * @param diagram The {@link Diagram} to serialize
-     * @param helper Implementation specific helper class for serialization
-     * @throws IOException If writing and/or serialization failed
+     * @param serializable The serializable to resolve the identifier for
+     * @return The identifier for the given {@link Element}
      */
-    void serialize(W writer, D diagram, WH helper) throws IOException;
-
-    /**
-     * @param reader The read handle
-     * @param helper Implementation specific helper clas for deserialization
-     * @return The deserialized {@link Diagram}
-     * @throws IOException If reading and/or deserialization failed
-     */
-    D deserialize(R reader, RH helper)  throws IOException;
+    String resolveIdentifier(Object serializable);
 }

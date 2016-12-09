@@ -16,21 +16,30 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.storage;
+package com.tallbyte.flowdesign.storage.xml;
 
-import com.tallbyte.flowdesign.core.Element;
+import com.tallbyte.flowdesign.core.environment.System;
 
+import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
 
 /**
- * Created by michael on 05.12.16.
+ * Created by michael on 09.12.16.
  */
-public interface ElementSerializationResolver<W> {
+public class XmlSystemSerializer implements XmlSerializer<System> {
+    @Override
+    public void serialize(XMLStreamWriter writer, System serializable, XmlSerializationHelper helper) throws IOException {
 
-    /**
-     * @param write The write handle to write to
-     * @param element The {@link Element} to resolve the {@link ElementSerializer} for
-     * @throws IOException If writing failed
-     */
-    void serialize(W write, Element element) throws IOException;
+    }
+
+    @Override
+    public System instantiate() {
+        return new System();
+    }
+
+    @Override
+    public System deserialize(XMLStreamReader reader, System system, XmlDeserializationHelper helper) throws IOException {
+        return system;
+    }
 }

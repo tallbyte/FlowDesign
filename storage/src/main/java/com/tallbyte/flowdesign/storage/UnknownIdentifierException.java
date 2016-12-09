@@ -18,29 +18,14 @@
 
 package com.tallbyte.flowdesign.storage;
 
-import com.tallbyte.flowdesign.core.Diagram;
-import com.tallbyte.flowdesign.core.Element;
-
 import java.io.IOException;
 
 /**
- * Created by michael on 05.12.16.
+ * Created by michael on 09.12.16.
  */
-public interface DiagramSerializer<D extends Diagram, R, W, RH, WH> {
+public class UnknownIdentifierException extends IOException {
 
-    /**
-     * @param writer The write handle to use for writing
-     * @param diagram The {@link Diagram} to serialize
-     * @param helper Implementation specific helper class for serialization
-     * @throws IOException If writing and/or serialization failed
-     */
-    void serialize(W writer, D diagram, WH helper) throws IOException;
-
-    /**
-     * @param reader The read handle
-     * @param helper Implementation specific helper clas for deserialization
-     * @return The deserialized {@link Diagram}
-     * @throws IOException If reading and/or deserialization failed
-     */
-    D deserialize(R reader, RH helper)  throws IOException;
+    public UnknownIdentifierException(String identifier) {
+        super("Unknown identifier: "+identifier);
+    }
 }
