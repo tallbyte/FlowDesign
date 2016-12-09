@@ -51,6 +51,14 @@ public class Joint {
         this.maxOut   = maxOut;
     }
 
+    public Element getElement() {
+        return element;
+    }
+
+    public Joint getIncoming() {
+        return incoming;
+    }
+
     public String getLocation() {
         return location;
     }
