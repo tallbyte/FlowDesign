@@ -79,11 +79,13 @@ public class Joint {
                 );
     }
 
-    private void notifyJoin(Joint source) throws JointJoinException {
+    private void checkJoint(Joint source) throws JointJoinException {
         if (this.incoming != null) {
             throw new JointJoinException("can not join " + this + " and " + source + ": target already joined");
         }
+    }
 
+    private void notifyJoin(Joint source) throws JointJoinException {
         this.incoming = source;
     }
 
@@ -103,6 +105,8 @@ public class Joint {
         Connection connection = new Connection(this, target);
 
         if (element != null) {
+            target.checkJoint(this);
+
             if (element.getDiagram().addConnection(connection)) {
                 target.notifyJoin(this);
                 outgoing.add(target);
