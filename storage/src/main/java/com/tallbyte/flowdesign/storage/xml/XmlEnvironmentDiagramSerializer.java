@@ -19,15 +19,16 @@
 package com.tallbyte.flowdesign.storage.xml;
 
 import com.tallbyte.flowdesign.core.Connection;
-import com.tallbyte.flowdesign.core.Element;
 import com.tallbyte.flowdesign.core.EnvironmentDiagram;
 import com.tallbyte.flowdesign.core.environment.EnvironmentDiagramElement;
+import com.tallbyte.flowdesign.core.environment.System;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Queue;
 
 /**
  * Created by michael on 05.12.16.
@@ -47,20 +48,24 @@ public class XmlEnvironmentDiagramSerializer extends XmlDiagramSerializer implem
             writer.writeAttribute(ATTRIBUTE_NAME, diagram.getName());
 
             // update the id map
-            helper.getAssignedIdMap().putAll(
-                    serializeTypes(
-                            writer,
-                            diagram.getElements(),
-                            helper.getIdentifierResolver()
-                    )
+            Queue<Map.Entry<String, EnvironmentDiagramElement>> queue = serializeTypes(
+                    writer,
+                    diagram.getElements(),
+                    helper.getIdentifierResolver()
             );
+
+            queue.forEach(e -> helper.getAssignedIdMap().put(
+                    e.getValue(),
+                    e.getKey()
+            ));
+
 
             // write elements
             writer.writeStartElement(ELEMENT_NAME_ELEMENTS);
-            for (Element element : diagram.getElements()) {
+            while (!queue.isEmpty()) {
                 helper.getSerializationResolver().serialize(
                         writer,
-                        element,
+                        queue.poll().getValue(),
                         helper
                 );
             }
@@ -94,30 +99,41 @@ public class XmlEnvironmentDiagramSerializer extends XmlDiagramSerializer implem
         try {
             // load the diagram attributes
             Map<String, String> attributes = helper.getAttributes(reader);
-            EnvironmentDiagram  diagram    = new EnvironmentDiagram(
-                    attributes.get(ATTRIBUTE_NAME)
-            );
 
             // instantiate all the entities
-            helper.getAssignedIdMap().putAll(
-                    deserializeTypes(
-                            reader,
-                            EnvironmentDiagramElement.class,
-                            helper
-                    )
+            Queue<Map.Entry<String, EnvironmentDiagramElement>> queue = deserializeTypes(
+                    reader,
+                    EnvironmentDiagramElement.class,
+                    helper
             );
 
+            // prepare the AssignedIdMap
+            helper.getAssignedIdMap().clear();
+            queue.forEach(e -> helper.getAssignedIdMap().put(
+                    e.getKey(),
+                    e.getValue()
+            ));
 
-            // load all the elements
+
+            EnvironmentDiagram  diagram    = new EnvironmentDiagram(
+                    attributes.get(ATTRIBUTE_NAME),
+                    (System) queue.peek().getValue()
+            );
+
+            // load all the elements with proper values
             helper.fastForwardToElementStart(reader, ELEMENT_NAME_ELEMENTS);
             helper.foreachElementStartUntil (reader, ELEMENT_NAME_ELEMENTS, () -> {
-                diagram.addElement(
-                        helper.getDeserializationResolver().deserialize(
-                                reader,
-                                EnvironmentDiagramElement.class,
-                                helper
-                        )
+                EnvironmentDiagramElement e = helper.getDeserializationResolver().deserialize(
+                        reader,
+                        queue.poll().getValue(),
+                        EnvironmentDiagramElement.class,
+                        helper
                 );
+
+                // do not add the root element twice (first time through constructor)
+                if (!diagram.getRoot().equals(e)) {
+                    diagram.addElement(e);
+                }
             });
 
             // build all the connections

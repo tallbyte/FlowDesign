@@ -38,7 +38,7 @@ public class XmlJointSerializer implements XmlSerializer<Joint> {
     @Override
     public void serialize(XMLStreamWriter writer, Joint joint, XmlSerializationHelper helper) throws IOException {
         try {
-            writer.writeAttribute(ATTRIBUTE_LOCATION, joint.getLocation().toString());
+            writer.writeAttribute(ATTRIBUTE_LOCATION, joint.getLocation());
             writer.writeAttribute(ATTRIBUTE_ENTITY,   helper.getAssignedIdMap().get(joint.getElement()));
 
         } catch (XMLStreamException e) {
@@ -70,7 +70,7 @@ public class XmlJointSerializer implements XmlSerializer<Joint> {
             }
 
             for (Joint j : element.getJoints()) {
-                if (j.getLocation().toString().equals(location)) {
+                if (j.getLocation().equals(location)) {
                     return j;
                 }
             }

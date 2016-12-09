@@ -21,16 +21,15 @@ package com.tallbyte.flowdesign.storage.xml;
 import com.tallbyte.flowdesign.core.Connection;
 import com.tallbyte.flowdesign.core.EnvironmentDiagram;
 import com.tallbyte.flowdesign.core.Joint;
+import com.tallbyte.flowdesign.core.Project;
 import com.tallbyte.flowdesign.core.environment.Actor;
 import com.tallbyte.flowdesign.core.environment.System;
 import com.tallbyte.flowdesign.storage.Serializer;
 import com.tallbyte.flowdesign.storage.UnknownIdentifierException;
 
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
+import javax.xml.stream.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -44,7 +43,8 @@ public class XmlStorage {
     protected Map<String, Serializer<?, XMLStreamReader, XMLStreamWriter, XmlDeserializationHelper, XmlSerializationHelper>> serializers = new HashMap<>();
     protected Map<Class, String> identifiers = new HashMap<>();
 
-    protected XmlSerializationHelper helperSerialization;
+    protected XmlSerializationHelper   helperSerialization;
+    protected XmlDeserializationHelper helperDeserialization;
 
     public XmlStorage() {
         this.helperSerialization = new XmlSerializationHelper(
@@ -52,7 +52,14 @@ public class XmlStorage {
                 this::resolvedSerialization
         );
 
+        this.helperDeserialization = new XmlDeserializationHelper(
+                this::instantiate,
+                this::deserialize
+        );
+
         // register default entries
+        register(Project            .class, new XmlProjectSerializer());
+
         register(Connection         .class, new XmlConnectionSerializer());
         register(Joint              .class, new XmlJointSerializer());
 
@@ -77,15 +84,10 @@ public class XmlStorage {
         return this;
     }
 
-    public <T> XmlStorage register(String tagName, Serializer<T, XMLStreamReader, XMLStreamWriter, XmlDeserializationHelper, XmlSerializationHelper> serializer) {
-        this.serializers.put(tagName, serializer);
-        return this;
-    }
-
     public void serialize(Object serializable, OutputStream outputStream) throws IOException {
         try {
             XMLOutputFactory factory = XMLOutputFactory.newInstance();
-            XMLStreamWriter writer  = factory.createXMLStreamWriter(outputStream, StandardCharsets.UTF_8.name());
+            XMLStreamWriter  writer  = factory.createXMLStreamWriter(outputStream, StandardCharsets.UTF_8.name());
 
             writer.writeStartDocument();
             helperSerialization.getSerializationResolver().serialize(
@@ -102,6 +104,23 @@ public class XmlStorage {
 
     }
 
+    public Object deserialize(InputStream inputStream) throws IOException {
+        try {
+            XMLInputFactory factory = XMLInputFactory.newInstance();
+            XMLStreamReader reader  = factory.createXMLStreamReader(inputStream, StandardCharsets.UTF_8.name());
+
+            helperDeserialization.fastForwardToElementStart(reader);
+            return helperDeserialization.getDeserializationResolver().deserialize(
+                    reader,
+                    Object.class,
+                    helperDeserialization
+            );
+
+        } catch (XMLStreamException e) {
+            throw new IOException(e);
+        }
+    }
+
     protected String resolveIdentifier(Object serializable) {
         return identifiers.get(serializable.getClass());
     }
@@ -113,14 +132,55 @@ public class XmlStorage {
                 serializers.get(identifier);
 
         if (serializer != null) {
-            serializer.serialize(
-                    writer,
-                    serializable,
-                    helper
-            );
+            try {
+                writer.writeStartElement(identifier);
+                serializer.serialize(
+                        writer,
+                        serializable,
+                        helper
+                );
+                writer.writeEndElement();
+
+            } catch (XMLStreamException e) {
+                throw new IOException(e);
+            }
 
         } else {
+            throw new IOException(
+                    "No serializer for serializable: "+serializable.getClass().getSimpleName() +
+                            " and identifier: "+identifier
+            );
+        }
+    }
+
+    protected Object instantiate(String identifier) throws UnknownIdentifierException {
+        Serializer serializer = serializers.get(identifier);
+
+        if (serializer == null) {
             throw new UnknownIdentifierException(identifier);
+        }
+
+        return serializer.instantiate();
+    }
+
+    protected <T> T deserialize(XMLStreamReader reader, T emptyInstance, Class<T> type, XmlDeserializationHelper helper) throws IOException {
+        // since its optional, one needs to check whether to instantiate one
+        if (emptyInstance == null) {
+            emptyInstance = helper.getInstantiationResolver().instantiate(reader.getLocalName(), type);
+        }
+
+        Serializer<T, XMLStreamReader, XMLStreamWriter, XmlDeserializationHelper, XmlSerializationHelper>
+                serializer = (Serializer<T, XMLStreamReader, XMLStreamWriter, XmlDeserializationHelper, XmlSerializationHelper>)
+                serializers.get(reader.getLocalName());
+
+        if (serializer != null) {
+            return serializer.deserialize(
+                    reader,
+                    emptyInstance,
+                    helper
+            );
+        } else {
+            throw new IOException("No serializer for localName: "+reader.getLocalName());
         }
     }
 }

@@ -33,7 +33,7 @@ import java.util.Map;
  * or a similar function to start and/or end a xml-element. This will all be handled
  * by this class
  */
-public class XmlProject implements XmlSerializer<Project> {
+public class XmlProjectSerializer implements XmlSerializer<Project> {
 
     public static final String ELEMENT_DIAGRAMS = "diagrams";
     public static final String ATTRIBUTE_NAME   = "name";
@@ -88,6 +88,6 @@ public class XmlProject implements XmlSerializer<Project> {
             throw new IOException(e);
         }
 
-        return null;
+        return project;
     }
 }

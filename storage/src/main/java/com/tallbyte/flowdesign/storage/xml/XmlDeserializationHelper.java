@@ -119,6 +119,9 @@ public class XmlDeserializationHelper {
                     // inform about the element start
                     callback.call();
 
+                case XMLStreamConstants.END_DOCUMENT:
+                    break connectionLoop;
+
                 case XMLStreamConstants.END_ELEMENT:
                     if (localNameEnd.equals(reader.getLocalName())) {
                         // list processed

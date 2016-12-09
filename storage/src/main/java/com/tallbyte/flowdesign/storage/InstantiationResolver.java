@@ -48,8 +48,13 @@ public interface InstantiationResolver {
     default <T> T instantiate(String identifier, Class<T> type) throws UnknownIdentifierException {
         Object instance = instantiate(identifier);
 
+        if (instance == null) {
+            return null;
+        }
+
         if (type.isInstance(instance)) {
             return type.cast(instance);
+
         }
 
         // act as if there is no such identifier
