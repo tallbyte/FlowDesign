@@ -29,9 +29,7 @@ import com.tallbyte.flowdesign.storage.Storage;
 import com.tallbyte.flowdesign.storage.UnknownIdentifierException;
 
 import javax.xml.stream.*;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -97,6 +95,17 @@ public class XmlStorage implements Storage<XmlStorage, OutputStream, InputStream
         return this;
     }
 
+    /**
+     * @param serializable The serializable to serialize
+     * @param destination The {@link File} to write to
+     * @throws IOException If serialization failed
+     */
+    public void serialize(Object serializable, File destination) throws IOException {
+        try (FileOutputStream fos = new FileOutputStream(destination)) {
+            serialize(serializable, fos);
+        }
+    }
+
     @Override
     public void serialize(Object serializable, OutputStream outputStream) throws IOException {
         try {
@@ -118,6 +127,19 @@ public class XmlStorage implements Storage<XmlStorage, OutputStream, InputStream
 
     }
 
+    /**
+     * @param source The {@link File} to read from
+     * @param type The type to enforce the serializable to be
+     * @param <T> The type being enforced
+     * @return The deserialized serializable
+     * @throws IOException If deserialization failed or on type mismatch
+     */
+    public <T> T deserialize(File source, Class<T> type) throws IOException {
+        try (FileInputStream fis = new FileInputStream(source)) {
+            return deserialize(fis, type);
+        }
+    }
+
     @Override
     public <T> T deserialize(InputStream input, Class<T> type) throws IOException {
         Object value = deserialize(input);
@@ -130,6 +152,17 @@ public class XmlStorage implements Storage<XmlStorage, OutputStream, InputStream
                     "Type enforcement failed, expected "+type +
                             " but got "+(value != null ? value.getClass():null)
             );
+        }
+    }
+
+    /**
+     * @param source The {@link File} to read from
+     * @return The deserialized serializable
+     * @throws IOException If deserialization failed or on type mismatch
+     */
+    public Object deserialize(File source) throws IOException {
+        try (FileInputStream fis = new FileInputStream(source)) {
+            return deserialize(fis);
         }
     }
 
