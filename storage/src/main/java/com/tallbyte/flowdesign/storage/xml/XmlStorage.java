@@ -21,6 +21,8 @@ package com.tallbyte.flowdesign.storage.xml;
 import com.tallbyte.flowdesign.core.Connection;
 import com.tallbyte.flowdesign.core.EnvironmentDiagram;
 import com.tallbyte.flowdesign.core.Joint;
+import com.tallbyte.flowdesign.core.environment.Actor;
+import com.tallbyte.flowdesign.core.environment.System;
 import com.tallbyte.flowdesign.storage.Serializer;
 import com.tallbyte.flowdesign.storage.UnknownIdentifierException;
 
@@ -51,9 +53,12 @@ public class XmlStorage {
         );
 
         // register default entries
-        register(EnvironmentDiagram .class, new XmlEnvironmentDiagramSerializer());
         register(Connection         .class, new XmlConnectionSerializer());
         register(Joint              .class, new XmlJointSerializer());
+
+        register(EnvironmentDiagram .class, new XmlEnvironmentDiagramSerializer());
+        register(Actor              .class, new XmlActorSerializer());
+        register(System             .class, new XmlSystemSerializer());
     }
 
     protected String toTagName(Class<?> type) {
