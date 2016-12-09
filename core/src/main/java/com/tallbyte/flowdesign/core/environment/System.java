@@ -26,6 +26,8 @@ import com.tallbyte.flowdesign.core.JointType;
  * <p/>
  * Authors:<br/>
  * - julian (2016-11-07)<br/>
+ * <br/>
+ * A {@link System} describes a software-system in terms of diagram-element.
  */
 public class System extends EnvironmentDiagramElement {
 
@@ -35,6 +37,9 @@ public class System extends EnvironmentDiagramElement {
     public static final String JOINT_TOP    = "top";
     public static final String JOINT_BOTTOM = "bottom";
 
+    /**
+     * Create a new {@link System}.
+     */
     public System() {
         addJoint(new Joint(this, JOINT_LEFT  , JointType.INPUT_OUTPUT, 0));
         addJoint(new Joint(this, JOINT_RIGHT , JointType.INPUT_OUTPUT, 0));

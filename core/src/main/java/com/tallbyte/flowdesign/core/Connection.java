@@ -23,22 +23,38 @@ package com.tallbyte.flowdesign.core;
  * <p/>
  * Authors:<br/>
  * - julian (2016-11-11)<br/>
+ * <br/>
+ * A {@link Connection} describes a connection between two {@link Joint}s, which
+ * basically means a connection between two {@link Element}s.
  */
 public class Connection {
 
     private final Joint source;
     private final Joint target;
 
+    /**
+     * Creates a new {@link Connection} between two {@link Joint}s.
+     * @param source the source {@link Joint}
+     * @param target the target {@link Joint}
+     */
     public Connection(Joint source, Joint target) {
         this.source = source;
         this.target = target;
 
     }
 
+    /**
+     * Gets the source {@link Joint}.
+     * @return Returns the {@link Joint}.
+     */
     public Joint getSource() {
         return source;
     }
 
+    /**
+     * Gets the target {@link Joint}.
+     * @return Returns the {@link Joint}.
+     */
     public Joint getTarget() {
         return target;
     }

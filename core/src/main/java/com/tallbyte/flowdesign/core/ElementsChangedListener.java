@@ -26,6 +26,11 @@ package com.tallbyte.flowdesign.core;
  */
 public interface ElementsChangedListener {
 
-    public void onElementsChanged(Element element, boolean added);
+    /**
+     * Handler method that is to be called if {@link Element}s were changed.
+     * @param element the changed {@link Element}
+     * @param added was the {@link Element} added or removed?
+     */
+    void onElementsChanged(Element element, boolean added);
 
 }
