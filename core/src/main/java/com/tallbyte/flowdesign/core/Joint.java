@@ -114,6 +114,7 @@ public class Joint {
      */
     public boolean canJoin(Joint target) {
         return (outgoing.size() < maxOut || maxOut == 0)
+                && target.getElement() != getElement()
                 && (
                         (type == JointType.INPUT_OUTPUT && target.type == JointType.INPUT_OUTPUT)
                     ||  (type == JointType.OUTPUT       && target.type == JointType.INPUT       )
