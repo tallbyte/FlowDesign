@@ -45,7 +45,7 @@ public class VerticalStickDiagramImage extends DiagramImage {
 
         context.clearRect(0, 0, width, height);
         context.setFill(Color.BLACK);
-        context.fillRect(4, 4, width-4, height-4);
+        context.fillRect(3, 3, width-6, height-6);
     }
 
 }
