@@ -16,23 +16,21 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core.environment;
+package com.tallbyte.flowdesign.javafx.diagram.factory;
 
-import com.tallbyte.flowdesign.core.Element;
+import com.tallbyte.flowdesign.core.flow.Join;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-12-08)<br/>
- * <br/>
- * An {@link Element} for usage in {@link EnvironmentDiagram}.
+ * - julian (2016-11-29)<br/>
  */
-public abstract class EnvironmentDiagramElement extends Element {
+public class JoinElementFactory implements ElementFactory<Join> {
 
-    /**
-     * Creates an new {@link EnvironmentDiagramElement}.
-     */
-    protected EnvironmentDiagramElement() {
+    @Override
+    public Join createElement() {
+        return new Join();
     }
+
 }

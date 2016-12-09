@@ -18,7 +18,7 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.element;
 
-import com.tallbyte.flowdesign.core.environment.Actor;
+import com.tallbyte.flowdesign.core.flow.Join;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.JointNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
@@ -31,26 +31,30 @@ import javafx.geometry.Pos;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class ActorElementNode extends ElementNode {
+public class JoinElementNode extends ElementNode {
 
-    private final Actor actor;
+    private final Join join;
 
-    public ActorElementNode(Actor element, DiagramImage content) {
+    public JoinElementNode(Join element, DiagramImage content) {
         super(element, content, Pos.BOTTOM_CENTER);
 
-        this.actor = element;
+        this.join = element;
     }
 
     @Override
     protected void setup() {
         super.setup();
 
-        JointNode left = addJoint(actor.getJoint(Actor.JOINT_LEFT));
-        left.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0).add(left.radiusProperty()));
-        left.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.4));
+        JointNode input0 = addJoint(join.getJoint(Join.JOINT_INPUT0));
+        input0.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0).add(input0.radiusProperty()));
+        input0.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.1));
 
-        JointNode right = addJoint(actor.getJoint(Actor.JOINT_RIGHT));
-        right.centerXProperty().bind(widthProperty().subtract(right.radiusProperty()).subtract(widthExtend));
-        right.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.4));
+        JointNode input1 = addJoint(join.getJoint(Join.JOINT_INPUT1));
+        input1.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0).add(input1.radiusProperty()));
+        input1.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.9));
+
+        JointNode output = addJoint(join.getJoint(Join.JOINT_OUTPUT));
+        output.centerXProperty().bind(widthProperty().subtract(output.radiusProperty()).subtract(widthExtend));
+        output.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
     }
 }

@@ -16,32 +16,40 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx.diagram;
+package com.tallbyte.flowdesign.core.flow;
 
-import com.tallbyte.flowdesign.core.environment.EnvironmentDiagram;
-import com.tallbyte.flowdesign.core.environment.Actor;
-import com.tallbyte.flowdesign.core.environment.EnvironmentDiagramElement;
+import com.tallbyte.flowdesign.core.Diagram;
 import com.tallbyte.flowdesign.core.environment.System;
-import com.tallbyte.flowdesign.javafx.diagram.factory.*;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-12-08)<br/>
+ * - julian (2016-11-07)<br/>
+ * <br/>
+ * A {@link FlowDiagram} describes a data flow trough operations etc. .
  */
-public class EnvironmentDiagramHandler extends DiagramHandlerBase<EnvironmentDiagram, EnvironmentDiagramElement> {
+public class FlowDiagram extends Diagram<FlowDiagramElement> {
 
-    public EnvironmentDiagramHandler() {
-        addEntries("System", System.class,
-                new SystemElementFactory(),
-                new EllipseDiagramImageFactory(),
-                new SystemElementNodeFactory()
-        );
-        addEntries("Actor", Actor.class,
-                new ActorElementFactory(),
-                new StickmanDiagramImageFactory(),
-                new ActorElementNodeFactory()
-        );
+    /**
+     * Creates a new {@link FlowDiagram} using name only.
+     * @param name the desired name
+     */
+    public FlowDiagram(String name) {
+        super(name, new Start());
+    }
+
+    /**
+     * Creates a new {@link FlowDiagram} with a given {@link Start} as root.
+     * @param name the desired name
+     * @param root the desired root
+     */
+    public FlowDiagram(String name, Start root) {
+        super(name, root);
+    }
+
+    @Override
+    public Start getRoot() {
+        return (Start) super.getRoot();
     }
 }

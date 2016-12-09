@@ -16,32 +16,24 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx.diagram;
+package com.tallbyte.flowdesign.core.flow;
 
+import com.tallbyte.flowdesign.core.Element;
 import com.tallbyte.flowdesign.core.environment.EnvironmentDiagram;
-import com.tallbyte.flowdesign.core.environment.Actor;
-import com.tallbyte.flowdesign.core.environment.EnvironmentDiagramElement;
-import com.tallbyte.flowdesign.core.environment.System;
-import com.tallbyte.flowdesign.javafx.diagram.factory.*;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
+ * <br/>
+ * An {@link Element} for usage in {@link EnvironmentDiagram}.
  */
-public class EnvironmentDiagramHandler extends DiagramHandlerBase<EnvironmentDiagram, EnvironmentDiagramElement> {
+public abstract class FlowDiagramElement extends Element {
 
-    public EnvironmentDiagramHandler() {
-        addEntries("System", System.class,
-                new SystemElementFactory(),
-                new EllipseDiagramImageFactory(),
-                new SystemElementNodeFactory()
-        );
-        addEntries("Actor", Actor.class,
-                new ActorElementFactory(),
-                new StickmanDiagramImageFactory(),
-                new ActorElementNodeFactory()
-        );
+    /**
+     * Creates an new {@link FlowDiagramElement}.
+     */
+    protected FlowDiagramElement() {
     }
 }

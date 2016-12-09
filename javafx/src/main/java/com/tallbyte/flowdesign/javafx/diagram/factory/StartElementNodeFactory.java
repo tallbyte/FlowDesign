@@ -18,10 +18,12 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.factory;
 
-import com.tallbyte.flowdesign.core.Element;
+import com.tallbyte.flowdesign.core.environment.Actor;
+import com.tallbyte.flowdesign.core.flow.Start;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
+import com.tallbyte.flowdesign.javafx.diagram.element.ActorElementNode;
+import com.tallbyte.flowdesign.javafx.diagram.element.StartElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
-import javafx.geometry.Pos;
 
 /**
  * This file is part of project flowDesign.
@@ -29,10 +31,10 @@ import javafx.geometry.Pos;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class BottomElementNodeFactory<T extends Element> implements ElementNodeFactory<T> {
+public class StartElementNodeFactory implements ElementNodeFactory<Start> {
 
     @Override
-    public ElementNode createDiagramNode(Element element, DiagramImage image) {
-        return new ElementNode(element, image, Pos.BOTTOM_CENTER);
+    public ElementNode createDiagramNode(Start element, DiagramImage image) {
+        return new StartElementNode(element, image);
     }
 }

@@ -37,6 +37,7 @@
             </Menu>
             <Menu text="%menu.edit">
                 <MenuItem fx:id="menuItemAddEnvironment" text="%menu.edit.newEnvironment" onAction="#onAddEnvironment"/>
+                <MenuItem fx:id="menuItemAddFlow"        text="%menu.edit.newFlow"        onAction="#onAddFlow"/>
             </Menu>
             <Menu text="%menu.help">
                 <MenuItem text="%menu.help.about" onAction="#onAbout"/>

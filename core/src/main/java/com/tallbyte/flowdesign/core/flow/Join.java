@@ -16,24 +16,30 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx.diagram.factory;
+package com.tallbyte.flowdesign.core.flow;
 
-import com.tallbyte.flowdesign.core.Element;
-import com.tallbyte.flowdesign.core.environment.System;
-import com.tallbyte.flowdesign.javafx.diagram.image.CircleDiagramImage;
-import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
+import com.tallbyte.flowdesign.core.Joint;
+import com.tallbyte.flowdesign.core.JointType;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-11-04)<br/>
+ * - julian (2016-12-09)<br/>
  */
-public class SystemDiagramImageFactory implements DiagramImageFactory {
+public class Join extends FlowDiagramElement {
 
-    @Override
-    public DiagramImage createDiagramImage() {
-        return new CircleDiagramImage();
+    public static final String JOINT_INPUT0 = "input0";
+    public static final String JOINT_INPUT1 = "input1";
+    public static final String JOINT_OUTPUT = "output";
+
+    /**
+     * Creats an new {@link Join}.
+     */
+    public Join() {
+        addJoint(new Joint(this, JOINT_INPUT0, JointType.INPUT, 1));
+        addJoint(new Joint(this, JOINT_INPUT1, JointType.INPUT, 1));
+        addJoint(new Joint(this, JOINT_OUTPUT, JointType.OUTPUT, 0));
     }
 
 }

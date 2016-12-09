@@ -28,20 +28,20 @@ import java.util.List;
 /**
  * Created by michael on 21.11.16.
  */
-public class FlowElement extends Element {
+public class Operation extends Element {
 
     protected DataType input;
     protected DataType output;
     protected String name;
     protected String commentary;
-    protected List<FlowElement> representation;
+    protected List<Operation> representation;
 
-    public FlowElement(String name, List<FlowElement> representation) {
+    public Operation(String name, List<Operation> representation) {
         this.name           = name;
         this.representation = representation;
     }
 
-    public FlowElement(DataType input, DataType output, String name) {
+    public Operation(DataType input, DataType output, String name) {
         this.input  = input;
         this.output = output;
         this.name   = name;
@@ -68,43 +68,43 @@ public class FlowElement extends Element {
     }
 
     /**
-     * @return The name of this {@link FlowElement}
+     * @return The name of this {@link Operation}
      */
     public String getName() {
         return name;
     }
 
     /**
-     * @param name The new name of this {@link FlowElement}
+     * @param name The new name of this {@link Operation}
      * @return itself
      */
-    public FlowElement setName(String name) {
+    public Operation setName(String name) {
         // TODO notify listeners
         this.name = name;
         return this;
     }
 
     /**
-     * @return Additional commentary for this {@link FlowElement} or null
+     * @return Additional commentary for this {@link Operation} or null
      */
     public String getCommentary() {
         return commentary;
     }
 
     /**
-     * @param commentary The new commentary for  this {@link FlowElement} or null
+     * @param commentary The new commentary for  this {@link Operation} or null
      * @return itself
      */
-    public FlowElement setCommentary(String commentary) {
+    public Operation setCommentary(String commentary) {
         // TODO notify listeners
         this.commentary = commentary;
         return this;
     }
 
     /**
-     * @return Whether this {@link FlowElement} is representative an thus
-     *         represents this {@link FlowElement} summaries multiple other
-     *         {@link FlowElement} by its first input {@link DataType} and
+     * @return Whether this {@link Operation} is representative an thus
+     *         represents this {@link Operation} summaries multiple other
+     *         {@link Operation} by its first input {@link DataType} and
      *         last output {@link DataType}
      */
     public boolean isRepresentative() {
@@ -112,11 +112,11 @@ public class FlowElement extends Element {
     }
 
     /**
-     * @param element The {@link FlowElement} to add to re representative chain
-     * @return The given {@link FlowElement}
+     * @param element The {@link Operation} to add to re representative chain
+     * @return The given {@link Operation}
      * @throws DeclinedFlowException If adding failed
      */
-    public FlowElement addToRepresentation(FlowElement element) throws DeclinedFlowException {
+    public Operation addToRepresentation(Operation element) throws DeclinedFlowException {
         if (!isRepresentative()) {
             throw new DeclinedFlowException("Not a representative "+getClass().getSimpleName());
         }
@@ -131,11 +131,11 @@ public class FlowElement extends Element {
     }
 
     /**
-     * @param element The {@link FlowElement} to remove
-     * @return The given {@link FlowElement}
+     * @param element The {@link Operation} to remove
+     * @return The given {@link Operation}
      * @throws DeclinedFlowException If the removal failed
      */
-    public FlowElement removeFromRepresentation(FlowElement element) throws DeclinedFlowException {
+    public Operation removeFromRepresentation(Operation element) throws DeclinedFlowException {
         if (!isRepresentative()) {
             throw new DeclinedFlowException("Not a representative "+getClass().getSimpleName());
         }
@@ -148,8 +148,8 @@ public class FlowElement extends Element {
 
         if (index > 0 && (index+1) < representation.size()) {
             // neither first nor last --> need to check DataType consistency
-            FlowElement before = representation.get(index-1);
-            FlowElement after  = representation.get(index+1);
+            Operation before = representation.get(index-1);
+            Operation after  = representation.get(index+1);
 
             if (!before.getOutput().equals(after.getInput())) {
                 throw new DeclinedFlowException("DataType mismatch of the chain");
@@ -162,9 +162,9 @@ public class FlowElement extends Element {
     }
 
     /**
-     * @return The {@link FlowElement}s represented by this {@link FlowElement}
+     * @return The {@link Operation}s represented by this {@link Operation}
      */
-    public Iterable<FlowElement> getRepresentation() {
+    public Iterable<Operation> getRepresentation() {
         return isRepresentative() ? representation : Collections.emptyList();
     }
 }

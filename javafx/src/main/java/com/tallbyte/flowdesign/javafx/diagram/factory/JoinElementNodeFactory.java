@@ -18,22 +18,23 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.factory;
 
-import com.tallbyte.flowdesign.core.Element;
-import com.tallbyte.flowdesign.core.environment.Actor;
+import com.tallbyte.flowdesign.core.flow.Join;
+import com.tallbyte.flowdesign.core.flow.Start;
+import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
+import com.tallbyte.flowdesign.javafx.diagram.element.JoinElementNode;
+import com.tallbyte.flowdesign.javafx.diagram.element.StartElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
-import com.tallbyte.flowdesign.javafx.diagram.image.StickmanDiagramImage;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-11-04)<br/>
+ * - julian (2016-12-08)<br/>
  */
-public class ActorDiagramImageFactory implements DiagramImageFactory {
+public class JoinElementNodeFactory implements ElementNodeFactory<Join> {
 
     @Override
-    public DiagramImage createDiagramImage() {
-        return new StickmanDiagramImage();
+    public ElementNode createDiagramNode(Join element, DiagramImage image) {
+        return new JoinElementNode(element, image);
     }
-
 }

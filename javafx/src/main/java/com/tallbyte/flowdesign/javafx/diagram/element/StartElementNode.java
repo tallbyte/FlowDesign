@@ -16,11 +16,14 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx.diagram.factory;
+package com.tallbyte.flowdesign.javafx.diagram.element;
 
-import com.tallbyte.flowdesign.core.Element;
+import com.tallbyte.flowdesign.core.environment.Actor;
+import com.tallbyte.flowdesign.core.flow.Start;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
+import com.tallbyte.flowdesign.javafx.diagram.JointNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 
 /**
@@ -29,10 +32,22 @@ import javafx.geometry.Pos;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class CenteredElementNodeFactory<T extends Element> implements ElementNodeFactory<T> {
+public class StartElementNode extends ElementNode {
+
+    private final Start start;
+
+    public StartElementNode(Start element, DiagramImage content) {
+        super(element, content, Pos.BOTTOM_CENTER);
+
+        this.start = element;
+    }
 
     @Override
-    public ElementNode createDiagramNode(Element element, DiagramImage image) {
-        return new ElementNode(element, image, Pos.CENTER);
+    protected void setup() {
+        super.setup();
+
+        JointNode output = addJoint(start.getJoint(Start.JOINT_OUTPUT));
+        output.centerXProperty().bind(widthProperty().subtract(output.radiusProperty()).subtract(widthExtend));
+        output.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
     }
 }

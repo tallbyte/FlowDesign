@@ -27,13 +27,13 @@ import javafx.scene.paint.Color;
  * Authors:<br/>
  * - julian (2016-10-30)<br/>
  */
-public class CircleDiagramImage extends DiagramImage {
+public class VerticalStickDiagramImage extends DiagramImage {
 
     /**
-     * Creates a new {@link CircleDiagramImage} with default dimension.
+     * Creates a new {@link VerticalStickDiagramImage} with default dimension.
      */
-    public CircleDiagramImage() {
-        setWidth(75);
+    public VerticalStickDiagramImage() {
+        setWidth(10);
         setHeight(75);
     }
 
@@ -44,12 +44,8 @@ public class CircleDiagramImage extends DiagramImage {
         double height = getHeight();
 
         context.clearRect(0, 0, width, height);
-        context.setStroke(Color.BLACK);
-        context.setLineWidth(1.5);
-        context.strokeOval(
-                context.getLineWidth(), context.getLineWidth(),
-                width - 2*context.getLineWidth(), height - 2*context.getLineWidth()
-        );
+        context.setFill(Color.BLACK);
+        context.fillRect(3, 3, width-6, height-6);
     }
 
 }
