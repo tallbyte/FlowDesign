@@ -18,8 +18,8 @@
 
 package com.tallbyte.flowdesign.storage;
 
-import com.tallbyte.flowdesign.core.EnvironmentDiagram;
 import com.tallbyte.flowdesign.core.Project;
+import com.tallbyte.flowdesign.core.environment.EnvironmentDiagram;
 import com.tallbyte.flowdesign.storage.xml.XmlStorage;
 
 import java.io.FileInputStream;
