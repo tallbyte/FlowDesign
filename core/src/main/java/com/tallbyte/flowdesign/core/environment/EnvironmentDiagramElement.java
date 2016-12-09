@@ -33,12 +33,4 @@ public abstract class EnvironmentDiagramElement extends Element{
 
     protected EnvironmentDiagramElement() {
     }
-
-    protected EnvironmentDiagramElement(List<Joint> joints) {
-        super(joints);
-    }
-
-    protected EnvironmentDiagramElement(Joint... joints) {
-        super(joints);
-    }
 }

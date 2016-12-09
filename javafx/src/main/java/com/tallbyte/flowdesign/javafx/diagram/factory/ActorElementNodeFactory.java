@@ -16,13 +16,14 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx.diagram;
+package com.tallbyte.flowdesign.javafx.diagram.factory;
 
-import com.tallbyte.flowdesign.core.EnvironmentDiagram;
+import com.tallbyte.flowdesign.core.Element;
 import com.tallbyte.flowdesign.core.environment.Actor;
-import com.tallbyte.flowdesign.core.environment.EnvironmentDiagramElement;
-import com.tallbyte.flowdesign.core.environment.System;
-import com.tallbyte.flowdesign.javafx.diagram.factory.*;
+import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
+import com.tallbyte.flowdesign.javafx.diagram.element.ActorElementNode;
+import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
+import javafx.geometry.Pos;
 
 /**
  * This file is part of project flowDesign.
@@ -30,18 +31,10 @@ import com.tallbyte.flowdesign.javafx.diagram.factory.*;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class EnvironmentDiagramHandler extends DiagramHandlerBase<EnvironmentDiagram, EnvironmentDiagramElement> {
+public class ActorElementNodeFactory implements ElementNodeFactory<Actor> {
 
-    public EnvironmentDiagramHandler() {
-        addEntries("System", System.class,
-                new SystemElementFactory(),
-                new SystemDiagramImageFactory(),
-                new SystemElementNodeFactory()
-        );
-        addEntries("Actor", Actor.class,
-                new ActorElementFactory(),
-                new ActorDiagramImageFactory(),
-                new ActorElementNodeFactory()
-        );
+    @Override
+    public ElementNode createDiagramNode(Actor element, DiagramImage image) {
+        return new ActorElementNode(element, image);
     }
 }

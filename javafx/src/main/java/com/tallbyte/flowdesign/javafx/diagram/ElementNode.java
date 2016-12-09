@@ -275,30 +275,9 @@ public class ElementNode extends Pane {
         return element;
     }
 
-    private JointNode addJoint(Joint joint) {
+    protected JointNode addJoint(Joint joint) {
         JointNode element = new JointNode(joint, this);
         element.setRadius(3);
-        switch (joint.getLocation()) {
-            case TOP_CENTER:
-                element.centerXProperty().bind(widthProperty().subtract(widthExtend).multiply(0.5));
-                element.centerYProperty().bind(Bindings.createDoubleBinding(() -> 0.0).add(element.radiusProperty()));
-                break;
-
-            case CENTER_RIGHT:
-                element.centerXProperty().bind(widthProperty().subtract(element.radiusProperty()).subtract(widthExtend));
-                element.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
-                break;
-
-            case BOTTOM_CENTER:
-                element.centerXProperty().bind(widthProperty().subtract(widthExtend).multiply(0.5));
-                element.centerYProperty().bind(heightProperty().subtract(element.radiusProperty()).subtract(heightExtend));
-                break;
-
-            case CENTER_LEFT:
-                element.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0).add(element.radiusProperty()));
-                element.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
-                break;
-        }
         element.visibleProperty().bind(
                 selected.or(hoverProperty())
                         .and(Bindings.createBooleanBinding(joint::isOutput))
@@ -367,7 +346,7 @@ public class ElementNode extends Pane {
     /**
      * Setup of bindings and listeners.
      */
-    private void setup() {
+    protected void setup() {
         /*
          * Basic layout
          */
@@ -377,13 +356,11 @@ public class ElementNode extends Pane {
 
         TextField textFieldText     = addText(text, "nodeTextHolder", posLabel, true);
 
-        NodeModificator topRight    = addModificator(NodeModificator.Location.TOP_RIGHT);
-        NodeModificator topLeft     = addModificator(NodeModificator.Location.TOP_LEFT);
+        addModificator(NodeModificator.Location.TOP_RIGHT);
+        addModificator(NodeModificator.Location.TOP_LEFT);
 
-        NodeModificator bottomRight = addModificator(NodeModificator.Location.BOTTOM_RIGHT);
-        NodeModificator bottomLeft  = addModificator(NodeModificator.Location.BOTTOM_LEFT);
-
-        element.getJoints().forEach(this::addJoint);
+        addModificator(NodeModificator.Location.BOTTOM_RIGHT);
+        addModificator(NodeModificator.Location.BOTTOM_LEFT);
 
         /*
          * Basic settings
