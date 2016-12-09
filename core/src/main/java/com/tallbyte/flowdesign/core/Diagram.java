@@ -29,6 +29,10 @@ import java.util.List;
  * <p/>
  * Authors:<br/>
  * - julian (2016-11-07)<br/>
+ * <br/>
+ * A {@link Diagram} contains {@link Element}s of specifiable type. It
+ * allows allows to specify certain listeners to monitor {@link Element}
+ * or {@link Connection} removal or addition.
  */
 public abstract class Diagram<E extends Element> {
 
@@ -122,7 +126,7 @@ public abstract class Diagram<E extends Element> {
      * @param element the @{link Element} to remove
      */
 
-    public void removeElement(Element element) {
+    public void removeElement(E element) {
         this.elements.remove(element);
         element.setDiagram(null);
 
