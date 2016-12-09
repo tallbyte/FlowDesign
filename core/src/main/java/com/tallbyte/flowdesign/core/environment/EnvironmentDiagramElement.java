@@ -28,9 +28,14 @@ import java.util.List;
  * <p/>
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
+ * <br/>
+ * An {@link Element} for usage in {@link com.tallbyte.flowdesign.core.EnvironmentDiagram}.
  */
-public abstract class EnvironmentDiagramElement extends Element{
+public abstract class EnvironmentDiagramElement extends Element {
 
+    /**
+     * Creates an new {@link EnvironmentDiagramElement}.
+     */
     protected EnvironmentDiagramElement() {
     }
 }

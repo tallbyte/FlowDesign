@@ -28,13 +28,25 @@ import java.lang.*;
  * <p/>
  * Authors:<br/>
  * - julian (2016-11-07)<br/>
+ * <br/>
+ * A System-{@link EnvironmentDiagram} describes all dependencies and external actors of
+ * an software system.
  */
 public class EnvironmentDiagram extends Diagram<EnvironmentDiagramElement> {
 
+    /**
+     * Creatss a new {@link EnvironmentDiagram} using name only.
+     * @param name the desired name
+     */
     public EnvironmentDiagram(String name) {
         super(name, new System());
     }
 
+    /**
+     * Creates a new {@link EnvironmentDiagram} with a given {@link System} as root.
+     * @param name the desired name
+     * @param root the desired root
+     */
     public EnvironmentDiagram(String name, System root) {
         super(name, root);
     }

@@ -26,6 +26,11 @@ package com.tallbyte.flowdesign.core;
  */
 public interface ConnectionsChangedListener {
 
-    public void onConnectionsChanged(Connection connection, boolean added);
+    /**
+     * Handler method that is to be called if {@link Connection}s were changed.
+     * @param connection the changed {@link Connection}
+     * @param added was the {@link Connection} added or removed?
+     */
+    void onConnectionsChanged(Connection connection, boolean added);
 
 }

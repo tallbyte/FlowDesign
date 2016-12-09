@@ -26,12 +26,18 @@ import com.tallbyte.flowdesign.core.JointType;
  * <p/>
  * Authors:<br/>
  * - julian (2016-11-07)<br/>
+ * <br/>
+ * The {@link Actor} describes an external human or non-human influence or "user"
+ * of a {@link System}.
  */
 public class Actor extends EnvironmentDiagramElement {
 
     public static final String JOINT_LEFT  = "left";
     public static final String JOINT_RIGHT = "right";
 
+    /**
+     * Creats an new {@link Actor}.
+     */
     public Actor() {
         addJoint(new Joint(this, JOINT_LEFT , JointType.INPUT_OUTPUT, 0));
         addJoint(new Joint(this, JOINT_RIGHT, JointType.INPUT_OUTPUT, 0));
