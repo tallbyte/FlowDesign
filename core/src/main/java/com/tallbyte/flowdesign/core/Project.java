@@ -30,6 +30,9 @@ import java.util.Map;
  * <p/>
  * Authors:<br/>
  * - julian (2016-11-07)<br/>
+ * <br/>
+ * The {@link Project} holds {@link Diagram}s of arbitrary type, registered by
+ * {@link Class}.
  */
 public class Project {
 

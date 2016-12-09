@@ -27,6 +27,10 @@ import java.util.*;
  * <p/>
  * Authors:<br/>
  * - julian (2016-11-07)<br/>
+ * <br/>
+ * This class describes an abstract element inside of a {@link Diagram}.
+ * The {@link Element} is resizeable and movable. It may also contain {@link Joint}s
+ * which can be used to connect it to other {@link Element}s.
  */
 public abstract class Element {
 

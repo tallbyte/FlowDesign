@@ -18,12 +18,8 @@
 
 package com.tallbyte.flowdesign.core.environment;
 
-import com.tallbyte.flowdesign.core.Element;
 import com.tallbyte.flowdesign.core.Joint;
 import com.tallbyte.flowdesign.core.JointType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This file is part of project flowDesign.
@@ -37,8 +33,8 @@ public class Actor extends EnvironmentDiagramElement {
     public static final String JOINT_RIGHT = "right";
 
     public Actor() {
-        addJoint(new Joint(this, JOINT_LEFT , JointType.DEPENDENCY, 0));
-        addJoint(new Joint(this, JOINT_RIGHT, JointType.DEPENDENCY, 0));
+        addJoint(new Joint(this, JOINT_LEFT , JointType.INPUT_OUTPUT, 0));
+        addJoint(new Joint(this, JOINT_RIGHT, JointType.INPUT_OUTPUT, 0));
     }
 
 }

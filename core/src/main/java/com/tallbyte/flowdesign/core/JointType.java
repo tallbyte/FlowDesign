@@ -23,9 +23,11 @@ package com.tallbyte.flowdesign.core;
  * <p/>
  * Authors:<br/>
  * - julian (2016-12-09)<br/>
+ * <br/>
+ * An enum describing the type of a {@link Joint}.
  */
 public enum JointType {
     INPUT,
     OUTPUT,
-    DEPENDENCY
+    INPUT_OUTPUT
 }
