@@ -31,8 +31,8 @@ public class StorageHandler {
 
     public static final String STORAGE_TYPE_XML = "xml";
 
-    protected Map<Class, Storage> storages = new HashMap<>();
-    protected Map<String, Class>  types    = new HashMap<>();
+    protected Map<Class<? extends Storage>, Storage> storages = new HashMap<>();
+    protected Map<String, Class<? extends Storage>>  types    = new HashMap<>();
 
     protected StorageMetadata metadata;
 
@@ -139,6 +139,19 @@ public class StorageHandler {
     }
 
     /**
+     * @param type The type to get the {@link Storage} for
+     * @param <T> Type of the {@link Storage}
+     * @return {@link Storage} of the given type or null if unknown
+     */
+    public <T extends Storage> T getStorage(Class<T> type) {
+        return type.cast(
+                storages.get(
+                        type
+                )
+        );
+    }
+
+    /**
      * @param type The type of the {@link Storage} to return
      * @return The {@link Storage} registered on the given type string or null
      */
@@ -174,9 +187,16 @@ public class StorageHandler {
     }
 
     /**
-     * @return An {@link Iterable} over all added storage types
+     * @return An {@link Iterable} over all known storage types
      */
     public Iterable<String> getStorageTypes() {
         return types.keySet();
+    }
+
+    /**
+     * @return An {@link Iterable} over all known storage classes
+     */
+    public Iterable<Class<? extends Storage>> getStorageClasses() {
+        return storages.keySet();
     }
 }
