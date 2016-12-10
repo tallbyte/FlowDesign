@@ -28,12 +28,12 @@ import javafx.scene.shape.ArcType;
  * Authors:<br/>
  * - julian (2016-10-30)<br/>
  */
-public class EllipseDiagramImage extends DiagramImage {
+public class StateDiagramImage extends DiagramImage {
 
     /**
-     * Creates a new {@link EllipseDiagramImage} with default dimension.
+     * Creates a new {@link StateDiagramImage} with default dimension.
      */
-    public EllipseDiagramImage() {
+    public StateDiagramImage() {
         setWidth(75);
         setHeight(75);
     }
@@ -50,6 +50,39 @@ public class EllipseDiagramImage extends DiagramImage {
         context.strokeOval(
                 context.getLineWidth(), context.getLineWidth(),
                 width - 2*context.getLineWidth(), height - 2*context.getLineWidth()
+        );
+
+        double rx = (1+Math.cos(2*Math.PI*0.125))*0.5*width;
+        double ry = (1+Math.sin(2*Math.PI*0.125))*0.5*height;
+        double rw = width*0.25;
+        double rh = height*0.25;
+
+        rx -= rw*0.75;
+        ry -= rh*0.75;
+
+        strokeCylinder(context, rx, ry, rw, rh);
+    }
+
+    private void strokeCylinder(GraphicsContext context, double x, double y, double w, double h) {
+        context.strokeOval(
+                x + context.getLineWidth(), y + context.getLineWidth(),
+                w - 2*context.getLineWidth(), h*0.2
+        );
+
+        context.strokeArc(
+                x + context.getLineWidth(), y+h-h*0.2-context.getLineWidth(),
+                w - 2*context.getLineWidth(), h*0.2,
+                180, 180, ArcType.OPEN
+        );
+
+        context.strokeLine(
+                x+context.getLineWidth(), y+h*0.1+context.getLineWidth(),
+                x+context.getLineWidth(), y+h-h*0.1-context.getLineWidth()
+        );
+
+        context.strokeLine(
+                x+w-context.getLineWidth(), y+h*0.1+context.getLineWidth(),
+                x+w-context.getLineWidth(), y+h-h*0.1-context.getLineWidth()
         );
     }
 
