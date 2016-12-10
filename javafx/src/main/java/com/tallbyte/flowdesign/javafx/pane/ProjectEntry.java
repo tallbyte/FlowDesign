@@ -18,6 +18,7 @@
 
 package com.tallbyte.flowdesign.javafx.pane;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.LoadException;
@@ -58,5 +59,9 @@ public class ProjectEntry extends BorderPane {
         labelName.setText(name);
         labelPath.setText(path);
 
+    }
+
+    public void onClose(ActionEvent event) {
+        event.consume();
     }
 }

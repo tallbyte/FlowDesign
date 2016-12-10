@@ -18,10 +18,13 @@
 
 package com.tallbyte.flowdesign.javafx.pane;
 
+import com.tallbyte.flowdesign.core.Project;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.LoadException;
 import javafx.scene.Node;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -38,7 +41,7 @@ import static com.tallbyte.flowdesign.javafx.ResourceUtils.getResourceBundle;
  */
 public class WelcomePane extends BorderPane {
 
-    @FXML private VBox vBoxProjects;
+    @FXML private ListView<Project> listProjects;
 
     /**
      * Creates a new {@link WelcomePane} by loading from a fxml-file
@@ -56,11 +59,25 @@ public class WelcomePane extends BorderPane {
             throw new LoadException("Could not load "+getClass().getSimpleName(), e);
         }
 
-        vBoxProjects.getChildren().add(new ProjectEntry("test", "/path/to/file.xml"));
-        vBoxProjects.getChildren().add(new ProjectEntry("test2", "/path/to/file2.xml"));
+        listProjects.setCellFactory(param -> new ListCell<Project>() {
 
-        for (Node node : vBoxProjects.getChildrenUnmodifiable()) {
+            @Override
+            protected void updateItem(Project item, boolean empty) {
+                super.updateItem(item, empty);
 
-        }
+                if (item != null) {
+                    try {
+                        setGraphic(new ProjectEntry("test", "test/test"));
+                    } catch (LoadException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    setGraphic(null);
+                }
+            }
+        });
+
+        listProjects.getItems().add(new Project("test"));
+        listProjects.getItems().add(new Project("test2"));
     }
 }

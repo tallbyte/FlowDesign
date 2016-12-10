@@ -166,27 +166,53 @@ WelcomePane Button:pressed {
     -fx-text-fill:        #3c3c3c;
 }
 
-ProjectEntry {
-    -fx-min-width:        200px;
-    -fx-pref-height:      50px;
-    -fx-padding:          3px 10px;
+WelcomePane .projectList {
+    -fx-padding: 0;
 }
 
-ProjectEntry:hover {
+WelcomePane .projectList .list-cell {
+    -fx-background-color: transparent;
+}
+
+WelcomePane .projectList .list-cell:filled:selected:focused, WelcomePane .projectList .list-cell:filled:selected {
+    -fx-background-color: rgb(72, 117, 255);
+}
+
+WelcomePane .projectList .list-cell:filled:hover {
     -fx-background-color: #e1e1e1;
 }
 
-ProjectEntry .closeButton {
+ProjectEntry {
+    -fx-min-width:        200px;
+    -fx-pref-height:      50px;
+    -fx-padding:          5px 10px;
+}
+
+ProjectEntry .name {
+    -fx-text-fill:        #414141;
+    -fx-font-weight:      bold;
+    -fx-font-size:        1.1em;
+}
+
+ProjectEntry .path {
+
+}
+
+ProjectEntry .glyphClose:hover {
+    -fx-text-fill:        red;
+}
+
+ProjectEntry .closeButton .glyphClose {
     -fx-background-color: transparent;
     -fx-padding:          0;
     -fx-border:           none;
-    -fx-text-fill:        gray;
+    -fx-text-fill:        #656565;
 }
 
-ProjectEntry .closeButton:hover {
-    -fx-text-fill:        dimgray;
+ProjectEntry .closeButton:hover .glyphClose {
+    -fx-text-fill:        #7c7c7c;
 }
 
-ProjectEntry .closeButton:pressed {
+ProjectEntry .closeButton:pressed .glyphClose {
     -fx-text-fill:        #484848;
 }
