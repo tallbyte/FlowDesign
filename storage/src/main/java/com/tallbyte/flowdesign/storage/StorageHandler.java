@@ -139,6 +139,18 @@ public class StorageHandler {
     }
 
     /**
+     * @param type The type of the {@link Storage} to return
+     * @return The {@link Storage} registered on the given type string or null
+     */
+    public Storage getStorage(String type) {
+        return storages.get(
+                types.get(
+                        type
+                )
+        );
+    }
+
+    /**
      * @param type Type to add the {@link Storage} for
      * @param storage {@link Storage} to add
      * @return itself
