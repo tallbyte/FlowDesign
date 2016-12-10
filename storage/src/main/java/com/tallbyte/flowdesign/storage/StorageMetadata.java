@@ -120,9 +120,13 @@ public class StorageMetadata {
         private long timeMillis;
 
         public Entry(String type, String path) {
+            this(type, path, System.currentTimeMillis());
+        }
+
+        public Entry(String type, String path, long timeMillis) {
             this.type       = type;
             this.path       = path;
-            this.timeMillis = System.currentTimeMillis();
+            this.timeMillis = timeMillis;
         }
 
         /**
