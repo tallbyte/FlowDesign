@@ -202,6 +202,8 @@ public class ApplicationPane extends BorderPane {
     @FXML
     public void onCreateProject() {
         Dialog<String> dialog = new TextInputDialog();
+        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image("/images/realIcon.png"));
         dialog.setTitle(getResourceString("popup.newProject.title"));
         dialog.setContentText(getResourceString("popup.newProject.field.name"));
         dialog.setHeaderText(null);
@@ -269,6 +271,8 @@ public class ApplicationPane extends BorderPane {
     @FXML
     public void onAddEnvironment() {
         Dialog<String> dialog = new TextInputDialog();
+        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image("/images/realIcon.png"));
         dialog.setTitle(getResourceString("popup.newEnvironment.title"));
         dialog.setContentText(getResourceString("popup.newEnvironment.field.name"));
         dialog.setHeaderText(null);
@@ -287,6 +291,8 @@ public class ApplicationPane extends BorderPane {
     @FXML
     public void onAddFlow() {
         Dialog<String> dialog = new TextInputDialog();
+        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image("/images/realIcon.png"));
         dialog.setTitle(getResourceString("popup.newFlow.title"));
         dialog.setContentText(getResourceString("popup.newFlow.field.name"));
         dialog.setHeaderText(null);
