@@ -19,7 +19,7 @@
 package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.core.*;
-import com.tallbyte.flowdesign.core.Connection;
+import com.tallbyte.flowdesign.data.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
@@ -57,8 +57,8 @@ public class DiagramPane extends ScrollPane {
     protected double mouseX;
     protected double mouseY;
 
-    protected ElementsChangedListener          listenerElements    = null;
-    protected ConnectionsChangedListener       listenerConnections = null;
+    protected ElementsChangedListener listenerElements    = null;
+    protected ConnectionsChangedListener listenerConnections = null;
     protected EventHandler<? super MouseEvent> listenerRelease     = null;
 
 

@@ -18,9 +18,9 @@
 
 package com.tallbyte.flowdesign.storage.xml;
 
-import com.tallbyte.flowdesign.core.Connection;
-import com.tallbyte.flowdesign.core.Joint;
-import com.tallbyte.flowdesign.core.JointJoinException;
+import com.tallbyte.flowdesign.data.Connection;
+import com.tallbyte.flowdesign.data.Joint;
+import com.tallbyte.flowdesign.data.JointJoinException;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;

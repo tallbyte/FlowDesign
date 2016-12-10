@@ -18,8 +18,8 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
-import com.tallbyte.flowdesign.core.Element;
-import com.tallbyte.flowdesign.core.Joint;
+import com.tallbyte.flowdesign.data.Element;
+import com.tallbyte.flowdesign.data.Joint;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;

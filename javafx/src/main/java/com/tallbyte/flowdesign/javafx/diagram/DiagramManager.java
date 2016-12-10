@@ -18,10 +18,10 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
-import com.tallbyte.flowdesign.core.Diagram;
-import com.tallbyte.flowdesign.core.Element;
-import com.tallbyte.flowdesign.core.environment.EnvironmentDiagram;
-import com.tallbyte.flowdesign.core.flow.FlowDiagram;
+import com.tallbyte.flowdesign.data.Diagram;
+import com.tallbyte.flowdesign.data.Element;
+import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
+import com.tallbyte.flowdesign.data.flow.FlowDiagram;
 import com.tallbyte.flowdesign.javafx.diagram.factory.DiagramImageFactory;
 
 import java.util.HashMap;

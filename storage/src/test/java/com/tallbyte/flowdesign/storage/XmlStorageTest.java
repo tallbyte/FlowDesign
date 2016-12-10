@@ -18,10 +18,10 @@
 
 package com.tallbyte.flowdesign.storage;
 
-import com.tallbyte.flowdesign.core.JointJoinException;
-import com.tallbyte.flowdesign.core.Project;
-import com.tallbyte.flowdesign.core.environment.Actor;
-import com.tallbyte.flowdesign.core.environment.EnvironmentDiagram;
+import com.tallbyte.flowdesign.data.JointJoinException;
+import com.tallbyte.flowdesign.data.Project;
+import com.tallbyte.flowdesign.data.environment.Actor;
+import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
 import com.tallbyte.flowdesign.storage.xml.XmlStorage;
 import org.junit.Assert;
 import org.junit.Test;

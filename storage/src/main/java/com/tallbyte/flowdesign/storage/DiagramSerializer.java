@@ -18,8 +18,7 @@
 
 package com.tallbyte.flowdesign.storage;
 
-import com.tallbyte.flowdesign.core.Diagram;
-import com.tallbyte.flowdesign.core.Element;
+import com.tallbyte.flowdesign.data.Diagram;
 
 import java.io.IOException;
 

@@ -18,7 +18,7 @@
 
 package com.tallbyte.flowdesign.javafx.pane;
 
-import com.tallbyte.flowdesign.core.Diagram;
+import com.tallbyte.flowdesign.data.Diagram;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramManager;
 import com.tallbyte.flowdesign.javafx.diagram.FactoryNode;
 import javafx.beans.value.ChangeListener;

@@ -18,9 +18,9 @@
 
 package com.tallbyte.flowdesign.storage.xml;
 
-import com.tallbyte.flowdesign.core.Diagram;
-import com.tallbyte.flowdesign.core.environment.EnvironmentDiagram;
-import com.tallbyte.flowdesign.core.Project;
+import com.tallbyte.flowdesign.data.Diagram;
+import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
+import com.tallbyte.flowdesign.data.Project;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;

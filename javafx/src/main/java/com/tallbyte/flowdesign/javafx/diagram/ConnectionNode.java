@@ -18,8 +18,8 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
-import com.tallbyte.flowdesign.core.Joint;
-import com.tallbyte.flowdesign.core.Connection;
+import com.tallbyte.flowdesign.data.Joint;
+import com.tallbyte.flowdesign.data.Connection;
 import javafx.scene.shape.Line;
 
 /**

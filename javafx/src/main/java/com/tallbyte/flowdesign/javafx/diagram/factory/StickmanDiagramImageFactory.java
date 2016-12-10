@@ -18,8 +18,6 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.factory;
 
-import com.tallbyte.flowdesign.core.Element;
-import com.tallbyte.flowdesign.core.environment.Actor;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import com.tallbyte.flowdesign.javafx.diagram.image.StickmanDiagramImage;
 

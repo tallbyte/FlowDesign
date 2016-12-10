@@ -18,12 +18,12 @@
 
 package com.tallbyte.flowdesign.storage.xml;
 
-import com.tallbyte.flowdesign.core.Connection;
-import com.tallbyte.flowdesign.core.environment.EnvironmentDiagram;
-import com.tallbyte.flowdesign.core.Joint;
-import com.tallbyte.flowdesign.core.Project;
-import com.tallbyte.flowdesign.core.environment.Actor;
-import com.tallbyte.flowdesign.core.environment.System;
+import com.tallbyte.flowdesign.data.Connection;
+import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
+import com.tallbyte.flowdesign.data.Joint;
+import com.tallbyte.flowdesign.data.Project;
+import com.tallbyte.flowdesign.data.environment.Actor;
+import com.tallbyte.flowdesign.data.environment.System;
 import com.tallbyte.flowdesign.storage.Serializer;
 import com.tallbyte.flowdesign.storage.Storage;
 import com.tallbyte.flowdesign.storage.StorageMetadata;

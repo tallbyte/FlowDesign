@@ -18,7 +18,7 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.factory;
 
-import com.tallbyte.flowdesign.core.environment.System;
+import com.tallbyte.flowdesign.data.environment.System;
 
 /**
  * This file is part of project flowDesign.

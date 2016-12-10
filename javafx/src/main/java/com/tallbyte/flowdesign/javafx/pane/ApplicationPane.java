@@ -18,11 +18,11 @@
 
 package com.tallbyte.flowdesign.javafx.pane;
 
-import com.tallbyte.flowdesign.core.Diagram;
-import com.tallbyte.flowdesign.core.DiagramsChangedListener;
-import com.tallbyte.flowdesign.core.environment.EnvironmentDiagram;
-import com.tallbyte.flowdesign.core.Project;
-import com.tallbyte.flowdesign.core.flow.FlowDiagram;
+import com.tallbyte.flowdesign.data.Diagram;
+import com.tallbyte.flowdesign.data.DiagramsChangedListener;
+import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
+import com.tallbyte.flowdesign.data.Project;
+import com.tallbyte.flowdesign.data.flow.FlowDiagram;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
 import com.tallbyte.flowdesign.storage.xml.XmlStorage;
 import javafx.application.Platform;
@@ -285,7 +285,7 @@ public class ApplicationPane extends BorderPane {
     }
 
     /**
-     * Adds a new {@link com.tallbyte.flowdesign.core.flow.FlowDiagram} to the {@link Project}.
+     * Adds a new {@link FlowDiagram} to the {@link Project}.
      * If no {@link Project} is set, this method will do nothing.
      */
     @FXML

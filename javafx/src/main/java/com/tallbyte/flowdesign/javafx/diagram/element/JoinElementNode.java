@@ -18,7 +18,7 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.element;
 
-import com.tallbyte.flowdesign.core.flow.Join;
+import com.tallbyte.flowdesign.data.flow.Join;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.JointNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;

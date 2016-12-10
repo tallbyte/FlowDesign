@@ -18,11 +18,10 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
-import com.tallbyte.flowdesign.core.environment.Actor;
-import com.tallbyte.flowdesign.core.flow.FlowDiagram;
-import com.tallbyte.flowdesign.core.flow.FlowDiagramElement;
-import com.tallbyte.flowdesign.core.flow.Join;
-import com.tallbyte.flowdesign.core.flow.Start;
+import com.tallbyte.flowdesign.data.flow.FlowDiagram;
+import com.tallbyte.flowdesign.data.flow.FlowDiagramElement;
+import com.tallbyte.flowdesign.data.flow.Join;
+import com.tallbyte.flowdesign.data.flow.Start;
 import com.tallbyte.flowdesign.javafx.diagram.factory.*;
 
 /**

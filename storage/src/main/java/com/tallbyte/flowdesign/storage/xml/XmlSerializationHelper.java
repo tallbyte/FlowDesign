@@ -18,7 +18,7 @@
 
 package com.tallbyte.flowdesign.storage.xml;
 
-import com.tallbyte.flowdesign.core.Element;
+import com.tallbyte.flowdesign.data.Element;
 import com.tallbyte.flowdesign.storage.IdentifierResolver;
 import com.tallbyte.flowdesign.storage.SerializationResolver;
 

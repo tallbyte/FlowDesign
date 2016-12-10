@@ -18,8 +18,8 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
-import com.tallbyte.flowdesign.core.Joint;
-import com.tallbyte.flowdesign.core.JointJoinException;
+import com.tallbyte.flowdesign.data.Joint;
+import com.tallbyte.flowdesign.data.JointJoinException;
 import javafx.event.Event;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
