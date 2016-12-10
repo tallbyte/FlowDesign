@@ -40,7 +40,7 @@ import java.util.Map;
 /**
  * Created by michael on 09.12.16.
  */
-public class XmlStorage implements Storage<XmlStorage, OutputStream, InputStream, IOException, IOException, XMLStreamReader, XMLStreamWriter, XmlDeserializationHelper, XmlSerializationHelper> {
+public class XmlStorage implements Storage<XmlStorage, OutputStream, InputStream, XMLStreamReader, XMLStreamWriter, XmlDeserializationHelper, XmlSerializationHelper> {
 
     protected Map<String, Serializer<?, XMLStreamReader, XMLStreamWriter, XmlDeserializationHelper, XmlSerializationHelper>> serializers = new HashMap<>();
     protected Map<Class, String> identifiers = new HashMap<>();

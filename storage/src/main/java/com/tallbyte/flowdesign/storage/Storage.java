@@ -18,33 +18,38 @@
 
 package com.tallbyte.flowdesign.storage;
 
+import java.io.IOException;
+
 /**
  * Created by michael on 09.12.16.
  */
-public interface Storage<S extends Storage, O, I, OE extends Throwable, IE extends Throwable, R, W, RH, WH> {
+public interface Storage<S extends Storage, R, W, RH, WH> {
 
     /**
      * @param serializable The serializable to serialize
-     * @param output The output to to serialize to
-     * @throws OE If serialization failed
+     * @param path The path to serialize to - how the path (which does not need to be a
+     *             file path) is treat depends on the implementation
+     * @throws IOException If serialization failed
      */
-    void serialize(Object serializable, O output) throws OE;
+    void serialize(Object serializable, String path) throws IOException;
 
     /**
-     * @param input The input to deserialize from
+     * @param path The path to deserialize from - how the path (which does not need to be a
+     *             file path) is treat depends on the implementation
      * @return The deserialized serializable
-     * @throws IE If deserialization failed
+     * @throws IOException If deserialization failed
      */
-    Object deserialize(I input) throws IE;
+    Object deserialize(String path) throws IOException;
 
     /**
-     * @param input The input to deserialize from
+     * @param path The path to deserialize from - how the path (which does not need to be a
+     *             file path) is treat depends on the implementation
      * @param type The class to enforce the return type to be
      * @param <T> The type that is enforced
      * @return The deserialized serializable
-     * @throws IE If deserialization failed or type enforcement failed
+     * @throws IOException If deserialization failed or type enforcement failed
      */
-    <T> T deserialize(I input, Class<T> type) throws IE;
+    <T> T deserialize(String path, Class<T> type) throws IOException;
 
     /**
      * @param type The type to register the {@link Serializer} for
