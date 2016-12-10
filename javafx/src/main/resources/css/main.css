@@ -148,6 +148,24 @@ WelcomePane .version {
     -fx-text-fill:      #676767;
 }
 
+WelcomePane Button {
+    -fx-background-color: transparent;
+    -fx-border:           none;
+    -fx-text-fill:        #3c3c3c;
+}
+
+WelcomePane Button:hover {
+    -fx-background-color: transparent;
+    -fx-border:           none;
+    -fx-text-fill:        #5e5e5e;
+}
+
+WelcomePane Button:pressed {
+    -fx-background-color: transparent;
+    -fx-border:           none;
+    -fx-text-fill:        #3c3c3c;
+}
+
 ProjectEntry {
     -fx-min-width:        200px;
     -fx-pref-height:      50px;

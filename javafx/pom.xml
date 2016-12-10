@@ -77,6 +77,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>8.40.12</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.tallbyte.flowdesign</groupId>
             <artifactId>core</artifactId>
             <version>1.0-SNAPSHOT</version>
