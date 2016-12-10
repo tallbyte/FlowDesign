@@ -33,6 +33,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.LoadException;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -248,10 +249,12 @@ public class ApplicationPane extends BorderPane {
     public void onTest() {
         try {
             Stage stage = new Stage();
+            stage.getIcons().add(new Image("/images/realIcon.png"));
             Scene scene = new Scene(new WelcomePane());
+            stage.getIcons().add(new Image("/images/realIcon.png"));
             stage.setScene(scene);
-            stage.setWidth(500);
-            stage.setHeight(300);
+            stage.setWidth(700);
+            stage.setHeight(400);
             stage.show();
         } catch (LoadException e) {
             // TODO
@@ -310,6 +313,7 @@ public class ApplicationPane extends BorderPane {
     public void onAbout() {
         try  {
             Stage stage = new Stage();
+            stage.getIcons().add(new Image("/images/realIcon.png"));
             stage.setScene(new Scene(new AboutPane()));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setHeight(400);

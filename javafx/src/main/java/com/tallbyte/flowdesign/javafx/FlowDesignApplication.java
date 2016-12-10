@@ -21,6 +21,7 @@ package com.tallbyte.flowdesign.javafx;
 import com.tallbyte.flowdesign.javafx.pane.ApplicationPane;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -34,6 +35,7 @@ public class FlowDesignApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Scene scene = new Scene(new ApplicationPane());
+        primaryStage.getIcons().add(new Image("/images/realIcon.png"));
         primaryStage.setScene(scene);
         primaryStage.setWidth(1200);
         primaryStage.setHeight(800);

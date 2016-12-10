@@ -130,21 +130,32 @@ PropertyPane > TextField {
 
 #vBoxControl {
     -fx-padding:          10;
-    -fx-spacing:          10
+    -fx-spacing:          5
 }
 
 WelcomePane .projectList {
     -fx-background-color: white;
 }
 
+WelcomePane .applicationName {
+    -fx-font-size:      1.2em;
+    -fx-font-weight:    bold;
+    -fx-text-fill:      #3b3b3b;
+}
+
+WelcomePane .version {
+    -fx-font-size:      0.9em;
+    -fx-text-fill:      #676767;
+}
+
 ProjectEntry {
-    -fx-min-width:       200px;
+    -fx-min-width:        200px;
     -fx-pref-height:      50px;
     -fx-padding:          3px 10px;
 }
 
-ProjectEntry:pressed {
-    -fx-background-color: #aeaeae;
+ProjectEntry:hover {
+    -fx-background-color: #e1e1e1;
 }
 
 ProjectEntry .closeButton {

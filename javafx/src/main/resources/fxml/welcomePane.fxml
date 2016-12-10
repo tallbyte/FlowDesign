@@ -24,6 +24,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.shape.Rectangle?>
 <fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" stylesheets="/css/main.css">
 
     <center>
@@ -33,16 +34,17 @@
     </center>
 
     <right>
-        <BorderPane>
+        <BorderPane prefWidth="400">
             <top>
                 <VBox fx:id="vBoxControl" alignment="TOP_CENTER">
                     <ImageView>
                         <image>
-                            <Image url="/test.png"/>
+                            <Image url="/images/realIcon.png" requestedWidth="200" requestedHeight="200" smooth="true"/>
                         </image>
                     </ImageView>
                     <Label  text="FlowDesign"         styleClass="applicationName"/>
                     <Label  text="Version 0.1"        styleClass="version"/>
+                    <Rectangle height="20" visible="false"/>
                     <Button text="Create New Project" styleClass="newProjectButton"/>
                     <Button text="Open"               styleClass="openButton"/>
                 </VBox>
