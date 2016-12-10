@@ -55,6 +55,8 @@ public class XmlStorageTest {
             entry = e;
         }
 
+        Assert.assertTrue(entry != null);
+
         Project project = storageHandler.deserialize(
                 entry.getType(),
                 entry.getPath(),
