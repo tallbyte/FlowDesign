@@ -127,3 +127,37 @@ PropertyPane > TextField {
 #textAreaLicense {
     -fx-border:           none;
 }
+
+#vBoxControl {
+    -fx-padding:          10;
+    -fx-spacing:          10
+}
+
+WelcomePane .projectList {
+    -fx-background-color: white;
+}
+
+ProjectEntry {
+    -fx-min-width:       200px;
+    -fx-pref-height:      50px;
+    -fx-padding:          3px 10px;
+}
+
+ProjectEntry:pressed {
+    -fx-background-color: #aeaeae;
+}
+
+ProjectEntry .closeButton {
+    -fx-background-color: transparent;
+    -fx-padding:          0;
+    -fx-border:           none;
+    -fx-text-fill:        gray;
+}
+
+ProjectEntry .closeButton:hover {
+    -fx-text-fill:        dimgray;
+}
+
+ProjectEntry .closeButton:pressed {
+    -fx-text-fill:        #484848;
+}

@@ -59,6 +59,7 @@ public class ApplicationPane extends BorderPane {
     @FXML private DiagramsPane        paneDiagrams;
     @FXML private PropertyPane        paneProperty;
     @FXML private MenuItem            menuItemAddEnvironment;
+    @FXML private MenuItem            menuItemAddFlow;
     @FXML private MenuItem            menuItemLoad;
     @FXML private MenuItem            menuItemSave;
     @FXML private MenuItem            menuItemSaveAs;
@@ -91,6 +92,7 @@ public class ApplicationPane extends BorderPane {
         paneFactory.setup(paneDiagrams);
         paneProperty.setup(paneDiagrams);
         menuItemAddEnvironment.disableProperty().bind(projectProperty().isNull());
+        menuItemAddFlow.disableProperty().bind(projectProperty().isNull());
         menuItemLoad.disableProperty().bind(projectProperty().isNull());
         menuItemSave.disableProperty().bind(projectProperty().isNull());
         menuItemSaveAs.disableProperty().bind(projectProperty().isNull());
@@ -237,6 +239,24 @@ public class ApplicationPane extends BorderPane {
     @FXML
     public void onSaveAs() {
 
+    }
+
+    /**
+     * Test for internal use only.
+     */
+    @FXML
+    public void onTest() {
+        try {
+            Stage stage = new Stage();
+            Scene scene = new Scene(new WelcomePane());
+            stage.setScene(scene);
+            stage.setWidth(500);
+            stage.setHeight(300);
+            stage.show();
+        } catch (LoadException e) {
+            // TODO
+            e.printStackTrace();
+        }
     }
 
     /**

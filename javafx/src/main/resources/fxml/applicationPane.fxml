@@ -46,6 +46,7 @@
                 <MenuItem fx:id="menuItemAddFlow"        text="%menu.edit.newFlow"        onAction="#onAddFlow"/>
             </Menu>
             <Menu text="%menu.help">
+                <MenuItem text="Test" onAction="#onTest"/>
                 <MenuItem text="%menu.help.about" onAction="#onAbout"/>
             </Menu>
         </MenuBar>
