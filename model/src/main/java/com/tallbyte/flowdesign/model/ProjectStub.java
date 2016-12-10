@@ -19,7 +19,27 @@
 package com.tallbyte.flowdesign.model;
 
 /**
- * Created by michael on 10.12.16.
+ * This file is part of project flowDesign.
+ * <p/>
+ * Authors:<br/>
+ * - julian (2016-12-10)<br/>
  */
-public class _SpaceHolder {
+public class ProjectStub {
+
+    private String name;
+    private String path;
+
+    public ProjectStub(String name, String path) {
+        this.name = name;
+        this.path = path;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
 }
