@@ -18,7 +18,9 @@
 
 package com.tallbyte.flowdesign.storage;
 
+import com.tallbyte.flowdesign.core.JointJoinException;
 import com.tallbyte.flowdesign.core.Project;
+import com.tallbyte.flowdesign.core.environment.Actor;
 import com.tallbyte.flowdesign.core.environment.EnvironmentDiagram;
 import com.tallbyte.flowdesign.storage.xml.XmlStorage;
 import org.junit.Assert;
@@ -33,6 +35,34 @@ import java.nio.file.Files;
  * Created by michael on 09.12.16.
  */
 public class XmlStorageTest {
+
+    @Test
+    public void testStorageHandler() throws IOException, JointJoinException {
+        StorageHandler storageHandler = new StorageHandler();
+
+        storageHandler.serialize("xml", "/tmp/test.xml", getNewProject());
+
+        XmlStorage xml = storageHandler.getStorage(XmlStorage.class);
+
+        xml.serialize(storageHandler.getMetadata(), "/tmp/metadata.xml");
+        storageHandler.setMetadata(
+                xml.deserialize("/tmp/metadata.xml", StorageMetadata.class)
+        );
+
+        StorageMetadata       metadata = storageHandler.getMetadata();
+        StorageMetadata.Entry entry    = null;
+        for (StorageMetadata.Entry e : metadata.getRecentlyUsed()) {
+            entry = e;
+        }
+
+        Project project = storageHandler.deserialize(
+                entry.getType(),
+                entry.getPath(),
+                Project.class
+        );
+
+        Assert.assertTrue(project != null);
+    }
 
     /**
      * This test shall test whether the written serialized data
@@ -71,5 +101,20 @@ public class XmlStorageTest {
     protected String loadFileContent(File file) throws IOException {
         byte[] bytes = Files.readAllBytes(file.toPath());
         return new String(bytes, StandardCharsets.UTF_8);
+    }
+
+    protected Project getNewProject() throws JointJoinException {
+        Project            project = new Project();
+        EnvironmentDiagram diagram = new EnvironmentDiagram("TestDiagram");
+
+        Actor actor = new Actor();
+
+        diagram.addElement(actor);
+        actor.getJoints().iterator().next().join(
+                diagram.getRoot().getJoints().iterator().next()
+        );
+
+        project.addDiagram(diagram);
+        return project;
     }
 }
