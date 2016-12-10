@@ -26,6 +26,7 @@ import com.tallbyte.flowdesign.core.environment.Actor;
 import com.tallbyte.flowdesign.core.environment.System;
 import com.tallbyte.flowdesign.storage.Serializer;
 import com.tallbyte.flowdesign.storage.Storage;
+import com.tallbyte.flowdesign.storage.StorageMetadata;
 import com.tallbyte.flowdesign.storage.UnknownIdentifierException;
 
 import javax.xml.stream.*;
@@ -40,7 +41,7 @@ import java.util.Map;
 /**
  * Created by michael on 09.12.16.
  */
-public class XmlStorage implements Storage<XmlStorage, OutputStream, InputStream, XMLStreamReader, XMLStreamWriter, XmlDeserializationHelper, XmlSerializationHelper> {
+public class XmlStorage implements Storage<XmlStorage, XMLStreamReader, XMLStreamWriter, XmlDeserializationHelper, XmlSerializationHelper> {
 
     protected Map<String, Serializer<?, XMLStreamReader, XMLStreamWriter, XmlDeserializationHelper, XmlSerializationHelper>> serializers = new HashMap<>();
     protected Map<Class, String> identifiers = new HashMap<>();
@@ -68,14 +69,17 @@ public class XmlStorage implements Storage<XmlStorage, OutputStream, InputStream
         );
 
         // register default entries
-        register(Project            .class, new XmlProjectSerializer());
+        register(StorageMetadata        .class, new XmlStorageMetadataSerializer());
+        register(StorageMetadata.Entry  .class, new XmlStorageMetadataEntrySerializer());
 
-        register(Connection         .class, new XmlConnectionSerializer());
-        register(Joint              .class, new XmlJointSerializer());
+        register(Project                .class, new XmlProjectSerializer());
 
-        register(EnvironmentDiagram .class, new XmlEnvironmentDiagramSerializer());
-        register(Actor              .class, new XmlActorSerializer());
-        register(System             .class, new XmlSystemSerializer());
+        register(Connection             .class, new XmlConnectionSerializer());
+        register(Joint                  .class, new XmlJointSerializer());
+
+        register(EnvironmentDiagram     .class, new XmlEnvironmentDiagramSerializer());
+        register(Actor                  .class, new XmlActorSerializer());
+        register(System                 .class, new XmlSystemSerializer());
     }
 
     /**
@@ -118,6 +122,20 @@ public class XmlStorage implements Storage<XmlStorage, OutputStream, InputStream
     }
 
     @Override
+    public void serialize(Object serializable, String fileOut) throws IOException {
+        try (FileOutputStream fos = new FileOutputStream(fileOut)) {
+            serialize(serializable, fos);
+        }
+    }
+
+
+    /**
+     * Adds indent to the output depending on the configuration of this {@link XmlStorage}
+     *
+     * @param serializable The serializable to serialize
+     * @param outputStream The {@link OutputStream} to to write to
+     * @throws IOException If serialization failed
+     */
     public void serialize(Object serializable, OutputStream outputStream) throws IOException {
         if (indentation) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -184,6 +202,19 @@ public class XmlStorage implements Storage<XmlStorage, OutputStream, InputStream
     }
 
     @Override
+    public <T> T deserialize(String fileIn, Class<T> type) throws IOException {
+        try (FileInputStream fis = new FileInputStream(fileIn)) {
+            return deserialize(fis, type);
+        }
+    }
+
+    /**
+     * @param input The {@link InputStream} to read from
+     * @param type The type enforcement on the deserialized serializable
+     * @param <T> Type being enforced
+     * @return The deserialized serializable
+     * @throws IOException If deserialization failed or the type enforcement failed
+     */
     public <T> T deserialize(InputStream input, Class<T> type) throws IOException {
         Object value = deserialize(input);
 
@@ -210,6 +241,17 @@ public class XmlStorage implements Storage<XmlStorage, OutputStream, InputStream
     }
 
     @Override
+    public Object deserialize(String fileIn) throws IOException {
+        try (FileInputStream fis = new FileInputStream(fileIn)) {
+            return deserialize(fis);
+        }
+    }
+
+    /**
+     * @param inputStream The {@link InputStream} to read from
+     * @return The deserialized serializable
+     * @throws IOException If deserialization failed
+     */
     public Object deserialize(InputStream inputStream) throws IOException {
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
