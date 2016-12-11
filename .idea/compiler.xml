@@ -8,14 +8,16 @@
         <outputRelativeToContentRoot value="true" />
         <module name="core" />
         <module name="data" />
+        <module name="data-ui" />
         <module name="javafx" />
         <module name="model" />
         <module name="storage" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
-      <module name="core" target="1.5" />
+      <module name="core" target="1.8" />
       <module name="data" target="1.8" />
+      <module name="data-ui" target="1.8" />
       <module name="javafx" target="1.8" />
       <module name="model" target="1.5" />
       <module name="storage" target="1.8" />
