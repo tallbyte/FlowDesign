@@ -60,6 +60,7 @@ public class NewProjectPane extends SwitchContentPane {
     @FXML
     private void onChoose() {
         DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setTitle(getResourceString("pane.newProject.chooseDirectory"));
         File file = chooser.showDialog(getScene().getWindow());
 
         if (file != null) {
