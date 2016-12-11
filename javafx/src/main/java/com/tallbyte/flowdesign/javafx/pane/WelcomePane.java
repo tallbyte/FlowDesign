@@ -111,6 +111,7 @@ public class WelcomePane extends SwitchContentPane {
         ApplicationPane pane = new ApplicationPane(manager);
 
         Stage stage = new Stage();
+        stage.setTitle("FlowDesign");
         stage.getIcons().add(new Image("/images/realIcon.png"));
         Scene scene = new Scene(pane);
         stage.setScene(scene);

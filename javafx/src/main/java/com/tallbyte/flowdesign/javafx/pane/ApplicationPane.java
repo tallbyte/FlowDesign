@@ -84,13 +84,15 @@ public class ApplicationPane extends BorderPane {
         loader.setRoot(this);
         loader.setResources(getResourceBundle());
 
-        updateTitle();
-
         try {
             loader.load();
         } catch (IOException e) {
             throw new LoadException("Could not load "+getClass().getSimpleName(), e);
         }
+
+        sceneProperty().addListener((observable, oldValue, newValue) -> {
+            updateTitle();
+        });
 
         /*
          * Prepare
@@ -378,11 +380,11 @@ public class ApplicationPane extends BorderPane {
         Window window = scene != null ? scene.getWindow() : null;
 
         if (window instanceof Stage) {
-            String title = "Flow Design";
+            String title = "FlowDesign";
 
             Project project = getProject();
             if (project != null) {
-                title = project.getName();
+                title += "- [" + project.getName()+"]";
 
                 DiagramPane diagram = paneDiagrams.getDiagram();
                 if (diagram != null) {

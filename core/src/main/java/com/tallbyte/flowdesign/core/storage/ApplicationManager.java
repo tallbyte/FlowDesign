@@ -93,13 +93,17 @@ public class ApplicationManager {
 
     public void saveProject(Project project, String path) throws IOException {
         storage.serialize(path, project);
+        paths.put(project, path);
 
         saveHistory();
     }
 
     public Project loadProject(ProjectStorageHistoryEntry entry) throws IOException, ProjectNotFoundException {
         try {
-            return storage.deserialize(entry.getPath(), Project.class);
+            Project project = storage.deserialize(entry.getPath(), Project.class);
+            paths.put(project, entry.getPath());
+
+            return project;
         } catch (FileNotFoundException e) {
             throw new ProjectNotFoundException("no project at path " + entry.getPath());
         }
@@ -107,7 +111,10 @@ public class ApplicationManager {
 
     public Project loadProject(String path) throws IOException, ProjectNotFoundException {
         try {
-            return storage.deserialize(path, Project.class);
+            Project project = storage.deserialize(path, Project.class);
+            paths.put(project, path);
+
+            return project;
         } catch (FileNotFoundException e) {
             throw new ProjectNotFoundException("no project at path " + path);
         }
