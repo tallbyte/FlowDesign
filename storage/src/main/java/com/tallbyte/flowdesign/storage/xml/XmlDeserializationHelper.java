@@ -130,7 +130,7 @@ public class XmlDeserializationHelper {
                     */
 
                 case XMLStreamConstants.END_ELEMENT:
-                    if (localNameEnd.equals(reader.getLocalName())) {
+                    if (!reader.isCharacters() && localNameEnd.equals(reader.getLocalName())) {
                         /*
                         System.out.println("foreachElementStartUntil: break for localName="+reader.getLocalName());
                         System.out.flush();
@@ -169,6 +169,47 @@ public class XmlDeserializationHelper {
         }
 
         return map;
+    }
+
+    /**
+     * Reads the text before the next element start the next element end, therefore
+     * the position is expected at {@link XMLStreamConstants#ATTRIBUTE} or
+     * {@link XMLStreamConstants#START_ELEMENT}
+     *
+     * @param reader {@link XMLStreamReader} to read from
+     * @return The read characters
+     * @throws XMLStreamException If reading the text failed
+     */
+    public String getCharacters(XMLStreamReader reader) throws XMLStreamException {
+        while (reader.hasNext()) {
+            switch (reader.next()) {
+                case XMLStreamConstants.START_ELEMENT:
+                    throw new XMLStreamException(
+                            "Unexpected element: "+reader.getLocalName()+
+                                    " expected characters" +
+                                    " at line: "+reader.getLocation().getLineNumber()
+                    );
+
+                case XMLStreamConstants.END_ELEMENT:
+                    throw new XMLStreamException(
+                            "Unexpected element end: "+reader.getLocalName()+
+                                    " expected characters" +
+                                    " at line: "+reader.getLocation().getLineNumber()
+                    );
+
+                case XMLStreamConstants.CHARACTERS:
+                    return reader.getText();
+
+                default:
+                    // nothing to do?
+                    break;
+            }
+        }
+
+        throw new XMLStreamException(
+                "End of stream, expected characters" +
+                        " at line: "+reader.getLocation().getLineNumber()
+        );
     }
 
     @FunctionalInterface
