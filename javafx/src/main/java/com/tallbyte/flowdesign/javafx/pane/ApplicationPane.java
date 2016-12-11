@@ -18,6 +18,10 @@
 
 package com.tallbyte.flowdesign.javafx.pane;
 
+import com.tallbyte.flowdesign.core.storage.ApplicationManager;
+import com.tallbyte.flowdesign.core.storage.NoPathSpecifiedException;
+import com.tallbyte.flowdesign.core.storage.ProjectNotFoundException;
+import com.tallbyte.flowdesign.core.storage.ProjectStorage;
 import com.tallbyte.flowdesign.data.Diagram;
 import com.tallbyte.flowdesign.data.DiagramsChangedListener;
 import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
@@ -35,6 +39,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -65,14 +70,15 @@ public class ApplicationPane extends BorderPane {
     @FXML private MenuItem            menuItemSave;
     @FXML private MenuItem            menuItemSaveAs;
 
-    // TODO temporary
-    private final XmlStorage               storage = new XmlStorage();
+    private final ApplicationManager       applicationManager;
 
     private ObjectProperty<Project>        project           = new SimpleObjectProperty<>(this, "project", null);
     private List<DiagramsChangedListener>  listenersDiagrams = new ArrayList<>();
     private PropertyChangeListener         listenerName     = null;
 
-    public ApplicationPane() throws LoadException {
+    public ApplicationPane(ApplicationManager applicationManager) throws LoadException {
+        this.applicationManager = applicationManager;
+
         FXMLLoader loader = new FXMLLoader( getClass().getResource("/fxml/applicationPane.fxml") );
         loader.setController(this);
         loader.setRoot(this);
@@ -94,7 +100,6 @@ public class ApplicationPane extends BorderPane {
         paneProperty.setup(paneDiagrams);
         menuItemAddEnvironment.disableProperty().bind(projectProperty().isNull());
         menuItemAddFlow.disableProperty().bind(projectProperty().isNull());
-        menuItemLoad.disableProperty().bind(projectProperty().isNull());
         menuItemSave.disableProperty().bind(projectProperty().isNull());
         menuItemSaveAs.disableProperty().bind(projectProperty().isNull());
 
@@ -215,11 +220,18 @@ public class ApplicationPane extends BorderPane {
      */
     @FXML
     public void onLoad() {
-        try {
-            project.set(storage.deserialize(new File("/tmp/test.xml"), Project.class));
-        } catch (IOException e) {
-            e.printStackTrace();
-            // TODO temporary
+        FileChooser chooser = new FileChooser();
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All", "*"));
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Flow", "flow"));
+        File file = chooser.showOpenDialog(getScene().getWindow());
+
+        if (file != null) {
+            try {
+                project.set(applicationManager.loadProject(file.getPath()));
+            } catch (IOException | ProjectNotFoundException e) {
+                e.printStackTrace();
+                // TODO temporary
+            }
         }
     }
 
@@ -229,10 +241,12 @@ public class ApplicationPane extends BorderPane {
     @FXML
     public void onSave() {
         try {
-            storage.serialize(project.get(), new File("/tmp/test.xml"));
+            applicationManager.saveProject(project.get());
         } catch (IOException e) {
             e.printStackTrace();
             // TODO temporary
+        } catch (NoPathSpecifiedException e) {
+            onSaveAs();
         }
     }
 
@@ -241,7 +255,24 @@ public class ApplicationPane extends BorderPane {
      */
     @FXML
     public void onSaveAs() {
+        FileChooser chooser = new FileChooser();
+        File file = chooser.showSaveDialog(getScene().getWindow());
 
+        if (file != null) {
+            try {
+                Project project = getProject();
+                String path = file.getPath();
+                if (!path.endsWith(".flow")) {
+                    path += ".flow";
+                }
+
+                applicationManager.saveProject(project, path);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                // TODO temporary
+            }
+        }
     }
 
     /**
@@ -252,7 +283,7 @@ public class ApplicationPane extends BorderPane {
         try {
             Stage stage = new Stage();
             stage.getIcons().add(new Image("/images/realIcon.png"));
-            Scene scene = new Scene(new WelcomePane());
+            Scene scene = new Scene(new WelcomePane(applicationManager.getHistory()));
             stage.getIcons().add(new Image("/images/realIcon.png"));
             stage.setScene(scene);
             stage.setWidth(700);

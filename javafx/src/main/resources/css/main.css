@@ -138,7 +138,7 @@ WelcomePane .projectList {
 }
 
 WelcomePane .applicationName {
-    -fx-font-size:      1.2em;
+    -fx-font-size:      1.3em;
     -fx-font-weight:    bold;
     -fx-text-fill:      #3b3b3b;
 }
@@ -191,11 +191,11 @@ ProjectEntry {
 ProjectEntry .name {
     -fx-text-fill:        #414141;
     -fx-font-weight:      bold;
-    -fx-font-size:        1.1em;
+    -fx-font-size:        1em;
 }
 
 ProjectEntry .path {
-
+    -fx-font-size:        0.9em;
 }
 
 ProjectEntry .glyphClose:hover {

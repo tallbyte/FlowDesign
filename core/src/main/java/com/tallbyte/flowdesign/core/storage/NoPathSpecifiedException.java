@@ -16,34 +16,28 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx;
-
-import com.tallbyte.flowdesign.core.storage.ApplicationManager;
-import com.tallbyte.flowdesign.javafx.pane.ApplicationPane;
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
+package com.tallbyte.flowdesign.core.storage;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-10-26)<br/>
+ * - julian (2016-12-11)<br/>
  */
-public class FlowDesignApplication extends Application {
+public class NoPathSpecifiedException extends Exception {
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        ApplicationManager manager = new ApplicationManager();
-
-        Scene scene = new Scene(new ApplicationPane(manager));
-        primaryStage.getIcons().add(new Image("/images/realIcon.png"));
-        primaryStage.setScene(scene);
-        primaryStage.setWidth(1200);
-        primaryStage.setHeight(800);
-
-        primaryStage.show();
+    public NoPathSpecifiedException() {
     }
 
+    public NoPathSpecifiedException(String message) {
+        super(message);
+    }
+
+    public NoPathSpecifiedException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public NoPathSpecifiedException(Throwable cause) {
+        super(cause);
+    }
 }

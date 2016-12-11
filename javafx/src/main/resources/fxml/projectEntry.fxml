@@ -30,7 +30,7 @@
                 <Label fx:id="labelName" styleClass="name"/>
             </left>
             <right>
-                <Button styleClass="closeButton" onAction="#onClose">
+                <Button visible="false" styleClass="closeButton" onAction="#onClose">
                     <graphic>
                         <Glyph styleClass="glyphClose" fontFamily="FontAwesome" icon="CLOSE"/>
                     </graphic>

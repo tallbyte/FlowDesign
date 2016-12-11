@@ -19,6 +19,8 @@
 package com.tallbyte.flowdesign.javafx.pane;
 
 import com.tallbyte.flowdesign.data.Project;
+import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistory;
+import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistoryEntry;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.LoadException;
@@ -38,13 +40,13 @@ import static com.tallbyte.flowdesign.javafx.ResourceUtils.getResourceBundle;
  */
 public class WelcomePane extends BorderPane {
 
-    @FXML private ListView<Project> listProjects;
+    @FXML private ListView<ProjectStorageHistoryEntry> listProjects;
 
     /**
      * Creates a new {@link WelcomePane} by loading from a fxml-file
      * @throws LoadException Is thrown if the fxml-file could not be loaded.
      */
-    public WelcomePane() throws LoadException {
+    public WelcomePane(ProjectStorageHistory history) throws LoadException {
         FXMLLoader loader = new FXMLLoader( getClass().getResource("/fxml/welcomePane.fxml") );
         loader.setController(this);
         loader.setRoot(this);
@@ -56,15 +58,23 @@ public class WelcomePane extends BorderPane {
             throw new LoadException("Could not load "+getClass().getSimpleName(), e);
         }
 
-        listProjects.setCellFactory(param -> new ListCell<Project>() {
+        listProjects.setCellFactory(param -> new ListCell<ProjectStorageHistoryEntry>() {
 
             @Override
-            protected void updateItem(Project item, boolean empty) {
+            protected void updateItem(ProjectStorageHistoryEntry item, boolean empty) {
                 super.updateItem(item, empty);
 
                 if (item != null) {
                     try {
-                        setGraphic(new ProjectEntry("test", "test/test"));
+                        ProjectEntry entry = new ProjectEntry(item.getProjectName(), item.getPath());
+
+                        entry.setOnMouseClicked(event -> {
+                            if (event.getClickCount() == 2) {
+                                System.out.println("test");
+                            }
+                        });
+
+                        setGraphic(entry);
                     } catch (LoadException e) {
                         e.printStackTrace();
                     }
@@ -74,7 +84,9 @@ public class WelcomePane extends BorderPane {
             }
         });
 
-        listProjects.getItems().add(new Project("test"));
-        listProjects.getItems().add(new Project("test2"));
+        // add all entries to the list
+        for (ProjectStorageHistoryEntry entry : history.getEntries()) {
+            listProjects.getItems().add(entry);
+        }
     }
 }
