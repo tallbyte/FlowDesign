@@ -24,6 +24,8 @@ import com.tallbyte.flowdesign.data.Project;
 import com.tallbyte.flowdesign.data.environment.Actor;
 import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
 import com.tallbyte.flowdesign.data.environment.System;
+import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistory;
+import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistoryEntry;
 import com.tallbyte.flowdesign.storage.Serializer;
 import com.tallbyte.flowdesign.storage.Storage;
 import com.tallbyte.flowdesign.storage.UnknownIdentifierException;
@@ -71,14 +73,17 @@ public class XmlStorage implements Storage<XmlStorage, XMLStreamReader, XMLStrea
         );
 
         // register default entries
-        register(Project                .class, new XmlProjectSerializer());
+        register(Project                    .class, new XmlProjectSerializer());
 
-        register(Connection             .class, new XmlConnectionSerializer());
-        register(Joint                  .class, new XmlJointSerializer());
+        register(ProjectStorageHistory      .class, new XmlProjectStorageHistorySerializer());
+        register(ProjectStorageHistoryEntry .class, new XmlProjectStorageHistoryEntrySerializer());
 
-        register(EnvironmentDiagram     .class, new XmlEnvironmentDiagramSerializer());
-        register(Actor                  .class, new XmlActorSerializer());
-        register(System                 .class, new XmlSystemSerializer());
+        register(Connection                 .class, new XmlConnectionSerializer());
+        register(Joint                      .class, new XmlJointSerializer());
+
+        register(EnvironmentDiagram         .class, new XmlEnvironmentDiagramSerializer());
+        register(Actor                      .class, new XmlActorSerializer());
+        register(System                     .class, new XmlSystemSerializer());
     }
 
     /**
