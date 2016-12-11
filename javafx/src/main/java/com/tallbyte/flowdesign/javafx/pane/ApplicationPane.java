@@ -280,19 +280,7 @@ public class ApplicationPane extends BorderPane {
      */
     @FXML
     public void onTest() {
-        try {
-            Stage stage = new Stage();
-            stage.getIcons().add(new Image("/images/realIcon.png"));
-            Scene scene = new Scene(new WelcomePane(applicationManager.getHistory()));
-            stage.getIcons().add(new Image("/images/realIcon.png"));
-            stage.setScene(scene);
-            stage.setWidth(700);
-            stage.setHeight(400);
-            stage.show();
-        } catch (LoadException e) {
-            // TODO
-            e.printStackTrace();
-        }
+
     }
 
     /**

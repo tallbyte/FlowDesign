@@ -20,6 +20,8 @@ package com.tallbyte.flowdesign.javafx;
 
 import com.tallbyte.flowdesign.core.storage.ApplicationManager;
 import com.tallbyte.flowdesign.javafx.pane.ApplicationPane;
+import com.tallbyte.flowdesign.javafx.pane.SwitchPane;
+import com.tallbyte.flowdesign.javafx.pane.WelcomePane;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -37,11 +39,17 @@ public class FlowDesignApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
         ApplicationManager manager = new ApplicationManager();
 
-        Scene scene = new Scene(new ApplicationPane(manager));
+        SwitchPane  switchPane  = new SwitchPane();
+        WelcomePane defaultPane = new WelcomePane(manager);
+        switchPane.setDefaultContent(defaultPane);
+        switchPane.setContent(defaultPane);
+
+        primaryStage.titleProperty().bind(switchPane.titleProperty());
+        Scene scene = new Scene(switchPane);
         primaryStage.getIcons().add(new Image("/images/realIcon.png"));
         primaryStage.setScene(scene);
-        primaryStage.setWidth(1200);
-        primaryStage.setHeight(800);
+        primaryStage.setWidth(700);
+        primaryStage.setHeight(430);
 
         primaryStage.show();
     }

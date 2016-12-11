@@ -49,13 +49,13 @@
 
                     <Rectangle height="10" visible="false"/>
 
-                    <Button text="Create New Project" styleClass="newProjectButton">
+                    <Button text="Create New Project" styleClass="newProjectButton" onAction="#onNew">
                         <graphic>
                             <Glyph textFill="cornflowerblue" fontFamily="FontAwesome" icon="GEAR"/>
                         </graphic>
                     </Button>
 
-                    <Button text="Open" styleClass="openButton">
+                    <Button text="Open" styleClass="openButton" onAction="#onOpen">
                         <graphic>
                             <Glyph textFill="burlywood" fontFamily="FontAwesome" icon="FOLDER"/>
                         </graphic>

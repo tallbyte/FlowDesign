@@ -18,16 +18,23 @@
 
 package com.tallbyte.flowdesign.javafx.pane;
 
+import com.tallbyte.flowdesign.core.storage.ApplicationManager;
+import com.tallbyte.flowdesign.core.storage.ProjectNotFoundException;
 import com.tallbyte.flowdesign.data.Project;
 import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistory;
 import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistoryEntry;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.LoadException;
+import javafx.scene.Scene;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 
 import static com.tallbyte.flowdesign.javafx.ResourceUtils.getResourceBundle;
@@ -38,15 +45,20 @@ import static com.tallbyte.flowdesign.javafx.ResourceUtils.getResourceBundle;
  * Authors:<br/>
  * - julian (2016-10-26)<br/>
  */
-public class WelcomePane extends BorderPane {
+public class WelcomePane extends SwitchContentPane {
 
     @FXML private ListView<ProjectStorageHistoryEntry> listProjects;
+
+    private final ApplicationManager manager;
+    private       SwitchPane         switchPane;
 
     /**
      * Creates a new {@link WelcomePane} by loading from a fxml-file
      * @throws LoadException Is thrown if the fxml-file could not be loaded.
      */
-    public WelcomePane(ProjectStorageHistory history) throws LoadException {
+    public WelcomePane(ApplicationManager manager) throws LoadException {
+        this.manager = manager;
+
         FXMLLoader loader = new FXMLLoader( getClass().getResource("/fxml/welcomePane.fxml") );
         loader.setController(this);
         loader.setRoot(this);
@@ -70,7 +82,11 @@ public class WelcomePane extends BorderPane {
 
                         entry.setOnMouseClicked(event -> {
                             if (event.getClickCount() == 2) {
-                                System.out.println("test");
+                                try {
+                                    openApplication().setProject(manager.loadProject(item.getPath()));
+                                } catch (ProjectNotFoundException | IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         });
 
@@ -85,8 +101,94 @@ public class WelcomePane extends BorderPane {
         });
 
         // add all entries to the list
-        for (ProjectStorageHistoryEntry entry : history.getEntries()) {
+        for (ProjectStorageHistoryEntry entry : manager.getHistory().getEntries()) {
             listProjects.getItems().add(entry);
         }
+    }
+
+    private ApplicationPane openApplication() throws LoadException {
+        ApplicationPane pane = new ApplicationPane(manager);
+
+        Stage stage = new Stage();
+        stage.getIcons().add(new Image("/images/realIcon.png"));
+        Scene scene = new Scene(pane);
+        stage.setScene(scene);
+        stage.setWidth(1200);
+        stage.setHeight(800);
+        stage.show();
+
+        ((Stage) switchPane.getScene().getWindow()).close();
+
+        return pane;
+    }
+
+    @FXML
+    private void onNew() {
+        try {
+            NewProjectPane pane = new NewProjectPane() {
+                @Override
+                public void onOk() {
+                    Project project = new Project(textFieldName.getText());
+                    File    file    = new File(textFieldDirectory.getText(),
+                            textFieldName.getText()+".flow"
+                    );
+                    try {
+                        manager.saveProject(project, file.getPath());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        openApplication().setProject(project);
+                    } catch (LoadException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            switchPane.setContent(pane);
+        } catch (LoadException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void onOpen() {
+        FileChooser chooser = new FileChooser();
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All", "*"));
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Flow", "flow"));
+        File file = chooser.showOpenDialog(getScene().getWindow());
+
+        if (file != null) {
+            try {
+                openApplication().setProject(manager.loadProject(file.getPath()));
+            } catch (IOException | ProjectNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    private void onShowHistory() {
+
+    }
+
+    @Override
+    public void onOpen(SwitchPane pane) {
+        this.switchPane = pane;
+    }
+
+    @Override
+    public boolean hasOk() {
+        return false;
+    }
+
+    @Override
+    public boolean hasCancel() {
+        return false;
+    }
+
+    @Override
+    public String getTitle() {
+        return "Welcome to FlowDesign";
     }
 }

@@ -138,13 +138,13 @@ WelcomePane .projectList {
 }
 
 WelcomePane .applicationName {
-    -fx-font-size:      1.3em;
+    -fx-font-size:      1.4em;
     -fx-font-weight:    bold;
     -fx-text-fill:      #3b3b3b;
 }
 
 WelcomePane .version {
-    -fx-font-size:      0.9em;
+    -fx-font-size:      1.05em;
     -fx-text-fill:      #676767;
 }
 
@@ -215,4 +215,18 @@ ProjectEntry .closeButton:hover .glyphClose {
 
 ProjectEntry .closeButton:pressed .glyphClose {
     -fx-text-fill:        #484848;
+}
+
+NewProjectPane {
+    -fx-padding:          5px;
+}
+
+NewProjectPane .propertySheet {
+    -fx-hgap:             10px;
+    -fx-vgap:             5px;
+}
+
+SwitchPane .boxButtons {
+    -fx-padding:          5px;
+    -fx-spacing:          5px;
 }
