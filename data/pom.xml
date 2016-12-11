@@ -10,7 +10,7 @@
     </properties>
 
     <groupId>com.tallbyte.flowdesign</groupId>
-    <artifactId>core</artifactId>
+    <artifactId>data</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <build>

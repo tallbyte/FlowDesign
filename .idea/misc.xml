@@ -10,6 +10,7 @@
         <option value="$PROJECT_DIR$/javafx/pom.xml" />
         <option value="$PROJECT_DIR$/core/pom.xml" />
         <option value="$PROJECT_DIR$/model/pom.xml" />
+        <option value="$PROJECT_DIR$/data/pom.xml" />
       </list>
     </option>
   </component>
