@@ -19,6 +19,7 @@
 package com.tallbyte.flowdesign.data.ui.storage;
 
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Queue;
 
 /**
@@ -93,5 +94,20 @@ public class ProjectStorageHistory {
      */
     public Iterable<ProjectStorageHistoryEntry> getEntries() {
         return entries;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj instanceof ProjectStorageHistory) {
+            ProjectStorageHistory other = (ProjectStorageHistory)obj;
+            return Objects.equals(this.getSizeLimit(), other.getSizeLimit())
+                && Objects.equals(this.getEntries(),   other.getEntries());
+        }
+
+        return false;
     }
 }

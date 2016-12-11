@@ -20,6 +20,7 @@ package com.tallbyte.flowdesign.data.ui.storage;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by michael on 11.12.16.
@@ -64,5 +65,22 @@ public class ApplicationChangelogEntry {
      */
     public Iterable<String> getDetailed() {
         return detailed;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj instanceof ApplicationChangelogEntry) {
+            ApplicationChangelogEntry other = (ApplicationChangelogEntry)obj;
+            return Objects.equals(this.getTimeMillis(), other.getTimeMillis())
+                && Objects.equals(this.getCommit(),     other.getCommit())
+                && Objects.equals(this.getSummary(),    other.getSummary())
+                && Objects.equals(this.getDetailed(),   other.getDetailed());
+        }
+
+        return false;
     }
 }

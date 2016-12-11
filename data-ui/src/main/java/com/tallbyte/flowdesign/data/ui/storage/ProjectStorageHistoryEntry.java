@@ -18,6 +18,8 @@
 
 package com.tallbyte.flowdesign.data.ui.storage;
 
+import java.util.Objects;
+
 /**
  * Created by michael on 11.12.16.
  */
@@ -65,5 +67,22 @@ public class ProjectStorageHistoryEntry {
      */
     public long getTimeMillis() {
         return timeMillis;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj instanceof ProjectStorageHistoryEntry) {
+            ProjectStorageHistoryEntry other = ((ProjectStorageHistoryEntry)obj);
+            return Objects.equals(this.getPath(),        other.getType())
+                && Objects.equals(this.getPath(),        other.getPath())
+                && Objects.equals(this.getProjectName(), other.getProjectName())
+                && Objects.equals(this.getTimeMillis(),  other.getTimeMillis());
+        }
+
+        return false;
     }
 }
