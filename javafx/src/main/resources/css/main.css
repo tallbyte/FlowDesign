@@ -217,11 +217,11 @@ ProjectEntry .closeButton:pressed .glyphClose {
     -fx-text-fill:        #484848;
 }
 
-NewProjectPane {
+.newProjectPane {
     -fx-padding:          5px;
 }
 
-NewProjectPane .propertySheet {
+.newProjectPane .propertySheet {
     -fx-hgap:             10px;
     -fx-vgap:             5px;
 }

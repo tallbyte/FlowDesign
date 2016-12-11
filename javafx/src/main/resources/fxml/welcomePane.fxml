@@ -44,24 +44,24 @@
                             <Image url="/images/realIcon.png" requestedWidth="200" requestedHeight="200" smooth="true"/>
                         </image>
                     </ImageView>
-                    <Label  text="FlowDesign"         styleClass="applicationName"/>
-                    <Label  text="Version 0.1"        styleClass="version"/>
+                    <Label  text="%pane.welcome.name"         styleClass="applicationName"/>
+                    <Label  text="%pane.welcome.version"        styleClass="version"/>
 
                     <Rectangle height="10" visible="false"/>
 
-                    <Button text="Create New Project" styleClass="newProjectButton" onAction="#onNew">
+                    <Button text="%pane.welcome.newProject" styleClass="newProjectButton" onAction="#onNew">
                         <graphic>
                             <Glyph textFill="cornflowerblue" fontFamily="FontAwesome" icon="GEAR"/>
                         </graphic>
                     </Button>
 
-                    <Button text="Open" styleClass="openButton" onAction="#onOpen">
+                    <Button text="%pane.welcome.load" styleClass="openButton" onAction="#onOpen">
                         <graphic>
                             <Glyph textFill="burlywood" fontFamily="FontAwesome" icon="FOLDER"/>
                         </graphic>
                     </Button>
 
-                    <Button text="Version History" styleClass="versionButton">
+                    <Button text="%pane.welcome.versionHistory" styleClass="versionButton">
                         <graphic>
                             <Glyph textFill="darkolivegreen" fontFamily="FontAwesome" icon="BOOK"/>
                         </graphic>

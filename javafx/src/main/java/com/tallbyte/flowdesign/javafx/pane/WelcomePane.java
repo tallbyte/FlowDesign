@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static com.tallbyte.flowdesign.javafx.ResourceUtils.getResourceBundle;
+import static com.tallbyte.flowdesign.javafx.ResourceUtils.getResourceString;
 
 /**
  * This file is part of project flowDesign.
@@ -189,6 +190,6 @@ public class WelcomePane extends SwitchContentPane {
 
     @Override
     public String getTitle() {
-        return "Welcome to FlowDesign";
+        return getResourceString("pane.welcome.title");
     }
 }

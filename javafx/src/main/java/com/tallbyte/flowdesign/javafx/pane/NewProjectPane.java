@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static com.tallbyte.flowdesign.javafx.ResourceUtils.getResourceBundle;
+import static com.tallbyte.flowdesign.javafx.ResourceUtils.getResourceString;
 
 /**
  * This file is part of project flowDesign.
@@ -78,6 +79,6 @@ public class NewProjectPane extends SwitchContentPane {
 
     @Override
     public String getTitle() {
-        return "Create new project";
+        return getResourceString("pane.newProject.title");
     }
 }
