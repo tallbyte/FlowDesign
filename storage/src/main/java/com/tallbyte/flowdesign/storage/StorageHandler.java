@@ -34,8 +34,6 @@ public class StorageHandler {
     protected Map<Class<? extends Storage>, Storage> storages = new HashMap<>();
     protected Map<String, Class<? extends Storage>>  types    = new HashMap<>();
 
-    protected StorageMetadata metadata;
-
     public StorageHandler() {
         this(true);
     }
@@ -44,24 +42,6 @@ public class StorageHandler {
         if (addDefaultStorages) {
             addStorage(STORAGE_TYPE_XML, new XmlStorage());
         }
-
-        this.metadata = new StorageMetadata();
-    }
-
-    /**
-     * @return {@link StorageMetadata} being updated automatically
-     */
-    public StorageMetadata getMetadata() {
-        return metadata;
-    }
-
-    /**
-     * @param metadata The new {@link StorageMetadata} to update
-     * @return itself
-     */
-    public StorageHandler setMetadata(StorageMetadata metadata) {
-        this.metadata = metadata;
-        return this;
     }
 
     /**
@@ -84,7 +64,6 @@ public class StorageHandler {
         }
 
         storage.serialize(serializable, path);
-        metadata.pushRecentlyUsed(type, path);
     }
 
     /**
@@ -106,9 +85,7 @@ public class StorageHandler {
             throw new IOException("Unknown storage: "+type);
         }
 
-        Object ob = storage.deserialize(path);
-        metadata.pushRecentlyUsed(type, path);
-        return ob;
+        return storage.deserialize(path);
     }
 
     /**
@@ -133,9 +110,7 @@ public class StorageHandler {
             throw new IOException("Unknown storage: "+type);
         }
 
-        T value = storage.deserialize(path, classType);
-        metadata.pushRecentlyUsed(type, path);
-        return value;
+        return storage.deserialize(path, classType);
     }
 
     /**

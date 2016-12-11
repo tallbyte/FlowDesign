@@ -19,18 +19,20 @@
 package com.tallbyte.flowdesign.storage.xml;
 
 import com.tallbyte.flowdesign.data.Connection;
-import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
 import com.tallbyte.flowdesign.data.Joint;
 import com.tallbyte.flowdesign.data.Project;
 import com.tallbyte.flowdesign.data.environment.Actor;
+import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
 import com.tallbyte.flowdesign.data.environment.System;
 import com.tallbyte.flowdesign.storage.Serializer;
 import com.tallbyte.flowdesign.storage.Storage;
-import com.tallbyte.flowdesign.storage.StorageMetadata;
 import com.tallbyte.flowdesign.storage.UnknownIdentifierException;
 
 import javax.xml.stream.*;
-import javax.xml.transform.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
@@ -69,9 +71,6 @@ public class XmlStorage implements Storage<XmlStorage, XMLStreamReader, XMLStrea
         );
 
         // register default entries
-        register(StorageMetadata        .class, new XmlStorageMetadataSerializer());
-        register(StorageMetadata.Entry  .class, new XmlStorageMetadataEntrySerializer());
-
         register(Project                .class, new XmlProjectSerializer());
 
         register(Connection             .class, new XmlConnectionSerializer());
