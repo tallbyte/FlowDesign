@@ -65,7 +65,7 @@ public class XmlProjectStorageHistorySerializer implements XmlSerializer<Project
         try {
             Map<String, String> attributes = helper.getAttributes(reader);
 
-            history.setSizeLimit(Integer.valueOf(attributes.get(ELEMENT_ENTRIES)));
+            history.setSizeLimit(Integer.valueOf(attributes.get(ATTRIBUTE_SIZE_LIMIT)));
 
             helper.fastForwardToElementStart(reader, ELEMENT_ENTRIES);
             helper.foreachElementStartUntil (reader, ELEMENT_ENTRIES, () -> {
