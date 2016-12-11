@@ -20,13 +20,12 @@ package com.tallbyte.flowdesign.data.ui.storage;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 /**
  * Created by michael on 11.12.16.
  */
-public class ApplicationChangelog implements Iterable<ApplicationChangelogEntry> {
+public class ApplicationChangelog {
 
     protected List<ApplicationChangelogEntry> entries = new ArrayList<>();
 
@@ -61,8 +60,10 @@ public class ApplicationChangelog implements Iterable<ApplicationChangelogEntry>
         this.entries.add(entry);
     }
 
-    @Override
-    public Iterator<ApplicationChangelogEntry> iterator() {
-        return entries.iterator();
+    /**
+     * @return An {@link Iterable} over all added {@link ApplicationChangelogEntry}s
+     */
+    public Iterable<ApplicationChangelogEntry> getEntries() {
+        return entries;
     }
 }
