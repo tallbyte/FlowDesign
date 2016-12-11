@@ -155,7 +155,7 @@ public class WelcomePane extends SwitchContentPane {
     private void onOpen() {
         FileChooser chooser = new FileChooser();
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All", "*"));
-        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Flow", "flow"));
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Flow", "*.flow"));
         File file = chooser.showOpenDialog(getScene().getWindow());
 
         if (file != null) {
