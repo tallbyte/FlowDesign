@@ -25,22 +25,18 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by michael on 11.12.16.
  */
-public class ProjectStorageTest {
+public class ProjectStorageHistoryTest {
 
     @Test
     public void testHistory() throws IOException{
-        Path path = Files.createTempDirectory("flowdesign.junit.testHistory.");
+        Path path = FileUtils.createTempDirectory(getClass());
 
         List<String> names = Arrays.asList(
                 "Test3",
@@ -86,23 +82,6 @@ public class ProjectStorageTest {
         }
 
         // cleanup
-        deleteDirectoryRecursive(path);
-    }
-
-    public void deleteDirectoryRecursive(Path path) throws IOException {
-        Files.walkFileTree(path, new SimpleFileVisitor<Path>(){
-            @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                Files.delete(file);
-                return FileVisitResult.CONTINUE;
-            }
-
-
-            @Override
-            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-                Files.delete(dir);
-                return FileVisitResult.CONTINUE;
-            }
-        });
+        FileUtils.deleteDirectoryRecursive(path);
     }
 }
