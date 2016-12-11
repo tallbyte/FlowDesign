@@ -36,35 +36,6 @@ import java.nio.file.Files;
  */
 public class XmlStorageTest {
 
-    @Test
-    public void testStorageHandler() throws IOException, JointJoinException {
-        StorageHandler storageHandler = new StorageHandler();
-
-        storageHandler.serialize("xml", "/tmp/test.xml", getNewProject());
-
-        XmlStorage xml = storageHandler.getStorage(XmlStorage.class);
-
-        xml.serialize(storageHandler.getMetadata(), "/tmp/metadata.xml");
-        storageHandler.setMetadata(
-                xml.deserialize("/tmp/metadata.xml", StorageMetadata.class)
-        );
-
-        StorageMetadata       metadata = storageHandler.getMetadata();
-        StorageMetadata.Entry entry    = null;
-        for (StorageMetadata.Entry e : metadata.getRecentlyUsed()) {
-            entry = e;
-        }
-
-        Assert.assertTrue(entry != null);
-
-        Project project = storageHandler.deserialize(
-                entry.getType(),
-                entry.getPath(),
-                Project.class
-        );
-
-        Assert.assertTrue(project != null);
-    }
 
     /**
      * This test shall test whether the written serialized data
