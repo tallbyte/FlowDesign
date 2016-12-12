@@ -19,10 +19,7 @@
 package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.data.flow.*;
-import com.tallbyte.flowdesign.javafx.diagram.element.JoinElementNode;
-import com.tallbyte.flowdesign.javafx.diagram.element.OperationalUnitElementNode;
-import com.tallbyte.flowdesign.javafx.diagram.element.SplitElementNode;
-import com.tallbyte.flowdesign.javafx.diagram.element.StartElementNode;
+import com.tallbyte.flowdesign.javafx.diagram.element.*;
 import com.tallbyte.flowdesign.javafx.diagram.factory.*;
 import com.tallbyte.flowdesign.javafx.diagram.image.*;
 import javafx.geometry.Pos;
@@ -65,6 +62,11 @@ public class FlowDiagramHandler extends DiagramHandlerBase<FlowDiagram, FlowDiag
                 Split::new,
                 SplitDiagramImage::new,
                 SplitElementNode::new
+        );
+        addEntries("Portal", Portal.class,
+                Portal::new,
+                PortalDiagramImage::new,
+                PortalElementNode::new
         );
     }
 
