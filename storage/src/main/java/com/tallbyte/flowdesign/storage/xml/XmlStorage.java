@@ -86,8 +86,8 @@ public class XmlStorage implements Storage<XmlStorage, XMLStreamReader, XMLStrea
 
         // Connection related serializer
         register(Connection                 .class, new XmlConnectionSerializer<>());
-        register(DependencyConnection       .class, new XmlDependencyConnectionSerializer());
         register(Joint                      .class, new XmlJointSerializer<>());
+        register(DependencyConnection       .class, new XmlDependencyConnectionSerializer());
         register(DependencyJoint            .class, new XmlDependencyJointSerializer());
         register(FlowConnection             .class, new XmlFlowConnectionSerializer());
         register(FlowJoint                  .class, new XmlFlowJointSerializer());
