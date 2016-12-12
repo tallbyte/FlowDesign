@@ -18,16 +18,15 @@
 
 package com.tallbyte.flowdesign.storage.xml;
 
-import com.tallbyte.flowdesign.data.environment.Actor;
+import com.tallbyte.flowdesign.data.flow.Portal;
 
 /**
- * Created by michael on 09.12.16.
+ * Created by michael on 12.12.16.
  */
-public class XmlActorSerializer extends XmlEnvironmentDiagramElementSerializer<Actor> {
+public class XmlPortalSerializer extends XmlFlowDiagramElementSerializer<Portal> {
 
     @Override
-    public Actor instantiate() {
-        return new Actor();
+    public Portal instantiate() {
+        return new Portal();
     }
-
 }

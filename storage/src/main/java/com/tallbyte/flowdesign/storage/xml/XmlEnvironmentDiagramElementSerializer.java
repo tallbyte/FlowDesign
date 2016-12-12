@@ -18,16 +18,24 @@
 
 package com.tallbyte.flowdesign.storage.xml;
 
-import com.tallbyte.flowdesign.data.environment.Actor;
+import com.tallbyte.flowdesign.data.environment.EnvironmentDiagramElement;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
 
 /**
- * Created by michael on 09.12.16.
+ * Created by michael on 12.12.16.
  */
-public class XmlActorSerializer extends XmlEnvironmentDiagramElementSerializer<Actor> {
+public abstract class XmlEnvironmentDiagramElementSerializer<E extends EnvironmentDiagramElement> extends XmlElementSerializer<E> {
 
     @Override
-    public Actor instantiate() {
-        return new Actor();
+    protected void writeAttributes(XMLStreamWriter writer, E element, XmlSerializationHelper helper) throws XMLStreamException {
+        super.writeAttributes(writer, element, helper);
     }
 
+    @Override
+    protected void readAttributes(XMLStreamReader reader, E element, XmlDeserializationHelper helper) throws XMLStreamException {
+        super.readAttributes(reader, element, helper);
+    }
 }
