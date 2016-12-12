@@ -416,13 +416,8 @@ public class ElementNode extends Pane {
         });
 
         EventHandler<? super MouseEvent> handlerClickedPre = event -> {
-            if (!diagramPane.hasSelectedNodes()) {
-                if (!event.isShiftDown()) {
-                    diagramPane.setAllUnselected();
-                }
-
-                selected.set(true);
-            }
+            diagramPane.setAllUnselected();
+            selected.set(true);
 
             release = true;
             event.consume();

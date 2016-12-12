@@ -80,6 +80,7 @@ public class DiagramPane extends ScrollPane {
     }
 
     private void addElement(Element element) {
+        setAllUnselected();
         ElementNode node = diagramManager.createNode(getDiagram(), element);
         if (node != null) {
             node.setDiagramPane(this);
