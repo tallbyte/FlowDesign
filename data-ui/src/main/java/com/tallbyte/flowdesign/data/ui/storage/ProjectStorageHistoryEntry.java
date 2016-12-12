@@ -85,7 +85,7 @@ public class ProjectStorageHistoryEntry {
             return true;
         }
 
-        return Objects.equals(this.getPath(),        other.getType())
+        return Objects.equals(this.getType(),        other.getType())
             && Objects.equals(this.getPath(),        other.getPath())
             && Objects.equals(this.getProjectName(), other.getProjectName())
             && (!checkTime || this.getTimeMillis() == other.getTimeMillis());
