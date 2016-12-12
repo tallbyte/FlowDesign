@@ -33,7 +33,7 @@ public class VerticalStickDiagramImage extends DiagramImage {
      * Creates a new {@link VerticalStickDiagramImage} with default dimension.
      */
     public VerticalStickDiagramImage() {
-        setWidth(10);
+
     }
 
     @Override
@@ -44,7 +44,7 @@ public class VerticalStickDiagramImage extends DiagramImage {
 
         context.clearRect(0, 0, width, height);
         context.setFill(Color.BLACK);
-        context.fillRect(3, 3, width-6, height-6);
+        context.fillRect(width/2-1, 1, 2, height-2);
     }
 
 }

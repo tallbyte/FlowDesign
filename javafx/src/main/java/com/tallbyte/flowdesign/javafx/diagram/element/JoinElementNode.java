@@ -46,15 +46,15 @@ public class JoinElementNode extends ElementNode {
         super.setup();
 
         JointNode input0 = addJoint(join.getJoint(Join.JOINT_INPUT0));
-        input0.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0).add(input0.radiusProperty()));
-        input0.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.1));
+        input0.centerXProperty().bind(widthProperty().subtract(widthExtend).multiply(0.5).subtract(input0.radiusProperty()));
+        input0.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.2));
 
         JointNode input1 = addJoint(join.getJoint(Join.JOINT_INPUT1));
-        input1.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0).add(input1.radiusProperty()));
-        input1.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.9));
+        input1.centerXProperty().bind(widthProperty().subtract(widthExtend).multiply(0.5).subtract(input1.radiusProperty()));
+        input1.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.8));
 
         JointNode output = addJoint(join.getJoint(Join.JOINT_OUTPUT));
-        output.centerXProperty().bind(widthProperty().subtract(output.radiusProperty()).subtract(widthExtend));
+        output.centerXProperty().bind(widthProperty().subtract(widthExtend).multiply(0.5).add(output.radiusProperty()));
         output.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
     }
 }

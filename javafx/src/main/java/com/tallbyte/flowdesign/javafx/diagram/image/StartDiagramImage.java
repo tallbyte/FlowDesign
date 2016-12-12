@@ -33,7 +33,8 @@ public class StartDiagramImage extends DiagramImage {
      * Creates a new {@link StartDiagramImage} with default dimension.
      */
     public StartDiagramImage() {
-
+        setWidth(50);
+        setHeight(50);
     }
 
     @Override

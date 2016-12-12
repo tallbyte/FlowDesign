@@ -37,6 +37,7 @@ public abstract class Element {
     protected       Diagram            diagram;
     protected final Map<String, Joint> joints = new HashMap<>();
 
+    protected String text       = "Label";
     protected double x          = 0;
     protected double y          = 0;
     protected double width      = 75;
@@ -58,6 +59,22 @@ public abstract class Element {
      */
     protected void addJoint(Joint joint) {
         joints.put(joint.getLocation(), joint);
+    }
+
+    /**
+     * Gets the description text
+     * @return Returns the text.
+     */
+    public String getText() {
+        return text;
+    }
+
+    /**
+     * Sets the description text.
+     * @param text the new text
+     */
+    public void setText(String text) {
+        this.text = text;
     }
 
     /**

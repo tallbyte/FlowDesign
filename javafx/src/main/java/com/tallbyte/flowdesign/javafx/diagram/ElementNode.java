@@ -25,6 +25,8 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.*;
 import javafx.beans.property.adapter.JavaBeanDoublePropertyBuilder;
+import javafx.beans.property.adapter.JavaBeanStringProperty;
+import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -60,11 +62,11 @@ public class ElementNode extends Pane {
     protected DoubleProperty    realY;
     protected DoubleProperty    realWidth;
     protected DoubleProperty    realHeight;
+    protected StringProperty    text;
 
     protected DoubleBinding     widthExtend  = Bindings.createDoubleBinding(() -> 0.0);
     protected DoubleBinding     heightExtend = Bindings.createDoubleBinding(() -> 0.0);
 
-    protected StringProperty    text     = new SimpleStringProperty(this, "text", "");
     protected BooleanProperty   selected = new SimpleBooleanProperty(this, "selected", false);
 
     private   boolean           release  = true;
@@ -79,6 +81,7 @@ public class ElementNode extends Pane {
             realY      = JavaBeanDoublePropertyBuilder.create().bean(element).name("y").build();
             realWidth  = JavaBeanDoublePropertyBuilder.create().bean(element).name("width").build();
             realHeight = JavaBeanDoublePropertyBuilder.create().bean(element).name("height").build();
+            text       = JavaBeanStringPropertyBuilder.create().bean(element).name("text").build();
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("Could not create properties. This should never happen?!");
         }
