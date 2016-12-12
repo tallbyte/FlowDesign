@@ -322,7 +322,7 @@ public class ElementNode extends Pane {
         element.getStyleClass().add(cssClass);
         StackPane.setAlignment(element, position);
         element.minWidthProperty().bind(Bindings.createDoubleBinding(() -> 10.0));
-        element.maxWidthProperty().bind(widthProperty().divide(2));
+        element.maxWidthProperty().bind(widthProperty().multiply(0.8));
 
         return element;
     }

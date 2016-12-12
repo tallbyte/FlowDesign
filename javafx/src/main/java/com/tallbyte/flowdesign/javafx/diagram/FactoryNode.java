@@ -19,6 +19,7 @@
 package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.javafx.diagram.factory.DiagramImageFactory;
+import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Label;
 import javafx.scene.input.ClipboardContent;
@@ -42,8 +43,11 @@ public class FactoryNode extends Label {
      * @param text the display text
      */
     public FactoryNode(DiagramImageFactory factory, String name, String text) {
-        setGraphic(factory.createDiagramImage());
+        DiagramImage image = factory.createDiagramImage();
+        setGraphic(image);
         setText(text);
+        image.setWidth(image.getWidth()*0.75);
+        image.setHeight(image.getHeight()*0.75);
 
         setOnDragDetected(event -> {
             startFullDrag();

@@ -22,7 +22,11 @@ import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
 import com.tallbyte.flowdesign.data.environment.Actor;
 import com.tallbyte.flowdesign.data.environment.EnvironmentDiagramElement;
 import com.tallbyte.flowdesign.data.environment.System;
+import com.tallbyte.flowdesign.javafx.diagram.element.ActorElementNode;
+import com.tallbyte.flowdesign.javafx.diagram.element.SystemElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.factory.*;
+import com.tallbyte.flowdesign.javafx.diagram.image.EllipseDiagramImage;
+import com.tallbyte.flowdesign.javafx.diagram.image.StickmanDiagramImage;
 
 /**
  * This file is part of project flowDesign.
@@ -34,14 +38,14 @@ public class EnvironmentDiagramHandler extends DiagramHandlerBase<EnvironmentDia
 
     public EnvironmentDiagramHandler() {
         addEntries("System", System.class,
-                new SystemElementFactory(),
-                new EllipseDiagramImageFactory(),
-                new SystemElementNodeFactory()
+                System::new,
+                EllipseDiagramImage::new,
+                SystemElementNode::new
         );
         addEntries("Actor", Actor.class,
-                new ActorElementFactory(),
-                new StickmanDiagramImageFactory(),
-                new ActorElementNodeFactory()
+                Actor::new,
+                StickmanDiagramImage::new,
+                ActorElementNode::new
         );
     }
 }

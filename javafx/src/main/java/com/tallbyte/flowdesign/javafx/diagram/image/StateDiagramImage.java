@@ -34,8 +34,7 @@ public class StateDiagramImage extends DiagramImage {
      * Creates a new {@link StateDiagramImage} with default dimension.
      */
     public StateDiagramImage() {
-        setWidth(75);
-        setHeight(75);
+
     }
 
     @Override

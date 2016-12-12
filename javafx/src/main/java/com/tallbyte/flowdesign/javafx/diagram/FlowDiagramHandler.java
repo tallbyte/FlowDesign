@@ -19,7 +19,12 @@
 package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.data.flow.*;
+import com.tallbyte.flowdesign.javafx.diagram.element.JoinElementNode;
+import com.tallbyte.flowdesign.javafx.diagram.element.OperationalUnitElementNode;
+import com.tallbyte.flowdesign.javafx.diagram.element.StartElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.factory.*;
+import com.tallbyte.flowdesign.javafx.diagram.image.*;
+import javafx.geometry.Pos;
 
 /**
  * This file is part of project flowDesign.
@@ -31,19 +36,29 @@ public class FlowDiagramHandler extends DiagramHandlerBase<FlowDiagram, FlowDiag
 
     public FlowDiagramHandler() {
         addEntries("Start", Start.class,
-                new StartElementFactory(),
-                new EllipseDiagramImageFactory(),
-                new StartElementNodeFactory()
+                Start::new,
+                StartDiagramImage::new,
+                StartElementNode::new
         );
         addEntries("Join", Join.class,
-                new JoinElementFactory(),
-                new VerticalStickDiagramImageFactory(),
-                new JoinElementNodeFactory()
+                Join::new,
+                VerticalStickDiagramImage::new,
+                JoinElementNode::new
         );
         addEntries("Operation", Operation.class,
-                new OperationElementFactory(),
-                new EllipseDiagramImageFactory(),
-                new OperationElementNodeFactory()
+                Operation::new,
+                EllipseDiagramImage::new,
+                OperationalUnitElementNode::new
+        );
+        addEntries("ResourceAccess", ResourceAccess.class,
+                ResourceAccess::new,
+                ResourceDiagramImage::new,
+                OperationalUnitElementNode::new
+        );
+        addEntries("StateAccess", StateAccess.class,
+                StateAccess::new,
+                StateDiagramImage::new,
+                OperationalUnitElementNode::new
         );
     }
 }

@@ -20,7 +20,6 @@ package com.tallbyte.flowdesign.javafx.diagram.image;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.ArcType;
 
 /**
  * This file is part of project flowDesign.
@@ -28,12 +27,12 @@ import javafx.scene.shape.ArcType;
  * Authors:<br/>
  * - julian (2016-10-30)<br/>
  */
-public class ResourceDiagramImage extends DiagramImage {
+public class StartDiagramImage extends DiagramImage {
 
     /**
-     * Creates a new {@link ResourceDiagramImage} with default dimension.
+     * Creates a new {@link StartDiagramImage} with default dimension.
      */
-    public ResourceDiagramImage() {
+    public StartDiagramImage() {
 
     }
 
@@ -46,37 +45,8 @@ public class ResourceDiagramImage extends DiagramImage {
         context.clearRect(0, 0, width, height);
         context.setStroke(Color.BLACK);
         context.setLineWidth(1.5);
-        context.strokeOval(
-                context.getLineWidth(), context.getLineWidth(),
-                width - 2*context.getLineWidth(), height - 2*context.getLineWidth()
-        );
-
-        double rx = (1+Math.cos(2*Math.PI*0.125))*0.5*width;
-        double ry = (1+Math.sin(2*Math.PI*0.125))*0.5*height;
-        double rw = width*0.25;
-        double rh = height*0.25;
-
-        rx -= rw*0.75;
-        ry -= rh*0.75;
-
-        strokeRect(context, rx, ry, rw, rh);
+        context.strokeLine(context.getLineWidth(), context.getLineWidth(), width-context.getLineWidth(), height/2);
+        context.strokeLine(context.getLineWidth(), height/2, width-context.getLineWidth(), height/2);
+        context.strokeLine(context.getLineWidth(), height-context.getLineWidth(), width-context.getLineWidth(), height/2);
     }
-
-    private void strokeRect(GraphicsContext context, double x, double y, double w, double h) {
-        context.strokeLine(
-                x+((w-2*context.getLineWidth())*0.5), y+context.getLineWidth(),
-                x+w-context.getLineWidth(), y+h-context.getLineWidth()
-        );
-
-        context.strokeLine(
-                x+context.getLineWidth(), y+h-context.getLineWidth(),
-                x+((w-2*context.getLineWidth())*0.5), y+context.getLineWidth()
-        );
-
-        context.strokeLine(
-                x+context.getLineWidth(), y+h-context.getLineWidth(),
-                x+w-2*context.getLineWidth(), y+h-context.getLineWidth()
-        );
-    }
-
 }

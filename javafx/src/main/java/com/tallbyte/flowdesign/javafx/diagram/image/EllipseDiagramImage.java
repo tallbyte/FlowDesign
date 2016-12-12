@@ -34,8 +34,7 @@ public class EllipseDiagramImage extends DiagramImage {
      * Creates a new {@link EllipseDiagramImage} with default dimension.
      */
     public EllipseDiagramImage() {
-        setWidth(75);
-        setHeight(75);
+
     }
 
     @Override

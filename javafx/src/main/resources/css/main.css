@@ -48,7 +48,7 @@
     -fx-background-color:   transparent;
 }
 
-DiagramNode {
+.diagramNode {
     -fx-insets:             5px;
     -fx-background-color:   transparent;
 }
@@ -111,6 +111,7 @@ PropertyPane > TextField {
     -fx-background-color: transparent;
     -fx-border-style:     none;
     -fx-alignment:        center;
+    -fx-font-size:        0.85em;
 }
 
 .nodeBorderRectangle {

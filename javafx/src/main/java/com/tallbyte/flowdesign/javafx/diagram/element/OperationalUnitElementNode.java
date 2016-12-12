@@ -19,6 +19,7 @@
 package com.tallbyte.flowdesign.javafx.diagram.element;
 
 import com.tallbyte.flowdesign.data.flow.Operation;
+import com.tallbyte.flowdesign.data.flow.OperationalUnit;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.JointNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
@@ -31,11 +32,11 @@ import javafx.geometry.Pos;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class OperationElementNode extends ElementNode {
+public class OperationalUnitElementNode extends ElementNode {
 
-    private final Operation operation;
+    private final OperationalUnit operation;
 
-    public OperationElementNode(Operation element, DiagramImage content) {
+    public OperationalUnitElementNode(OperationalUnit element, DiagramImage content) {
         super(element, content, Pos.CENTER);
 
         this.operation = element;

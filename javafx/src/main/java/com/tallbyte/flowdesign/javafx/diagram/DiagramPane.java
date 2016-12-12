@@ -88,6 +88,8 @@ public class DiagramPane extends ScrollPane {
     }
 
     private void setup() {
+        getStyleClass().add("diagramNode");
+
         diagram.addListener((observable, oldValue, newValue) -> {
             if (oldValue != null) {
                 oldValue.removeElementsChangedListener(listenerElements);

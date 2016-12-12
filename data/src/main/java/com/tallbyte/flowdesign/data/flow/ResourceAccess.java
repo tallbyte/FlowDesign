@@ -16,21 +16,18 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx.diagram.factory;
+package com.tallbyte.flowdesign.data.flow;
 
-import com.tallbyte.flowdesign.data.environment.Actor;
+import com.tallbyte.flowdesign.data.DependencyJoint;
+import com.tallbyte.flowdesign.data.FlowJoint;
+import com.tallbyte.flowdesign.data.JointType;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-11-29)<br/>
+ * - julian (2016-12-09)<br/>
  */
-public class ActorElementFactory implements ElementFactory<Actor> {
-
-    @Override
-    public Actor createElement() {
-        return new Actor();
-    }
+public class ResourceAccess extends OperationalUnit {
 
 }

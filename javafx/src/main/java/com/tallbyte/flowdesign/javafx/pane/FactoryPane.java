@@ -22,6 +22,7 @@ import com.tallbyte.flowdesign.data.Diagram;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramManager;
 import com.tallbyte.flowdesign.javafx.diagram.FactoryNode;
 import javafx.beans.value.ChangeListener;
+import javafx.geometry.HPos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
@@ -79,6 +80,7 @@ public class FactoryPane extends GridPane {
                                 GridPane.setRowIndex(child, i / 2);
 
                                 getChildren().add(child);
+                                GridPane.setHalignment(child, HPos.CENTER);
                             }
                         } else {
                             getChildren().add(new Label(getResourceString("pane.factory.unsupported")));

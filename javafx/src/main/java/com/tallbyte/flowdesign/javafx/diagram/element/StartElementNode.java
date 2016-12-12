@@ -35,7 +35,7 @@ public class StartElementNode extends ElementNode {
     private final Start start;
 
     public StartElementNode(Start element, DiagramImage content) {
-        super(element, content, Pos.CENTER);
+        super(element, content, Pos.BOTTOM_CENTER);
 
         this.start = element;
     }

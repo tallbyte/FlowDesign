@@ -33,8 +33,7 @@ public class VerticalStickDiagramImage extends DiagramImage {
      * Creates a new {@link VerticalStickDiagramImage} with default dimension.
      */
     public VerticalStickDiagramImage() {
-        setWidth(10);
-        setHeight(75);
+
     }
 
     @Override

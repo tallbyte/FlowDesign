@@ -39,6 +39,9 @@ public abstract class DiagramImage extends Canvas {
             repaint();
         });
 
+        setWidth(75);
+        setHeight(75);
+
         repaint();
     }
 

@@ -39,8 +39,8 @@ public abstract class Element {
 
     protected double x          = 0;
     protected double y          = 0;
-    protected double width      = 100;
-    protected double height     = 100;
+    protected double width      = 75;
+    protected double height     = 75;
     protected boolean deletable = true;
 
     private PropertyChangeSupport changeSupport;
