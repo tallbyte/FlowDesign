@@ -94,6 +94,7 @@ public class DiagramsPane extends TabPane {
                     tab.setOnClosed(event -> {
                         tabMap.remove(d);
                         paneMap.remove(tab);
+                        diagrams.remove(d);
                     });
                     getSelectionModel().select(tab);
                 }
