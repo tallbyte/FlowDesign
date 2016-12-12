@@ -22,6 +22,7 @@ import com.tallbyte.flowdesign.data.*;
 import com.tallbyte.flowdesign.data.environment.Actor;
 import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
 import com.tallbyte.flowdesign.data.environment.System;
+import com.tallbyte.flowdesign.data.flow.*;
 import com.tallbyte.flowdesign.data.ui.storage.ApplicationChangelog;
 import com.tallbyte.flowdesign.data.ui.storage.ApplicationChangelogEntry;
 import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistory;
@@ -83,14 +84,27 @@ public class XmlStorage implements Storage<XmlStorage, XMLStreamReader, XMLStrea
         register(ApplicationChangelog       .class, new XmlApplicationChangelogSerializer());
         register(ApplicationChangelogEntry  .class, new XmlApplicationChangelogEntrySerializer());
 
+        // Connection related serializer
         register(Connection                 .class, new XmlConnectionSerializer<>());
         register(DependencyConnection       .class, new XmlDependencyConnectionSerializer());
         register(Joint                      .class, new XmlJointSerializer<>());
         register(DependencyJoint            .class, new XmlDependencyJointSerializer());
+        register(FlowConnection             .class, new XmlFlowConnectionSerializer());
+        register(FlowJoint                  .class, new XmlFlowJointSerializer());
 
+        // EnvironmentDiagram and elements
         register(EnvironmentDiagram         .class, new XmlEnvironmentDiagramSerializer());
         register(Actor                      .class, new XmlActorSerializer());
         register(System                     .class, new XmlSystemSerializer());
+
+        // FlowDiagram and elements
+        register(FlowDiagram                .class, new XmlFlowDiagramSerializer());
+        register(Start                      .class, new XmlStartSerializer());
+        register(Split                      .class, new XmlSplitSerializer());
+        register(Join                       .class, new XmlJoinSerializer());
+        register(ResourceAccess             .class, new XmlResourceAccessSerializer());
+        register(StateAccess                .class, new XmlStateAccessSerializer());
+        register(Operation                  .class, new XmlOperationSerializer());
     }
 
     /**

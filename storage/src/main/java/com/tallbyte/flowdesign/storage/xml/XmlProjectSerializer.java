@@ -46,12 +46,14 @@ public class XmlProjectSerializer implements XmlSerializer<Project> {
             writer.writeAttribute(ATTRIBUTE_NAME, project.getName());
 
             writer.writeStartElement(ELEMENT_DIAGRAMS);
-            for (Diagram diagram : project.getDiagrams(EnvironmentDiagram.class)) {
-                helper.getSerializationResolver().serialize(
-                        writer,
-                        diagram,
-                        helper
-                );
+            for (Class<? extends Diagram> type : project.getDiagramTypes()) {
+                for (Diagram<?> diagram : project.getDiagrams(type)) {
+                    helper.getSerializationResolver().serialize(
+                            writer,
+                            diagram,
+                            helper
+                    );
+                }
             }
             writer.writeEndElement();
 

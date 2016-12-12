@@ -37,16 +37,35 @@ public abstract class XmlElementSerializer<T extends Element> implements XmlSeri
     public static final String ATTRIBUTE_HEIGHT     = "height";
     public static final String ATTRIBUTE_DELETABLE  = "deletable";
 
+
+
+    protected void writeAttributes(XMLStreamWriter writer, T element, XmlSerializationHelper helper) throws XMLStreamException {
+        // Double#toString is locale independent
+        writer.writeAttribute(ATTRIBUTE_X,          Double.toString(element.getX()));
+        writer.writeAttribute(ATTRIBUTE_Y,          Double.toString(element.getY()));
+        writer.writeAttribute(ATTRIBUTE_WIDTH,      Double.toString(element.getWidth()));
+        writer.writeAttribute(ATTRIBUTE_HEIGHT,     Double.toString(element.getHeight()));
+
+        writer.writeAttribute(ATTRIBUTE_DELETABLE,  Boolean.toString(element.isDeletable()));
+    }
+
+    protected void readAttributes(XMLStreamReader reader, T element, XmlDeserializationHelper helper) throws XMLStreamException {
+        // read common attributes
+        Map<String, String> attributes = helper.getAttributes(reader);
+
+        // Double#valueOf is locale independent
+        element.setX       (Double.valueOf(attributes.get(ATTRIBUTE_X)));
+        element.setY       (Double.valueOf(attributes.get(ATTRIBUTE_Y)));
+        element.setWidth   (Double.valueOf(attributes.get(ATTRIBUTE_WIDTH)));
+        element.setHeight  (Double.valueOf(attributes.get(ATTRIBUTE_HEIGHT)));
+
+        element.setDeletable(Boolean.valueOf(attributes.get(ATTRIBUTE_DELETABLE)));
+    }
+
     @Override
     public void serialize(XMLStreamWriter writer, T serializable, XmlSerializationHelper helper) throws IOException {
         try {
-            // Double#toString is locale independent
-            writer.writeAttribute(ATTRIBUTE_X,          Double.toString(serializable.getX()));
-            writer.writeAttribute(ATTRIBUTE_Y,          Double.toString(serializable.getY()));
-            writer.writeAttribute(ATTRIBUTE_WIDTH,      Double.toString(serializable.getWidth()));
-            writer.writeAttribute(ATTRIBUTE_HEIGHT,     Double.toString(serializable.getHeight()));
-
-            writer.writeAttribute(ATTRIBUTE_DELETABLE,  Boolean.toString(serializable.isDeletable()));
+            writeAttributes(writer, serializable, helper);
 
         } catch (XMLStreamException e) {
             throw new IOException(e);
@@ -56,16 +75,7 @@ public abstract class XmlElementSerializer<T extends Element> implements XmlSeri
     @Override
     public T deserialize(XMLStreamReader reader, T serializable, XmlDeserializationHelper helper) throws IOException {
         try {
-            Map<String, String> attributes = helper.getAttributes(reader);
-
-            // Double#valueOf is locale independent
-            serializable.setX       (Double.valueOf(attributes.get(ATTRIBUTE_X)));
-            serializable.setY       (Double.valueOf(attributes.get(ATTRIBUTE_Y)));
-            serializable.setWidth   (Double.valueOf(attributes.get(ATTRIBUTE_WIDTH)));
-            serializable.setHeight  (Double.valueOf(attributes.get(ATTRIBUTE_HEIGHT)));
-
-            serializable.setDeletable(Boolean.valueOf(attributes.get(ATTRIBUTE_DELETABLE)));
-
+            readAttributes(reader, serializable, helper);
             return serializable;
 
         } catch (XMLStreamException e) {
