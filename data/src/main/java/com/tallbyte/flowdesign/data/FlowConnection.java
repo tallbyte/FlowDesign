@@ -16,32 +16,22 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.data.flow;
-
-import com.tallbyte.flowdesign.data.DependencyJoint;
-import com.tallbyte.flowdesign.data.FlowJoint;
-import com.tallbyte.flowdesign.data.Joint;
-import com.tallbyte.flowdesign.data.JointType;
+package com.tallbyte.flowdesign.data;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-12-09)<br/>
+ * - julian (2016-12-12)<br/>
  */
-public class Join extends FlowDiagramElement {
-
-    public static final String JOINT_INPUT0 = "input0";
-    public static final String JOINT_INPUT1 = "input1";
-    public static final String JOINT_OUTPUT = "output";
-
+public class FlowConnection extends Connection {
     /**
-     * Creats an new {@link Join}.
+     * Creates a new {@link Connection} between two {@link Joint}s.
+     *
+     * @param source the source {@link Joint}
+     * @param target the target {@link Joint}
      */
-    public Join() {
-        addJoint(new FlowJoint(this, JOINT_INPUT0, JointType.INPUT, 1));
-        addJoint(new FlowJoint(this, JOINT_INPUT1, JointType.INPUT, 1));
-        addJoint(new FlowJoint(this, JOINT_OUTPUT, JointType.OUTPUT, 0));
+    public FlowConnection(Joint source, Joint target) {
+        super(source, target);
     }
-
 }

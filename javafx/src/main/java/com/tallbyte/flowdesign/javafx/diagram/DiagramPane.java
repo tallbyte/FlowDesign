@@ -97,7 +97,6 @@ public class DiagramPane extends ScrollPane {
             // remove all existing entries
             groupContent.getChildren().clear();
             groupContent.getChildren().add(new Rectangle());
-
             // add new
             if (newValue != null && diagramManager.isSupporting(newValue)) {
                 try {
@@ -180,7 +179,14 @@ public class DiagramPane extends ScrollPane {
     }
 
     private void addConnection(Connection connection) {
-        groupContent.getChildren().add(new ConnectionNode(connection, this));
+        // TODO make using factories and map lookup
+        if (connection instanceof FlowConnection) {
+            groupContent.getChildren().add(new ArrowConnectionNode(connection, this));
+
+        } else if (connection instanceof DependencyConnection) {
+            groupContent.getChildren().add(new CircleConnectionNode(connection, this));
+        }
+
     }
 
     void registerJointNode(JointNode jointNode) {

@@ -18,6 +18,8 @@
 
 package com.tallbyte.flowdesign.data.flow;
 
+import com.tallbyte.flowdesign.data.DependencyJoint;
+import com.tallbyte.flowdesign.data.FlowJoint;
 import com.tallbyte.flowdesign.data.Joint;
 import com.tallbyte.flowdesign.data.JointType;
 
@@ -35,7 +37,7 @@ public class Start extends FlowDiagramElement {
      * Creats an new {@link Start}.
      */
     public Start() {
-        addJoint(new Joint(this, JOINT_OUTPUT, JointType.OUTPUT, 0));
+        addJoint(new FlowJoint(this, JOINT_OUTPUT, JointType.OUTPUT, 0));
     }
 
 }

@@ -31,7 +31,7 @@ import java.util.List;
  * {@link Element}s. Some {@link Joint}s may be defined as input, others
  * as output.
  */
-public class Joint {
+public abstract class Joint {
 
     private final Element                       element;
 
@@ -43,7 +43,7 @@ public class Joint {
     private final int                           maxOut;
 
     /**
-     * Creates a new {@link Connection} based on given configuration.
+     * Creates a new {@link Joint} based on given configuration.
      * @param element the containing {@link Element}
      * @param location the location (e.g. name)
      * @param type the type
@@ -142,6 +142,14 @@ public class Joint {
     }
 
     /**
+     * Creates a new {@link Connection} between the two {@link Joint}s.
+     * @param source the source {@link Joint}
+     * @param target the target {@link Joint}
+     * @return Returns the new {@link Connection}.
+     */
+    protected abstract Connection createConnection(Joint source, Joint target);
+
+    /**
      * Joins two {@link Joint}s. This assumes this {@link Joint} is source and the given one is target.
      * @param target the target {@link Joint}
      * @return Returns the created {@link Connection}.
@@ -161,7 +169,7 @@ public class Joint {
             throw new JointJoinException("can not join " + target + " and " + this + ": joints do not match");
         }
 
-        Connection connection = new Connection(this, target);
+        Connection connection = createConnection(this, target);
 
         target.checkJoint(this);
 

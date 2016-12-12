@@ -18,6 +18,7 @@
 
 package com.tallbyte.flowdesign.data.environment;
 
+import com.tallbyte.flowdesign.data.DependencyJoint;
 import com.tallbyte.flowdesign.data.Joint;
 import com.tallbyte.flowdesign.data.JointType;
 
@@ -41,11 +42,11 @@ public class System extends EnvironmentDiagramElement {
      * Create a new {@link System}.
      */
     public System() {
-        addJoint(new Joint(this, JOINT_LEFT  , JointType.INPUT_OUTPUT, 0));
-        addJoint(new Joint(this, JOINT_RIGHT , JointType.INPUT_OUTPUT, 0));
+        addJoint(new DependencyJoint(this, JOINT_LEFT  , JointType.INPUT_OUTPUT, 0));
+        addJoint(new DependencyJoint(this, JOINT_RIGHT , JointType.INPUT_OUTPUT, 0));
 
-        addJoint(new Joint(this, JOINT_TOP   , JointType.INPUT_OUTPUT, 0));
-        addJoint(new Joint(this, JOINT_BOTTOM, JointType.INPUT_OUTPUT, 0));
+        addJoint(new DependencyJoint(this, JOINT_TOP   , JointType.INPUT_OUTPUT, 0));
+        addJoint(new DependencyJoint(this, JOINT_BOTTOM, JointType.INPUT_OUTPUT, 0));
     }
 
 }

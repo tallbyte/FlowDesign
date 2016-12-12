@@ -16,32 +16,35 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.data.flow;
-
-import com.tallbyte.flowdesign.data.DependencyJoint;
-import com.tallbyte.flowdesign.data.FlowJoint;
-import com.tallbyte.flowdesign.data.Joint;
-import com.tallbyte.flowdesign.data.JointType;
+package com.tallbyte.flowdesign.data;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-12-09)<br/>
+ * - julian (2016-12-12)<br/>
  */
-public class Join extends FlowDiagramElement {
-
-    public static final String JOINT_INPUT0 = "input0";
-    public static final String JOINT_INPUT1 = "input1";
-    public static final String JOINT_OUTPUT = "output";
-
+public class FlowJoint extends Joint {
     /**
-     * Creats an new {@link Join}.
+     * Creates a new {@link Joint} based on given configuration.
+     *
+     * @param element  the containing {@link Element}
+     * @param location the location (e.g. name)
+     * @param type     the type
+     * @param maxOut   the maximum amount of outgoing
+     *                 connections or 0 for infinite
      */
-    public Join() {
-        addJoint(new FlowJoint(this, JOINT_INPUT0, JointType.INPUT, 1));
-        addJoint(new FlowJoint(this, JOINT_INPUT1, JointType.INPUT, 1));
-        addJoint(new FlowJoint(this, JOINT_OUTPUT, JointType.OUTPUT, 0));
+    public FlowJoint(Element element, String location, JointType type, int maxOut) {
+        super(element, location, type, maxOut);
     }
 
+    @Override
+    public boolean canJoin(Joint target) {
+        return target instanceof FlowJoint && super.canJoin(target);
+    }
+
+    @Override
+    protected Connection createConnection(Joint source, Joint target) {
+        return new FlowConnection(source, target);
+    }
 }

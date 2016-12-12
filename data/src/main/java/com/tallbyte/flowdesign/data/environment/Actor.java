@@ -18,6 +18,7 @@
 
 package com.tallbyte.flowdesign.data.environment;
 
+import com.tallbyte.flowdesign.data.DependencyJoint;
 import com.tallbyte.flowdesign.data.Joint;
 import com.tallbyte.flowdesign.data.JointType;
 
@@ -39,8 +40,8 @@ public class Actor extends EnvironmentDiagramElement {
      * Creats an new {@link Actor}.
      */
     public Actor() {
-        addJoint(new Joint(this, JOINT_LEFT , JointType.INPUT_OUTPUT, 0));
-        addJoint(new Joint(this, JOINT_RIGHT, JointType.INPUT_OUTPUT, 0));
+        addJoint(new DependencyJoint(this, JOINT_LEFT , JointType.INPUT_OUTPUT, 0));
+        addJoint(new DependencyJoint(this, JOINT_RIGHT, JointType.INPUT_OUTPUT, 0));
     }
 
 }
