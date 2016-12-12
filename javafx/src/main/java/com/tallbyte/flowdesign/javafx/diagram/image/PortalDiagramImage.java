@@ -16,28 +16,37 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx.diagram;
+package com.tallbyte.flowdesign.javafx.diagram.image;
 
-import com.tallbyte.flowdesign.data.Diagram;
-import com.tallbyte.flowdesign.data.Element;
-import com.tallbyte.flowdesign.javafx.diagram.factory.DiagramImageFactory;
-
-import java.util.Map;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-12-08)<br/>
+ * - julian (2016-10-30)<br/>
  */
-public interface DiagramHandler<T extends Diagram> {
+public class PortalDiagramImage extends DiagramImage {
 
-    void createElement(T diagram, String element, double x, double y);
+    /**
+     * Creates a new {@link PortalDiagramImage} with default dimension.
+     */
+    public PortalDiagramImage() {
+    }
 
-    ElementNode createNode(Element element);
+    @Override
+    public void repaint() {
+        GraphicsContext context = getGraphicsContext2D();
+        double width  = getWidth();
+        double height = getHeight();
 
-    public Map<String, DiagramImageFactory> getSupportedElements();
-
-    public T createDiagram(String name);
-
+        context.clearRect(0, 0, width, height);
+        context.setStroke(Color.BLACK);
+        context.setLineWidth(1.5);
+        context.strokeRect(
+                context.getLineWidth(), context.getLineWidth(),
+                width-2*context.getLineWidth(), height-2*context.getLineWidth()
+        );
+    }
 }

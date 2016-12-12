@@ -65,8 +65,7 @@ public class ApplicationPane extends BorderPane {
     @FXML private FactoryPane         paneFactory;
     @FXML private DiagramsPane        paneDiagrams;
     @FXML private PropertyPane        paneProperty;
-    @FXML private MenuItem            menuItemAddEnvironment;
-    @FXML private MenuItem            menuItemAddFlow;
+    @FXML private Menu                menuEdit;
     @FXML private MenuItem            menuItemLoad;
     @FXML private MenuItem            menuItemSave;
     @FXML private MenuItem            menuItemSaveAs;
@@ -101,8 +100,6 @@ public class ApplicationPane extends BorderPane {
 
         paneFactory.setup(paneDiagrams);
         paneProperty.setup(paneDiagrams);
-        menuItemAddEnvironment.disableProperty().bind(projectProperty().isNull());
-        menuItemAddFlow.disableProperty().bind(projectProperty().isNull());
         menuItemSave.disableProperty().bind(projectProperty().isNull());
         menuItemSaveAs.disableProperty().bind(projectProperty().isNull());
 
@@ -112,6 +109,28 @@ public class ApplicationPane extends BorderPane {
 
         paneDiagrams.diagramProperty().addListener((observable, oldValue, newValue) -> {
             updateTitle();
+        });
+
+        treeProject.setCellFactory(param -> new TreeCell<TreeEntry>() {
+
+            @Override
+            protected void updateItem(TreeEntry item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty) {
+                    setContextMenu(null);
+                    setText(null);
+                } else {
+                    if (item instanceof MenuTreeEntry) {
+                        setContextMenu(((MenuTreeEntry) item).getContextMenu());
+                    } else {
+                        setContextMenu(null);
+                    }
+
+                    setText(item.toString());
+                }
+
+            }
         });
 
         treeProject.setOnMouseClicked(event -> {
@@ -138,6 +157,7 @@ public class ApplicationPane extends BorderPane {
                 root.setExpanded(true);
                 treeProject.setRoot(root);
 
+                menuEdit.getItems().clear();
 
                 List<Class<? extends Diagram>> list = new ArrayList<>();
                 for (Class<? extends Diagram> supported : paneDiagrams.getDiagramManager().getSupportedDiagramTypes()) {
@@ -173,11 +193,28 @@ public class ApplicationPane extends BorderPane {
                                     Class<? extends Diagram> diagramClazz,
                                     Project project,
                                     List<DiagramsChangedListener> listeners) {
+
+        ContextMenu menu     = new ContextMenu();
+        MenuItem    menuItem = new MenuItem();
+        menuItem.setText("New...");
+        menuItem.setOnAction(event -> createDiagram(diagramClazz));
+        menu.getItems().add(menuItem);
+
         TreeItem<TreeEntry> overview = new TreeItem<>(
-                new TreeEntry(getResourceString("tree.overview."+diagramClazz.getSimpleName(), diagramClazz.getSimpleName()))
+                new MenuTreeEntry(
+                        getResourceString("tree.overview."+diagramClazz.getSimpleName(), diagramClazz.getSimpleName()),
+                        menu
+                )
         );
+
         overview.setExpanded(true);
         root.getChildren().add(overview);
+
+        MenuItem itemEdit = new MenuItem();
+        itemEdit.setText(getResourceString("menu.edit.new."+diagramClazz.getSimpleName()));
+        itemEdit.disableProperty().bind(projectProperty().isNull());
+        itemEdit.setOnAction(event -> createDiagram(diagramClazz));
+        menuEdit.getItems().add(itemEdit);
 
         for (Diagram d : project.getDiagrams(diagramClazz)) {
             TreeItem<TreeEntry> item = new TreeItem<>();
@@ -206,9 +243,29 @@ public class ApplicationPane extends BorderPane {
                     }
                 }
             }
-
         };
         listeners.add(listenerDiagrams);
+    }
+
+    /**
+     * Creates and adds a new {@link Diagram} based on its {@link Class}.
+     * @param clazz the target {@link Class}
+     */
+    private void createDiagram(Class<? extends Diagram> clazz) {
+        Dialog<String> dialog = new TextInputDialog();
+        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image("/images/realIcon.png"));
+        dialog.setTitle(getResourceString("popup.new."+clazz.getSimpleName()+".title"));
+        dialog.setContentText(getResourceString("popup.new."+clazz.getSimpleName()+".field.name"));
+        dialog.setHeaderText(null);
+        dialog.showAndWait().ifPresent(response -> {
+            Project project = getProject();
+            if (project != null) {
+                Diagram diagram = paneDiagrams.getDiagramManager().createDiagram(response, clazz);
+                project.addDiagram(diagram);
+                paneDiagrams.addDiagram(diagram);
+            }
+        });
     }
 
     /**
@@ -419,6 +476,30 @@ public class ApplicationPane extends BorderPane {
         @Override
         public String toString() {
             return name;
+        }
+    }
+
+    private class MenuTreeEntry extends TreeEntry {
+
+        private final ContextMenu contextMenu;
+
+        /**
+         * Creates a new {@link TreeEntry} using a static string.
+         *
+         * @param name
+         */
+        public MenuTreeEntry(String name, ContextMenu menu) {
+            super(name);
+
+            this.contextMenu = menu;
+        }
+
+        /**
+         * Gets the desired {@link ContextMenu}.
+         * @return Returns the menu.
+         */
+        public ContextMenu getContextMenu() {
+            return contextMenu;
         }
     }
 

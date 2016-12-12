@@ -98,4 +98,20 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
         return Collections.unmodifiableMap(supportedElements);
     }
 
+    protected abstract T createNewDiagramInstance(String name);
+
+    @Override
+    public T createDiagram(String name) {
+        T diagram = createNewDiagramInstance(name);
+
+        Element e = diagram.getRoot();
+        DiagramImageFactory factory = imageFactories.get(e.getClass());
+        if (factory != null) {
+            DiagramImage image = factory.createDiagramImage();
+            e.setWidth(image.getWidth());
+            e.setHeight(image.getHeight());
+        }
+
+        return diagram;
+    }
 }

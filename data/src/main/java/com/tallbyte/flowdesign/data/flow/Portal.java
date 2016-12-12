@@ -16,28 +16,28 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx.diagram;
+package com.tallbyte.flowdesign.data.flow;
 
-import com.tallbyte.flowdesign.data.Diagram;
-import com.tallbyte.flowdesign.data.Element;
-import com.tallbyte.flowdesign.javafx.diagram.factory.DiagramImageFactory;
-
-import java.util.Map;
+import com.tallbyte.flowdesign.data.FlowJoint;
+import com.tallbyte.flowdesign.data.JointType;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-12-08)<br/>
+ * - julian (2016-12-09)<br/>
  */
-public interface DiagramHandler<T extends Diagram> {
+public class Portal extends FlowDiagramElement {
 
-    void createElement(T diagram, String element, double x, double y);
+    public static final String JOINT_INPUT  = "input";
+    public static final String JOINT_OUTPUT = "output";
 
-    ElementNode createNode(Element element);
-
-    public Map<String, DiagramImageFactory> getSupportedElements();
-
-    public T createDiagram(String name);
+    /**
+     * Creats an new {@link Portal}.
+     */
+    public Portal() {
+        addJoint(new FlowJoint(this, JOINT_INPUT , JointType.INPUT, 1));
+        addJoint(new FlowJoint(this, JOINT_OUTPUT, JointType.OUTPUT, 0));
+    }
 
 }
