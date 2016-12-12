@@ -23,9 +23,11 @@ import com.tallbyte.flowdesign.javafx.diagram.DiagramManager;
 import com.tallbyte.flowdesign.javafx.diagram.FactoryNode;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,6 +74,7 @@ public class FactoryPane extends GridPane {
                                                 getResourceString("pane.factory.node."+factory.getKey(), factory.getKey())
                                             )
                                     ).collect(Collectors.toList());
+                            Collections.sort(list, (o1, o2) -> o1.getName().compareTo(o2.getName()));
 
                             for (int i = 0 ; i < list.size() ; ++i) {
                                 FactoryNode child = list.get(i);
@@ -81,6 +84,7 @@ public class FactoryPane extends GridPane {
 
                                 getChildren().add(child);
                                 GridPane.setHalignment(child, HPos.CENTER);
+                                GridPane.setValignment(child, VPos.BOTTOM);
                             }
                         } else {
                             getChildren().add(new Label(getResourceString("pane.factory.unsupported")));

@@ -36,6 +36,8 @@ import javafx.scene.paint.Color;
  */
 public class FactoryNode extends Label {
 
+    private final String name;
+
     /**
      * Creates a new {@link FactoryNode}
      * @param factory the {@link DiagramImageFactory} used to create images
@@ -43,6 +45,8 @@ public class FactoryNode extends Label {
      * @param text the display text
      */
     public FactoryNode(DiagramImageFactory factory, String name, String text) {
+        this.name = name;
+
         DiagramImage image = factory.createDiagramImage();
         setGraphic(image);
         setText(text);
@@ -67,4 +71,12 @@ public class FactoryNode extends Label {
         });
     }
 
+    /**
+     * Gets the name of this {@link FactoryNode}.
+     * The name is the string that is supplied on drag.
+     * @return Returns the name.
+     */
+    public String getName() {
+        return name;
+    }
 }
