@@ -18,15 +18,17 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
-import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
-import com.tallbyte.flowdesign.data.environment.Actor;
-import com.tallbyte.flowdesign.data.environment.EnvironmentDiagramElement;
+import com.tallbyte.flowdesign.data.environment.*;
 import com.tallbyte.flowdesign.data.environment.System;
 import com.tallbyte.flowdesign.javafx.diagram.element.ActorElementNode;
+import com.tallbyte.flowdesign.javafx.diagram.element.AdapterElementNode;
+import com.tallbyte.flowdesign.javafx.diagram.element.ResourceElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.element.SystemElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.factory.*;
+import com.tallbyte.flowdesign.javafx.diagram.image.AdapterDiagramImage;
 import com.tallbyte.flowdesign.javafx.diagram.image.EllipseDiagramImage;
 import com.tallbyte.flowdesign.javafx.diagram.image.StickmanDiagramImage;
+import com.tallbyte.flowdesign.javafx.diagram.image.SystemResourceDiagramImage;
 
 /**
  * This file is part of project flowDesign.
@@ -46,6 +48,16 @@ public class EnvironmentDiagramHandler extends DiagramHandlerBase<EnvironmentDia
                 Actor::new,
                 StickmanDiagramImage::new,
                 ActorElementNode::new
+        );
+        addEntries("Resource", Resource.class,
+                Resource::new,
+                SystemResourceDiagramImage::new,
+                ResourceElementNode::new
+        );
+        addEntries("Adapter", Adapter.class,
+                Adapter::new,
+                AdapterDiagramImage::new,
+                AdapterElementNode::new
         );
     }
 
