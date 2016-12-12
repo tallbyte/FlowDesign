@@ -27,26 +27,26 @@
     <top>
         <MenuBar>
             <Menu text="%menu.file">
-                <MenuItem text="%menu.file.newProject" onAction="#onCreateProject"/>
+                <MenuItem accelerator="Ctrl+N" text="%menu.file.newProject" onAction="#onCreateProject"/>
 
                 <SeparatorMenuItem/>
 
-                <MenuItem fx:id="menuItemLoad" text="%menu.file.load"   onAction="#onLoad" />
+                <MenuItem fx:id="menuItemLoad" accelerator="Ctrl+O" text="%menu.file.load"   onAction="#onLoad" />
 
                 <SeparatorMenuItem/>
 
-                <MenuItem fx:id="menuItemSave" text="%menu.file.save"   onAction="#onSave" />
-                <MenuItem fx:id="menuItemSaveAs" text="%menu.file.saveAs" onAction="#onSaveAs"/>
+                <MenuItem fx:id="menuItemSave" accelerator="Ctrl+S" text="%menu.file.save"   onAction="#onSave" />
+                <MenuItem fx:id="menuItemSaveAs" accelerator="Ctrl+Shift+S" text="%menu.file.saveAs" onAction="#onSaveAs"/>
 
                 <SeparatorMenuItem/>
-                <MenuItem text="%menu.file.quit" onAction="#onQuit"/>
+                <MenuItem accelerator="Ctrl+Q" text="%menu.file.quit" onAction="#onQuit"/>
             </Menu>
             <Menu fx:id="menuEdit" text="%menu.edit">
 
             </Menu>
             <Menu text="%menu.help">
-                <MenuItem text="Test" onAction="#onTest"/>
-                <MenuItem text="%menu.help.about" onAction="#onAbout"/>
+                <MenuItem visible="false" text="Test" onAction="#onTest"/>
+                <MenuItem accelerator="Ctrl+A" text="%menu.help.about" onAction="#onAbout"/>
             </Menu>
         </MenuBar>
     </top>
