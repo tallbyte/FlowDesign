@@ -41,9 +41,8 @@
                 <SeparatorMenuItem/>
                 <MenuItem text="%menu.file.quit" onAction="#onQuit"/>
             </Menu>
-            <Menu text="%menu.edit">
-                <MenuItem fx:id="menuItemAddEnvironment" text="%menu.edit.newEnvironment" onAction="#onAddEnvironment"/>
-                <MenuItem fx:id="menuItemAddFlow"        text="%menu.edit.newFlow"        onAction="#onAddFlow"/>
+            <Menu fx:id="menuEdit" text="%menu.edit">
+
             </Menu>
             <Menu text="%menu.help">
                 <MenuItem text="Test" onAction="#onTest"/>

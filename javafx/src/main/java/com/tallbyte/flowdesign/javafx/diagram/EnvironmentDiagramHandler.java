@@ -48,4 +48,9 @@ public class EnvironmentDiagramHandler extends DiagramHandlerBase<EnvironmentDia
                 ActorElementNode::new
         );
     }
+
+    @Override
+    protected EnvironmentDiagram createNewDiagramInstance(String name) {
+        return new EnvironmentDiagram(name);
+    }
 }

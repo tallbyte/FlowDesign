@@ -38,4 +38,6 @@ public interface DiagramHandler<T extends Diagram> {
 
     public Map<String, DiagramImageFactory> getSupportedElements();
 
+    public T createDiagram(String name);
+
 }

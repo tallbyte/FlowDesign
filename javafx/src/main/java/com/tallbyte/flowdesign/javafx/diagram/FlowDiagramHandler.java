@@ -67,4 +67,9 @@ public class FlowDiagramHandler extends DiagramHandlerBase<FlowDiagram, FlowDiag
                 SplitElementNode::new
         );
     }
+
+    @Override
+    protected FlowDiagram createNewDiagramInstance(String name) {
+        return new FlowDiagram(name);
+    }
 }

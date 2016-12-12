@@ -51,6 +51,11 @@ public class DiagramManager {
         return (DiagramHandler<T>) HANDLERS.get(diagram.getClass());
     }
 
+    @SuppressWarnings("unchecked") // this is safe, as we only allow altering of the handler map trough addHandler()
+    private <T extends Diagram> DiagramHandler<T> getHandler(Class<T> clazz) {
+        return (DiagramHandler<T>) HANDLERS.get(clazz);
+    }
+
     public <T extends Diagram> boolean isSupporting(T diagram) {
         return getHandler(diagram) != null;
     }
@@ -80,6 +85,16 @@ public class DiagramManager {
 
         if (handler != null) {
             return handler.getSupportedElements();
+        } else {
+            throw new IllegalStateException("unsupported diagram type");
+        }
+    }
+
+    public Diagram createDiagram(String name, Class<? extends Diagram> clazz) {
+        DiagramHandler<?> handler = getHandler(clazz);
+
+        if (handler != null) {
+            return handler.createDiagram(name);
         } else {
             throw new IllegalStateException("unsupported diagram type");
         }
