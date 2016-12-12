@@ -36,52 +36,20 @@ import java.util.Queue;
 public class XmlEnvironmentDiagramSerializer extends XmlDiagramSerializer implements XmlSerializer<EnvironmentDiagram> {
 
 
-    public static final String ELEMENT_NAME_ELEMENTS    = "elements";
-    public static final String ELEMENT_NAME_CONNECTIONS = "connections";
-    public static final String ATTRIBUTE_NAME           = "name";
 
 
     @Override
     public void serialize(XMLStreamWriter writer, EnvironmentDiagram diagram, XmlSerializationHelper helper) throws IOException {
         try {
             // write diagram related attributes
-            writer.writeAttribute(ATTRIBUTE_NAME, diagram.getName());
-
-            // update the id map
-            Queue<Map.Entry<String, EnvironmentDiagramElement>> queue = serializeTypes(
-                    writer,
-                    diagram.getElements(),
-                    helper.getIdentifierResolver()
-            );
-
-            queue.forEach(e -> helper.getAssignedIdMap().put(
-                    e.getValue(),
-                    e.getKey()
-            ));
-
+            serializeAttributes(writer, diagram, helper);
 
             // write elements
-            writer.writeStartElement(ELEMENT_NAME_ELEMENTS);
-            while (!queue.isEmpty()) {
-                helper.getSerializationResolver().serialize(
-                        writer,
-                        queue.poll().getValue(),
-                        helper
-                );
-            }
-            writer.writeEndElement();
-
+            helper.getAssignedIdMap().clear();
+            serializeElements(writer, diagram.getElements(), helper);
 
             // write connections
-            writer.writeStartElement(ELEMENT_NAME_CONNECTIONS);
-            for (Connection connection : diagram.getConnections()) {
-                helper.getSerializationResolver().serialize(
-                        writer,
-                        connection,
-                        helper
-                );
-            }
-            writer.writeEndElement();
+            serializeConnections(writer, diagram.getConnections(), helper);
 
         } catch (XMLStreamException e) {
             throw new IOException(e);
@@ -100,20 +68,12 @@ public class XmlEnvironmentDiagramSerializer extends XmlDiagramSerializer implem
             // load the diagram attributes
             Map<String, String> attributes = helper.getAttributes(reader);
 
-            // instantiate all the entities
-            Queue<Map.Entry<String, EnvironmentDiagramElement>> queue = deserializeTypes(
+            helper.getAssignedIdMap().clear();
+            Queue<Map.Entry<String, EnvironmentDiagramElement>> queue = deserializeElementTypes(
                     reader,
                     EnvironmentDiagramElement.class,
                     helper
             );
-
-            // prepare the AssignedIdMap
-            helper.getAssignedIdMap().clear();
-            queue.forEach(e -> helper.getAssignedIdMap().put(
-                    e.getKey(),
-                    e.getValue()
-            ));
-
 
             EnvironmentDiagram  diagram    = new EnvironmentDiagram(
                     attributes.get(ATTRIBUTE_NAME),
@@ -121,31 +81,14 @@ public class XmlEnvironmentDiagramSerializer extends XmlDiagramSerializer implem
             );
 
             // load all the elements with proper values
-            helper.fastForwardToElementStart(reader, ELEMENT_NAME_ELEMENTS);
-            helper.foreachElementStartUntil (reader, ELEMENT_NAME_ELEMENTS, () -> {
-                EnvironmentDiagramElement e = helper.getDeserializationResolver().deserialize(
-                        reader,
-                        queue.poll().getValue(),
-                        EnvironmentDiagramElement.class,
-                        helper
-                );
-
-                // do not add the root element twice (first time through constructor)
-                if (!diagram.getRoot().equals(e)) {
-                    diagram.addElement(e);
-                }
-            });
+            deserializeElements(reader, queue, EnvironmentDiagramElement.class, helper);
+            queue.poll(); // the first one is the root element, don#t add it twice (first time is the constructor)
+            queue.stream()
+                    .map(Map.Entry::getValue)
+                    .forEach(diagram::addElement);
 
             // build all the connections
-            helper.fastForwardToElementStart(reader, ELEMENT_NAME_CONNECTIONS);
-            helper.foreachElementStartUntil (reader, ELEMENT_NAME_CONNECTIONS, () -> {
-                // the deserialize call alone does all the work, nothing to do anymore
-                helper.getDeserializationResolver().deserialize(
-                        reader,
-                        Connection.class,
-                        helper
-                );
-            });
+            deserializeConnections(reader, Connection.class, helper);
 
             return diagram;
 
