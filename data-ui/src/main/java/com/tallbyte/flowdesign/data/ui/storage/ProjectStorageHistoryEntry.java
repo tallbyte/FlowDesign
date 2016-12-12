@@ -71,18 +71,23 @@ public class ProjectStorageHistoryEntry {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
+        return obj instanceof ProjectStorageHistoryEntry
+            && equals((ProjectStorageHistoryEntry) obj, true);
+    }
+
+    /**
+     * @param other The {@link ProjectStorageHistoryEntry} to compare to
+     * @param checkTime Whether also to compare the time
+     * @return Whether the given {@link ProjectStorageHistoryEntry} is the same or holds the same content
+     */
+    public boolean equals(ProjectStorageHistoryEntry other, boolean checkTime) {
+        if (other == this) {
             return true;
         }
 
-        if (obj instanceof ProjectStorageHistoryEntry) {
-            ProjectStorageHistoryEntry other = ((ProjectStorageHistoryEntry)obj);
-            return Objects.equals(this.getPath(),        other.getType())
-                && Objects.equals(this.getPath(),        other.getPath())
-                && Objects.equals(this.getProjectName(), other.getProjectName())
-                && Objects.equals(this.getTimeMillis(),  other.getTimeMillis());
-        }
-
-        return false;
+        return Objects.equals(this.getPath(),        other.getType())
+            && Objects.equals(this.getPath(),        other.getPath())
+            && Objects.equals(this.getProjectName(), other.getProjectName())
+            && (checkTime || this.getTimeMillis() == other.getTimeMillis());
     }
 }

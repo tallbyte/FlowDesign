@@ -49,6 +49,8 @@ import java.util.Map;
  */
 public class XmlStorage implements Storage<XmlStorage, XMLStreamReader, XMLStreamWriter, XmlDeserializationHelper, XmlSerializationHelper> {
 
+    public static final char MARKER_RESOURCE = '!';
+
     protected Map<String, Serializer<?, XMLStreamReader, XMLStreamWriter, XmlDeserializationHelper, XmlSerializationHelper>> serializers = new HashMap<>();
     protected Map<Class, String> identifiers = new HashMap<>();
 
@@ -212,6 +214,10 @@ public class XmlStorage implements Storage<XmlStorage, XMLStreamReader, XMLStrea
 
     @Override
     public <T> T deserialize(String fileIn, Class<T> type) throws IOException {
+        if (fileIn.length() > 0 && fileIn.charAt(0) == MARKER_RESOURCE) {
+            return deserialize(getClass().getResourceAsStream(fileIn.substring(1)), type);
+        }
+
         try (FileInputStream fis = new FileInputStream(fileIn)) {
             return deserialize(fis, type);
         }
@@ -244,16 +250,12 @@ public class XmlStorage implements Storage<XmlStorage, XMLStreamReader, XMLStrea
      * @throws IOException If deserialization failed or on type mismatch
      */
     public Object deserialize(File source) throws IOException {
-        try (FileInputStream fis = new FileInputStream(source)) {
-            return deserialize(fis);
-        }
+        return deserialize(source, Object.class);
     }
 
     @Override
     public Object deserialize(String fileIn) throws IOException {
-        try (FileInputStream fis = new FileInputStream(fileIn)) {
-            return deserialize(fis);
-        }
+        return deserialize(fileIn, Object.class);
     }
 
     /**

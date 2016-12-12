@@ -18,9 +18,7 @@
 
 package com.tallbyte.flowdesign.data.ui.storage;
 
-import java.util.LinkedList;
-import java.util.Objects;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Created by michael on 11.12.16.
@@ -81,6 +79,13 @@ public class ProjectStorageHistory {
      * @param entry The new {@link ProjectStorageHistoryEntry} to add
      */
     public void add(ProjectStorageHistoryEntry entry) {
+        List<ProjectStorageHistoryEntry> toRemove = new ArrayList<>(1);
+        for (ProjectStorageHistoryEntry e : entries) {
+            if (e.equals(entry, false)) {
+                toRemove.add(e);
+            }
+        }
+        entries.removeAll(toRemove);
         entries.add(entry);
         limitEntries();
     }
