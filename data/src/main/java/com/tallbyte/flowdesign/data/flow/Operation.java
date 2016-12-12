@@ -30,17 +30,19 @@ import com.tallbyte.flowdesign.data.JointType;
  */
 public class Operation extends FlowDiagramElement {
 
-    public static final String JOINT_INPUT0     = "input0";
-    public static final String JOINT_OUTPUT1    = "output0";
-    public static final String JOINT_DEPENDENCY = "dependency";
+    public static final String JOINT_INPUT0            = "input0";
+    public static final String JOINT_OUTPUT0           = "output0";
+    public static final String JOINT_DEPENDENCY_INPUT  = "dependencyInput";
+    public static final String JOINT_DEPENDENCY_OUTPUT = "dependencyOutput";
 
     /**
      * Creats an new {@link Operation}.
      */
     public Operation() {
-        addJoint(new FlowJoint(this, JOINT_INPUT0    , JointType.INPUT, 1));
-        addJoint(new FlowJoint(this, JOINT_OUTPUT1   , JointType.OUTPUT, 1));
-        addJoint(new DependencyJoint(this, JOINT_DEPENDENCY, JointType.OUTPUT, 0));
+        addJoint(new FlowJoint(this, JOINT_INPUT0 , JointType.INPUT, 1));
+        addJoint(new FlowJoint(this, JOINT_OUTPUT0, JointType.OUTPUT, 1));
+        addJoint(new DependencyJoint(this, JOINT_DEPENDENCY_INPUT , JointType.INPUT , 0));
+        addJoint(new DependencyJoint(this, JOINT_DEPENDENCY_OUTPUT, JointType.OUTPUT, 0));
     }
 
 }

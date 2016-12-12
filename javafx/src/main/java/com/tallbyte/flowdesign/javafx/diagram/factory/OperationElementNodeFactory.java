@@ -16,13 +16,14 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx.diagram.element;
+package com.tallbyte.flowdesign.javafx.diagram.factory;
 
-import com.tallbyte.flowdesign.data.flow.Start;
+import com.tallbyte.flowdesign.data.flow.Join;
+import com.tallbyte.flowdesign.data.flow.Operation;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
-import com.tallbyte.flowdesign.javafx.diagram.JointNode;
+import com.tallbyte.flowdesign.javafx.diagram.element.JoinElementNode;
+import com.tallbyte.flowdesign.javafx.diagram.element.OperationElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
-import javafx.geometry.Pos;
 
 /**
  * This file is part of project flowDesign.
@@ -30,22 +31,10 @@ import javafx.geometry.Pos;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class StartElementNode extends ElementNode {
-
-    private final Start start;
-
-    public StartElementNode(Start element, DiagramImage content) {
-        super(element, content, Pos.CENTER);
-
-        this.start = element;
-    }
+public class OperationElementNodeFactory implements ElementNodeFactory<Operation> {
 
     @Override
-    protected void setup() {
-        super.setup();
-
-        JointNode output = addJoint(start.getJoint(Start.JOINT_OUTPUT));
-        output.centerXProperty().bind(widthProperty().subtract(output.radiusProperty()).subtract(widthExtend));
-        output.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
+    public ElementNode createDiagramNode(Operation element, DiagramImage image) {
+        return new OperationElementNode(element, image);
     }
 }

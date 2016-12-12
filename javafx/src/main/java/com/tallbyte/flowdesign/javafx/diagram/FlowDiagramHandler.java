@@ -18,10 +18,7 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
-import com.tallbyte.flowdesign.data.flow.FlowDiagram;
-import com.tallbyte.flowdesign.data.flow.FlowDiagramElement;
-import com.tallbyte.flowdesign.data.flow.Join;
-import com.tallbyte.flowdesign.data.flow.Start;
+import com.tallbyte.flowdesign.data.flow.*;
 import com.tallbyte.flowdesign.javafx.diagram.factory.*;
 
 /**
@@ -42,6 +39,11 @@ public class FlowDiagramHandler extends DiagramHandlerBase<FlowDiagram, FlowDiag
                 new JoinElementFactory(),
                 new VerticalStickDiagramImageFactory(),
                 new JoinElementNodeFactory()
+        );
+        addEntries("Operation", Operation.class,
+                new OperationElementFactory(),
+                new EllipseDiagramImageFactory(),
+                new OperationElementNodeFactory()
         );
     }
 }
