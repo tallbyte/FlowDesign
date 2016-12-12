@@ -30,10 +30,10 @@ import java.io.IOException;
 /**
  * Created by michael on 09.12.16.
  */
-public class XmlConnectionSerializer implements XmlSerializer<Connection> {
+public class XmlConnectionSerializer<T extends Connection> implements XmlSerializer<T> {
 
     @Override
-    public void serialize(XMLStreamWriter writer, Connection connection, XmlSerializationHelper helper) throws IOException {
+    public void serialize(XMLStreamWriter writer, T connection, XmlSerializationHelper helper) throws IOException {
         // serialize the source joint
         helper.getSerializationResolver().serialize(
                 writer,
@@ -50,13 +50,13 @@ public class XmlConnectionSerializer implements XmlSerializer<Connection> {
     }
 
     @Override
-    public Connection instantiate() {
+    public T instantiate() {
         // no new instance is created inside this class
         return null;
     }
 
     @Override
-    public Connection deserialize(XMLStreamReader reader, Connection serializable, XmlDeserializationHelper helper) throws IOException {
+    public T deserialize(XMLStreamReader reader, Connection serializable, XmlDeserializationHelper helper) throws IOException {
         try {
             helper.fastForwardToElementStart(reader);
             Joint source = helper.getDeserializationResolver().deserialize(reader, Joint.class, helper);
@@ -64,7 +64,7 @@ public class XmlConnectionSerializer implements XmlSerializer<Connection> {
             helper.fastForwardToElementStart(reader);
             Joint target = helper.getDeserializationResolver().deserialize(reader, Joint.class, helper);
 
-            return source.join(target);
+            return (T)source.join(target);
         } catch (JointJoinException e) {
             throw new IOException("Cannot joint target on source at line: "+reader.getLocation().getLineNumber(), e);
 

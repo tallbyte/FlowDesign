@@ -30,13 +30,13 @@ import java.util.Map;
 /**
  * Created by michael on 09.12.16.
  */
-public class XmlJointSerializer implements XmlSerializer<Joint> {
+public class XmlJointSerializer<T extends Joint> implements XmlSerializer<T> {
 
     public static final String ATTRIBUTE_LOCATION = "location";
     public static final String ATTRIBUTE_ENTITY   = "entity";
 
     @Override
-    public void serialize(XMLStreamWriter writer, Joint joint, XmlSerializationHelper helper) throws IOException {
+    public void serialize(XMLStreamWriter writer, T joint, XmlSerializationHelper helper) throws IOException {
         try {
             writer.writeAttribute(ATTRIBUTE_LOCATION, joint.getLocation());
             writer.writeAttribute(ATTRIBUTE_ENTITY,   helper.getAssignedIdMap().get(joint.getElement()));
@@ -47,13 +47,13 @@ public class XmlJointSerializer implements XmlSerializer<Joint> {
     }
 
     @Override
-    public Joint instantiate() {
+    public T instantiate() {
         // no joint instances created inside this class
         return null;
     }
 
     @Override
-    public Joint deserialize(XMLStreamReader reader, Joint serializable, XmlDeserializationHelper helper) throws IOException {
+    public T deserialize(XMLStreamReader reader, Joint serializable, XmlDeserializationHelper helper) throws IOException {
         try {
             Map<String, String> attributes = helper.getAttributes(reader);
 
@@ -71,7 +71,7 @@ public class XmlJointSerializer implements XmlSerializer<Joint> {
 
             for (Joint j : element.getJoints()) {
                 if (j.getLocation().equals(location)) {
-                    return j;
+                    return (T)j;
                 }
             }
 

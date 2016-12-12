@@ -18,9 +18,7 @@
 
 package com.tallbyte.flowdesign.storage.xml;
 
-import com.tallbyte.flowdesign.data.Connection;
-import com.tallbyte.flowdesign.data.Joint;
-import com.tallbyte.flowdesign.data.Project;
+import com.tallbyte.flowdesign.data.*;
 import com.tallbyte.flowdesign.data.environment.Actor;
 import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
 import com.tallbyte.flowdesign.data.environment.System;
@@ -85,8 +83,10 @@ public class XmlStorage implements Storage<XmlStorage, XMLStreamReader, XMLStrea
         register(ApplicationChangelog       .class, new XmlApplicationChangelogSerializer());
         register(ApplicationChangelogEntry  .class, new XmlApplicationChangelogEntrySerializer());
 
-        register(Connection                 .class, new XmlConnectionSerializer());
-        register(Joint                      .class, new XmlJointSerializer());
+        register(Connection                 .class, new XmlConnectionSerializer<>());
+        register(DependencyConnection       .class, new XmlDependencyConnectionSerializer());
+        register(Joint                      .class, new XmlJointSerializer<>());
+        register(DependencyJoint            .class, new XmlDependencyJointSerializer());
 
         register(EnvironmentDiagram         .class, new XmlEnvironmentDiagramSerializer());
         register(Actor                      .class, new XmlActorSerializer());
