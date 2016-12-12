@@ -69,12 +69,15 @@ public class DiagramPane extends ScrollPane {
         this.diagramManager = diagramManager;
 
         setContent(groupContent);
+        setPannable(true);
 
         setup();
     }
 
     public DiagramPane(Diagram diagram, DiagramManager diagramManager) {
         this(diagramManager);
+
+        setPannable(true);
 
         this.diagram.setValue(diagram);
     }
