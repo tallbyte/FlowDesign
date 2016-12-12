@@ -103,7 +103,7 @@ public class WelcomePane extends SwitchContentPane {
 
         // add all entries to the list
         for (ProjectStorageHistoryEntry entry : manager.getHistory().getEntries()) {
-            listProjects.getItems().add(entry);
+            listProjects.getItems().add(0, entry);
         }
     }
 

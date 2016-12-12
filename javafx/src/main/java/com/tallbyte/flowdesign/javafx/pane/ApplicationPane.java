@@ -48,6 +48,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.tallbyte.flowdesign.javafx.ResourceUtils.*;
@@ -137,7 +138,14 @@ public class ApplicationPane extends BorderPane {
                 root.setExpanded(true);
                 treeProject.setRoot(root);
 
+
+                List<Class<? extends Diagram>> list = new ArrayList<>();
                 for (Class<? extends Diagram> supported : paneDiagrams.getDiagramManager().getSupportedDiagramTypes()) {
+                    list.add(supported);
+                }
+                Collections.sort(list, (o1, o2) -> o1.getSimpleName().compareTo(o2.getSimpleName()));
+
+                for (Class<? extends Diagram> supported : list) {
                     registerForDiagram(root, supported, newValue, listenersDiagrams);
                 }
 

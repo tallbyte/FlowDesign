@@ -164,6 +164,14 @@ public class Project {
     }
 
     /**
+     * Gets all types of {@link Diagram}s added to this {@link Project}.
+     * @return Returns an {@link Iterable} containing them.
+     */
+    public Iterable<Class<? extends Diagram>> getDiagramTypes() {
+        return diagrams.keySet();
+    }
+
+    /**
      * Registers an {@link DiagramsChangedListener}.
      * @param listener the {@link DiagramsChangedListener} to register
      */
