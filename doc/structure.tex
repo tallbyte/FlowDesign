@@ -32,6 +32,10 @@ bleibt jedoch Benutzeroberflächenunabhängig.
 
 \subsection{Modul Core}
 \label{mod_core}
+\begin{figure}[hb!]
+	\centering
+	\includegraphics[width=.8\textwidth]{module_dependencies_core.png}
+\end{figure}
 \depBox{Data (\ref{mod_data}), Data-UI (\ref{mod_data-ui}), Storage (\ref{mod_storage})}
 
 Modulerklräung hier
@@ -41,6 +45,10 @@ Modulerklräung hier
 
 \subsection{Modul Data}
 \label{mod_data}
+\begin{figure}[hb!]
+	\centering
+	\includegraphics[width=.8\textwidth]{module_dependencies_data.png}
+\end{figure}
 \depBox{Keine}
 
 Modulerklräung hier
@@ -50,6 +58,10 @@ Modulerklräung hier
 
 \subsection{Modul Data-UI}
 \label{mod_data-ui}
+\begin{figure}[hb!]
+	\centering
+	\includegraphics[width=.8\textwidth]{module_dependencies_data-ui.png}
+\end{figure}
 \depBox{Keine}
 
 Modulerklräung hier
@@ -59,6 +71,10 @@ Modulerklräung hier
 
 \subsection{Modul JavaFX}
 \label{mod_javafx}
+\begin{figure}[hb!]
+	\centering
+	\includegraphics[width=.8\textwidth]{module_dependencies_javafx.png}
+\end{figure}
 \depBox{Model (\ref{mod_model}), ControlsFX (ext. \cite{controlsfx})}
 
 Modulerklräung hier
@@ -68,6 +84,10 @@ Modulerklräung hier
 
 \subsection{Modul Model}
 \label{mod_model}
+\begin{figure}[hb!]
+	\centering
+	\includegraphics[width=.8\textwidth]{module_dependencies_model.png}
+\end{figure}
 \depBox{Core (\ref{mod_core})}
 
 Modulerklräung hier
@@ -77,7 +97,29 @@ Modulerklräung hier
 
 \subsection{Modul Storage}
 \label{mod_storage}
+\begin{figure}[hb!]
+	\centering
+	\includegraphics[width=.8\textwidth]{module_dependencies_storage.png}
+\end{figure}
 \depBox{Data (\ref{mod_data}), Data-UI (\ref{mod_data-ui})}
 
-Modulerklräung hier
+Das Storage Modul enthält sowohl eine abstrake Definition von \textit{Serializern} und \textit{StorageHandlern}
+als auch eine Implementation für XML inklusive \textit{Serializer} für Komponenten in \refModData{} und
+\refModDataUI{}.
 
+\subsubsection{StorageHandler}
+Die Klasse \textit{StorageHandler} ist hält \textit{Storage}s und verteilt Serialisierungsaufgaben an
+das entsprechende \textit{Storage} anhand eines Textidentifikators (für XML lautet dieser 'xml').
+Eine weitere \textit{Storage} Implementation kann anhand eines neuen Textidentifkators registriert werden,
+wodurch ein Umstieg von XML auf JSON, SQL oder eine andere Implementation vereinfacht wird.
+
+\subsubsection{Storage}
+Ein \textit{Storage} stellt ein Speicherort für alle zum Projekt gehörenden Komponenten dar. Je nach
+Implementation kann dies XML (implementiert), JSON, SQL oder andere sein (nicht implementiert). Bei einem
+\textit{Storage} können \textit{Serializer} für weitere Komponenten registriert werden. Sowohl Lese- als
+auch Schreibhandles und Hilfsklassen für die \textit{Serializer} werden über Generics in \textit{Storage}
+definiert.
+
+\subsubsection{Serializer}
+Ein \textit{Serializer} hat die Aufgabe eine Komponente zu serialisieren und wieder zu deserialisieren.
+Der Umfang eines \textit{Serializer}s sollte sich auf eine Komponente beziehen (siehe \refPrincipleSingleResponsibilityLong).
