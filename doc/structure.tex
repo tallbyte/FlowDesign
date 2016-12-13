@@ -1,7 +1,7 @@
 
 \newcommand{\depBox}[1]{
-	\begin{adjustbox}{minipage=0.85\textwidth,margin=0 \smallskipamount,center}
-		Abhängigkeiten:	 \quad #1
+	\begin{adjustbox}{minipage=0.90\textwidth,margin=0 \smallskipamount,center}
+		Abhängigkeiten:	 #1
 	\end{adjustbox} ~\\
 }
 
@@ -9,7 +9,7 @@
 \subsection{Modulübersicht}
 Die Teilbereiche des Projekts wurden in verschieden Module aufgeteilt.
 
-\begin{figure}[hb!]
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width=.8\textwidth]{module_dependencies.png}
 	\caption{Abhängigkeitsgraph der Module}
@@ -27,11 +27,11 @@ bleibt jedoch Benutzeroberflächenunabhängig.
 
 \subsection{\textModCore}
 \label{\textModCore}
-\begin{figure}[hb!]
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width=.8\textwidth]{module_dependencies_core.png}
 \end{figure}
-\depBox{Data (\ref{mod_data}), Data-UI (\ref{mod_data-ui}), Storage (\ref{mod_storage})}
+\depBox{\refLongP{\textModData}, \refLongP{\textModDataUI}, \refLongP{\textModStorage}}
 
 Modulerklräung hier
 Core inklusive Abhängigkeiten enthalten alle Logik. Falls eine ander Benutzeroberfläche erstellt,
@@ -42,7 +42,7 @@ oder die Logik anderweitig benötigt wird, sollte auf dieses Modul die Abhängig
 
 \subsection{\textModData}
 \label{\textModData}
-\begin{figure}[hb!]
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width=.8\textwidth]{module_dependencies_data.png}
 \end{figure}
@@ -55,7 +55,7 @@ Modulerklräung hier
 
 \subsection{\textModDataUI}
 \label{\textModDataUI}
-\begin{figure}[hb!]
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width=.8\textwidth]{module_dependencies_data-ui.png}
 \end{figure}
@@ -68,11 +68,11 @@ Modulerklräung hier
 
 \subsection{\textModJavaFX}
 \label{\textModJavaFX}
-\begin{figure}[hb!]
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width=.8\textwidth]{module_dependencies_javafx.png}
 \end{figure}
-\depBox{Model (\ref{mod_model}), ControlsFX (ext. \cite{controlsfx})}
+\depBox{\refLongP{\textModModel}, ControlsFX (ext. \cite{controlsfx})}
 
 Modulerklräung hier
 
@@ -81,11 +81,11 @@ Modulerklräung hier
 
 \subsection{\textModModel}
 \label{\textModModel}
-\begin{figure}[hb!]
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width=.8\textwidth]{module_dependencies_model.png}
 \end{figure}
-\depBox{Core (\ref{mod_core})}
+\depBox{\refLongP{\textModCore}}
 
 Modulerklräung hier
 
@@ -94,7 +94,7 @@ Modulerklräung hier
 
 \subsection{\textModStorage}
 \label{\textModStorage}
-\begin{figure}[hb!]
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width=.8\textwidth]{module_dependencies_storage.png}
 \end{figure}
