@@ -1,0 +1,165 @@
+% use koma script classes
+\documentclass[12pt]{scrartcl}
+
+% fix for oliver: https://www.tug.org/pipermail/tex-live/2016-July/038985.html
+\makeatletter
+\DeclareOldFontCommand{\rm}{\normalfont\rmfamily}{\mathrm}
+\DeclareOldFontCommand{\sf}{\normalfont\sffamily}{\mathsf}
+\DeclareOldFontCommand{\tt}{\normalfont\ttfamily}{\mathtt}
+\DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
+\DeclareOldFontCommand{\it}{\normalfont\itshape}{\mathit}
+\DeclareOldFontCommand{\sl}{\normalfont\slshape}{\@nomath\sl}
+\DeclareOldFontCommand{\sc}{\normalfont\scshape}{\@nomath\sc}
+\makeatother
+
+
+
+% utf8 charset is required for some german characters
+\usepackage[utf8]{inputenc}
+% required for nicer footer / header
+\usepackage{fancyhdr}
+% required for diagramms
+\usepackage{pgfplots}
+% required for code snippets
+\usepackage{listings}
+\usepackage{color}
+% required for german bibliography list entries
+\usepackage[german]{babel}
+
+\usepackage{rotating}
+\usepackage{amsmath}
+
+\usepackage{tikz-uml}
+\usepackage{adjustbox}
+
+
+ %% clickable links for references
+\usepackage{hyperref}	%% ocgcolorlinks --> color in pdf viewer, but not printed
+% \usepackage[ocgcolorlinks]{hypcap}
+
+\hypersetup{
+  colorlinks   = true, %Colours links instead of ugly boxes
+  urlcolor     = blue, %Colour for external hyperlinks
+  linkcolor    = blue, %Colour of internal links
+  citecolor    = blue   %Colour of citations
+}
+
+
+% replaces bibtex, as bibtex has no native support for online sources
+\usepackage[
+	backend=bibtex,
+	style=numeric-comp
+	]{biblatex}
+\makeatletter % se great overlord fix http://tex.stackexchange.com/questions/311426/bibliography-error-use-of-blxbblverbaddi-doesnt-match-its-definition-ve
+\def\blx@maxline{77}
+\makeatother
+% add our bibliography source file
+\addbibresource{lit.bib}
+
+% define some code colors
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+% define the style of code snippets
+\lstset{frame=none,
+	language=matlab,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=4
+	}
+
+% title page (hacky)
+%\newcommand{\seauthor}{Michael Watzko \newline{}und Oliver Wasser\newline{}und Julian Klissenbauer}
+\newcommand{\lastModified}{13. Dezember 2016}
+\newcommand{\lab}{Projekt Softwaretechnik}
+\newcommand{\labtitle}{FlowDesign}
+\newcommand{\figurewidth}{0.66\textwidth}
+
+\title{
+	~\\ ~\\
+	\labtitle
+	~\\ ~\\
+		\LARGE \textnormal{
+     	\lab
+	~\\ Wintersemester 2016 ~\\ ~\\
+	}
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=.25\textwidth]{../javafx/src/main/resources/images/realIcon.png}
+	\end{figure}
+}
+
+\subtitle{
+\Large \textnormal{
+%	~\\ ~\\
+%	\textbf{Hausarbeit} \\
+~\\
+	Studiengang ~\\
+	Softwaretechnik und Medieninformatik \\
+~\\
+	~\\ \large %\lastModified
+	}
+}
+
+\author{
+	\large \textbf{Michael Watzko} (749567) \\
+	\large \textbf{Oliver Wasser} (749384) \\
+	\large \textbf{Julian Klissenbauer} (749564)
+}
+
+\date{}
+
+% page header and footer
+\pagestyle{fancy}
+\lhead{\small Hochschule Esslingen \\ Fakultät Informationstechnik}
+%\rhead{\small \lab \\ \labtitle}
+\rhead{\small \labtitle}
+\lfoot{\small Michael Watzko, Oliver Wasser,\newline{}Julian Klissenbauer}
+\rfoot{\small Stand: \lastModified}
+
+% actual start of the document
+\linespread{1.2}
+\begin{document}
+	\maketitle
+	\clearpage
+	\tableofcontents
+	
+	\clearpage
+	\include{intro}
+	
+	\clearpage
+	\include{requirements}
+	
+	\clearpage
+	\include{schedule}
+	
+	\clearpage
+	\include{structure}
+	
+	\clearpage
+	\include{expl_ui}
+	
+	\clearpage
+	\include{expl_code_principles}
+	
+	\clearpage
+	\include{expl_code}
+	
+	\clearpage
+	\addcontentsline{toc}{section}{\listfigurename}
+	\listoffigures
+	
+	\clearpage
+	\printbibliography[heading=bibintoc]
+\end{document}

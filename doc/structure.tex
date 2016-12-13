@@ -1,0 +1,65 @@
+
+\section{Module}
+\newcommand{\depBox}[1]{
+	\begin{adjustbox}{minipage=0.85\textwidth,margin=0 \smallskipamount,center}
+		Abhängigkeiten:	 \quad #1
+	\end{adjustbox} ~\\
+}
+
+\subsection{Modulübersicht}
+Keine aufgezeichneten Abhängigkeiten nach JUnit oder standard JDK (Version 8 vorausgesetzt)
+
+
+
+
+\subsection{Modul Core}
+\label{mod_core}
+\depBox{Data (\ref{mod_data}), Data-UI (\ref{mod_data-ui}), Storage (\ref{mod_storage})}
+
+Modulerklräung hier
+
+
+
+
+\subsection{Modul Data}
+\label{mod_data}
+\depBox{Keine}
+
+Modulerklräung hier
+
+
+
+
+\subsection{Modul Data-UI}
+\label{mod_data-ui}
+\depBox{Keine}
+
+Modulerklräung hier
+
+
+
+
+\subsection{Modul JavaFX}
+\label{mod_javafx}
+\depBox{Model (\ref{mod_model}), ControlsFX (ext. \cite{controlsfx})}
+
+Modulerklräung hier
+
+
+
+
+\subsection{Modul Model}
+\label{mod_model}
+\depBox{Core (\ref{mod_core})}
+
+Modulerklräung hier
+
+
+
+
+\subsection{Modul Storage}
+\label{mod_storage}
+\depBox{Data (\ref{mod_data}), Data-UI (\ref{mod_data-ui})}
+
+Modulerklräung hier
+
