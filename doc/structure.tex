@@ -4,16 +4,11 @@
 		Abhängigkeiten:	 \quad #1
 	\end{adjustbox} ~\\
 }
-\newcommand{\refModCore}{\hyperref[mod_core]{Core}}
-\newcommand{\refModData}{\hyperref[mod_data]{Data}}
-\newcommand{\refModDataUI}{\hyperref[mod_data-ui]{Data-UI}}
-\newcommand{\refModJavaFX}{\hyperref[mod_javafx]{JavaFX}}
-\newcommand{\refModModel}{\hyperref[mod_model]{Model}}
-\newcommand{\refModStorage}{\hyperref[mod_storage]{Storage}}
 
 \section{Module}
 \subsection{Modulübersicht}
-Die Teilbereiche des Projekts wurden in verschieden Module aufgeteilt:
+Die Teilbereiche des Projekts wurden in verschieden Module aufgeteilt.
+
 \begin{figure}[hb!]
 	\centering
 	\includegraphics[width=.8\textwidth]{module_dependencies.png}
@@ -24,14 +19,14 @@ Die Teilbereiche des Projekts wurden in verschieden Module aufgeteilt:
 Der in Abbildung \ref{mod_dep_view} gezeigte Graph enthält keine Abhängigkeiten nach JUnit und
 dem JDK aus Gründen der Übersicht.
 
-Anzumerken ist auch, dass bis in das Modul \refModCore{} keine Abhängigkeiten
+Anzumerken ist auch, dass bis in das \refLongP{\textModCore} keine Abhängigkeiten
 gegenüber einer UI-Bibliothek existieren. Das Modul \hyperref[mod_data-ui]{Data-UI} stellt
 zwar Komponenten bereit, die für die Integration in eine Benutzeroberfläche benötigt werden,
 bleibt jedoch Benutzeroberflächenunabhängig.
 
 
-\subsection{Modul Core}
-\label{mod_core}
+\subsection{\textModCore}
+\label{\textModCore}
 \begin{figure}[hb!]
 	\centering
 	\includegraphics[width=.8\textwidth]{module_dependencies_core.png}
@@ -39,12 +34,14 @@ bleibt jedoch Benutzeroberflächenunabhängig.
 \depBox{Data (\ref{mod_data}), Data-UI (\ref{mod_data-ui}), Storage (\ref{mod_storage})}
 
 Modulerklräung hier
+Core inklusive Abhängigkeiten enthalten alle Logik. Falls eine ander Benutzeroberfläche erstellt,
+oder die Logik anderweitig benötigt wird, sollte auf dieses Modul die Abhängigkeit aufgebaut werden.
 
 
 
 
-\subsection{Modul Data}
-\label{mod_data}
+\subsection{\textModData}
+\label{\textModData}
 \begin{figure}[hb!]
 	\centering
 	\includegraphics[width=.8\textwidth]{module_dependencies_data.png}
@@ -56,8 +53,8 @@ Modulerklräung hier
 
 
 
-\subsection{Modul Data-UI}
-\label{mod_data-ui}
+\subsection{\textModDataUI}
+\label{\textModDataUI}
 \begin{figure}[hb!]
 	\centering
 	\includegraphics[width=.8\textwidth]{module_dependencies_data-ui.png}
@@ -69,8 +66,8 @@ Modulerklräung hier
 
 
 
-\subsection{Modul JavaFX}
-\label{mod_javafx}
+\subsection{\textModJavaFX}
+\label{\textModJavaFX}
 \begin{figure}[hb!]
 	\centering
 	\includegraphics[width=.8\textwidth]{module_dependencies_javafx.png}
@@ -82,8 +79,8 @@ Modulerklräung hier
 
 
 
-\subsection{Modul Model}
-\label{mod_model}
+\subsection{\textModModel}
+\label{\textModModel}
 \begin{figure}[hb!]
 	\centering
 	\includegraphics[width=.8\textwidth]{module_dependencies_model.png}
@@ -95,17 +92,17 @@ Modulerklräung hier
 
 
 
-\subsection{Modul Storage}
-\label{mod_storage}
+\subsection{\textModStorage}
+\label{\textModStorage}
 \begin{figure}[hb!]
 	\centering
 	\includegraphics[width=.8\textwidth]{module_dependencies_storage.png}
 \end{figure}
-\depBox{Data (\ref{mod_data}), Data-UI (\ref{mod_data-ui})}
+\depBox{\refLongP{\textModData}, \refLongP{\textModDataUI}}
 
 Das Storage Modul enthält sowohl eine abstrake Definition von \textit{Serializern} und \textit{StorageHandlern}
-als auch eine Implementation für XML inklusive \textit{Serializer} für Komponenten in \refModData{} und
-\refModDataUI{}.
+als auch eine Implementation für XML inklusive \textit{Serializer} für Komponenten in \refLongP{\textModData} und
+\refLongP{\textModDataUI}.
 
 \subsubsection{StorageHandler}
 Die Klasse \textit{StorageHandler} ist hält \textit{Storage}s und verteilt Serialisierungsaufgaben an
@@ -122,4 +119,4 @@ definiert.
 
 \subsubsection{Serializer}
 Ein \textit{Serializer} hat die Aufgabe eine Komponente zu serialisieren und wieder zu deserialisieren.
-Der Umfang eines \textit{Serializer}s sollte sich auf eine Komponente beziehen (siehe \refPrincipleSingleResponsibilityLong).
+Der Umfang eines \textit{Serializer}s sollte sich auf eine Komponente beziehen (siehe \refLong{\textPrincipleSingleResponsibility}).
