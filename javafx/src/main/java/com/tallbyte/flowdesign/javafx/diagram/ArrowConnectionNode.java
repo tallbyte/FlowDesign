@@ -21,7 +21,9 @@ package com.tallbyte.flowdesign.javafx.diagram;
 import com.tallbyte.flowdesign.data.Connection;
 import com.tallbyte.flowdesign.data.Joint;
 import javafx.beans.property.DoubleProperty;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
@@ -34,9 +36,10 @@ import javafx.scene.transform.Rotate;
  */
 public class ArrowConnectionNode extends Group {
 
-    private final Line line   = new Line();
-    private final Line arrow0 = new Line();
-    private final Line arrow1 = new Line();
+    private final Line  line   = new Line();
+    private final Line  arrow0 = new Line();
+    private final Line  arrow1 = new Line();
+    private final Label label  = new Label("test");
 
     private final Connection connection;
     private final DiagramPane diagramPane;
@@ -75,7 +78,7 @@ public class ArrowConnectionNode extends Group {
         arrow1.startXProperty().bind(line.endXProperty());
         arrow1.startYProperty().bind(line.endYProperty());
 
-        getChildren().addAll(line, arrow0, arrow1);
+        getChildren().addAll(line, arrow0, arrow1, label);
 
         line.startXProperty().addListener((observable, oldValue, newValue) -> {
             updateArrow();
@@ -113,6 +116,20 @@ public class ArrowConnectionNode extends Group {
         arrow0.getTransforms().add(new Rotate(30, line.getEndX(), line.getEndY()));
         arrow1.getTransforms().clear();
         arrow1.getTransforms().add(new Rotate(-30, line.getEndX(), line.getEndY()));
+
+        label.setLayoutX(line.getEndX()-sx*len*0.5);
+        label.setLayoutY(line.getEndY()-sy*len*0.5-label.getHeight());
+
+        Point2D normal = new Point2D(1, 0);
+        Point2D line   = new Point2D(lenX, lenY).normalize();
+        double  angle  = normal.angle(line);
+
+        if (getStartY() > getEndY()) {
+            angle = 360-angle;
+        }
+
+        label.getTransforms().clear();
+        label.getTransforms().add(new Rotate(angle, 0, label.getHeight()));
     }
 
     public DoubleProperty startYProperty() {
