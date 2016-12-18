@@ -20,9 +20,10 @@
     -fx-border-radius:     0px;
     -fx-background-radius: 0px;
     -fx-text-fill: #e5e5e5;
-}
 
-.root {
+
+    -fx-scroll-bar-accent: #959595;
+    -fx-scroll-bar-hover-accent: #808080;
     -fx-draw-accent:        black;
     -fx-connection-accent:  black;
     -fx-joint-accent:       black;
@@ -37,11 +38,15 @@
     -fx-input-border-accent: gray;
     -fx-action-accent: #686868;
     -fx-action-border-accent: gray;
-    -fx-tab-accent: #666666;
+    -fx-tab-accent: #5d5d5d;
     -fx-main-pane-accent: #505050;
     -fx-accent:             #4a84ff;
     -fx-diabled-accent: #2f4493;
     -fx-focus-color:       -fx-accent;
+}
+
+.root {
+
 }
 
 /*
@@ -87,7 +92,31 @@
  */
 
 .scroll-bar .decrement-button {
-    visibility: hidden;
+    -fx-opacity: 0;
+}
+
+.scroll-bar .increment-button {
+    -fx-opacity: 0;
+}
+
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .track-background {
+    -fx-opacity: 0;
+}
+
+.scroll-bar .track {
+    -fx-opacity: 0;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: -fx-scroll-bar-accent;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: -fx-scroll-bar-hover-accent;
 }
 
 /*
@@ -141,7 +170,7 @@
     -fx-border-color: -fx-input-border-accent;
 }
 
-.text-area .content {
+.text-area .content, .text-area {
     -fx-background-color: -fx-input-accent;
 }
 
@@ -277,7 +306,11 @@ AboutPane {
     -fx-background-color: -fx-control-pane-accent;
 }
 
-AboutPane *.text-area .content {
+AboutPane .text-area {
+    -fx-border-color:     transparent;
+}
+
+AboutPane .text-area {
     -fx-border-color:     transparent;
 }
 
@@ -489,7 +522,7 @@ ProjectEntry {
 }
 
 ProjectEntry .name {
-    -fx-text-fill: #8a8a8a;
+    -fx-text-fill: #bfbfbf;
     -fx-font-weight:      bold;
     -fx-font-size:        1em;
 }
@@ -553,6 +586,7 @@ ArrowConnectionNode * {
 }
 
 DataTypePopup {
-    -fx-padding:          5px;
-    -fx-background-color: #c2c2c2;
+    -fx-padding:          3px;
+    -fx-background-color: -fx-bar-accent;
+    -fx-border-color:     -fx-bar-border-accent;
 }
