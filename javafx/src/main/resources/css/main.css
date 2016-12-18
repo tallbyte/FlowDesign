@@ -19,30 +19,64 @@
 * {
     -fx-border-radius:     0px;
     -fx-background-radius: 0px;
+
+    /*
+     * Text
+     */
     -fx-text-fill: #e5e5e5;
 
-
-    -fx-scroll-bar-accent: #959595;
+    /*
+     * ScrollBar
+     */
+    -fx-scroll-bar-accent:       #959595;
     -fx-scroll-bar-hover-accent: #808080;
+
+    /*
+     * Draw related
+     */
     -fx-draw-accent:        black;
     -fx-connection-accent:  black;
     -fx-joint-accent:       black;
-    -fx-pane-accent:        #ededed;
-    -fx-bar-accent: #5b5b5b;
-    -fx-bar-border-accent: #747474;
-    -fx-main-divider-accent:black;
-    -fx-off-divider-accent: #858585;
-    -fx-title-accent: #4f4f4f;
-    -fx-control-pane-accent: #636363;
-    -fx-input-accent: #686868;
-    -fx-input-border-accent: gray;
-    -fx-action-accent: #686868;
-    -fx-action-border-accent: gray;
+
+    /*
+     * Tab
+     */
+
     -fx-tab-accent: #5d5d5d;
-    -fx-main-pane-accent: #505050;
-    -fx-accent:             #4a84ff;
-    -fx-diabled-accent: #2f4493;
-    -fx-focus-color:       -fx-accent;
+
+    /*
+     * Input
+     */
+
+    -fx-input-accent:        #686868;
+    -fx-input-border-accent: gray;
+
+    /*
+     * Button and action
+     */
+
+    -fx-action-accent:       #686868;
+    -fx-action-border-accent:gray;
+
+    /*
+     * Main accents
+     */
+
+    -fx-bar-accent:          #5b5b5b;
+    -fx-bar-border-accent:   #747474;
+
+    -fx-main-divider-accent: black;
+    -fx-off-divider-accent:  #858585;
+
+    -fx-pane-accent:         #ededed;
+
+    -fx-title-accent:        #4f4f4f;
+    -fx-control-pane-accent: #636363;
+
+    -fx-main-pane-accent:    #505050;
+    -fx-accent:              #4a84ff;
+    -fx-diabled-accent:      #2f4493;
+    -fx-focus-color:         -fx-accent;
 }
 
 .root {
