@@ -36,7 +36,7 @@
     </center>
 
     <right>
-        <BorderPane prefWidth="400">
+        <BorderPane fx:id="content" prefWidth="400">
             <top>
                 <VBox fx:id="vBoxControl" alignment="TOP_CENTER">
                     <ImageView>

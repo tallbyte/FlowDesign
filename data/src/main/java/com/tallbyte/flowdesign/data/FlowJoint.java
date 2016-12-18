@@ -25,6 +25,9 @@ package com.tallbyte.flowdesign.data;
  * - julian (2016-12-12)<br/>
  */
 public class FlowJoint extends Joint {
+
+    private String dataType;
+
     /**
      * Creates a new {@link Joint} based on given configuration.
      *
@@ -35,7 +38,39 @@ public class FlowJoint extends Joint {
      *                 connections or 0 for infinite
      */
     public FlowJoint(Element element, String location, JointType type, int maxOut) {
+        this(element, location, type, "", maxOut);
+    }
+
+    /**
+     * Creates a new {@link Joint} based on given configuration.
+     *
+     * @param element  the containing {@link Element}
+     * @param location the location (e.g. name)
+     * @param type     the type
+     * @param dataType the desired data type
+     * @param maxOut   the maximum amount of outgoing
+     *                 connections or 0 for infinite
+     */
+    public FlowJoint(Element element, String location, JointType type, String dataType, int maxOut) {
         super(element, location, type, maxOut);
+
+        this.dataType = dataType;
+    }
+
+    /**
+     * Gets the current type as a string.
+     * @return Returns the type.
+     */
+    public String getDataType() {
+        return dataType;
+    }
+
+    /**
+     * Sets the current string type.
+     * @param dataType the new type
+     */
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
     }
 
     @Override

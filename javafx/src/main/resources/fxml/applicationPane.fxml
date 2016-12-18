@@ -25,66 +25,80 @@
 <?import javafx.scene.layout.*?>
 <fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" stylesheets="/css/main.css">
     <top>
-        <MenuBar>
-            <Menu text="%menu.file">
-                <MenuItem accelerator="Ctrl+N" text="%menu.file.newProject" onAction="#onCreateProject"/>
+        <VBox>
+            <MenuBar>
+                <Menu text="%menu.file">
+                    <MenuItem accelerator="Ctrl+N" text="%menu.file.newProject" onAction="#onCreateProject"/>
 
-                <SeparatorMenuItem/>
+                    <SeparatorMenuItem/>
 
-                <MenuItem fx:id="menuItemLoad" accelerator="Ctrl+O" text="%menu.file.load"   onAction="#onLoad" />
+                    <MenuItem fx:id="menuItemLoad" accelerator="Ctrl+O" text="%menu.file.load"   onAction="#onLoad" />
 
-                <SeparatorMenuItem/>
+                    <SeparatorMenuItem/>
 
-                <MenuItem fx:id="menuItemSave" accelerator="Ctrl+S" text="%menu.file.save"   onAction="#onSave" />
-                <MenuItem fx:id="menuItemSaveAs" accelerator="Ctrl+Shift+S" text="%menu.file.saveAs" onAction="#onSaveAs"/>
+                    <MenuItem fx:id="menuItemSave" accelerator="Ctrl+S" text="%menu.file.save"   onAction="#onSave" />
+                    <MenuItem fx:id="menuItemSaveAs" accelerator="Ctrl+Shift+S" text="%menu.file.saveAs" onAction="#onSaveAs"/>
 
-                <SeparatorMenuItem/>
-                <MenuItem accelerator="Ctrl+Q" text="%menu.file.quit" onAction="#onQuit"/>
-            </Menu>
-            <Menu fx:id="menuEdit" text="%menu.edit">
+                    <SeparatorMenuItem/>
+                    <MenuItem accelerator="Ctrl+Q" text="%menu.file.quit" onAction="#onQuit"/>
+                </Menu>
+                <Menu fx:id="menuEdit" text="%menu.edit">
 
-            </Menu>
-            <Menu text="%menu.help">
-                <MenuItem visible="false" text="Test" onAction="#onTest"/>
-                <MenuItem accelerator="Ctrl+A" text="%menu.help.about" onAction="#onAbout"/>
-            </Menu>
-        </MenuBar>
+                </Menu>
+                <Menu text="%menu.help">
+                    <MenuItem visible="false" text="Test" onAction="#onTest"/>
+                    <MenuItem accelerator="Ctrl+A" text="%menu.help.about" onAction="#onAbout"/>
+                </Menu>
+            </MenuBar>
+            <Pane fx:id="paneTop">
+
+            </Pane>
+        </VBox>
     </top>
 
-    <left>
-        <BorderPane fx:id="paneLeft">
-            <center>
-                <TreeView fx:id="treeProject"/>
-            </center>
-        </BorderPane>
-    </left>
-
-    <right>
-        <BorderPane fx:id="paneRight">
-            <top>
-                <VBox>
-                    <TitledPane collapsible="false" text="%pane.title.elements">
-                        <FactoryPane fx:id="paneFactory"/>
-                    </TitledPane>
-                    <TitledPane collapsible="false" text="%pane.title.properties">
-                        <PropertyPane fx:id="paneProperty"/>
-                    </TitledPane>
-                </VBox>
-            </top>
-            <center>
-                <TitledPane collapsible="false" text="%pane.title.info" maxHeight="65536"/>
-            </center>
-        </BorderPane>
-    </right>
-
-    <bottom>
-        <HBox fx:id="barBottom">
-            <Label fx:id="labelLastSave" text="%bar.bottom.save.never"/>
-        </HBox>
-    </bottom>
-
     <center>
-        <DiagramsPane fx:id="paneDiagrams"/>
+        <BorderPane fx:id="content">
+            <left>
+                <BorderPane fx:id="paneLeft">
+                    <top>
+                        <TitledPane collapsible="false" text="%pane.title.tree">
+                            <TreeView fx:id="treeProject"/>
+                        </TitledPane>
+                    </top>
+                    <center>
+                        <TitledPane collapsible="false" text="%pane.title.classes" maxHeight="65536"/>
+                    </center>
+                </BorderPane>
+            </left>
+
+            <right>
+                <BorderPane fx:id="paneRight">
+                    <top>
+                        <VBox>
+                            <TitledPane collapsible="false" text="%pane.title.elements">
+                                <FactoryPane fx:id="paneFactory"/>
+                            </TitledPane>
+                            <TitledPane collapsible="false" text="%pane.title.properties">
+                                <PropertyPane fx:id="paneProperty"/>
+                            </TitledPane>
+                        </VBox>
+                    </top>
+                    <center>
+                        <TitledPane collapsible="false" text="%pane.title.info" maxHeight="65536"/>
+                    </center>
+                </BorderPane>
+            </right>
+
+            <bottom>
+                <HBox fx:id="barBottom">
+                    <Label fx:id="labelLastSave" text="%bar.bottom.save.never"/>
+                </HBox>
+            </bottom>
+
+            <center>
+                <DiagramsPane fx:id="paneDiagrams"/>
+            </center>
+        </BorderPane>
     </center>
 
 </fx:root>

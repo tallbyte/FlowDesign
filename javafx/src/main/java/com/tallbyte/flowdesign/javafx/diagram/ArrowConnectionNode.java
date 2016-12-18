@@ -18,15 +18,29 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
+import com.sun.javafx.tk.FontMetrics;
+import com.sun.javafx.tk.Toolkit;
 import com.tallbyte.flowdesign.data.Connection;
 import com.tallbyte.flowdesign.data.Joint;
+import com.tallbyte.flowdesign.javafx.popup.DataTypePopup;
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
+import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.paint.Color;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
+import javafx.scene.layout.HBox;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
+import javafx.stage.Popup;
+
+import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
+import static javafx.scene.layout.Region.USE_PREF_SIZE;
 
 /**
  * This file is part of project flowDesign.
@@ -36,10 +50,11 @@ import javafx.scene.transform.Rotate;
  */
 public class ArrowConnectionNode extends Group {
 
-    private final Line  line   = new Line();
-    private final Line  arrow0 = new Line();
-    private final Line  arrow1 = new Line();
-    private final Label label  = new Label("test");
+    private final Line      line    = new Line();
+    private final Line      arrow0  = new Line();
+    private final Line      arrow1  = new Line();
+    private final HBox      boxText = new HBox();
+    private final TextField text    = new TextField("");
 
     private final Connection connection;
     private final DiagramPane diagramPane;
@@ -47,7 +62,7 @@ public class ArrowConnectionNode extends Group {
     public ArrowConnectionNode(Connection connection, DiagramPane diagramPane) {
         this.connection  = connection;
         this.diagramPane = diagramPane;
-
+        System.out.println("new conn");
         setup();
     }
 
@@ -78,25 +93,81 @@ public class ArrowConnectionNode extends Group {
         arrow1.startXProperty().bind(line.endXProperty());
         arrow1.startYProperty().bind(line.endYProperty());
 
-        getChildren().addAll(line, arrow0, arrow1, label);
+        System.out.println("add");
+        getChildren().addAll(line, arrow0, arrow1, boxText);
+        boxText.getChildren().addAll(new Label("("), text, new Label(")"));
+
 
         line.startXProperty().addListener((observable, oldValue, newValue) -> {
-            updateArrow();
+            update();
         });
         line.startYProperty().addListener((observable, oldValue, newValue) -> {
-            updateArrow();
+            update();
         });
         line.endXProperty().addListener((observable, oldValue, newValue) -> {
-            updateArrow();
+            update();
         });
         line.endYProperty().addListener((observable, oldValue, newValue) -> {
-            updateArrow();
+            update();
+        });
+        text.heightProperty().addListener((observable, oldValue, newValue) -> {
+            update();
+        });
+        text.widthProperty().addListener((observable, oldValue, newValue) -> {
+            update();
         });
 
-        updateArrow();
+        final Popup popup = new Popup();
+        popup.setAutoHide(true);
+        popup.setHideOnEscape(true);
+
+        boxText.setPadding(new Insets(0, 0, 5, 0));
+        text.textProperty().addListener((observable, oldValue, newValue) -> {
+            final String newText = newValue != null ? newValue : "";
+            /**
+             * Warning this is using an internal API which might change in the future.
+             *
+             * As of now (December 2016) JavaFX has no public text measurement API...
+             */
+            FontMetrics metrics = Toolkit.getToolkit().getFontLoader().getFontMetrics(text.getFont());
+            text.setPrefWidth(metrics.computeStringWidth(newText)+5);
+
+            /**
+             * Otherwise the textfield will "scroll" when updated, despite getting bigger
+             */
+            Platform.runLater(() -> {
+                text.positionCaret(0);
+                Platform.runLater(() -> text.positionCaret(newText.length()));
+            });
+
+            /**
+             * Popup handling
+             */
+            final DataTypePopup dtp = new DataTypePopup(
+                    sourceNode.getJoint().getElement().getDiagram().getProject(),
+                    text.getText()
+            );
+            dtp.getStylesheets().add("/css/main.css");
+            dtp.setPrefHeight(100);
+            popup.getContent().clear();
+            popup.getContent().add(dtp);
+
+            Bounds bounds = text.localToScreen(text.getBoundsInLocal());
+            if (bounds != null) {
+                popup.show(this, bounds.getMinX()+10, bounds.getMinY()-100);
+                System.out.println("showing");
+            }
+        });
+        text.setText(null);
+        text.setText("");
+        text.setPrefColumnCount(60);
+        text.setMinWidth(10);
+        text.setMaxWidth(60);
+
+        update();
     }
 
-    private void updateArrow() {
+    private void update() {
         double al = 10;
 
         double lenX = line.getEndX()-line.getStartX();
@@ -117,8 +188,8 @@ public class ArrowConnectionNode extends Group {
         arrow1.getTransforms().clear();
         arrow1.getTransforms().add(new Rotate(-30, line.getEndX(), line.getEndY()));
 
-        label.setLayoutX(line.getEndX()-sx*len*0.5);
-        label.setLayoutY(line.getEndY()-sy*len*0.5-label.getHeight());
+        boxText.setLayoutX(line.getEndX()-sx*len*0.5- boxText.getWidth()/2);
+        boxText.setLayoutY(line.getEndY()-sy*len*0.5- boxText.getHeight());
 
         Point2D normal = new Point2D(1, 0);
         Point2D line   = new Point2D(lenX, lenY).normalize();
@@ -128,8 +199,8 @@ public class ArrowConnectionNode extends Group {
             angle = 360-angle;
         }
 
-        label.getTransforms().clear();
-        label.getTransforms().add(new Rotate(angle, 0, label.getHeight()));
+        boxText.getTransforms().clear();
+        boxText.getTransforms().add(new Rotate(angle, boxText.getWidth()/2, boxText.getHeight()));
     }
 
     public DoubleProperty startYProperty() {

@@ -255,9 +255,11 @@ public class ApplicationPane extends BorderPane {
         Dialog<String> dialog = new TextInputDialog();
         Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image("/images/realIcon.png"));
+        dialog.setGraphic(null);
         dialog.setTitle(getResourceString("popup.new."+clazz.getSimpleName()+".title"));
         dialog.setContentText(getResourceString("popup.new."+clazz.getSimpleName()+".field.name"));
         dialog.setHeaderText(null);
+        dialog.getDialogPane().getStylesheets().add("/css/main.css");
         dialog.showAndWait().ifPresent(response -> {
             Project project = getProject();
             if (project != null) {
@@ -276,9 +278,11 @@ public class ApplicationPane extends BorderPane {
         Dialog<String> dialog = new TextInputDialog();
         Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image("/images/realIcon.png"));
+        dialog.setGraphic(null);
         dialog.setTitle(getResourceString("popup.newProject.title"));
         dialog.setContentText(getResourceString("popup.newProject.field.name"));
         dialog.setHeaderText(null);
+        dialog.getDialogPane().getStylesheets().add("/css/main.css");
         dialog.showAndWait().ifPresent(response -> project.set(new Project(response)));
     }
 
@@ -348,46 +352,6 @@ public class ApplicationPane extends BorderPane {
     @FXML
     public void onTest() {
 
-    }
-
-    /**
-     * Adds a new {@link EnvironmentDiagram} to the {@link Project}.
-     * If no {@link Project} is set, this method will do nothing.
-     */
-    @FXML
-    public void onAddEnvironment() {
-        Dialog<String> dialog = new TextInputDialog();
-        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(new Image("/images/realIcon.png"));
-        dialog.setTitle(getResourceString("popup.newEnvironment.title"));
-        dialog.setContentText(getResourceString("popup.newEnvironment.field.name"));
-        dialog.setHeaderText(null);
-        dialog.showAndWait().ifPresent(response -> {
-            Project project = getProject();
-            if (project != null) {
-                project.addDiagram(new EnvironmentDiagram(response));
-            }
-        });
-    }
-
-    /**
-     * Adds a new {@link FlowDiagram} to the {@link Project}.
-     * If no {@link Project} is set, this method will do nothing.
-     */
-    @FXML
-    public void onAddFlow() {
-        Dialog<String> dialog = new TextInputDialog();
-        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(new Image("/images/realIcon.png"));
-        dialog.setTitle(getResourceString("popup.newFlow.title"));
-        dialog.setContentText(getResourceString("popup.newFlow.field.name"));
-        dialog.setHeaderText(null);
-        dialog.showAndWait().ifPresent(response -> {
-            Project project = getProject();
-            if (project != null) {
-                project.addDiagram(new FlowDiagram(response));
-            }
-        });
     }
 
     /**

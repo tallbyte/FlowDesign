@@ -36,13 +36,14 @@ import java.util.Map;
  */
 public class Project {
 
-    private Map<Class<? extends Diagram>, List<Diagram>> diagrams  = new HashMap<>();
-    private Map<String,                   Diagram>       nameMap   = new HashMap<>();
-    private List<DiagramsChangedListener>                listeners = new ArrayList<>();
+    private final Map<Class<? extends Diagram>, List<Diagram>> diagrams  = new HashMap<>();
+    private final Map<String,                   Diagram>       nameMap   = new HashMap<>();
+    private final List<DiagramsChangedListener>                listeners = new ArrayList<>();
+    private final DataTypeHolder                               holder    = new DataTypeHolder();
 
-    private String                                       name;
+    private       String                                       name;
 
-    private PropertyChangeSupport                        changeSupport;
+    private final PropertyChangeSupport                        changeSupport;
 
     /**
      * Creates a new {@link Project} with a default name.
@@ -186,6 +187,14 @@ public class Project {
      */
     public void removeDiagramsChangedListener(DiagramsChangedListener listener) {
         listeners.remove(listener);
+    }
+
+    /**
+     * Gets the {@link DataTypeHolder} used to register and add {@link DataType}s.
+     * @return Returns the holder.
+     */
+    public DataTypeHolder getDataTypeHolder() {
+       return holder;
     }
 
     /**
