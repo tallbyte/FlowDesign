@@ -44,7 +44,7 @@ public class StateDiagramImage extends DiagramImage {
         double height = getHeight();
 
         context.clearRect(0, 0, width, height);
-        context.setStroke(Color.BLACK);
+        context.setStroke(ImageConstants.COLOR);
         context.setLineWidth(1.5);
         context.strokeOval(
                 context.getLineWidth(), context.getLineWidth(),

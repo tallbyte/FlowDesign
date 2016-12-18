@@ -42,7 +42,7 @@ public class PortalDiagramImage extends DiagramImage {
         double height = getHeight();
 
         context.clearRect(0, 0, width, height);
-        context.setStroke(Color.BLACK);
+        context.setStroke(ImageConstants.COLOR);
         context.setLineWidth(1.5);
         context.strokeRect(
                 context.getLineWidth(), context.getLineWidth(),

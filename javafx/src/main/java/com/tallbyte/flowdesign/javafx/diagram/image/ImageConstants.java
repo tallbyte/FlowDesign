@@ -18,35 +18,17 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.image;
 
-import javafx.scene.canvas.GraphicsContext;
+
 import javafx.scene.paint.Color;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-10-30)<br/>
+ * - julian (2016-12-18)<br/>
  */
-public class SplitDiagramImage extends DiagramImage {
+public class ImageConstants {
 
-    /**
-     * Creates a new {@link SplitDiagramImage} with default dimension.
-     */
-    public SplitDiagramImage() {
-        setWidth(30);
-        setHeight(30);
-    }
+    public static Color COLOR = Color.BLACK;
 
-    @Override
-    public void repaint() {
-        GraphicsContext context = getGraphicsContext2D();
-        double width  = getWidth();
-        double height = getHeight();
-
-        context.clearRect(0, 0, width, height);
-        context.setStroke(ImageConstants.COLOR);
-        context.setLineWidth(1.5);
-        double f = context.getLineWidth();
-        context.strokeRect(context.getLineWidth(), context.getLineWidth(), width-2*context.getLineWidth(), height-2*context.getLineWidth());
-    }
 }

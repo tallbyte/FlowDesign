@@ -66,7 +66,7 @@ public class StickmanDiagramImage extends DiagramImage {
         double headBase  = height*0.2;
 
 
-        context.setStroke(Color.BLACK);
+        context.setStroke(ImageConstants.COLOR);
         context.setLineWidth(1.5);
 
         // feet

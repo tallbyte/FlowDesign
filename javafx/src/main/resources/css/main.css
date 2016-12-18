@@ -62,18 +62,19 @@
      * Main accents
      */
 
-    -fx-bar-accent:          #5b5b5b;
+    -fx-menu-accent: #404040;
+    -fx-bar-accent: #3b3e40;
     -fx-bar-border-accent:   #747474;
 
     -fx-main-divider-accent: black;
-    -fx-off-divider-accent:  #858585;
+    -fx-off-divider-accent: #5c5c5c;
 
     -fx-pane-accent:         #ededed;
 
-    -fx-title-accent:        #4f4f4f;
-    -fx-control-pane-accent: #636363;
+    -fx-title-accent: #3a3a3a;
+    -fx-control-pane-accent: #474a4d;
 
-    -fx-main-pane-accent:    #505050;
+    -fx-main-pane-accent: #3a3a3a;
     -fx-accent:              #4a84ff;
     -fx-diabled-accent:      #2f4493;
     -fx-focus-color:         -fx-accent;
@@ -247,21 +248,14 @@
 
 .context-menu {
     -fx-border-color:       -fx-bar-border-accent;
-    -fx-background-color:   -fx-bar-accent;
+    -fx-background-color:   -fx-control-pane-accent;
     -fx-padding:            2;
-}
-
-.separator {
-    -fx-border-color:       -fx-bar-border-accent;
-    -fx-border-width:       0;
-    -fx-pref-height:        1px;
-    -fx-background-color:   -fx-bar-border-accent;
-    -fx-text-fill:          -fx-bar-border-accent;
 }
 
 .separator .line {
     -fx-border-color:       -fx-bar-border-accent;
     -fx-border-width:       1 0 0 0;
+    -fx-padding:            0;
 }
 
 /*
@@ -305,7 +299,7 @@
 
 #paneTop {
     -fx-border-color:       -fx-off-divider-accent transparent transparent transparent;
-    -fx-background-color:   -fx-control-pane-accent;
+    -fx-background-color:   -fx-bar-accent;
     -fx-pref-height:        1.5em;
 }
 
@@ -506,12 +500,12 @@ WelcomePane #content {
 WelcomePane .applicationName {
     -fx-font-size:      1.4em;
     -fx-font-weight:    bold;
-    -fx-text-fill: #2f2f2f;
+    -fx-text-fill: #262626;
 }
 
 WelcomePane .version {
     -fx-font-size:      1.05em;
-    -fx-text-fill: #4b4b4b;
+    -fx-text-fill: #7c7c7c;
 }
 
 WelcomePane .button {
@@ -621,6 +615,6 @@ ArrowConnectionNode * {
 
 DataTypePopup {
     -fx-padding:          3px;
-    -fx-background-color: -fx-bar-accent;
+    -fx-background-color: -fx-control-pane-accent;
     -fx-border-color:     -fx-bar-border-accent;
 }

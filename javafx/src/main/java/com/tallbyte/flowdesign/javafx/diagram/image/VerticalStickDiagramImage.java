@@ -43,7 +43,7 @@ public class VerticalStickDiagramImage extends DiagramImage {
         double height = getHeight();
 
         context.clearRect(0, 0, width, height);
-        context.setFill(Color.BLACK);
+        context.setFill(ImageConstants.COLOR);
         context.fillRect(width/2-1, 1, 2, height-2);
     }
 
