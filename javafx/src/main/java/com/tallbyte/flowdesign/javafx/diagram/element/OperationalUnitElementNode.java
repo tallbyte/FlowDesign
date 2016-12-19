@@ -47,19 +47,19 @@ public class OperationalUnitElementNode extends ElementNode {
         super.setup();
 
         JointNode input0 = addJoint(operation.getJoint(Operation.JOINT_INPUT0));
-        input0.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0).add(input0.radiusProperty()));
+        input0.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
         input0.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
 
         JointNode output0 = addJoint(operation.getJoint(Operation.JOINT_OUTPUT0));
-        output0.centerXProperty().bind(widthProperty().subtract(output0.radiusProperty()).subtract(widthExtend));
+        output0.centerXProperty().bind(widthProperty().subtract(widthExtend));
         output0.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
 
         JointNode dependencyInput = addJoint(operation.getJoint(Operation.JOINT_DEPENDENCY_INPUT));
         dependencyInput.centerXProperty().bind(widthProperty().subtract(widthExtend).multiply(0.5));
-        dependencyInput.centerYProperty().bind(Bindings.createDoubleBinding(() -> 0.0).add(dependencyInput.radiusProperty()));
+        dependencyInput.centerYProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
 
         JointNode dependencyOutput = addJoint(operation.getJoint(Operation.JOINT_DEPENDENCY_OUTPUT));
         dependencyOutput.centerXProperty().bind(widthProperty().subtract(widthExtend).multiply(0.5));
-        dependencyOutput.centerYProperty().bind(heightProperty().subtract(dependencyOutput.radiusProperty()).subtract(heightExtend));
+        dependencyOutput.centerYProperty().bind(heightProperty().subtract(heightExtend));
     }
 }

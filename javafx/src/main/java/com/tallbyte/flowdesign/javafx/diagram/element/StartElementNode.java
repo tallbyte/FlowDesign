@@ -45,7 +45,7 @@ public class StartElementNode extends ElementNode {
         super.setup();
 
         JointNode output = addJoint(start.getJoint(Start.JOINT_OUTPUT));
-        output.centerXProperty().bind(widthProperty().subtract(output.radiusProperty()).subtract(widthExtend));
+        output.centerXProperty().bind(widthProperty().subtract(widthExtend));
         output.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
     }
 }

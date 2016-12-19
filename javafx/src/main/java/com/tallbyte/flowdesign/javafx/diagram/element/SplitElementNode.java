@@ -47,11 +47,11 @@ public class SplitElementNode extends ElementNode {
         super.setup();
 
         JointNode input = addJoint(split.getJoint(Split.JOINT_INPUT));
-        input.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0).add(input.radiusProperty()));
+        input.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
         input.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
 
         JointNode output = addJoint(split.getJoint(Split.JOINT_OUTPUT));
-        output.centerXProperty().bind(widthProperty().subtract(output.radiusProperty()).subtract(widthExtend));
+        output.centerXProperty().bind(widthProperty().subtract(widthExtend));
         output.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
     }
 }

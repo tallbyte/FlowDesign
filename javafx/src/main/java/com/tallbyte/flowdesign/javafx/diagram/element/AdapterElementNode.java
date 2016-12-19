@@ -47,19 +47,19 @@ public class AdapterElementNode extends ElementNode {
         super.setup();
 
         JointNode left = addJoint(adapter.getJoint(Adapter.JOINT_LEFT));
-        left.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0).add(left.radiusProperty()));
+        left.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
         left.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
 
         JointNode right = addJoint(adapter.getJoint(Adapter.JOINT_RIGHT));
-        right.centerXProperty().bind(widthProperty().subtract(right.radiusProperty()).subtract(widthExtend));
+        right.centerXProperty().bind(widthProperty().subtract(widthExtend));
         right.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
 
         JointNode top = addJoint(adapter.getJoint(Adapter.JOINT_TOP));
         top.centerXProperty().bind(widthProperty().subtract(widthExtend).multiply(0.5));
-        top.centerYProperty().bind(Bindings.createDoubleBinding(() -> 0.0).add(top.radiusProperty()));
+        top.centerYProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
 
         JointNode bottom = addJoint(adapter.getJoint(Adapter.JOINT_BOTTOM));
         bottom.centerXProperty().bind(widthProperty().subtract(widthExtend).multiply(0.5));
-        bottom.centerYProperty().bind(heightProperty().subtract(bottom.radiusProperty()).subtract(heightExtend));
+        bottom.centerYProperty().bind(heightProperty().subtract(heightExtend));
     }
 }
