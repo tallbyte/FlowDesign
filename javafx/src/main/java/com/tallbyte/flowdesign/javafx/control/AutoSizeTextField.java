@@ -18,7 +18,13 @@
 
 package com.tallbyte.flowdesign.javafx.control;
 
-import java.awt.*;
+import com.sun.javafx.tk.*;
+import com.tallbyte.flowdesign.javafx.popup.DataTypePopup;
+import javafx.application.Platform;
+import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
+import javafx.scene.control.TextField;
+
 
 /**
  * This file is part of project flowDesign.
@@ -27,4 +33,32 @@ import java.awt.*;
  * - julian (2016-12-19)<br/>
  */
 public class AutoSizeTextField extends TextField {
+
+    public AutoSizeTextField() {
+        setPadding(new Insets(0));
+        textProperty().addListener((observable, oldValue, newValue) -> {
+            final String newText = newValue != null ? newValue : "";
+            /**
+             * Warning this is using an internal API which might change in the future.
+             *
+             * As of now (December 2016) JavaFX has no public text measurement API...
+             */
+            com.sun.javafx.tk.FontMetrics metrics = com.sun.javafx.tk.Toolkit.getToolkit().getFontLoader().getFontMetrics(getFont());
+            setPrefWidth(metrics.computeStringWidth(newText)+5);
+
+            /**
+             * Otherwise the textfield will "scroll" when updated, despite getting bigger
+             */
+            Platform.runLater(() -> {
+                positionCaret(0);
+                Platform.runLater(() -> positionCaret(newText.length()));
+            });
+
+        });
+        setText(null);
+        setText("");
+        setPrefColumnCount(60);
+        setMinWidth(10);
+    }
+
 }

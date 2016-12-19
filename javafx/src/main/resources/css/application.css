@@ -147,6 +147,18 @@ JointNode {
     -fx-border-color:       transparent;
 }
 
+.connectionNode .text-field {
+    -fx-background-color: transparent;
+    -fx-min-width:        10px;
+    -fx-border:           none;
+    -fx-padding:          0px;
+}
+
+.connectionNode * {
+    -fx-font-weight:      lighter;
+    -fx-font-size:        0.85em;
+}
+
 .nodeConnectionBlob {
     -fx-fill:               -fx-connection-accent;
 }
@@ -315,18 +327,6 @@ SwitchPane {
 SwitchPane .boxButtons {
     -fx-padding:          5px;
     -fx-spacing:          5px;
-}
-
-ArrowConnectionNode TextField {
-    -fx-background-color: transparent;
-    -fx-min-width:        10px;
-    -fx-border:           none;
-    -fx-padding:          0px;
-}
-
-ArrowConnectionNode * {
-    -fx-font-weight:      lighter;
-    -fx-font-size:        0.85em;
 }
 
 #treeProject {

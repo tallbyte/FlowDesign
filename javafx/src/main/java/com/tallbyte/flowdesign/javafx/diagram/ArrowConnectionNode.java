@@ -22,6 +22,7 @@ import com.sun.javafx.tk.FontMetrics;
 import com.sun.javafx.tk.Toolkit;
 import com.tallbyte.flowdesign.data.Connection;
 import com.tallbyte.flowdesign.data.Joint;
+import com.tallbyte.flowdesign.javafx.control.AutoSizeTextField;
 import com.tallbyte.flowdesign.javafx.popup.DataTypePopup;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -54,7 +55,7 @@ public class ArrowConnectionNode extends ConnectionNode {
     private final Line      arrow0  = new Line();
     private final Line      arrow1  = new Line();
     private final HBox      boxText = new HBox();
-    private final TextField text    = new TextField("");
+    private final TextField text    = new AutoSizeTextField();
 
     public ArrowConnectionNode(Connection connection) {
         super(connection);
@@ -117,23 +118,6 @@ public class ArrowConnectionNode extends ConnectionNode {
 
         boxText.setPadding(new Insets(0, 0, 5, 0));
         text.textProperty().addListener((observable, oldValue, newValue) -> {
-            final String newText = newValue != null ? newValue : "";
-            /**
-             * Warning this is using an internal API which might change in the future.
-             *
-             * As of now (December 2016) JavaFX has no public text measurement API...
-             */
-            FontMetrics metrics = Toolkit.getToolkit().getFontLoader().getFontMetrics(text.getFont());
-            text.setPrefWidth(metrics.computeStringWidth(newText)+5);
-
-            /**
-             * Otherwise the textfield will "scroll" when updated, despite getting bigger
-             */
-            Platform.runLater(() -> {
-                text.positionCaret(0);
-                Platform.runLater(() -> text.positionCaret(newText.length()));
-            });
-
             /**
              * Popup handling
              */
@@ -152,11 +136,6 @@ public class ArrowConnectionNode extends ConnectionNode {
                 System.out.println("showing");
             }
         });
-        text.setText(null);
-        text.setText("");
-        text.setPrefColumnCount(60);
-        text.setMinWidth(10);
-        text.setMaxWidth(60);
 
         update();
     }

@@ -21,6 +21,7 @@ package com.tallbyte.flowdesign.javafx.diagram;
 import com.tallbyte.flowdesign.data.Element;
 import com.tallbyte.flowdesign.data.Joint;
 import com.tallbyte.flowdesign.javafx.ColorHandler;
+import com.tallbyte.flowdesign.javafx.control.AutoSizeTextField;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import com.tallbyte.flowdesign.javafx.property.ColorProperty;
 import javafx.beans.binding.Bindings;
@@ -386,7 +387,7 @@ public class ElementNode extends Pane implements SelectableNode {
 
     private TextField addText(StringProperty bind, String cssClass, Pos position, boolean extend) {
 
-        TextField element = new TextField();
+        TextField element = new AutoSizeTextField();
         getChildren().add(element);
         layout();
         element.setPrefHeight(15);
