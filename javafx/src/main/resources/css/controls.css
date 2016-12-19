@@ -150,14 +150,11 @@
  */
 
 .button {
-    -fx-background-radius: 0.3em;
-    -fx-border-radius: 0.3em;
-    -fx-background-color: -fx-action-accent;
-    -fx-border-color: -fx-action-border-accent;
+    -fx-background-color: transparent, -fx-action-border-accent, -fx-action-accent;
 }
 
 .button:default {
-    -fx-background-color: -fx-focus-color;
+    -fx-background-color: transparent, -fx-action-border-accent, -fx-focus-color;
 }
 
 /*
@@ -190,6 +187,15 @@
     -fx-padding:            0;
 }
 
+.tool-bar {
+    -fx-border-color:       transparent transparent -fx-main-divider-accent transparent;
+    -fx-background-color:   -fx-bar-accent;
+}
+
+.border-pane {
+    -fx-background-color: transparent;
+}
+
 /*
  * Tabpane
  */
@@ -218,4 +224,92 @@
 
 .tab:focused {
     -fx-focus-color:        transparent;
+}
+
+/*
+ *
+ */
+
+.toggle-button {
+    -fx-background-color: -fx-action-border-accent, -fx-action-accent;
+    -fx-background-insets: 0, 1 1 1 1;
+}
+
+.toggle-button:selected {
+    -fx-background-color: -fx-action-border-accent, derive(-fx-action-accent, +20%);
+    -fx-background-insets: 0, 1 1 1 1;
+}
+
+
+/*
+ * Slider
+ */
+
+.slider .track {
+    -fx-background-color: -fx-input-border-accent, -fx-input-accent;
+    -fx-background-insets: 0, 1 1 1 1;
+}
+
+.slider .thumb {
+    -fx-background-color: derive(-fx-input-accent, +20%);
+}
+
+/*
+ * Color picker
+ */
+
+.color-picker {
+    -fx-background-color: -fx-action-border-accent, -fx-action-accent;
+    -fx-background-insets: 0, 1 1 1 1;
+}
+
+.color-palette {
+    -fx-background-color: -fx-control-pane-accent;
+    -fx-border-color:     -fx-input-border-accent;
+}
+
+.custom-color-dialog {
+    -fx-background-color: -fx-control-pane-accent;
+}
+
+.custom-color-dialog .controls-pane .customcolor-controls-background {
+    -fx-background-color: -fx-control-pane-accent;
+    -fx-border-color:     -fx-input-border-accent;
+    -fx-border-width:     1px;
+}
+
+.custom-color-dialog .controls-pane .current-new-color-grid #current-new-color-border {
+    -fx-border-width: 1px;
+    -fx-border-color: -fx-input-border-accent;
+}
+
+/*
+ * Combo box
+ */
+
+.combo-box {
+    -fx-background-color: -fx-action-border-accent, -fx-action-accent;
+    -fx-background-insets: 0, 1 1 1 1;
+}
+
+.combo-box > .arrow-button {
+    -fx-text-fill: red;
+}
+
+.combo-box-popup .list-view {
+    -fx-padding: 3px;
+    -fx-background-color: -fx-control-pane-accent;
+    -fx-border-color:     -fx-bar-border-accent;
+}
+
+/*
+ * Accordion
+ */
+
+.accordion > .titled-pane > .title {
+    -fx-background-color: red;
+}
+
+.pane {
+    -fx-background-color: red;
 }

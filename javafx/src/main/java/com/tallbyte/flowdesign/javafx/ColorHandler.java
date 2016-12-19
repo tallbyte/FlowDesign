@@ -42,7 +42,7 @@ public class ColorHandler implements PopupPreparer {
             return cssFile;
         }
     }
-    private Style style = Style.DARK;
+    private Style style = Style.DARK_CONTRAST;
 
     @Override
     public void prepare(Dialog dialog) {

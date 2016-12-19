@@ -16,15 +16,31 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import "darkColor.css";
+package com.tallbyte.flowdesign.javafx.property;
 
-* {
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.paint.Color;
 
-    /*
-     * Draw related
-     */
-    -fx-draw-accent:        #c9c9c9;
-    -fx-connection-accent:  #c9c9c9;
-    -fx-joint-accent:       #c9c9c9;
+/**
+ * This file is part of project flowDesign.
+ * <p/>
+ * Authors:<br/>
+ * - julian (2016-12-19)<br/>
+ */
+public class ColorProperty extends SimpleObjectProperty<Color> {
 
+    public ColorProperty() {
+    }
+
+    public ColorProperty(Color initialValue) {
+        super(initialValue);
+    }
+
+    public ColorProperty(Object bean, String name) {
+        super(bean, name);
+    }
+
+    public ColorProperty(Object bean, String name, Color initialValue) {
+        super(bean, name, initialValue);
+    }
 }

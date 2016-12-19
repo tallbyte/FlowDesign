@@ -22,12 +22,15 @@ import com.tallbyte.flowdesign.data.Element;
 import com.tallbyte.flowdesign.data.Joint;
 import com.tallbyte.flowdesign.javafx.ColorHandler;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
+import com.tallbyte.flowdesign.javafx.property.ColorProperty;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.*;
 import javafx.beans.property.adapter.JavaBeanDoublePropertyBuilder;
 import javafx.beans.property.adapter.JavaBeanStringProperty;
 import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.css.*;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -78,12 +81,11 @@ public class ElementNode extends Pane {
      * General stuff
      */
 
-    protected List<Property<?>> properties  = new ArrayList<>();
-    protected DiagramPane       diagramPane = null;
-    protected Pos               posLabel;
-    protected DiagramImage      content;
-
-    protected Element           element;
+    protected ObservableList<Property<?>> properties  = FXCollections.observableArrayList();
+    protected DiagramPane                 diagramPane = null;
+    protected Pos                         posLabel;
+    protected DiagramImage                content;
+    protected Element                     element;
 
     /*
      * General properties
@@ -100,12 +102,12 @@ public class ElementNode extends Pane {
      * Outside properties
      */
 
-    protected DoubleProperty        realX;
-    protected DoubleProperty        realY;
-    protected DoubleProperty        realWidth;
-    protected DoubleProperty        realHeight;
-    protected StringProperty        text;
-    protected ObjectProperty<Color> color;
+    protected DoubleProperty realX;
+    protected DoubleProperty realY;
+    protected DoubleProperty realWidth;
+    protected DoubleProperty realHeight;
+    protected StringProperty text;
+    protected ColorProperty  color;
 
     /*
      * Working variables
@@ -129,7 +131,7 @@ public class ElementNode extends Pane {
             realWidth  = JavaBeanDoublePropertyBuilder.create().bean(element).name("width").build();
             realHeight = JavaBeanDoublePropertyBuilder.create().bean(element).name("height").build();
             text       = JavaBeanStringPropertyBuilder.create().bean(element).name("text").build();
-            color      = new SimpleObjectProperty<>(this, "color", null);
+            color      = new ColorProperty(this, "color", null);
 
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("Could not create properties. This should never happen?!");
@@ -296,7 +298,7 @@ public class ElementNode extends Pane {
      * Gets the modifiable properties
      * @return Returns a list of such properties.
      */
-    public Iterable<Property<?>> getElementProperties() {
+    public ObservableList<Property<?>> getElementProperties() {
         return properties;
     }
 
@@ -321,6 +323,7 @@ public class ElementNode extends Pane {
         properties.add(realWidth);
         properties.add(realHeight);
         properties.add(text);
+        properties.add(color);
     }
 
     private NodeModificator addModificator(NodeModificator.Location modLoc) {

@@ -157,7 +157,7 @@ CircleConnectionNode .text-field:focused {
 }
 
 .nodeConnectionBlob {
-    -fx-fill:               -fx-accent;
+    -fx-fill:               -fx-connection-accent;
 }
 
 FactoryNode {
@@ -353,6 +353,7 @@ DataTypePopup {
     -fx-background-color: transparent;
     -fx-border-color:     transparent;
     -fx-padding:          0.25em;
+    -fx-background-radius:3px;
 }
 
 .iconButton:hover {
@@ -378,4 +379,16 @@ DataTypePopup {
 
 .elementNode {
     -fx-default-color: -fx-draw-accent;
+}
+
+.propertyColorBox {
+    -fx-spacing: 3px;
+}
+
+.propertyColorPicker {
+    -fx-pref-width: 80px;
+}
+
+.propertyColorResetButton {
+    -fx-text-fill: red;
 }

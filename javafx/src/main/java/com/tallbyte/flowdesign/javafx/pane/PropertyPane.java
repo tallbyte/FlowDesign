@@ -19,16 +19,27 @@
 package com.tallbyte.flowdesign.javafx.pane;
 
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.StringProperty;
+import com.tallbyte.flowdesign.javafx.property.ColorProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.paint.Color;
 import javafx.util.converter.NumberStringConverter;
+import org.controlsfx.control.PropertySheet;
+import org.controlsfx.glyphfont.FontAwesome;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 import static com.tallbyte.flowdesign.javafx.ResourceUtils.*;
 
@@ -68,34 +79,73 @@ public class PropertyPane extends GridPane {
         });
     }
 
-    private boolean addProperty(Property<?> property, int row) {
-        Label label = new Label(getResourceString("pane.properties.property."+property.getName(), property.getName()));
-        Node  data  = null;
-
+    private void createForString(Property<?> property, List<Node> data) {
         if (property instanceof StringProperty) {
             TextField textField = new TextField();
             textField.textProperty().bindBidirectional((StringProperty) property);
-            data = textField;
+            data.add(textField);
+        }
+    }
 
-        } else if (property instanceof DoubleProperty) {
+    private void createForDouble(Property<?> property, List<Node> data) {
+        if (property instanceof DoubleProperty) {
             TextField textField = new TextField();
             textField.textProperty().bindBidirectional((DoubleProperty) property, new NumberStringConverter());
-            data = textField;
+            data.add(textField);
+        }
+    }
 
-        } else if (property instanceof IntegerProperty) {
+    private void createForInteger(Property<?> property, List<Node> data) {
+        if (property instanceof IntegerProperty) {
             TextField textField = new TextField();
             textField.textProperty().bindBidirectional((IntegerProperty) property, new NumberStringConverter());
-            data = textField;
+            data.add(textField);
+        }
+    }
+
+    private void createForColor(Property<?> property, List<Node> data) {
+        if (property instanceof ColorProperty) {
+            HBox hBox = new HBox();
+            hBox.getStyleClass().add("propertyColorBox");
+            ColorPicker picker = new ColorPicker();
+            picker.getStyleClass().add("propertyColorPicker");
+            picker.valueProperty().bindBidirectional((ColorProperty) property);
+            HBox.setHgrow(picker, Priority.ALWAYS);
+
+            Button reset = new Button();
+            reset.getStyleClass().add("propertyColorResetButton");
+            reset.getStyleClass().add("iconButton");
+            reset.setText("\uf072"); // TODO can this be applied differently?
+            reset.setOnAction(event -> picker.setValue(null));
+
+            hBox.getChildren().addAll(picker, reset);
+
+            data.add(hBox);
         }
 
-        if (data != null) {
+    }
+
+    private boolean addProperty(Property<?> property, int row) {
+        Label      label = new Label(getResourceString("pane.properties.property."+property.getName(), property.getName()));
+        List<Node> data  = new ArrayList<>();
+
+        // TODO change to interface
+        createForString(property, data);
+        createForDouble(property, data);
+        createForInteger(property, data);
+        createForColor(property, data);
+
+        if (data.size() > 0) {
             GridPane.setColumnIndex(label, 0);
             GridPane.setRowIndex(label, row);
             getChildren().add(label);
 
-            GridPane.setColumnIndex(data, 1);
-            GridPane.setRowIndex(data, row);
-            getChildren().add(data);
+            for (int i = 0 ; i < data.size() ; ++i) {
+                Node node = data.get(i);
+                GridPane.setColumnIndex(node, i+1);
+                GridPane.setRowIndex(node, row);
+                getChildren().add(node);
+            }
 
             return true;
         }
