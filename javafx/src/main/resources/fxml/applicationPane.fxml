@@ -102,15 +102,7 @@
                     <center>
                         <TitledPane collapsible="false" text="%pane.title.classes" maxHeight="65536">
                             <VBox>
-                                <ColorPicker/>
-                                <ComboBox>
-                                    <items>
-                                        <FXCollections fx:factory="observableArrayList">
-                                            <String fx:value="test"/>
-                                            <String fx:value="test2"/>
-                                        </FXCollections>
-                                    </items>
-                                </ComboBox>
+
                             </VBox>
                         </TitledPane>
                     </center>
