@@ -27,6 +27,7 @@ import com.tallbyte.flowdesign.data.DiagramsChangedListener;
 import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
 import com.tallbyte.flowdesign.data.Project;
 import com.tallbyte.flowdesign.data.flow.FlowDiagram;
+import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
 import com.tallbyte.flowdesign.storage.xml.XmlStorage;
 import javafx.application.Platform;
@@ -70,14 +71,14 @@ public class ApplicationPane extends BorderPane {
     @FXML private MenuItem            menuItemSave;
     @FXML private MenuItem            menuItemSaveAs;
 
-    private final ApplicationManager       applicationManager;
+    private final FlowDesignFxApplication  application;
 
     private ObjectProperty<Project>        project           = new SimpleObjectProperty<>(this, "project", null);
     private List<DiagramsChangedListener>  listenersDiagrams = new ArrayList<>();
     private PropertyChangeListener         listenerName     = null;
 
-    public ApplicationPane(ApplicationManager applicationManager) throws LoadException {
-        this.applicationManager = applicationManager;
+    public ApplicationPane(FlowDesignFxApplication application) throws LoadException {
+        this.application = application;
 
         FXMLLoader loader = new FXMLLoader( getClass().getResource("/fxml/applicationPane.fxml") );
         loader.setController(this);
@@ -252,15 +253,11 @@ public class ApplicationPane extends BorderPane {
      * @param clazz the target {@link Class}
      */
     private void createDiagram(Class<? extends Diagram> clazz) {
-        Dialog<String> dialog = new TextInputDialog();
-        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(new Image("/images/realIcon.png"));
-        dialog.setGraphic(null);
-        dialog.setTitle(getResourceString("popup.new."+clazz.getSimpleName()+".title"));
-        dialog.setContentText(getResourceString("popup.new."+clazz.getSimpleName()+".field.name"));
-        dialog.setHeaderText(null);
-        dialog.getDialogPane().getStylesheets().add("/css/main.css");
-        dialog.showAndWait().ifPresent(response -> {
+        application.setupSimpleDialog(
+                new TextInputDialog(),
+                "popup.new."+clazz.getSimpleName()+".title",
+                "popup.new."+clazz.getSimpleName()+".field.name"
+        ).showAndWait().ifPresent(response -> {
             Project project = getProject();
             if (project != null) {
                 Diagram diagram = paneDiagrams.getDiagramManager().createDiagram(response, clazz);
@@ -275,15 +272,11 @@ public class ApplicationPane extends BorderPane {
      */
     @FXML
     public void onCreateProject() {
-        Dialog<String> dialog = new TextInputDialog();
-        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(new Image("/images/realIcon.png"));
-        dialog.setGraphic(null);
-        dialog.setTitle(getResourceString("popup.newProject.title"));
-        dialog.setContentText(getResourceString("popup.newProject.field.name"));
-        dialog.setHeaderText(null);
-        dialog.getDialogPane().getStylesheets().add("/css/main.css");
-        dialog.showAndWait().ifPresent(response -> project.set(new Project(response)));
+        application.setupSimpleDialog(
+                new TextInputDialog(),
+                "popup.newProject.title",
+                "popup.newProject.field.name"
+        ).showAndWait().ifPresent(response -> project.set(new Project(response)));
     }
 
     /**
@@ -298,7 +291,7 @@ public class ApplicationPane extends BorderPane {
 
         if (file != null) {
             try {
-                project.set(applicationManager.loadProject(file.getPath()));
+                project.set(application.getApplicationManager().loadProject(file.getPath()));
             } catch (IOException | ProjectNotFoundException e) {
                 e.printStackTrace();
                 // TODO temporary
@@ -312,7 +305,7 @@ public class ApplicationPane extends BorderPane {
     @FXML
     public void onSave() {
         try {
-            applicationManager.saveProject(project.get());
+            application.getApplicationManager().saveProject(project.get());
         } catch (IOException e) {
             e.printStackTrace();
             // TODO temporary
@@ -337,7 +330,7 @@ public class ApplicationPane extends BorderPane {
                     path += ".flow";
                 }
 
-                applicationManager.saveProject(project, path);
+                application.getApplicationManager().saveProject(project, path);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -368,13 +361,7 @@ public class ApplicationPane extends BorderPane {
     @FXML
     public void onAbout() {
         try  {
-            Stage stage = new Stage();
-            stage.getIcons().add(new Image("/images/realIcon.png"));
-            stage.setScene(new Scene(new AboutPane()));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setHeight(400);
-            stage.setTitle(getResourceString("popup.about.title"));
-            stage.show();
+            application.setupManualDialog(new Stage(), new AboutPane(), "popup.about.title", 400).show();
         } catch (LoadException e) {
             // TODO
             e.printStackTrace();

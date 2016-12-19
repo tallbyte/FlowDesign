@@ -23,6 +23,7 @@ import com.tallbyte.flowdesign.core.storage.ProjectNotFoundException;
 import com.tallbyte.flowdesign.data.Project;
 import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistory;
 import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistoryEntry;
+import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.LoadException;
@@ -50,15 +51,15 @@ public class WelcomePane extends SwitchContentPane {
 
     @FXML private ListView<ProjectStorageHistoryEntry> listProjects;
 
-    private final ApplicationManager manager;
-    private       SwitchPane         switchPane;
+    private final FlowDesignFxApplication application;
+    private       SwitchPane              switchPane;
 
     /**
      * Creates a new {@link WelcomePane} by loading from a fxml-file
      * @throws LoadException Is thrown if the fxml-file could not be loaded.
      */
-    public WelcomePane(ApplicationManager manager) throws LoadException {
-        this.manager = manager;
+    public WelcomePane(FlowDesignFxApplication application) throws LoadException {
+        this.application = application;
 
         FXMLLoader loader = new FXMLLoader( getClass().getResource("/fxml/welcomePane.fxml") );
         loader.setController(this);
@@ -84,7 +85,7 @@ public class WelcomePane extends SwitchContentPane {
                         entry.setOnMouseClicked(event -> {
                             if (event.getClickCount() == 2) {
                                 try {
-                                    openApplication().setProject(manager.loadProject(item.getPath()));
+                                    openApplication().setProject(application.getApplicationManager().loadProject(item.getPath()));
                                 } catch (ProjectNotFoundException | IOException e) {
                                     e.printStackTrace();
                                 }
@@ -102,21 +103,21 @@ public class WelcomePane extends SwitchContentPane {
         });
 
         // add all entries to the list
-        for (ProjectStorageHistoryEntry entry : manager.getHistory().getEntries()) {
+        for (ProjectStorageHistoryEntry entry : application.getApplicationManager().getHistory().getEntries()) {
             listProjects.getItems().add(0, entry);
         }
     }
 
     private ApplicationPane openApplication() throws LoadException {
-        ApplicationPane pane = new ApplicationPane(manager);
+        ApplicationPane pane = new ApplicationPane(application);
 
         Stage stage = new Stage();
         stage.setTitle("FlowDesign");
-        stage.getIcons().add(new Image("/images/realIcon.png"));
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.setWidth(1200);
         stage.setHeight(800);
+        application.setupStage(stage);
         stage.show();
 
         ((Stage) switchPane.getScene().getWindow()).close();
@@ -135,7 +136,7 @@ public class WelcomePane extends SwitchContentPane {
                             textFieldName.getText()+".flow"
                     );
                     try {
-                        manager.saveProject(project, file.getPath());
+                        application.getApplicationManager().saveProject(project, file.getPath());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -163,7 +164,7 @@ public class WelcomePane extends SwitchContentPane {
 
         if (file != null) {
             try {
-                openApplication().setProject(manager.loadProject(file.getPath()));
+                openApplication().setProject(application.getApplicationManager().loadProject(file.getPath()));
             } catch (IOException | ProjectNotFoundException e) {
                 e.printStackTrace();
             }

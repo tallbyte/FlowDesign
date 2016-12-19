@@ -21,7 +21,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" stylesheets="/css/main.css">
+<fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml">
 
     <bottom>
         <HBox fx:id="hBoxButtons" styleClass="boxButtons" alignment="BASELINE_RIGHT"/>

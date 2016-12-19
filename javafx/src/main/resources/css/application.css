@@ -1,0 +1,377 @@
+/*
+ * FlowDesign
+ * Copyright (C) 2016 Tallbyte <copyright at tallbyte.com>
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*
+ * Application styling
+ */
+
+#content {
+    -fx-padding:            0;
+    -fx-border-width:       1 0 0 0;
+}
+
+#paneTop {
+    -fx-border-color:       -fx-off-divider-accent transparent transparent transparent;
+    -fx-background-color:   -fx-bar-accent;
+    -fx-pref-height:        1.5em;
+    -fx-padding:            0.2em;
+    -fx-spacing:            2px;
+}
+
+#barBottom {
+    -fx-padding:            5 5 5 5;
+    -fx-background-color:   -fx-bar-accent;
+    -fx-border-color:       -fx-main-divider-accent transparent transparent transparent;
+}
+
+#paneLeft {
+    -fx-border-width:       0 1 0 0;
+    -fx-background-color:   -fx-control-pane-accent;
+    -fx-border-color:       transparent -fx-main-divider-accent transparent transparent;
+}
+
+#paneRight {
+    -fx-border-width:       0 0 0 1;
+    -fx-background-color:   -fx-control-pane-accent;
+    -fx-border-color:       transparent transparent transparent -fx-main-divider-accent;
+}
+
+#paneDiagrams {
+    -fx-border-color:       -fx-main-divider-accent transparent transparent transparent;
+    -fx-background-color:   -fx-main-pane-accent;
+}
+
+DiagramPane > .viewport {
+    -fx-background-color:   -fx-main-pane-accent;
+}
+
+AboutPane {
+    -fx-background-color: -fx-control-pane-accent;
+}
+
+AboutPane .text-area {
+    -fx-border-color:     transparent;
+}
+
+AboutPane .text-area {
+    -fx-border-color:     transparent;
+}
+
+FactoryPane {
+    -fx-border-width:       0;
+    -fx-background-color:   transparent;
+}
+
+PropertyPane {
+    -fx-border-width:       0;
+    -fx-background-color:   transparent;
+}
+
+#labelLastSave {
+    -fx-font-size:          0.95em;
+}
+
+.diagramNodeSpacerVertical {
+    -fx-pref-width:         2px;
+    -fx-background-color:   transparent;
+}
+
+.diagramNodeSpacerHorizontal {
+    -fx-pref-height:        2px;
+    -fx-background-color:   transparent;
+}
+
+.diagramNode {
+    -fx-insets:             5px;
+    -fx-background-color:   transparent;
+}
+
+.diagramNode .text-field {
+    -fx-background-color:   transparent;
+    -fx-border-color:       transparent;
+}
+
+.diagramNode .text-field:selected {
+    -fx-background-color:   transparent;
+    -fx-border-color:       transparent;
+}
+
+NodeModificator {
+    -fx-fill:               -fx-accent;
+}
+
+JointNode {
+    -fx-fill:               -fx-joint-accent;
+    -fx-min-width:          3px;
+    -fx-min-height:         3px;
+}
+
+ConnectionNode {
+    -fx-stroke:             -fx-connection-accent;
+}
+
+ArrowConnectionNode .line {
+    -fx-stroke:             -fx-connection-accent;
+    -fx-stroke-width:       1.5px;
+}
+
+ArrowConnectionNode .text-field {
+    -fx-background-color:   transparent;
+    -fx-border-color:       transparent;
+}
+
+ArrowConnectionNode .text-field:focused {
+    -fx-background-color:   transparent;
+    -fx-border-color:       transparent;
+}
+
+CircleConnectionNode .line {
+    -fx-stroke:             -fx-connection-accent;
+    -fx-stroke-width:       1.5px;
+    -fx-fill:               -fx-connection-accent;
+}
+
+CircleConnectionNode .text-field {
+    -fx-background-color:   transparent;
+    -fx-border-color:       transparent;
+}
+
+CircleConnectionNode .text-field:focused {
+    -fx-background-color:   transparent;
+    -fx-border-color:       transparent;
+}
+
+.nodeConnectionBlob {
+    -fx-fill:               -fx-accent;
+}
+
+FactoryNode {
+    -fx-content-display:   TOP;
+}
+
+FactoryPane {
+    -fx-alignment:         center;
+    -fx-padding:           10px;
+    -fx-vgap:              3px;
+    -fx-hgap:              3px;
+    -fx-min-height:        200px;
+}
+
+PropertyPane {
+    -fx-alignment:         center;
+    -fx-padding:           10px;
+    -fx-vgap:              3px;
+    -fx-hgap:              10px;
+    -fx-min-height:        200px;
+}
+
+PropertyPane > TextField {
+    -fx-pref-width:       100px;
+}
+
+.nodeTextHolder {
+    -fx-padding:          0;
+    -fx-background-color: transparent;
+    -fx-border-style:     none;
+    -fx-alignment:        center;
+    -fx-font-size:        0.85em;
+}
+
+.nodeBorderRectangle {
+    -fx-stroke:           -fx-accent;
+    -fx-stroke:           transparent;
+    -fx-fill:             transparent;
+    -fx-stroke-width:     1.5px;
+}
+
+.headerLabel {
+    -fx-font-size:        1.05em;
+    -fx-font-weight:      bold;
+}
+
+#paneAboutInfo {
+    -fx-hgap:             10px;
+    -fx-vgap:             2px;
+}
+
+#boxAboutHeader {
+    -fx-padding:          5px;
+    -fx-spacing:          10px;
+}
+
+#textAreaLicense {
+    -fx-border:           none;
+}
+
+#vBoxControl {
+    -fx-padding:          10;
+    -fx-spacing:          5
+}
+
+WelcomePane #content {
+    -fx-background-color: -fx-control-pane-accent;
+}
+
+WelcomePane .applicationName {
+    -fx-font-size:      1.4em;
+    -fx-font-weight:    bold;
+    -fx-text-fill: #262626;
+}
+
+WelcomePane .version {
+    -fx-font-size:      1.05em;
+    -fx-text-fill: #7c7c7c;
+}
+
+WelcomePane .button {
+    -fx-background-color: transparent;
+    -fx-border-width:     0;
+    -fx-text-fill: #c3c3c3;
+}
+
+WelcomePane .button:hover {
+    -fx-background-color: transparent;
+    -fx-border-width:     0;
+    -fx-text-fill: #afafaf;
+}
+
+WelcomePane .button:pressed {
+    -fx-background-color: transparent;
+    -fx-border-width:     0;
+    -fx-text-fill: #999999;
+}
+
+WelcomePane .projectList {
+    -fx-padding:          0;
+    -fx-background-color: -fx-main-pane-accent;
+}
+
+WelcomePane .newProjectButton * {
+    -fx-text-fill: cornflowerblue;
+}
+
+WelcomePane .openButton * {
+    -fx-text-fill: burlywood;
+}
+
+WelcomePane .versionButton * {
+    -fx-text-fill: seagreen;
+}
+
+ProjectEntry {
+    -fx-min-width:        200px;
+    -fx-pref-height:      50px;
+    -fx-padding:          5px 10px;
+}
+
+ProjectEntry .name {
+    -fx-text-fill: #bfbfbf;
+    -fx-font-weight:      bold;
+    -fx-font-size:        1em;
+}
+
+ProjectEntry .path {
+    -fx-font-size:        0.9em;
+}
+
+ProjectEntry .glyphClose:hover {
+    -fx-text-fill:        red;
+}
+
+ProjectEntry .closeButton .glyphClose {
+    -fx-background-color: transparent;
+    -fx-padding:          0;
+    -fx-border:           none;
+    -fx-text-fill:        #656565;
+}
+
+ProjectEntry .closeButton:hover .glyphClose {
+    -fx-text-fill:        #7c7c7c;
+}
+
+ProjectEntry .closeButton:pressed .glyphClose {
+    -fx-text-fill:        #484848;
+}
+
+.newProjectPane {
+    -fx-padding:          5px;
+}
+
+.newProjectPane .propertySheet {
+    -fx-hgap:             10px;
+    -fx-vgap:             5px;
+}
+
+SwitchPane {
+    -fx-background-color: -fx-control-pane-accent;
+}
+
+SwitchPane .boxButtons {
+    -fx-padding:          5px;
+    -fx-spacing:          5px;
+}
+
+ArrowConnectionNode TextField {
+    -fx-background-color: transparent;
+    -fx-min-width:        10px;
+    -fx-border:           none;
+    -fx-padding:          0px;
+}
+
+ArrowConnectionNode * {
+    -fx-font-weight:      lighter;
+    -fx-font-size:        0.85em;
+}
+
+#treeProject {
+    -fx-focus-color: -fx-box-border;
+    -fx-faint-focus-color: -fx-box-border;
+}
+
+DataTypePopup {
+    -fx-padding:          3px;
+    -fx-background-color: -fx-control-pane-accent;
+    -fx-border-color:     -fx-bar-border-accent;
+}
+
+.iconButton {
+    -fx-background-color: transparent;
+    -fx-border-color:     transparent;
+    -fx-padding:          0.25em;
+}
+
+.iconButton:hover {
+    -fx-background-color: rgba(128, 128, 128, 0.5);
+    -fx-border-color:     gray;
+}
+
+.darkStyleButton * {
+    -fx-text-fill:        black;
+}
+
+.highContrastStyleButton * {
+    -fx-text-fill:        black;
+}
+
+.whiteStyleButton * {
+
+}
+
+.searchButton * {
+
+}
