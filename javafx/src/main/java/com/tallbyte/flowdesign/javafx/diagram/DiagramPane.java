@@ -64,6 +64,9 @@ public class DiagramPane extends ScrollPane {
     protected double mouseX;
     protected double mouseY;
 
+    protected double offsetX;
+    protected double offsetY;
+
     protected ElementsChangedListener listenerElements         = null;
     protected ConnectionsChangedListener listenerConnections   = null;
     protected EventHandler<? super MouseEvent> listenerRelease = null;
@@ -137,14 +140,22 @@ public class DiagramPane extends ScrollPane {
                 this.selected.clear();
                 this.selected.add(node);
 
+                offsetX = event.getX();
+                offsetY = event.getY();
+
                 event.consume();
             }));
 
-            node.addEventHandler(MouseEvent.MOUSE_DRAGGED, addMouseHandler(node, event -> {
-                if (node.isSelected()) {
-                    //TODO move
+            node.addEventHandler(MouseEvent.MOUSE_DRAGGED, addMouseHandler(node,event -> {
+                for (Node child : groupContent.getChildren()) {
+                    if (child instanceof ElementNode && this.selected.contains(child)) {
+                        Bounds bounds = node.getBoundsInParent();
 
-                    event.consume();
+                        System.out.println((getVvalue() * getViewportBounds().getWidth()));
+
+                        ((ElementNode) child).realX.set(event.getX() - offsetX + bounds.getMinX() + getHvalue()*getViewportBounds().getWidth());
+                        ((ElementNode) child).realY.set(event.getY() - offsetY + bounds.getMinY() + getVvalue()*getViewportBounds().getHeight());
+                    }
                 }
             }));
 
