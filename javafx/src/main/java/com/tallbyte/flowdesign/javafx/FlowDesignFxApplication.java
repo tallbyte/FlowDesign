@@ -23,9 +23,18 @@ import com.tallbyte.flowdesign.javafx.pane.ApplicationPane;
 import com.tallbyte.flowdesign.javafx.pane.SwitchPane;
 import com.tallbyte.flowdesign.javafx.pane.WelcomePane;
 import javafx.application.Application;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.tallbyte.flowdesign.javafx.ResourceUtils.getResourceString;
 
 /**
  * This file is part of project flowDesign.
@@ -33,25 +42,67 @@ import javafx.stage.Stage;
  * Authors:<br/>
  * - julian (2016-10-26)<br/>
  */
-public class FlowDesignApplication extends Application {
+public class FlowDesignFxApplication extends Application {
+
+    private ApplicationManager  applicationManager;
+    private ColorHandler        colorHandler;
+    private List<PopupPreparer> preparers = new ArrayList<>();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        ApplicationManager manager = new ApplicationManager();
+        this.applicationManager = new ApplicationManager();
+        this.colorHandler       = new ColorHandler();
+
+        preparers.add(colorHandler);
+        preparers.add(new GeneralPopupPreparer());
 
         SwitchPane  switchPane  = new SwitchPane();
-        WelcomePane defaultPane = new WelcomePane(manager);
+        WelcomePane defaultPane = new WelcomePane(this);
         switchPane.setDefaultContent(defaultPane);
         switchPane.setContent(defaultPane);
 
         primaryStage.titleProperty().bind(switchPane.titleProperty());
         Scene scene = new Scene(switchPane);
-        primaryStage.getIcons().add(new Image("/images/realIcon.png"));
         primaryStage.setScene(scene);
         primaryStage.setWidth(700);
         primaryStage.setHeight(430);
+        setupStage(primaryStage);
 
         primaryStage.show();
+    }
+
+    public ApplicationManager getApplicationManager() {
+        return applicationManager;
+    }
+
+    public <T> Dialog<T> setupSimpleDialog(Dialog<T> dialog, String title, String itemName) {
+        dialog.setGraphic(null);
+        dialog.setTitle(getResourceString(title));
+        dialog.setContentText(getResourceString(itemName));
+        dialog.setHeaderText(null);
+
+        for (PopupPreparer preparer : preparers) {
+            preparer.prepare(dialog);
+        }
+
+        return dialog;
+    }
+
+    public Stage setupManualDialog(Stage stage, Parent root, String title, int height) {
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(new Scene(root));
+        stage.setTitle(getResourceString(title));
+        stage.setHeight(height);
+
+        return setupStage(stage);
+    }
+
+    public Stage setupStage(Stage stage) {
+        for (PopupPreparer preparer : preparers) {
+            preparer.prepare(stage);
+        }
+
+        return stage;
     }
 
 }

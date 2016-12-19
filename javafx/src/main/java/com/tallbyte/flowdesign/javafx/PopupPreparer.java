@@ -16,7 +16,22 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import "darkColor.css";
-@import "angular.css";
-@import "controls.css";
-@import "application.css";
+package com.tallbyte.flowdesign.javafx;
+
+import javafx.scene.control.Dialog;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
+
+
+/**
+ * Created by rootjk on 12/19/16.
+ */
+public interface PopupPreparer {
+
+    void prepare(Dialog dialog);
+
+    void prepare(Stage stage);
+
+    void prepare(Popup popup);
+
+}

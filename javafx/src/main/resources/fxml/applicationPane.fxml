@@ -23,7 +23,8 @@
 <?import com.tallbyte.flowdesign.javafx.pane.PropertyPane?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" stylesheets="/css/main.css">
+<?import org.controlsfx.glyphfont.Glyph?>
+<fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml">
     <top>
         <VBox>
             <MenuBar>
@@ -50,9 +51,40 @@
                     <MenuItem accelerator="Ctrl+A" text="%menu.help.about" onAction="#onAbout"/>
                 </Menu>
             </MenuBar>
-            <Pane fx:id="paneTop">
+            <HBox alignment="BASELINE_RIGHT" fx:id="paneTop">
 
-            </Pane>
+                <Button styleClass="darkStyleButton, iconButton">
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="CIRCLE"/>
+                    </graphic>
+                </Button>
+
+                <Button styleClass="highContrastStyleButton, iconButton">
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="CIRCLE_THIN"/>
+                    </graphic>
+                </Button>
+
+                <Button styleClass="whiteStyleButton, iconButton">
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="CIRCLE"/>
+                    </graphic>
+                </Button>
+
+                <Separator orientation="VERTICAL"/>
+
+                <Button styleClass="reorderButton, iconButton">
+                    <graphic>
+                        <Glyph textFill="white" fontFamily="FontAwesome" icon="REORDER"/>
+                    </graphic>
+                </Button>
+
+                <Button styleClass="searchButton, iconButton">
+                    <graphic>
+                        <Glyph textFill="white" fontFamily="FontAwesome" icon="SEARCH"/>
+                    </graphic>
+                </Button>
+            </HBox>
         </VBox>
     </top>
 

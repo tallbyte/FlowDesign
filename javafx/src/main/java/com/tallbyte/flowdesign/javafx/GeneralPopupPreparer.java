@@ -18,16 +18,31 @@
 
 package com.tallbyte.flowdesign.javafx;
 
-/**
- * This file is part of project flowDesign.
- * <p/>
- * Authors:<br/>
- * - julian (2016-10-26)<br/>
- */
-public class Main {
+import javafx.scene.control.Dialog;
+import javafx.scene.image.Image;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
 
-    public static void main(String[] args) {
-        FlowDesignFxApplication.launch(FlowDesignFxApplication.class, args);
+/**
+ * Created by rootjk on 12/19/16.
+ */
+public class GeneralPopupPreparer implements PopupPreparer {
+    @Override
+    public void prepare(Dialog dialog) {
+        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image("/images/realIcon.png"));
+        dialog.setGraphic(null);
+        dialog.setHeaderText(null);
     }
 
+    @Override
+    public void prepare(Stage stage) {
+        stage.getIcons().add(new Image("/images/realIcon.png"));
+    }
+
+    @Override
+    public void prepare(Popup popup) {
+        Stage stage = (Stage) popup.getScene().getWindow();
+        stage.getIcons().add(new Image("/images/realIcon.png"));
+    }
 }

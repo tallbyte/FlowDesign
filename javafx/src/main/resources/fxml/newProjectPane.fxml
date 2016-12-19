@@ -23,7 +23,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Button?>
-<fx:root type="BorderPane" styleClass="newProjectPane" xmlns:fx="http://javafx.com/fxml" stylesheets="/css/main.css">
+<fx:root type="BorderPane" styleClass="newProjectPane" xmlns:fx="http://javafx.com/fxml">
 
     <center>
         <GridPane styleClass="propertySheet">

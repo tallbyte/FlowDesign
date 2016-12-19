@@ -1,0 +1,221 @@
+/*
+ * FlowDesign
+ * Copyright (C) 2016 Tallbyte <copyright at tallbyte.com>
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*
+ * General look of tree-view and list-view
+ */
+
+.list-view {
+    -fx-padding:          0;
+    -fx-background-color: transparent;
+}
+
+.list-view .list-cell {
+    -fx-background-color: transparent;
+}
+
+.list-view .list-cell:filled:selected:focused, .list-view .list-cell:filled:selected {
+    -fx-background-color: -fx-accent;
+}
+
+.list-view .list-cell:filled:hover {
+    -fx-background-color: #7d7d7d;
+}
+
+.tree-view {
+    -fx-padding:          0;
+    -fx-background-color: transparent;
+}
+
+.tree-view .tree-cell {
+    -fx-background-color: transparent;
+}
+
+.tree-view .tree-cell:filled:selected:focused, .tree-view .tree-cell:filled:selected {
+    -fx-background-color: -fx-accent;
+}
+
+.tree-view .tree-cell:filled:hover {
+    -fx-background-color: -fx-diabled-accent;
+}
+
+/*
+ * General look of scroll bar
+ */
+
+.scroll-bar .decrement-button {
+    -fx-opacity: 0;
+}
+
+.scroll-bar .increment-button {
+    -fx-opacity: 0;
+}
+
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .track-background {
+    -fx-opacity: 0;
+}
+
+.scroll-bar .track {
+    -fx-opacity: 0;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: -fx-scroll-bar-accent;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: -fx-scroll-bar-hover-accent;
+}
+
+/*
+ * Dialogs
+ */
+
+.dialog-pane {
+    -fx-background-color: -fx-control-pane-accent;
+}
+
+/*
+ * TitledPane
+ */
+
+.titled-pane .title {
+    -fx-background-color: -fx-title-accent;
+    -fx-border-width:     1 0 1 0;
+    -fx-border-color:     -fx-main-divider-accent;
+}
+
+.titled-pane {
+    -fx-background-color: -fx-control-pane-accent;
+    -fx-border-width:     0 0 0 0;
+}
+
+.titled-pane > *.content {
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-background-color: transparent;
+}
+
+/*
+ * TextField
+ */
+
+.text-field {
+    -fx-background-color: -fx-input-accent;
+    -fx-border-color: -fx-input-border-accent;
+}
+
+.text-field:focused {
+    -fx-border-color: -fx-focus-color;
+}
+
+/*
+ * TextArea
+ */
+
+.text-area .content {
+    -fx-border-color: -fx-input-border-accent;
+}
+
+.text-area .content, .text-area {
+    -fx-background-color: -fx-input-accent;
+}
+
+.text-area .content:focused {
+    -fx-border-color: -fx-focus-color;
+}
+
+/*
+ * Buttons
+ */
+
+.button {
+    -fx-background-radius: 0.3em;
+    -fx-border-radius: 0.3em;
+    -fx-background-color: -fx-action-accent;
+    -fx-border-color: -fx-action-border-accent;
+}
+
+.button:default {
+    -fx-background-color: -fx-focus-color;
+}
+
+/*
+ * Menu
+ */
+
+.menu-bar {
+    -fx-border-color:       transparent transparent -fx-main-divider-accent transparent;
+    -fx-background-color:   -fx-bar-accent;
+}
+
+.menu {
+    -fx-background-color:   -fx-bar-accent;
+    -fx-padding:            3px 8px;
+}
+
+.menu:showing {
+    -fx-background-color:   -fx-accent;
+}
+
+.context-menu {
+    -fx-border-color:       -fx-bar-border-accent;
+    -fx-background-color:   -fx-control-pane-accent;
+    -fx-padding:            2;
+}
+
+.separator .line {
+    -fx-border-color:       -fx-bar-border-accent;
+    -fx-border-width:       1 1 0 0;
+    -fx-padding:            0;
+}
+
+/*
+ * Tabpane
+ */
+
+.tab-header-background {
+    -fx-background-color:   -fx-control-pane-accent;
+}
+
+.tab-pane *.tab-header-area {
+    -fx-padding:            0 0.166667em 0 0;
+}
+
+.tab-pane {
+    -fx-tab-min-width:      6em;
+}
+
+.tab {
+    -fx-background-color:   -fx-title-accent;
+    -fx-border-color:       -fx-main-divider-accent;
+    -fx-border-width:       0 1 1 0;
+}
+
+.tab:selected {
+    -fx-background-color:   -fx-tab-accent;
+}
+
+.tab:focused {
+    -fx-focus-color:        transparent;
+}
