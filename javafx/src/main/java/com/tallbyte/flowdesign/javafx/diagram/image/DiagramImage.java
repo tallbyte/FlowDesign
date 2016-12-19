@@ -18,7 +18,10 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.image;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.paint.Color;
 
 /**
  * This file is part of project flowDesign.
@@ -27,6 +30,8 @@ import javafx.scene.canvas.Canvas;
  * - julian (2016-10-30)<br/>
  */
 public abstract class DiagramImage extends Canvas {
+
+    protected ObjectProperty<Color> color = new SimpleObjectProperty<>(this, "color", Color.BLACK);
 
     /**
      * Creates a new {@link DiagramImage}.
@@ -42,7 +47,23 @@ public abstract class DiagramImage extends Canvas {
         setWidth(75);
         setHeight(75);
 
+        color.addListener(observable -> {
+            repaint();
+        });
+
         repaint();
+    }
+
+    public Color getColor() {
+        return color.get();
+    }
+
+    public void setColor(Color color) {
+        this.color.set(color);
+    }
+
+    public ObjectProperty<Color> colorProperty() {
+        return color;
     }
 
     /**

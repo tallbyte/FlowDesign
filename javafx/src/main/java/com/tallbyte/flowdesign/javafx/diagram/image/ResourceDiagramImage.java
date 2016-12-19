@@ -44,7 +44,7 @@ public class ResourceDiagramImage extends DiagramImage {
         double height = getHeight();
 
         context.clearRect(0, 0, width, height);
-        context.setStroke(ImageConstants.COLOR);
+        context.setStroke(getColor());
         context.setLineWidth(1.5);
         context.strokeOval(
                 context.getLineWidth(), context.getLineWidth(),

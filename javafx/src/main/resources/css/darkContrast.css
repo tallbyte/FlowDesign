@@ -16,19 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx.diagram.image;
-
-
-import javafx.scene.paint.Color;
-
-/**
- * This file is part of project flowDesign.
- * <p/>
- * Authors:<br/>
- * - julian (2016-12-18)<br/>
- */
-public class ImageConstants {
-
-    public static Color COLOR = Color.BLACK;
-
-}
+@import "darkContrastColor.css";
+@import "angular.css";
+@import "controls.css";
+@import "application.css";

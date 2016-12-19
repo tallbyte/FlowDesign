@@ -20,6 +20,7 @@ package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.data.Element;
 import com.tallbyte.flowdesign.data.Joint;
+import com.tallbyte.flowdesign.javafx.ColorHandler;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
@@ -27,6 +28,7 @@ import javafx.beans.property.*;
 import javafx.beans.property.adapter.JavaBeanDoublePropertyBuilder;
 import javafx.beans.property.adapter.JavaBeanStringProperty;
 import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
+import javafx.css.*;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -38,6 +40,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -48,33 +51,77 @@ import java.util.List;
  */
 public class ElementNode extends Pane {
 
+    private static final List<CssMetaData<? extends Styleable, ?>> STYLABLES;
+    private static final CssMetaData<ElementNode, Color>           DEFAULT_COLOR = new CssMetaData<ElementNode, Color>(
+            "-fx-default-color",
+            StyleConverter.getColorConverter(),
+            Color.BLACK ) {
+
+        @Override
+        public boolean isSettable(ElementNode styleable) {
+            return !styleable.defaultColorProperty().isBound();
+        }
+
+        @Override
+        public StyleableProperty<Color> getStyleableProperty(ElementNode styleable) {
+            return styleable.defaultColorProperty();
+        }
+    };
+
+    static {
+        List<CssMetaData<? extends Styleable, ?>> list = new ArrayList<>(getClassCssMetaData());
+        list.add(DEFAULT_COLOR);
+        STYLABLES = Collections.unmodifiableList(list);
+    }
+
+    /*
+     * General stuff
+     */
+
     protected List<Property<?>> properties  = new ArrayList<>();
     protected DiagramPane       diagramPane = null;
     protected Pos               posLabel;
     protected DiagramImage      content;
 
-    protected double            mouseX;
-    protected double            mouseY;
-
     protected Element           element;
 
-    protected DoubleProperty    realX;
-    protected DoubleProperty    realY;
-    protected DoubleProperty    realWidth;
-    protected DoubleProperty    realHeight;
-    protected StringProperty    text;
+    /*
+     * General properties
+     */
 
-    protected DoubleBinding     widthExtend  = Bindings.createDoubleBinding(() -> 0.0);
-    protected DoubleBinding     heightExtend = Bindings.createDoubleBinding(() -> 0.0);
+    protected DoubleBinding                  widthExtend  = Bindings.createDoubleBinding(() -> 0.0);
+    protected DoubleBinding                  heightExtend = Bindings.createDoubleBinding(() -> 0.0);
+    protected BooleanProperty                selected     = new SimpleBooleanProperty(this, "selected", false);
 
-    protected BooleanProperty   selected = new SimpleBooleanProperty(this, "selected", false);
+    protected StyleableObjectProperty<Color> defaultColor = new SimpleStyleableObjectProperty<>(DEFAULT_COLOR);
+
+
+    /*
+     * Outside properties
+     */
+
+    protected DoubleProperty        realX;
+    protected DoubleProperty        realY;
+    protected DoubleProperty        realWidth;
+    protected DoubleProperty        realHeight;
+    protected StringProperty        text;
+    protected ObjectProperty<Color> color;
+
+    /*
+     * Working variables
+     */
 
     private   boolean           release  = true;
+
+    protected double            mouseX;
+    protected double            mouseY;
 
     public ElementNode(Element element, DiagramImage content, Pos posLabel) {
         this.content     = content;
         this.element     = element;
         this.posLabel    = posLabel;
+
+        getStyleClass().add("elementNode");
 
         try {
             realX      = JavaBeanDoublePropertyBuilder.create().bean(element).name("x").build();
@@ -82,9 +129,13 @@ public class ElementNode extends Pane {
             realWidth  = JavaBeanDoublePropertyBuilder.create().bean(element).name("width").build();
             realHeight = JavaBeanDoublePropertyBuilder.create().bean(element).name("height").build();
             text       = JavaBeanStringPropertyBuilder.create().bean(element).name("text").build();
+            color      = new SimpleObjectProperty<>(this, "color", null);
+
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("Could not create properties. This should never happen?!");
         }
+
+        content.colorProperty().bind(Bindings.when(color.isNotNull()).then(color).otherwise(defaultColor));
 
         addDefaultProperties();
     }
@@ -195,6 +246,42 @@ public class ElementNode extends Pane {
      */
     public StringProperty textProperty() {
         return text;
+    }
+
+    /**
+     * Gets the current {@link Color}.
+     * @return Returns the {@link Color}.
+     */
+    public Color getColor() {
+        return color.get();
+    }
+
+    /**
+     * Sets the current {@link Color}.
+     * @param color the new {@link Color}
+     */
+    public void setColor(Color color) {
+        this.color.set(color);
+    }
+
+    /**
+     * Gets the color property
+     * @return Returns the property.
+     */
+    public ObjectProperty<Color> colorProperty() {
+        return color;
+    }
+
+    public Color getDefaultColor() {
+        return defaultColor.get();
+    }
+
+    public void setDefaultColor(Color defaultColor) {
+        this.defaultColor.set(defaultColor);
+    }
+
+    public StyleableObjectProperty<Color> defaultColorProperty() {
+        return defaultColor;
     }
 
     /**
@@ -442,5 +529,8 @@ public class ElementNode extends Pane {
         textFieldText.setOnMouseClicked(handlerClickedAfter);
     }
 
-
+    @Override
+    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
+        return STYLABLES;
+    }
 }

@@ -375,3 +375,7 @@ DataTypePopup {
 .searchButton * {
 
 }
+
+.elementNode {
+    -fx-default-color: -fx-draw-accent;
+}

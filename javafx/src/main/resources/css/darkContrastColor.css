@@ -1,0 +1,78 @@
+/*
+ * FlowDesign
+ * Copyright (C) 2016 Tallbyte <copyright at tallbyte.com>
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+* {
+    /*
+ * Text
+ */
+    -fx-text-fill: #e5e5e5;
+
+    /*
+     * ScrollBar
+     */
+    -fx-scroll-bar-accent:       #959595;
+    -fx-scroll-bar-hover-accent: #808080;
+
+    /*
+     * Draw related
+     */
+    -fx-draw-accent:        black;
+    -fx-connection-accent:  black;
+    -fx-joint-accent:       black;
+
+    /*
+     * Tab
+     */
+
+    -fx-tab-accent: #5d5d5d;
+
+    /*
+     * Input
+     */
+
+    -fx-input-accent:        #686868;
+    -fx-input-border-accent: gray;
+
+    /*
+     * Button and action
+     */
+
+    -fx-action-accent:       #686868;
+    -fx-action-border-accent:gray;
+
+    /*
+     * Main accents
+     */
+
+    -fx-menu-accent: #404040;
+    -fx-bar-accent: #3b3e40;
+    -fx-bar-border-accent:   #747474;
+
+    -fx-main-divider-accent: black;
+    -fx-off-divider-accent: #5c5c5c;
+
+    -fx-pane-accent:         #ededed;
+
+    -fx-title-accent: #3a3a3a;
+    -fx-control-pane-accent: #474a4d;
+
+    -fx-main-pane-accent: #3a3a3a;
+    -fx-accent:              #4a84ff;
+    -fx-diabled-accent:      #2f4493;
+    -fx-focus-color:         -fx-accent;
+}

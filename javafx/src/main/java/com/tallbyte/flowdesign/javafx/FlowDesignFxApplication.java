@@ -75,6 +75,10 @@ public class FlowDesignFxApplication extends Application {
         return applicationManager;
     }
 
+    public ColorHandler getColorHandler() {
+        return colorHandler;
+    }
+
     public <T> Dialog<T> setupSimpleDialog(Dialog<T> dialog, String title, String itemName) {
         dialog.setGraphic(null);
         dialog.setTitle(getResourceString(title));

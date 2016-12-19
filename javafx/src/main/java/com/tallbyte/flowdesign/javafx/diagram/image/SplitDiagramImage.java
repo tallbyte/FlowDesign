@@ -44,7 +44,7 @@ public class SplitDiagramImage extends DiagramImage {
         double height = getHeight();
 
         context.clearRect(0, 0, width, height);
-        context.setStroke(ImageConstants.COLOR);
+        context.setStroke(getColor());
         context.setLineWidth(1.5);
         double f = context.getLineWidth();
         context.strokeRect(context.getLineWidth(), context.getLineWidth(), width-2*context.getLineWidth(), height-2*context.getLineWidth());

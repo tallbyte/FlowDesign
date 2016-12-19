@@ -44,8 +44,8 @@ public class AdapterDiagramImage extends DiagramImage {
         double height = getHeight();
 
         context.clearRect(0, 0, width, height);
-        context.setStroke(ImageConstants.COLOR);
-        context.setFill(ImageConstants.COLOR);
+        context.setStroke(getColor());
+        context.setFill(getColor());
         context.setLineWidth(1.5);
 
         context.strokeOval(
