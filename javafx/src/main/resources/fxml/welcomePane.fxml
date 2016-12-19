@@ -61,7 +61,7 @@
                         </graphic>
                     </Button>
 
-                    <Button text="%pane.welcome.versionHistory" styleClass="versionButton">
+                    <Button text="%pane.welcome.versionHistory" styleClass="versionButton" onAction="#onShowHistory">
                         <graphic>
                             <Glyph textFill="darkolivegreen" fontFamily="FontAwesome" icon="BOOK"/>
                         </graphic>

@@ -19,20 +19,15 @@
 package com.tallbyte.flowdesign.javafx.pane;
 
 import com.tallbyte.flowdesign.core.storage.ApplicationManager;
-import com.tallbyte.flowdesign.core.storage.ProjectNotFoundException;
-import com.tallbyte.flowdesign.data.Project;
+import com.tallbyte.flowdesign.data.ui.storage.ApplicationChangelog;
+import com.tallbyte.flowdesign.data.ui.storage.ApplicationChangelogEntry;
 import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistoryEntry;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.LoadException;
-import javafx.scene.Scene;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 
 import static com.tallbyte.flowdesign.javafx.ResourceUtils.getResourceBundle;
@@ -44,21 +39,21 @@ import static com.tallbyte.flowdesign.javafx.ResourceUtils.getResourceString;
  * Authors:<br/>
  * - julian (2016-10-26)<br/>
  */
-public class VersionHistoryPane extends SwitchContentPane {
+public class ChangelogPane extends SwitchContentPane {
 
-    @FXML private ListView<ProjectStorageHistoryEntry> listHistory;
+    @FXML private ListView<ApplicationChangelogEntry> listChangelog;
 
     private final ApplicationManager manager;
     private       SwitchPane         switchPane;
 
     /**
-     * Creates a new {@link VersionHistoryPane} by loading from a fxml-file
+     * Creates a new {@link ChangelogPane} by loading from a fxml-file
      * @throws LoadException Is thrown if the fxml-file could not be loaded.
      */
-    public VersionHistoryPane(ApplicationManager manager) throws LoadException {
+    public ChangelogPane(ApplicationManager manager) throws LoadException {
         this.manager = manager;
 
-        /*FXMLLoader loader = new FXMLLoader( getClass().getResource("/fxml/welcomePane.fxml") );
+        FXMLLoader loader = new FXMLLoader( getClass().getResource("/fxml/changelogPane.fxml") );
         loader.setController(this);
         loader.setRoot(this);
         loader.setResources(getResourceBundle());
@@ -69,25 +64,15 @@ public class VersionHistoryPane extends SwitchContentPane {
             throw new LoadException("Could not load "+getClass().getSimpleName(), e);
         }
 
-        listProjects.setCellFactory(param -> new ListCell<ProjectStorageHistoryEntry>() {
+        listChangelog.setCellFactory(param -> new ListCell<ApplicationChangelogEntry>() {
 
             @Override
-            protected void updateItem(ProjectStorageHistoryEntry item, boolean empty) {
+            protected void updateItem(ApplicationChangelogEntry item, boolean empty) {
                 super.updateItem(item, empty);
 
                 if (item != null) {
                     try {
-                        ProjectEntry entry = new ProjectEntry(item.getProjectName(), item.getPath());
-
-                        entry.setOnMouseClicked(event -> {
-                            if (event.getClickCount() == 2) {
-                                try {
-                                    openApplication().setProject(manager.loadProject(item.getPath()));
-                                } catch (ProjectNotFoundException | IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
+                        ChangelogEntry entry = new ChangelogEntry(item);
 
                         setGraphic(entry);
                     } catch (LoadException e) {
@@ -100,9 +85,13 @@ public class VersionHistoryPane extends SwitchContentPane {
         });
 
         // add all entries to the list
-        for (ProjectStorageHistoryEntry entry : manager.getHistory().getEntries()) {
-            listProjects.getItems().add(0, entry);
-        }*/
+        try {
+            for (ApplicationChangelogEntry entry : manager.deserialize(ApplicationChangelog.class, "!/changelog.xml").getEntries()) {
+                listChangelog.getItems().add(0, entry);
+            }
+        } catch (IOException e) {
+            throw new LoadException("could not load changelog", e);
+        }
     }
 
     @Override
@@ -117,7 +106,7 @@ public class VersionHistoryPane extends SwitchContentPane {
 
     @Override
     public boolean hasCancel() {
-        return false;
+        return true;
     }
 
     @Override

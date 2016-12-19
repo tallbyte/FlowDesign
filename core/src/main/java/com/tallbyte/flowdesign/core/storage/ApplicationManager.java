@@ -98,6 +98,10 @@ public class ApplicationManager {
         saveHistory();
     }
 
+    public void serialize(Object target, String path) throws IOException {
+        storage.serialize(path, target);
+    }
+
     public Project loadProject(ProjectStorageHistoryEntry entry) throws IOException, ProjectNotFoundException {
         try {
             Project project = storage.deserialize(entry.getPath(), Project.class);
@@ -118,6 +122,10 @@ public class ApplicationManager {
         } catch (FileNotFoundException e) {
             throw new ProjectNotFoundException("no project at path " + path);
         }
+    }
+
+    public <T> T deserialize(Class<T> clazz, String path) throws IOException {
+        return storage.deserialize(path, clazz);
     }
 
     public ProjectStorageHistory getHistory() {

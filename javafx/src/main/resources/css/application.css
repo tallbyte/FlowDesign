@@ -383,3 +383,29 @@ DataTypePopup {
 .propertyColorResetButton {
     -fx-text-fill: red;
 }
+
+.changelogEntry .detailList {
+    -fx-padding:    1.5em 0 1em 1em;
+}
+
+.changelogEntry .summary {
+    -fx-text-fill: #aeaeae;
+    -fx-font-weight: bold;
+}
+
+.changelogEntry .commit {
+    -fx-text-fill: -fx-focus-color;
+    -fx-font-size: 0.9em;
+}
+
+.undecoratedList .list-cell {
+    -fx-background-color: transparent;
+}
+
+.undecoratedList .list-cell:hover {
+    -fx-background-color: transparent;
+}
+
+.undecoratedList .list-cell:pressed {
+    -fx-background-color: transparent;
+}

@@ -20,10 +20,10 @@
 
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.BorderPane?>
-<fx:root type="BorderPane" styleClass="newProjectPane" xmlns:fx="http://javafx.com/fxml" stylesheets="/css/main.css">
+<fx:root type="BorderPane" styleClass="newProjectPane" xmlns:fx="http://javafx.com/fxml">
 
     <center>
-        <ListView fx:id="listHistory"/>
+        <ListView fx:id="listChangelog" styleClass="undecoratedList"/>
     </center>
 
 </fx:root>

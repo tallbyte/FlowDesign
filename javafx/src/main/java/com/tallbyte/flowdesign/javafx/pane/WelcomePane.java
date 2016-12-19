@@ -80,7 +80,7 @@ public class WelcomePane extends SwitchContentPane {
 
                 if (item != null) {
                     try {
-                        ProjectEntry entry = new ProjectEntry(item.getProjectName(), item.getPath());
+                        ProjectEntry entry = new ProjectEntry(item);
 
                         entry.setOnMouseClicked(event -> {
                             if (event.getClickCount() == 2) {
@@ -162,7 +162,13 @@ public class WelcomePane extends SwitchContentPane {
 
     @FXML
     private void onShowHistory() {
-
+        try {
+            System.out.println("new content");
+            switchPane.setContent(new ChangelogPane(application.getApplicationManager()));
+            System.out.println("new content");
+        } catch (LoadException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

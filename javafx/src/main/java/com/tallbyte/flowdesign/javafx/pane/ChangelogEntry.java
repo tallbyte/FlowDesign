@@ -18,13 +18,14 @@
 
 package com.tallbyte.flowdesign.javafx.pane;
 
-import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistoryEntry;
+import com.tallbyte.flowdesign.data.ui.storage.ApplicationChangelogEntry;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.LoadException;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
@@ -36,17 +37,19 @@ import static com.tallbyte.flowdesign.javafx.ResourceUtils.getResourceBundle;
  * Authors:<br/>
  * - julian (2016-10-26)<br/>
  */
-public class ProjectEntry extends BorderPane {
+public class ChangelogEntry extends BorderPane {
 
-    @FXML private Label labelName;
-    @FXML private Label labelPath;
+    @FXML private Label labelSummary;
+    @FXML private Label labelCommit;
+    @FXML private VBox  vBoxDetails;
 
     /**
-     * Creates a new {@link ProjectEntry} by loading from a fxml-file
+     * Creates a new {@link ChangelogEntry} by loading from a fxml-file
+     * @params the {@link ApplicationChangelogEntry} that should be reflected
      * @throws LoadException Is thrown if the fxml-file could not be loaded.
      */
-    public ProjectEntry(ProjectStorageHistoryEntry entry) throws LoadException {
-        FXMLLoader loader = new FXMLLoader( getClass().getResource("/fxml/projectEntry.fxml") );
+    public ChangelogEntry(ApplicationChangelogEntry entry) throws LoadException {
+        FXMLLoader loader = new FXMLLoader( getClass().getResource("/fxml/changelogEntry.fxml") );
         loader.setController(this);
         loader.setRoot(this);
         loader.setResources(getResourceBundle());
@@ -57,9 +60,23 @@ public class ProjectEntry extends BorderPane {
             throw new LoadException("Could not load "+getClass().getSimpleName(), e);
         }
 
-        labelName.setText(entry.getProjectName());
-        labelPath.setText(entry.getPath());
+        labelSummary.setText(entry.getSummary());
+        labelCommit.setText(entry.getCommit());
 
+        for (String s : entry.getDetailed()) {
+            vBoxDetails.getChildren().add(new Label(s));
+        }
+
+        labelCommit.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                System.out.println("test");
+                try {
+                    new ProcessBuilder("x-www-browser", "https://git.tallbyte.com/commit/hs!flowDesign.git/"+entry.getCommit()).start();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void onClose(ActionEvent event) {

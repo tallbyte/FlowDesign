@@ -27,6 +27,8 @@ import com.tallbyte.flowdesign.data.DiagramsChangedListener;
 import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
 import com.tallbyte.flowdesign.data.Project;
 import com.tallbyte.flowdesign.data.flow.FlowDiagram;
+import com.tallbyte.flowdesign.data.ui.storage.ApplicationChangelog;
+import com.tallbyte.flowdesign.data.ui.storage.ApplicationChangelogEntry;
 import com.tallbyte.flowdesign.javafx.ColorHandler;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
@@ -359,8 +361,21 @@ public class ApplicationPane extends BorderPane {
      * Test for internal use only.
      */
     @FXML
-    public void onTest() {
+    public void onTest() throws IOException {
+        ApplicationChangelog changelog = new ApplicationChangelog();
+        changelog.add(new ApplicationChangelogEntry(0, "1394528a5d6f0d492764f3c9b0753099ee632c6f", "Version 0.1 - First functional version", new ArrayList<String>() {{
+            add("Implemented Flow-Diagram");
+            add("Implemented System-Environment-Diagram");
+            add("Added storage functionality");
+        }}));
 
+        changelog.add(new ApplicationChangelogEntry(0, "1394528a5d6f0d492764f3c9b0753099ee632c6f", "Version 0.2 - Added better visuals and more content", new ArrayList<String>() {{
+            add("Added multiple style choices");
+            add("Added more diagram components");
+            add("Internal cleanup for further expansion");
+        }}));
+
+        application.getApplicationManager().serialize(changelog, "/tmp/changelog.xml");
     }
 
     /**

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><applicationChangelog modifiable="true">
+<entries>
+<applicationChangelogEntry timeMillis="0" commit="1394528a5d6f0d492764f3c9b0753099ee632c6f" summary="Version 0.1 - First functional version">
+<details>
+<detail>Implemented Flow-Diagram</detail>
+<detail>Implemented System-Environment-Diagram</detail>
+<detail>Added storage functionality</detail>
+</details>
+</applicationChangelogEntry>
+<applicationChangelogEntry timeMillis="0" commit="5a88e47544be11e3f4789f2761dc411d745eb35f" summary="Version 0.2 - Better visuals and more content">
+<details>
+<detail>Added multiple style choices</detail>
+<detail>Added more diagram components</detail>
+<detail>Internal cleanup for further expansion</detail>
+</details>
+</applicationChangelogEntry>
+</entries>
+</applicationChangelog>
