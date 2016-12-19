@@ -21,6 +21,7 @@ package com.tallbyte.flowdesign.javafx.diagram;
 import com.tallbyte.flowdesign.data.Connection;
 import com.tallbyte.flowdesign.data.Joint;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.scene.Group;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -32,22 +33,17 @@ import javafx.scene.transform.Rotate;
  * Authors:<br/>
  * - julian (2016-12-12)<br/>
  */
-public class CircleConnectionNode extends Group {
+public class CircleConnectionNode extends ConnectionNode {
 
-    private final Line   line   = new Line();
     private final Circle circle = new Circle();
 
-    private final Connection connection;
-    private final DiagramPane diagramPane;
 
-    public CircleConnectionNode(Connection connection, DiagramPane diagramPane) {
-        this.connection  = connection;
-        this.diagramPane = diagramPane;
-
-        setup();
+    public CircleConnectionNode(Connection connection) {
+        super(connection);
     }
 
-    private void setup() {
+    @Override
+    protected void setup() {
         Joint source = connection.getSource();
         Joint target = connection.getTarget();
 
@@ -72,54 +68,6 @@ public class CircleConnectionNode extends Group {
         circle.centerYProperty().bind(endYProperty());
         circle.setRadius(3);
 
-        getChildren().addAll(line, circle);
-    }
-
-    public DoubleProperty startYProperty() {
-        return line.startYProperty();
-    }
-
-    public void setStartX(double value) {
-        line.setStartX(value);
-    }
-
-    public double getStartX() {
-        return line.getStartX();
-    }
-
-    public DoubleProperty startXProperty() {
-        return line.startXProperty();
-    }
-
-    public void setStartY(double value) {
-        line.setStartY(value);
-    }
-
-    public double getStartY() {
-        return line.getStartY();
-    }
-
-    public void setEndX(double value) {
-        line.setEndX(value);
-    }
-
-    public double getEndX() {
-        return line.getEndX();
-    }
-
-    public DoubleProperty endXProperty() {
-        return line.endXProperty();
-    }
-
-    public void setEndY(double value) {
-        line.setEndY(value);
-    }
-
-    public double getEndY() {
-        return line.getEndY();
-    }
-
-    public DoubleProperty endYProperty() {
-        return line.endYProperty();
+        getChildren().addAll(circle);
     }
 }

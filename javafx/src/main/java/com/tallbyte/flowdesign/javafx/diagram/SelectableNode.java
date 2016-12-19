@@ -18,13 +18,27 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
-import javafx.scene.shape.Line;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-12-02)<br/>
+ * - julian (2016-12-19)<br/>
  */
-public class ConnectionLine extends Line implements MarkerNode {
+public interface SelectableNode {
+
+    /**
+     * Gets whether this {@link SelectableNode} is selected or not.
+     * @return Returns true if it is, else false.
+     */
+    boolean isSelected();
+
+    /**
+     * Gets the selected property
+     * @return Returns the property.
+     */
+    ReadOnlyBooleanProperty selectedProperty();
+
+
 }

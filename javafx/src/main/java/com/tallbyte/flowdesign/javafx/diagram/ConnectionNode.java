@@ -18,9 +18,25 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
+import com.sun.javafx.tk.FontMetrics;
+import com.sun.javafx.tk.Toolkit;
 import com.tallbyte.flowdesign.data.Joint;
 import com.tallbyte.flowdesign.data.Connection;
+import com.tallbyte.flowdesign.javafx.popup.DataTypePopup;
+import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
+import javafx.scene.Group;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.shape.Line;
+import javafx.scene.transform.Rotate;
+import javafx.stage.Popup;
 
 /**
  * This file is part of project flowDesign.
@@ -28,40 +44,94 @@ import javafx.scene.shape.Line;
  * Authors:<br/>
  * - julian (2016-12-05)<br/>
  */
-public class ConnectionNode extends Line {
+public class ConnectionNode extends Group implements SelectableNode {
 
-    private final Connection  connection;
-    private final DiagramPane diagramPane;
+    protected final Line                    line = new Line();
 
-    public ConnectionNode(Connection connection, DiagramPane diagramPane) {
+    protected final Connection              connection;
+    protected       DiagramPane             diagramPane;
+
+    protected       ReadOnlyBooleanProperty selected;
+
+    public ConnectionNode(Connection connection) {
         this.connection  = connection;
+
+        getChildren().add(line);
+        getStyleClass().add("connectionNode");
+    }
+
+    /**
+     * Sest the containing {@link DiagramPane}
+     * @param diagramPane the new pane
+     */
+    void setDiagramPane(DiagramPane diagramPane, ReadOnlyBooleanProperty selected) {
         this.diagramPane = diagramPane;
+        this.selected    = selected;
 
-        setup();
+        if (diagramPane != null) {
+            setup();
+        }
     }
 
-    private void setup() {
-        Joint source = connection.getSource();
-        Joint target = connection.getTarget();
+    protected void setup() {
 
-        JointNode sourceNode = diagramPane.getJointNode(source);
-        JointNode targetNode = diagramPane.getJointNode(target);
-
-        startXProperty().bind(sourceNode.layoutXProperty()
-                .add(sourceNode.centerXProperty())
-                .add(sourceNode.getNode().realXProperty()));
-        startYProperty().bind(sourceNode.layoutYProperty()
-                .add(sourceNode.centerYProperty())
-                .add(sourceNode.getNode().realYProperty()));
-
-        endXProperty().bind(targetNode.layoutXProperty()
-                .add(targetNode.centerXProperty())
-                .add(targetNode.getNode().realXProperty()));
-        endYProperty().bind(targetNode.layoutYProperty()
-                .add(targetNode.centerYProperty())
-                .add(targetNode.getNode().realYProperty()));
-
-        setStrokeWidth(1.5);
     }
 
+    public DoubleProperty startYProperty() {
+        return line.startYProperty();
+    }
+
+    public void setStartX(double value) {
+        line.setStartX(value);
+    }
+
+    public double getStartX() {
+        return line.getStartX();
+    }
+
+    public DoubleProperty startXProperty() {
+        return line.startXProperty();
+    }
+
+    public void setStartY(double value) {
+        line.setStartY(value);
+    }
+
+    public double getStartY() {
+        return line.getStartY();
+    }
+
+    public void setEndX(double value) {
+        line.setEndX(value);
+    }
+
+    public double getEndX() {
+        return line.getEndX();
+    }
+
+    public DoubleProperty endXProperty() {
+        return line.endXProperty();
+    }
+
+    public void setEndY(double value) {
+        line.setEndY(value);
+    }
+
+    public double getEndY() {
+        return line.getEndY();
+    }
+
+    public DoubleProperty endYProperty() {
+        return line.endYProperty();
+    }
+
+    @Override
+    public boolean isSelected() {
+        return selected.get();
+    }
+
+    @Override
+    public ReadOnlyBooleanProperty selectedProperty() {
+        return selected;
+    }
 }

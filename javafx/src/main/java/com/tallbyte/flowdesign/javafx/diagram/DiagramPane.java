@@ -19,21 +19,25 @@
 package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.data.*;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.*;
 import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.css.PseudoClass;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This file is part of project flowDesign.
@@ -43,22 +47,26 @@ import java.util.Map;
  */
 public class DiagramPane extends ScrollPane {
 
-    protected final DiagramManager              diagramManager;
-    protected final Group                       groupContent  = new Group();
-    protected final Map<Joint, JointNode>       jointNodes    = new HashMap<>();
+    protected final DiagramManager                                       diagramManager;
+    protected final Group                                                groupContent     = new Group();
+    protected final Group                                                groupConnections = new Group();
+    protected final Group                                                groupMarker      = new Group();
+    protected final Map<Joint, JointNode>                                jointNodes       = new HashMap<>();
+    protected final Map<SelectableNode, List<EventHandler<MouseEvent>>>  mouseHandlers    = new HashMap<>();
 
-    protected final ObjectProperty<Diagram<?>>  diagram = new SimpleObjectProperty<>(this, "diagram", null);
+    protected final ObjectProperty<Diagram<?>>     diagram  = new SimpleObjectProperty<>(this, "diagram", null);
+    protected final ObservableList<SelectableNode> selected = FXCollections.observableArrayList();
 
-    protected       StringProperty              name;
-    protected final ObjectProperty<ElementNode> node    = new SimpleObjectProperty<>(this, "node", null);
-    protected final ObjectProperty<Joint>       joint   = new SimpleObjectProperty<>(this, "joint", null);
+    protected       StringProperty                 name;
+    protected final ObjectProperty<ElementNode>    node    = new SimpleObjectProperty<>(this, "node", null);
+    protected final ObjectProperty<Joint>          joint   = new SimpleObjectProperty<>(this, "joint", null);
 
     protected double mouseX;
     protected double mouseY;
 
-    protected ElementsChangedListener listenerElements    = null;
-    protected ConnectionsChangedListener listenerConnections = null;
-    protected EventHandler<? super MouseEvent> listenerRelease     = null;
+    protected ElementsChangedListener listenerElements         = null;
+    protected ConnectionsChangedListener listenerConnections   = null;
+    protected EventHandler<? super MouseEvent> listenerRelease = null;
 
 
     /**
@@ -67,8 +75,10 @@ public class DiagramPane extends ScrollPane {
      */
     public DiagramPane(DiagramManager diagramManager) {
         this.diagramManager = diagramManager;
+        Group group = new Group();
+        group.getChildren().addAll(groupContent, groupConnections, groupMarker);
 
-        setContent(groupContent);
+        setContent(group);
         setPannable(true);
 
         setup();
@@ -82,12 +92,90 @@ public class DiagramPane extends ScrollPane {
         this.diagram.setValue(diagram);
     }
 
+    private EventHandler<MouseEvent> addMouseHandler(SelectableNode node, EventHandler<MouseEvent> handler) {
+        List<EventHandler<MouseEvent>> list = mouseHandlers.get(node);
+
+        if (list == null) {
+            list = new ArrayList<>();
+            mouseHandlers.put(node, list);
+        }
+
+        list.add(handler);
+
+        return handler;
+    }
+
+    private BooleanProperty createSelectedProperty(SelectableNode node) {
+        BooleanProperty selected = new SimpleBooleanProperty();
+        selected.bind(Bindings.createBooleanBinding(() -> this.selected.contains(node), this.selected));
+        selected.addListener((observable, oldValue, newValue) -> {
+            if (node instanceof Node) {
+                ((Node) node).pseudoClassStateChanged(PseudoClass.getPseudoClass("activeSelected"), newValue);
+            }
+        });
+
+        return selected;
+    }
+
+    private void removeMouseHandler(SelectableNode node, EventHandler<MouseEvent> handler) {
+        List<EventHandler<MouseEvent>> list = mouseHandlers.get(node);
+
+        if (list != null) {
+            list.remove(handler);
+
+            if (list.size() == 0) {
+                mouseHandlers.remove(node);
+            }
+        }
+    }
+
     private void addElement(Element element) {
-        setAllUnselected();
         ElementNode node = diagramManager.createNode(getDiagram(), element);
         if (node != null) {
-            node.setDiagramPane(this);
+            node.setDiagramPane(this, createSelectedProperty(node));
+            node.addEventHandler(MouseEvent.MOUSE_PRESSED, addMouseHandler(node, event -> {
+                this.selected.clear();
+                this.selected.add(node);
+
+                event.consume();
+            }));
+
+            node.addEventHandler(MouseEvent.MOUSE_DRAGGED, addMouseHandler(node, event -> {
+                if (node.isSelected()) {
+                    //TODO move
+
+                    event.consume();
+                }
+            }));
+
             groupContent.getChildren().add(node);
+        }
+    }
+
+    private void addConnection(Connection connection) {
+        ConnectionNode node;
+
+        // TODO make using factories and map lookup
+        if (connection instanceof FlowConnection) {
+            node = new ArrowConnectionNode(connection);
+
+        } else if (connection instanceof DependencyConnection) {
+            node = new CircleConnectionNode(connection);
+
+        } else {
+            node = null;
+        }
+
+        if (node != null) {
+            node.setDiagramPane(this, createSelectedProperty(node));
+            node.addEventHandler(MouseEvent.MOUSE_PRESSED, addMouseHandler(node, event -> {
+                this.selected.clear();
+                this.selected.add(node);
+
+                event.consume();
+            }));
+
+            groupConnections.getChildren().add(node);
         }
     }
 
@@ -145,6 +233,13 @@ public class DiagramPane extends ScrollPane {
             mouseY = event.getSceneY();
         });
 
+        addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
+            groupMarker.getChildren().stream().filter(node -> node instanceof ConnectionNode).forEach(node -> {
+                ((ConnectionNode) node).setEndX(event.getX());
+                ((ConnectionNode) node).setEndY(event.getY());
+            });
+        });
+
         setOnDragOver(event -> {
             mouseX = event.getSceneX();
             mouseY = event.getSceneY();
@@ -166,33 +261,24 @@ public class DiagramPane extends ScrollPane {
         });
 
         setOnMousePressed(event -> {
-            setAllUnselected();
+            selected.clear();
+            node.set(null);
             event.consume();
         });
 
-        listenerRelease = event -> {
-            Iterator<Node> iterator = groupContent.getChildren().iterator();
-            while(iterator.hasNext()) {
-                Node node = iterator.next();
-
-                if (node instanceof MarkerNode) {
-                    iterator.remove();
-                }
+        selected.addListener((ListChangeListener<SelectableNode>) c -> {
+            while(c.next()) {
+                c.getAddedSubList().stream()
+                        .filter(node1 -> node1 instanceof ElementNode)
+                        .forEach(node1 -> DiagramPane.this.node.set((ElementNode) node1));
             }
+        });
+
+        listenerRelease = event -> {
+            groupMarker.getChildren().clear();
         };
 
         addEventFilter(MouseEvent.MOUSE_RELEASED, listenerRelease);
-    }
-
-    private void addConnection(Connection connection) {
-        // TODO make using factories and map lookup
-        if (connection instanceof FlowConnection) {
-            groupContent.getChildren().add(new ArrowConnectionNode(connection, this));
-
-        } else if (connection instanceof DependencyConnection) {
-            groupContent.getChildren().add(new CircleConnectionNode(connection, this));
-        }
-
     }
 
     void registerJointNode(JointNode jointNode) {
@@ -208,48 +294,6 @@ public class DiagramPane extends ScrollPane {
     }
 
     /**
-     * Marks all {@link ElementNode}s as unselected.
-     */
-    void setAllUnselected() {
-        groupContent.getChildrenUnmodifiable()
-                .stream()
-                .filter(node
-                        -> node instanceof ElementNode
-                ).forEach(node
-                        -> ((ElementNode) node).selectedProperty().set(false)
-        );
-    }
-
-    /**
-     * Notifies all selected @{@link ElementNode} to move.
-     * @param dx the x delta
-     * @param dy the y delta
-     */
-    void moveAllSelected(double dx, double dy) {
-        groupContent.getChildrenUnmodifiable()
-                .stream()
-                .filter(node
-                        -> node instanceof ElementNode && ((ElementNode) node).selectedProperty().get()
-                ).forEach(node
-                        -> ((ElementNode) node).move(dx, dy)
-        );
-    }
-
-    /**
-     * Checks if any {@link ElementNode} is selected.
-     * @return True if one is selected, else false.
-     */
-    boolean hasSelectedNodes() {
-        for (Node node : groupContent.getChildrenUnmodifiable()) {
-            if (node instanceof ElementNode && ((ElementNode) node).selectedProperty().get()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Adds an (temporary) {@link Node} to the drawing board.
      * This will refuse {@link ElementNode}s.
      * @param node the {@link Node} to add
@@ -259,7 +303,7 @@ public class DiagramPane extends ScrollPane {
             return;
         }
 
-        groupContent.getChildren().add(node);
+        groupMarker.getChildren().add(node);
     }
 
     /**
@@ -272,7 +316,7 @@ public class DiagramPane extends ScrollPane {
             return;
         }
 
-        groupContent.getChildren().remove(node);
+        groupMarker.getChildren().remove(node);
     }
 
     public String getName() {
@@ -315,7 +359,7 @@ public class DiagramPane extends ScrollPane {
         this.node.set(node);
     }
 
-    public ObjectProperty<ElementNode> nodeProperty() {
+    public ReadOnlyObjectProperty<ElementNode> nodeProperty() {
         return node;
     }
 

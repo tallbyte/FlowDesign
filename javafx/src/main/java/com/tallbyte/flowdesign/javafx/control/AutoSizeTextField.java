@@ -16,13 +16,15 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx.diagram;
+package com.tallbyte.flowdesign.javafx.control;
+
+import java.awt.*;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-12-02)<br/>
+ * - julian (2016-12-19)<br/>
  */
-public interface MarkerNode {
+public class AutoSizeTextField extends TextField {
 }

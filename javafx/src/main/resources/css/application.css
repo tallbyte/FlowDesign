@@ -121,37 +121,28 @@ JointNode {
     -fx-min-height:         3px;
 }
 
-ConnectionNode {
+.connectionNode {
     -fx-stroke:             -fx-connection-accent;
 }
 
-ArrowConnectionNode .line {
+.connectionNode Line {
     -fx-stroke:             -fx-connection-accent;
-    -fx-stroke-width:       1.5px;
-}
-
-ArrowConnectionNode .text-field {
-    -fx-background-color:   transparent;
-    -fx-border-color:       transparent;
-}
-
-ArrowConnectionNode .text-field:focused {
-    -fx-background-color:   transparent;
-    -fx-border-color:       transparent;
-}
-
-CircleConnectionNode .line {
-    -fx-stroke:             -fx-connection-accent;
-    -fx-stroke-width:       1.5px;
     -fx-fill:               -fx-connection-accent;
+    -fx-stroke-width:       1.5px;
 }
 
-CircleConnectionNode .text-field {
+.connectionNode:activeSelected Line {
+    -fx-stroke:             -fx-focus-color;
+    -fx-fill:               -fx-focus-color;
+    -fx-stroke-width:       1.5px;
+}
+
+.connectionNode .text-field {
     -fx-background-color:   transparent;
     -fx-border-color:       transparent;
 }
 
-CircleConnectionNode .text-field:focused {
+.connectionNode .text-field:focused {
     -fx-background-color:   transparent;
     -fx-border-color:       transparent;
 }

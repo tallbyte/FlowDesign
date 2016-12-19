@@ -52,7 +52,7 @@ import java.util.List;
  * Authors:<br/>
  * - julian (2016-10-28)<br/>
  */
-public class ElementNode extends Pane {
+public class ElementNode extends Pane implements SelectableNode {
 
     private static final List<CssMetaData<? extends Styleable, ?>> STYLABLES;
     private static final CssMetaData<ElementNode, Color>           DEFAULT_COLOR = new CssMetaData<ElementNode, Color>(
@@ -93,7 +93,8 @@ public class ElementNode extends Pane {
 
     protected DoubleBinding                  widthExtend  = Bindings.createDoubleBinding(() -> 0.0);
     protected DoubleBinding                  heightExtend = Bindings.createDoubleBinding(() -> 0.0);
-    protected BooleanProperty                selected     = new SimpleBooleanProperty(this, "selected", false);
+    protected ReadOnlyBooleanProperty        selected;
+
 
     protected StyleableObjectProperty<Color> defaultColor = new SimpleStyleableObjectProperty<>(DEFAULT_COLOR);
 
@@ -115,8 +116,6 @@ public class ElementNode extends Pane {
 
     private   boolean           release  = true;
 
-    protected double            mouseX;
-    protected double            mouseY;
 
     public ElementNode(Element element, DiagramImage content, Pos posLabel) {
         this.content     = content;
@@ -154,8 +153,9 @@ public class ElementNode extends Pane {
      * Sest the containing {@link DiagramPane}
      * @param diagramPane the new pane
      */
-    void setDiagramPane(DiagramPane diagramPane) {
+    void setDiagramPane(DiagramPane diagramPane, ReadOnlyBooleanProperty selected) {
         this.diagramPane = diagramPane;
+        this.selected    = selected;
 
         if (diagramPane != null) {
             setup();
@@ -287,14 +287,6 @@ public class ElementNode extends Pane {
     }
 
     /**
-     * Gets the selected property
-     * @return Returns the property.
-     */
-    public BooleanProperty selectedProperty() {
-        return selected;
-    }
-
-    /**
      * Gets the modifiable properties
      * @return Returns a list of such properties.
      */
@@ -372,13 +364,19 @@ public class ElementNode extends Pane {
         JointNode element = new JointNode(joint, this);
         element.setRadius(3);
         element.visibleProperty().bind(
-                selected.or(hoverProperty())
-                        .and(Bindings.createBooleanBinding(joint::isOutput))
-                        .or(Bindings.createBooleanBinding(() -> {
+                Bindings.when(
+                        diagramPane.jointProperty().isNotNull()
+                ).then(
+                        Bindings.createBooleanBinding(() -> {
                             Joint j = diagramPane.getJoint();
 
                             return j != null && j.canJoin(joint);
-                        }, diagramPane.jointProperty()))
+                        }, diagramPane.jointProperty())
+                ).otherwise(
+                        selected.or(hoverProperty()).and(
+                                Bindings.createBooleanBinding(joint::isOutput)
+                        )
+                )
         );
         getChildren().add(element);
         diagramPane.registerJointNode(element);
@@ -447,7 +445,7 @@ public class ElementNode extends Pane {
         addContent();
         addBorder();
 
-        TextField textFieldText     = addText(text, "nodeTextHolder", posLabel, true);
+        addText(text, "nodeTextHolder", posLabel, true);
 
         addModificator(NodeModificator.Location.TOP_RIGHT);
         addModificator(NodeModificator.Location.TOP_LEFT);
@@ -459,7 +457,6 @@ public class ElementNode extends Pane {
          * Basic settings
          */
 
-        selected.set(true);
         content.setMouseTransparent(true);
 
         layoutXProperty().bindBidirectional(realX);
@@ -475,65 +472,20 @@ public class ElementNode extends Pane {
         prefHeightProperty().bind(realHeight);
 
         setCursor(Cursor.MOVE);
-
-        /*
-         * Handlers
-         */
-
-        selected.addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                diagramPane.setNode(this);
-            }
-        });
-
-        setOnMouseMoved(event -> {
-            mouseX = event.getSceneX();
-            mouseY = event.getSceneY();
-
-            event.consume();
-        });
-
-        setOnMouseDragged(event -> {
-            double dx = event.getSceneX() - mouseX;
-            double dy = event.getSceneY() - mouseY;
-
-            diagramPane.moveAllSelected(dx, dy);
-
-            mouseX = event.getSceneX();
-            mouseY = event.getSceneY();
-
-            event.consume();
-        });
-
-        EventHandler<? super MouseEvent> handlerClickedPre = event -> {
-            diagramPane.setAllUnselected();
-            selected.set(true);
-
-            release = true;
-            event.consume();
-        };
-
-        EventHandler<? super MouseEvent> handlerClickedAfter = event -> {
-            if (release) {
-                if (!event.isShiftDown()) {
-                    diagramPane.setAllUnselected();
-                }
-
-                selected.set(true);
-
-                event.consume();
-            }
-        };
-
-        setOnMousePressed(handlerClickedPre);
-        textFieldText.setOnMousePressed(handlerClickedPre);
-
-        setOnMouseClicked(handlerClickedAfter);
-        textFieldText.setOnMouseClicked(handlerClickedAfter);
     }
 
     @Override
     public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
         return STYLABLES;
+    }
+
+    @Override
+    public boolean isSelected() {
+        return selected.get();
+    }
+
+    @Override
+    public ReadOnlyBooleanProperty selectedProperty() {
+        return selected;
     }
 }

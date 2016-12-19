@@ -60,7 +60,7 @@ public class JointNode extends Circle {
 
         DiagramPane diagramPane = node.getDiagramPane();
         setOnDragDetected(event -> {
-            ConnectionLine line = new ConnectionLine();
+            ConnectionNode line = new ConnectionNode(null);
             line.startXProperty().bind(centerXProperty().add(node.realXProperty()));
             line.startYProperty().bind(centerYProperty().add(node.realYProperty()));
             line.setEndX(line.getStartX());
@@ -68,12 +68,6 @@ public class JointNode extends Circle {
             line.setMouseTransparent(true);
 
             startFullDrag();
-
-            // TODO listener leak
-            diagramPane.addEventFilter(MouseEvent.MOUSE_DRAGGED, eventDrag -> {
-                line.setEndX(eventDrag.getX());
-                line.setEndY(eventDrag.getY());
-            });
 
             diagramPane.addDisplayNode(line);
             event.consume();

@@ -26,6 +26,7 @@ import com.tallbyte.flowdesign.javafx.popup.DataTypePopup;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
@@ -48,25 +49,19 @@ import static javafx.scene.layout.Region.USE_PREF_SIZE;
  * Authors:<br/>
  * - julian (2016-12-12)<br/>
  */
-public class ArrowConnectionNode extends Group {
+public class ArrowConnectionNode extends ConnectionNode {
 
-    private final Line      line    = new Line();
     private final Line      arrow0  = new Line();
     private final Line      arrow1  = new Line();
     private final HBox      boxText = new HBox();
     private final TextField text    = new TextField("");
 
-    private final Connection connection;
-    private final DiagramPane diagramPane;
-
-    public ArrowConnectionNode(Connection connection, DiagramPane diagramPane) {
-        this.connection  = connection;
-        this.diagramPane = diagramPane;
-        System.out.println("new conn");
-        setup();
+    public ArrowConnectionNode(Connection connection) {
+        super(connection);
     }
 
-    private void setup() {
+    @Override
+    protected void setup() {
         Joint source = connection.getSource();
         Joint target = connection.getTarget();
 
@@ -93,8 +88,7 @@ public class ArrowConnectionNode extends Group {
         arrow1.startXProperty().bind(line.endXProperty());
         arrow1.startYProperty().bind(line.endYProperty());
 
-        System.out.println("add");
-        getChildren().addAll(line, arrow0, arrow1, boxText);
+        getChildren().addAll(arrow0, arrow1, boxText);
         boxText.getChildren().addAll(new Label("("), text, new Label(")"));
 
 
@@ -201,53 +195,5 @@ public class ArrowConnectionNode extends Group {
 
         boxText.getTransforms().clear();
         boxText.getTransforms().add(new Rotate(angle, boxText.getWidth()/2, boxText.getHeight()));
-    }
-
-    public DoubleProperty startYProperty() {
-        return line.startYProperty();
-    }
-
-    public void setStartX(double value) {
-        line.setStartX(value);
-    }
-
-    public double getStartX() {
-        return line.getStartX();
-    }
-
-    public DoubleProperty startXProperty() {
-        return line.startXProperty();
-    }
-
-    public void setStartY(double value) {
-        line.setStartY(value);
-    }
-
-    public double getStartY() {
-        return line.getStartY();
-    }
-
-    public void setEndX(double value) {
-        line.setEndX(value);
-    }
-
-    public double getEndX() {
-        return line.getEndX();
-    }
-
-    public DoubleProperty endXProperty() {
-        return line.endXProperty();
-    }
-
-    public void setEndY(double value) {
-        line.setEndY(value);
-    }
-
-    public double getEndY() {
-        return line.getEndY();
-    }
-
-    public DoubleProperty endYProperty() {
-        return line.endYProperty();
     }
 }
