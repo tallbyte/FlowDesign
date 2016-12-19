@@ -463,14 +463,12 @@ public class ElementNode extends Pane implements SelectableNode {
         layoutXProperty().bindBidirectional(realX);
         layoutYProperty().bindBidirectional(realY);
 
-        realWidth.setValue(realWidth.getValue()+widthExtend.get());
-        realHeight.setValue(realHeight.getValue()+heightExtend.get());
 
-        content.widthProperty().bind(realWidth.subtract(widthExtend));
-        content.heightProperty().bind(realHeight.subtract(heightExtend));
+        content.widthProperty().bindBidirectional(realWidth);
+        content.heightProperty().bindBidirectional(realHeight);
 
-        prefWidthProperty().bind(realWidth);
-        prefHeightProperty().bind(realHeight);
+        prefWidthProperty().bind(realWidth.add(widthExtend));
+        prefHeightProperty().bind(realHeight.add(heightExtend));
 
         setCursor(Cursor.MOVE);
     }

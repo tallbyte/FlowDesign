@@ -151,10 +151,15 @@ public class DiagramPane extends ScrollPane {
                     if (child instanceof ElementNode && this.selected.contains(child)) {
                         Bounds bounds = node.getBoundsInParent();
 
-                        System.out.println((getVvalue() * getViewportBounds().getWidth()));
+                        System.out.println((getHvalue() * getViewportBounds().getWidth()));
+
+                        System.out.println(getHvalue());
+                        System.out.println(getViewportBounds().getWidth());
 
                         ((ElementNode) child).realX.set(event.getX() - offsetX + bounds.getMinX() + getHvalue()*getViewportBounds().getWidth());
                         ((ElementNode) child).realY.set(event.getY() - offsetY + bounds.getMinY() + getVvalue()*getViewportBounds().getHeight());
+
+                        System.out.println((event.getX() - offsetX + bounds.getMinX() + getHvalue() * getViewportBounds().getWidth()));
                     }
                 }
             }));
