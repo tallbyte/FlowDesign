@@ -27,7 +27,7 @@ import javafx.scene.paint.Color;
  * Authors:<br/>
  * - julian (2016-10-30)<br/>
  */
-public class StartDiagramImage extends DiagramImage {
+public class StartDiagramImage extends EllipseDiagramImage {
 
     /**
      * Creates a new {@link StartDiagramImage} with default dimension.
@@ -35,19 +35,5 @@ public class StartDiagramImage extends DiagramImage {
     public StartDiagramImage() {
         setWidth(50);
         setHeight(50);
-    }
-
-    @Override
-    public void repaint() {
-        GraphicsContext context = getGraphicsContext2D();
-        double width  = getWidth();
-        double height = getHeight();
-
-        context.clearRect(0, 0, width, height);
-        context.setStroke(ImageConstants.COLOR);
-        context.setLineWidth(1.5);
-        context.strokeLine(context.getLineWidth(), context.getLineWidth(), width-context.getLineWidth(), height/2);
-        context.strokeLine(context.getLineWidth(), height/2, width-context.getLineWidth(), height/2);
-        context.strokeLine(context.getLineWidth(), height-context.getLineWidth(), width-context.getLineWidth(), height/2);
     }
 }
