@@ -55,19 +55,19 @@
             </MenuBar>
             <HBox alignment="BASELINE_RIGHT" fx:id="paneTop">
 
-                <Button styleClass="darkStyleButton, iconButton">
+                <Button styleClass="darkStyleButton, iconButton" onAction="#onDarkStyle">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="CIRCLE"/>
                     </graphic>
                 </Button>
 
-                <Button styleClass="highContrastStyleButton, iconButton">
+                <Button styleClass="highContrastStyleButton, iconButton" onAction="#onDarkContrastStyle">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="CIRCLE_THIN"/>
                     </graphic>
                 </Button>
 
-                <Button styleClass="whiteStyleButton, iconButton">
+                <Button styleClass="lightStyleButton, iconButton" onAction="#onLightStyle">
                     <graphic>
                         <Glyph fontFamily="FontAwesome" icon="CIRCLE"/>
                     </graphic>

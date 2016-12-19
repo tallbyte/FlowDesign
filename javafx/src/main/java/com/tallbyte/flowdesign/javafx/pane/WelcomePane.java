@@ -109,20 +109,9 @@ public class WelcomePane extends SwitchContentPane {
     }
 
     private ApplicationPane openApplication() throws LoadException {
-        ApplicationPane pane = new ApplicationPane(application);
-
-        Stage stage = new Stage();
-        stage.setTitle("FlowDesign");
-        Scene scene = new Scene(pane);
-        stage.setScene(scene);
-        stage.setWidth(1200);
-        stage.setHeight(800);
-        application.setupStage(stage);
-        stage.show();
-
         ((Stage) switchPane.getScene().getWindow()).close();
 
-        return pane;
+        return application.openApplication();
     }
 
     @FXML

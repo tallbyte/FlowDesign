@@ -44,9 +44,15 @@ public class ColorHandler implements PopupPreparer {
     }
     private Style style = Style.DARK_CONTRAST;
 
+    private final FlowDesignFxApplication application;
+
+    public ColorHandler(FlowDesignFxApplication application) {
+        this.application = application;
+    }
+
     @Override
     public void prepare(Dialog dialog) {
-        dialog.getDialogPane().getStylesheets().add(style.getCssFile());
+        dialog.getDialogPane().getScene().getStylesheets().add(style.getCssFile());
     }
 
     @Override
@@ -64,6 +70,11 @@ public class ColorHandler implements PopupPreparer {
     }
 
     public void setStyle(Style style) {
+        for (Stage stage : application.getMainStages()) {
+            stage.getScene().getStylesheets().remove(this.style.getCssFile());
+            stage.getScene().getStylesheets().add(style.getCssFile());
+        }
+
         this.style = style;
     }
 }

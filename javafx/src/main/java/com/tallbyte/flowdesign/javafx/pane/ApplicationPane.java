@@ -27,6 +27,7 @@ import com.tallbyte.flowdesign.data.DiagramsChangedListener;
 import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
 import com.tallbyte.flowdesign.data.Project;
 import com.tallbyte.flowdesign.data.flow.FlowDiagram;
+import com.tallbyte.flowdesign.javafx.ColorHandler;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
 import com.tallbyte.flowdesign.storage.xml.XmlStorage;
@@ -337,6 +338,21 @@ public class ApplicationPane extends BorderPane {
                 // TODO temporary
             }
         }
+    }
+
+    @FXML
+    private void onDarkStyle() {
+        application.getColorHandler().setStyle(ColorHandler.Style.DARK);
+    }
+
+    @FXML
+    private void onDarkContrastStyle() {
+        application.getColorHandler().setStyle(ColorHandler.Style.DARK_CONTRAST);
+    }
+
+    @FXML
+    private void onLightStyle() {
+        application.getColorHandler().setStyle(ColorHandler.Style.LIGHT);
     }
 
     /**

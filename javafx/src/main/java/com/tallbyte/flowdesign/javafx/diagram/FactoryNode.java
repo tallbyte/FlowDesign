@@ -50,8 +50,8 @@ public class FactoryNode extends Label {
         DiagramImage image = factory.createDiagramImage();
         setGraphic(image);
         setText(text);
-        image.setWidth(image.getWidth()*0.75);
-        image.setHeight(image.getHeight()*0.75);
+        /*image.setWidth(image.getWidth()*0.75);
+        image.setHeight(image.getHeight()*0.75);*/
 
         setOnDragDetected(event -> {
             startFullDrag();

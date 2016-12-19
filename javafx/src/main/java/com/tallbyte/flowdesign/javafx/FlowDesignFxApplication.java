@@ -23,6 +23,7 @@ import com.tallbyte.flowdesign.javafx.pane.ApplicationPane;
 import com.tallbyte.flowdesign.javafx.pane.SwitchPane;
 import com.tallbyte.flowdesign.javafx.pane.WelcomePane;
 import javafx.application.Application;
+import javafx.fxml.*;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -32,6 +33,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.tallbyte.flowdesign.javafx.ResourceUtils.getResourceString;
@@ -46,12 +48,13 @@ public class FlowDesignFxApplication extends Application {
 
     private ApplicationManager  applicationManager;
     private ColorHandler        colorHandler;
-    private List<PopupPreparer> preparers = new ArrayList<>();
+    private List<PopupPreparer> preparers  = new ArrayList<>();
+    private List<Stage>         mainStages = new ArrayList<>();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.applicationManager = new ApplicationManager();
-        this.colorHandler       = new ColorHandler();
+        this.colorHandler       = new ColorHandler(this);
 
         preparers.add(colorHandler);
         preparers.add(new GeneralPopupPreparer());
@@ -77,6 +80,24 @@ public class FlowDesignFxApplication extends Application {
 
     public ColorHandler getColorHandler() {
         return colorHandler;
+    }
+
+    public ApplicationPane openApplication() throws javafx.fxml.LoadException {
+        ApplicationPane pane = new ApplicationPane(this);
+
+        Stage stage = new Stage();
+        stage.setTitle("FlowDesign");
+        Scene scene = new Scene(pane);
+        stage.setScene(scene);
+        stage.setWidth(1200);
+        stage.setHeight(800);
+        this.setupStage(stage);
+        stage.show();
+
+        mainStages.add(stage);
+        stage.setOnCloseRequest(event -> mainStages.remove(stage));
+
+        return pane;
     }
 
     public <T> Dialog<T> setupSimpleDialog(Dialog<T> dialog, String title, String itemName) {
@@ -109,4 +130,7 @@ public class FlowDesignFxApplication extends Application {
         return stage;
     }
 
+    public List<Stage> getMainStages() {
+        return Collections.unmodifiableList(mainStages);
+    }
 }
