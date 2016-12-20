@@ -28,7 +28,10 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import javafx.css.PseudoClass;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 /**
  * This file is part of project flowDesign.
@@ -55,6 +58,20 @@ public class OperationalUnitElementNode extends ElementNode {
             pseudoClassStateChanged(PseudoClass.getPseudoClass("referenced"), newValue != null);
         });
         pseudoClassStateChanged(PseudoClass.getPseudoClass("referenced"), reference.getValue() != null);
+
+        addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            System.out.println(("code=" + event.getCode()));
+
+            Object ref = reference.get();
+
+            if (event.isControlDown() && event.getCode() == KeyCode.B && ref instanceof Diagram) {
+                diagramPane.getDiagramsPane().addDiagram((Diagram) ref);
+            }
+        });
+
+        setOnMousePressed(event -> {
+            requestFocus();
+        });
 
         this.operation = element;
     }

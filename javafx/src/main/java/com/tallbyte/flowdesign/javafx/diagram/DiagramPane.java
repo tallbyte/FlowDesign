@@ -20,6 +20,7 @@ package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.data.*;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
+import com.tallbyte.flowdesign.javafx.pane.DiagramsPane;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
@@ -51,6 +52,7 @@ public class DiagramPane extends ScrollPane {
     protected final FlowDesignFxApplication                              application;
 
     protected final DiagramManager                                       diagramManager;
+    protected final DiagramsPane                                         diagramsPane;
     protected final Group                                                groupContent     = new Group();
     protected final Group                                                groupConnections = new Group();
     protected final Group                                                groupMarker      = new Group();
@@ -80,8 +82,9 @@ public class DiagramPane extends ScrollPane {
      * @param application the {@link FlowDesignFxApplication}
      * @param diagramManager the {@link DiagramManager} used for e.g. element creation
      */
-    public DiagramPane(FlowDesignFxApplication application, DiagramManager diagramManager) {
+    public DiagramPane(FlowDesignFxApplication application, DiagramsPane pane, DiagramManager diagramManager) {
         this.application    = application;
+        this.diagramsPane   = pane;
         this.diagramManager = diagramManager;
         Group group = new Group();
         group.getChildren().addAll(groupContent, groupConnections, groupMarker);
@@ -92,8 +95,8 @@ public class DiagramPane extends ScrollPane {
         setup();
     }
 
-    public DiagramPane(FlowDesignFxApplication application, Diagram diagram, DiagramManager diagramManager) {
-        this(application, diagramManager);
+    public DiagramPane(FlowDesignFxApplication application, DiagramsPane pane, Diagram diagram, DiagramManager diagramManager) {
+        this(application, pane, diagramManager);
 
         setPannable(true);
 
@@ -312,6 +315,10 @@ public class DiagramPane extends ScrollPane {
 
     JointNode getJointNode(Joint joint) {
         return jointNodes.get(joint);
+    }
+
+    public DiagramsPane getDiagramsPane() {
+        return diagramsPane;
     }
 
     /**

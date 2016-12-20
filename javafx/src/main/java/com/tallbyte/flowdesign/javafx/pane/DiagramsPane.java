@@ -91,7 +91,7 @@ public class DiagramsPane extends TabPane {
             while(c.next()) {
                 for (Diagram d : c.getAddedSubList()) {
                     Tab         tab  = new Tab();
-                    DiagramPane pane = new DiagramPane(application, d, diagramManager);
+                    DiagramPane pane = new DiagramPane(application, this, d, diagramManager);
 
                     tab.textProperty().bindBidirectional(pane.nameProperty());
                     tab.setContent(pane);
