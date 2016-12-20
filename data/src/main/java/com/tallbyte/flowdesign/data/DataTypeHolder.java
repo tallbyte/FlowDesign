@@ -18,8 +18,6 @@
 
 package com.tallbyte.flowdesign.data;
 
-import com.tallbyte.flowdesign.data.DataType;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,25 +29,56 @@ import java.util.stream.Collectors;
  */
 public class DataTypeHolder {
 
-    private final List<DataType> types = new ArrayList<>();
+    protected final List<DataType>                 types     = new ArrayList<>();
+    protected final List<DataTypesChangedListener> listeners = new ArrayList<>();
 
     public DataTypeHolder() {
         addDataType("String");
-        addDataType("StringUtils");
         addDataType("Object");
-        addDataType("Car");
+        addDataType("Integer");
+        addDataType("Double");
+        addDataType("Integer");
+        addDataType("Float");
+        addDataType("Long");
+        addDataType("Byte");
+        addDataType("Character");
+        addDataType("int");
+        addDataType("byte");
+        addDataType("char");
+        addDataType("double");
+        addDataType("float");
+        addDataType("long");
+        addDataType("StringBuilder");
+        addDataType("StringBuffer");
+        addDataType("HashMap");
+        addDataType("List");
+        addDataType("Set");
     }
 
     public void addDataType(String name) {
         addDataType(new DataType(name));
     }
 
-    public void addDataType(DataType type) {
-        types.add(type);
+    public boolean addDataType(DataType type) {
+        if (!types.contains(type)) {
+            types.add(type);
+
+            for (DataTypesChangedListener listener : listeners) {
+                listener.onDataTypesChanged(type, true);
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     public void removeDataType(DataType type) {
         types.remove(type);
+
+        for (DataTypesChangedListener listener : listeners) {
+            listener.onDataTypesChanged(type, false);
+        }
     }
 
     public Iterable<DataType> getDataTypes() {
@@ -65,6 +94,22 @@ public class DataTypeHolder {
                 type -> type.getClassName().toLowerCase().startsWith(prefix.toLowerCase())
         ).collect(Collectors.toList());
 
+    }
+
+    /**
+     * Registers an {@link DataTypesChangedListener}.
+     * @param listener the {@link DataTypesChangedListener} to register
+     */
+    public void addDataTypesChangedListener(DataTypesChangedListener listener) {
+        listeners.add(listener);
+    }
+
+    /**
+     * Unregisters an {@link DataTypesChangedListener}.
+     * @param listener the {@link DataTypesChangedListener} to unregister
+     */
+    public void removeDataTypesChangedListener(DataTypesChangedListener listener) {
+        listeners.remove(listener);
     }
 
 }

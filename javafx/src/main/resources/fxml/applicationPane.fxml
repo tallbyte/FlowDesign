@@ -24,6 +24,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import org.controlsfx.glyphfont.*?>
+<?import com.tallbyte.flowdesign.javafx.pane.DataTypePane?>
 <fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml">
     <top>
         <VBox>
@@ -99,9 +100,7 @@
                     </top>
                     <center>
                         <TitledPane collapsible="false" text="%pane.title.classes" maxHeight="65536">
-                            <VBox>
-
-                            </VBox>
+                            <DataTypePane fx:id="paneTypes"/>
                         </TitledPane>
                     </center>
                 </BorderPane>

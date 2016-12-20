@@ -115,7 +115,7 @@ public class PropertyPane extends GridPane {
             Button reset = new Button();
             reset.getStyleClass().add("propertyColorResetButton");
             reset.getStyleClass().add("iconButton");
-            reset.setText("\uf072"); // TODO can this be applied differently?
+            reset.setText("\uf00d"); // TODO can this be applied differently?
             reset.setOnAction(event -> picker.setValue(null));
 
             hBox.getChildren().addAll(picker, reset);

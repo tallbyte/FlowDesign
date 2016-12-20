@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ FlowDesign
+  ~ Copyright (C) 2016 Tallbyte <copyright at tallbyte.com>
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<?import org.controlsfx.glyphfont.Glyph?>
+<fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml" styleClass="dataTypePane">
+
+    <top>
+        <TextField fx:id="textFieldSearch" styleClass="textFieldSearch" promptText="%pane.dataType.searchPrompt"/>
+    </top>
+
+    <center>
+        <BorderPane styleClass="centerPane">
+            <center>
+                <ListView fx:id="listTypes" styleClass="listTypes, subtleList"/>
+            </center>
+            <right>
+                <VBox styleClass="controlList">
+                    <Button fx:id="buttonAdd" styleClass="buttonAdd, iconButton" onAction="#onAdd">
+                        <graphic>
+                            <Glyph textFill="darkolivegreen" fontFamily="FontAwesome" icon="PLUS"/>
+                        </graphic>
+                    </Button>
+
+                    <Button fx:id="buttonRemove" styleClass="buttonRemove, iconButton" onAction="#onRemove">
+                        <graphic>
+                            <Glyph textFill="darkolivegreen" fontFamily="FontAwesome" icon="MINUS"/>
+                        </graphic>
+                    </Button>
+                </VBox>
+            </right>
+        </BorderPane>
+    </center>
+
+</fx:root>

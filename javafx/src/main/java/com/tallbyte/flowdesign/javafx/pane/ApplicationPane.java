@@ -69,6 +69,7 @@ public class ApplicationPane extends BorderPane {
     @FXML private FactoryPane         paneFactory;
     @FXML private DiagramsPane        paneDiagrams;
     @FXML private PropertyPane        paneProperty;
+    @FXML private DataTypePane        paneTypes;
     @FXML private Menu                menuEdit;
     @FXML private MenuItem            menuItemLoad;
     @FXML private MenuItem            menuItemSave;
@@ -104,6 +105,7 @@ public class ApplicationPane extends BorderPane {
 
         paneFactory.setup(paneDiagrams);
         paneProperty.setup(paneDiagrams);
+        paneTypes.setup(this);
         menuItemSave.disableProperty().bind(projectProperty().isNull());
         menuItemSaveAs.disableProperty().bind(projectProperty().isNull());
 
@@ -200,7 +202,7 @@ public class ApplicationPane extends BorderPane {
 
         ContextMenu menu     = new ContextMenu();
         MenuItem    menuItem = new MenuItem();
-        menuItem.setText("New...");
+        menuItem.setText(getResourceString("context.new."+diagramClazz.getSimpleName()));
         menuItem.setOnAction(event -> createDiagram(diagramClazz));
         menu.getItems().add(menuItem);
 
@@ -222,7 +224,7 @@ public class ApplicationPane extends BorderPane {
 
         for (Diagram d : project.getDiagrams(diagramClazz)) {
             TreeItem<TreeEntry> item = new TreeItem<>();
-            item.setValue(new DiagramEntry(d));
+            item.setValue(new DiagramEntry(d, createDiagramContextMenu(d)));
             overview.getChildren().add(item);
         }
 
@@ -230,7 +232,7 @@ public class ApplicationPane extends BorderPane {
             if (diagram.getClass() == diagramClazz) {
                 if (added) {
                     TreeItem<TreeEntry> item = new TreeItem<>();
-                    item.setValue(new DiagramEntry(diagram));
+                    item.setValue(new DiagramEntry(diagram, createDiagramContextMenu(diagram)));
                     overview.getChildren().add(item);
                 } else {
                     TreeItem<TreeEntry> remove = null;
@@ -249,6 +251,15 @@ public class ApplicationPane extends BorderPane {
             }
         };
         listeners.add(listenerDiagrams);
+    }
+
+    public ContextMenu createDiagramContextMenu(Diagram diagram) {
+        ContextMenu menu = new ContextMenu();
+        MenuItem itemRemove = new MenuItem(getResourceString("context.diagram.remove"));
+        MenuItem itemRename = new MenuItem(getResourceString("context.diagram.rename"));
+        menu.getItems().addAll(itemRemove, itemRename);
+
+        return menu;
     }
 
     /**
@@ -485,7 +496,7 @@ public class ApplicationPane extends BorderPane {
         }
     }
 
-    private class DiagramEntry extends TreeEntry {
+    private class DiagramEntry extends MenuTreeEntry {
 
         private final Diagram                diagram;
         private final PropertyChangeListener listener;
@@ -496,8 +507,8 @@ public class ApplicationPane extends BorderPane {
          * releasing this object in order to avoid zombie-listeners.
          * @param diagram the {@link Diagram} to contain
          */
-        public DiagramEntry(Diagram diagram) {
-            super(diagram.getName());
+        public DiagramEntry(Diagram diagram, ContextMenu menu) {
+            super(diagram.getName(), menu);
             this.diagram  = diagram;
             this.listener = evt -> {
                 if (evt.getPropertyName().equals("name")) {

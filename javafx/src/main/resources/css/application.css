@@ -345,6 +345,7 @@ DataTypePopup {
     -fx-border-color:     transparent;
     -fx-padding:          0.25em;
     -fx-background-radius:3px;
+    -fx-border-radius:    3px;
 }
 
 .iconButton:hover {
@@ -396,4 +397,32 @@ DataTypePopup {
 .changelogEntry .commit {
     -fx-text-fill: -fx-focus-color;
     -fx-font-size: 0.9em;
+}
+
+.dataTypePane {
+    -fx-padding: 5;
+}
+
+.dataTypePane .centerPane {
+    -fx-padding: 5 0 0 0;
+}
+
+.dataTypePane .centerPane .controlList {
+    -fx-padding: 3 3 0 3;
+    -fx-spacing: 3px;
+
+    -fx-border-color: -fx-off-divider-accent;
+    -fx-border-width: 1 1 1 0;
+}
+
+.dataTypePane .centerPane .controlList .buttonAdd * {
+    -fx-text-fill: #00cc00;
+}
+
+.dataTypePane .centerPane .controlList .buttonRemove * {
+    -fx-text-fill: red;
+}
+
+.subtleList {
+    -fx-border-color: -fx-off-divider-accent;
 }
