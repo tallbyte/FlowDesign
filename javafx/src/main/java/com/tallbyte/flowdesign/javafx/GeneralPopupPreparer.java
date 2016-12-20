@@ -42,7 +42,5 @@ public class GeneralPopupPreparer implements PopupPreparer {
 
     @Override
     public void prepare(Popup popup) {
-        Stage stage = (Stage) popup.getScene().getWindow();
-        stage.getIcons().add(new Image("/images/realIcon.png"));
     }
 }

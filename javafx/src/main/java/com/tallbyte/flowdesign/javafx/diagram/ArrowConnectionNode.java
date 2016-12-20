@@ -22,6 +22,7 @@ import com.sun.javafx.tk.FontMetrics;
 import com.sun.javafx.tk.Toolkit;
 import com.tallbyte.flowdesign.data.Connection;
 import com.tallbyte.flowdesign.data.Joint;
+import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import com.tallbyte.flowdesign.javafx.control.AutoSizeTextField;
 import com.tallbyte.flowdesign.javafx.popup.DataTypePopup;
 import javafx.application.Platform;
@@ -35,11 +36,13 @@ import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Popup;
+import javafx.stage.Stage;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
@@ -52,13 +55,17 @@ import static javafx.scene.layout.Region.USE_PREF_SIZE;
  */
 public class ArrowConnectionNode extends ConnectionNode {
 
+    private final FlowDesignFxApplication application;
+
     private final Line      arrow0  = new Line();
     private final Line      arrow1  = new Line();
     private final HBox      boxText = new HBox();
     private final TextField text    = new AutoSizeTextField();
 
-    public ArrowConnectionNode(Connection connection) {
+    public ArrowConnectionNode(FlowDesignFxApplication application, Connection connection) {
         super(connection);
+
+        this.application = application;
     }
 
     @Override
@@ -112,28 +119,22 @@ public class ArrowConnectionNode extends ConnectionNode {
             update();
         });
 
-        final Popup popup = new Popup();
+        final DataTypePopup popup = new DataTypePopup(text.textProperty());
         popup.setAutoHide(true);
         popup.setHideOnEscape(true);
+        application.setupPopup(popup);
 
         boxText.setPadding(new Insets(0, 0, 5, 0));
         text.textProperty().addListener((observable, oldValue, newValue) -> {
             /**
              * Popup handling
              */
-            final DataTypePopup dtp = new DataTypePopup(
-                    sourceNode.getJoint().getElement().getDiagram().getProject(),
-                    text.getText()
-            );
-            dtp.getStylesheets().add("/css/main.css");
-            dtp.setPrefHeight(100);
-            popup.getContent().clear();
-            popup.getContent().add(dtp);
-
             Bounds bounds = text.localToScreen(text.getBoundsInLocal());
             if (bounds != null) {
-                popup.show(this, bounds.getMinX()+10, bounds.getMinY()-100);
-                System.out.println("showing");
+                popup.show(this, bounds.getMinX()+10, bounds.getMinY()-100,
+                        sourceNode.getJoint().getElement().getDiagram().getProject(),
+                        text.getText()
+                );
             }
         });
 

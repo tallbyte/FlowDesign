@@ -30,6 +30,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -128,6 +129,14 @@ public class FlowDesignFxApplication extends Application {
         }
 
         return stage;
+    }
+
+    public Popup setupPopup(Popup popup) {
+        for (PopupPreparer preparer : preparers) {
+            preparer.prepare(popup);
+        }
+
+        return popup;
     }
 
     public List<Stage> getMainStages() {

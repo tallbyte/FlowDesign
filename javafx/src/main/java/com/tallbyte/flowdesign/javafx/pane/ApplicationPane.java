@@ -103,6 +103,7 @@ public class ApplicationPane extends BorderPane {
          * Prepare
          */
 
+        paneDiagrams.setup(this);
         paneFactory.setup(paneDiagrams);
         paneProperty.setup(paneDiagrams);
         paneTypes.setup(this);
@@ -260,6 +261,10 @@ public class ApplicationPane extends BorderPane {
         menu.getItems().addAll(itemRemove, itemRename);
 
         return menu;
+    }
+
+    public FlowDesignFxApplication getApplication() {
+        return application;
     }
 
     /**

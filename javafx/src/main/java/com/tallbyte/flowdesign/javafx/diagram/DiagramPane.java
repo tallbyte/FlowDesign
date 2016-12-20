@@ -19,6 +19,7 @@
 package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.data.*;
+import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
@@ -47,6 +48,8 @@ import java.util.*;
  */
 public class DiagramPane extends ScrollPane {
 
+    protected final FlowDesignFxApplication                              application;
+
     protected final DiagramManager                                       diagramManager;
     protected final Group                                                groupContent     = new Group();
     protected final Group                                                groupConnections = new Group();
@@ -74,9 +77,11 @@ public class DiagramPane extends ScrollPane {
 
     /**
      * Creates a new {@link DiagramPane} with a default set of factories.
+     * @param application the {@link FlowDesignFxApplication}
      * @param diagramManager the {@link DiagramManager} used for e.g. element creation
      */
-    public DiagramPane(DiagramManager diagramManager) {
+    public DiagramPane(FlowDesignFxApplication application, DiagramManager diagramManager) {
+        this.application    = application;
         this.diagramManager = diagramManager;
         Group group = new Group();
         group.getChildren().addAll(groupContent, groupConnections, groupMarker);
@@ -87,8 +92,8 @@ public class DiagramPane extends ScrollPane {
         setup();
     }
 
-    public DiagramPane(Diagram diagram, DiagramManager diagramManager) {
-        this(diagramManager);
+    public DiagramPane(FlowDesignFxApplication application, Diagram diagram, DiagramManager diagramManager) {
+        this(application, diagramManager);
 
         setPannable(true);
 
@@ -173,7 +178,7 @@ public class DiagramPane extends ScrollPane {
 
         // TODO make using factories and map lookup
         if (connection instanceof FlowConnection) {
-            node = new ArrowConnectionNode(connection);
+            node = new ArrowConnectionNode(application, connection);
 
         } else if (connection instanceof DependencyConnection) {
             node = new CircleConnectionNode(connection);

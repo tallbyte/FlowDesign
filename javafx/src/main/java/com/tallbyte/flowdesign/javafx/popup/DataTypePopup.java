@@ -20,8 +20,15 @@ package com.tallbyte.flowdesign.javafx.popup;
 
 import com.tallbyte.flowdesign.data.DataType;
 import com.tallbyte.flowdesign.data.Project;
+import com.tallbyte.flowdesign.javafx.pane.DataTypeEntry;
+import javafx.beans.property.StringProperty;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
 
 /**
  * This file is part of project flowDesign.
@@ -29,16 +36,72 @@ import javafx.scene.layout.VBox;
  * Authors:<br/>
  * - julian (2016-12-16)<br/>
  */
-public class DataTypePopup extends VBox {
+public class DataTypePopup extends Popup {
 
-    public DataTypePopup(Project project, String start) {
-        ListView<String> list = new ListView<>();
+    private final ListView<DataType> list;
+    private final StringProperty     property;
 
-        for (DataType type : project.getDataTypeHolder().getDataTypes(start)) {
-            list.getItems().add(type.getClassName());
-        }
+    public DataTypePopup(StringProperty property) {
 
-        getChildren().add(list);
+        list          = new ListView<>();
+        this.property = property;
+
+        list.setCellFactory(param -> {
+            ListCell<DataType> cell = new ListCell<DataType>() {
+                @Override
+                protected void updateItem(DataType item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(new DataTypeEntry(item));
+                    }
+                }
+            };
+
+            cell.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2) {
+                    close();
+                }
+            });
+
+            return cell;
+        });
+
+        list.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                close();
+
+                event.consume();
+            }
+        });
+
+        VBox vBox = new VBox(list);
+        vBox.getStyleClass().add("dataTypePopup");
+
+        getContent().add(vBox);
     }
 
+    public void show(Node ownerNode, double anchorX, double anchorY, Project project, String start) {
+        super.show(ownerNode, anchorX, anchorY);
+
+        list.getItems().clear();
+
+        for (DataType type : project.getDataTypeHolder().getDataTypes(start)) {
+            list.getItems().add(type);
+        }
+
+        show(ownerNode, anchorX, anchorY);
+    }
+
+    private void close() {
+        DataType selected = list.getSelectionModel().getSelectedItem();
+
+        if (selected != null) {
+            property.setValue(selected.getClassName());
+        }
+
+        hide();
+    }
 }

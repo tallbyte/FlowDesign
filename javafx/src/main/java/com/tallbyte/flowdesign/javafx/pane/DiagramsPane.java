@@ -19,6 +19,7 @@
 package com.tallbyte.flowdesign.javafx.pane;
 
 import com.tallbyte.flowdesign.data.Diagram;
+import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramManager;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
 import javafx.beans.property.*;
@@ -38,6 +39,8 @@ import java.util.Map;
  */
 public class DiagramsPane extends TabPane {
 
+    private       FlowDesignFxApplication application;
+
     private final ListProperty<Diagram> diagrams        = new SimpleListProperty<>(this, "diagram", FXCollections.observableArrayList());
     private final Map<Diagram, Tab>     tabMap          = new HashMap<>();
     private final Map<Tab, DiagramPane> paneMap         = new HashMap<>();
@@ -46,7 +49,7 @@ public class DiagramsPane extends TabPane {
     private final ObjectProperty<DiagramPane> diagram = new SimpleObjectProperty<>(this, "diagram", null);
 
     public DiagramsPane() {
-        setup();
+
     }
 
     public void addDiagram(Diagram diagram) {
@@ -73,6 +76,12 @@ public class DiagramsPane extends TabPane {
         return diagramManager;
     }
 
+    public void setup(ApplicationPane pane) {
+        application = pane.getApplication();
+
+        setup();
+    }
+
     private void setup() {
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             diagram.setValue(paneMap.get(newValue));
@@ -82,7 +91,7 @@ public class DiagramsPane extends TabPane {
             while(c.next()) {
                 for (Diagram d : c.getAddedSubList()) {
                     Tab         tab  = new Tab();
-                    DiagramPane pane = new DiagramPane(d, diagramManager);
+                    DiagramPane pane = new DiagramPane(application, d, diagramManager);
 
                     tab.textProperty().bindBidirectional(pane.nameProperty());
                     tab.setContent(pane);
