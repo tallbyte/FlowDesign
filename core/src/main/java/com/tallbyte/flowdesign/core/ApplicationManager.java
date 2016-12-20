@@ -16,9 +16,12 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core.storage;
+package com.tallbyte.flowdesign.core;
 
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+import com.tallbyte.flowdesign.core.storage.NoPathSpecifiedException;
+import com.tallbyte.flowdesign.core.storage.ProjectNotFoundException;
+import com.tallbyte.flowdesign.core.storage.ProjectStorage;
 import com.tallbyte.flowdesign.data.Project;
 import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistory;
 import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistoryEntry;
@@ -39,7 +42,7 @@ public class ApplicationManager {
 
     private File                 storageFile;
 
-    private ProjectStorage       storage = new ProjectStorage();
+    private ProjectStorage storage = new ProjectStorage();
     private Map<Project, String> paths   = new HashMap<>();
 
     public ApplicationManager() throws IOException {

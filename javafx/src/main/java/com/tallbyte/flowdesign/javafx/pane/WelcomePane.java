@@ -18,20 +18,15 @@
 
 package com.tallbyte.flowdesign.javafx.pane;
 
-import com.tallbyte.flowdesign.core.storage.ApplicationManager;
 import com.tallbyte.flowdesign.core.storage.ProjectNotFoundException;
 import com.tallbyte.flowdesign.data.Project;
-import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistory;
 import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistoryEntry;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.LoadException;
-import javafx.scene.Scene;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 

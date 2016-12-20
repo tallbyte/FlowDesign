@@ -18,10 +18,9 @@
 
 package com.tallbyte.flowdesign.javafx.pane;
 
-import com.tallbyte.flowdesign.core.storage.ApplicationManager;
+import com.tallbyte.flowdesign.core.ApplicationManager;
 import com.tallbyte.flowdesign.data.ui.storage.ApplicationChangelog;
 import com.tallbyte.flowdesign.data.ui.storage.ApplicationChangelogEntry;
-import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistoryEntry;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.LoadException;

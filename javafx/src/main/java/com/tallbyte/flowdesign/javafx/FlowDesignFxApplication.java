@@ -18,17 +18,14 @@
 
 package com.tallbyte.flowdesign.javafx;
 
-import com.tallbyte.flowdesign.core.storage.ApplicationManager;
+import com.tallbyte.flowdesign.core.ApplicationManager;
 import com.tallbyte.flowdesign.javafx.pane.ApplicationPane;
 import com.tallbyte.flowdesign.javafx.pane.SwitchPane;
 import com.tallbyte.flowdesign.javafx.pane.WelcomePane;
 import javafx.application.Application;
-import javafx.fxml.*;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Dialog;
-import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
