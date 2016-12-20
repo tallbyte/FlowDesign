@@ -55,7 +55,7 @@ public class ApplicationManager {
      */
 
 
-    private Logger               logger  = LogManager.getRootLogger();
+    private Logger               logger  = LogManager.getLogger(getClass());
 
     public ApplicationManager() throws IOException {
         setApplicationStoragePath();

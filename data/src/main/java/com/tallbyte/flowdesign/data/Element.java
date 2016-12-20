@@ -44,7 +44,7 @@ public abstract class Element {
     protected double height     = 75;
     protected boolean deletable = true;
 
-    private PropertyChangeSupport changeSupport;
+    protected PropertyChangeSupport changeSupport;
 
     /**
      * Creats a new {@link Element} with a given set of {@link Joint}s.
@@ -74,6 +74,7 @@ public abstract class Element {
      * @param text the new text
      */
     public void setText(String text) {
+        this.changeSupport.firePropertyChange("text", this.text, text);
         this.text = text;
     }
 
@@ -90,6 +91,7 @@ public abstract class Element {
      * @param x the coordinate
      */
     public void setX(double x) {
+        this.changeSupport.firePropertyChange("x", this.x, x);
         this.x = x;
     }
 
@@ -106,6 +108,7 @@ public abstract class Element {
      * @param y the coordinate
      */
     public void setY(double y) {
+        this.changeSupport.firePropertyChange("y", this.y, y);
         this.y = y;
     }
 
@@ -122,6 +125,7 @@ public abstract class Element {
      * @param width the width
      */
     public void setWidth(double width) {
+        this.changeSupport.firePropertyChange("width", this.width, width);
         this.width = width;
     }
 
@@ -138,6 +142,7 @@ public abstract class Element {
      * @param height the height
      */
     public void setHeight(double height) {
+        this.changeSupport.firePropertyChange("height", this.height, height);
         this.height = height;
     }
 
@@ -154,6 +159,7 @@ public abstract class Element {
      * @param deletable the deletable state
      */
     public void setDeletable(boolean deletable) {
+        this.changeSupport.firePropertyChange("deletable", this.deletable, deletable);
         this.deletable = deletable;
     }
 
@@ -169,7 +175,7 @@ public abstract class Element {
      * Sets the {@link Diagram} of this {@link Element}. For internal use only.
      * @param diagram the new {@link Diagram}
      */
-    void setDiagram(Diagram diagram) {
+    protected void setDiagram(Diagram diagram) {
         this.diagram = diagram;
     }
 
