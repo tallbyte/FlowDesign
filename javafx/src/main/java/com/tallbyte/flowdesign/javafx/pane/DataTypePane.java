@@ -24,6 +24,9 @@ import com.tallbyte.flowdesign.data.Diagram;
 import com.tallbyte.flowdesign.data.Project;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.LoadException;
@@ -55,6 +58,7 @@ public class DataTypePane extends BorderPane {
 
     @FXML private ListView<DataType> listTypes;
 
+    protected ObservableList<DataType> listData;
     protected Project                  project       = null;
     protected DataTypesChangedListener listenerTypes = null;
 
@@ -70,8 +74,19 @@ public class DataTypePane extends BorderPane {
             throw new LoadException("Could not load "+getClass().getSimpleName(), e);
         }
 
+        listData = FXCollections.observableArrayList();
+
+        FilteredList<DataType> filter = new FilteredList<>(listData, dataType -> true);
+        listTypes.setItems(filter);
+
+
+
         buttonAdd.setDisable(true);
         buttonRemove.setDisable(true);
+
+        textFieldSearch.textProperty().addListener(observable -> {
+            filter.setPredicate(dataType -> dataType.getClassName().toLowerCase().startsWith(textFieldSearch.getText().toLowerCase()));
+        });
 
         listTypes.setCellFactory(new Callback<ListView<DataType>, ListCell<DataType>>() {
             @Override
@@ -123,18 +138,18 @@ public class DataTypePane extends BorderPane {
             project = newProject;
 
             if (newProject != null) {
-                listTypes.getItems().clear();
+                listData.clear();
 
                 listenerTypes = (dataType, added) -> {
                     if (added) {
-                        listTypes.getItems().add(dataType);
+                        listData.add(dataType);
                     } else {
-                        listTypes.getItems().remove(dataType);
+                        listData.remove(dataType);
                     }
                 };
 
                 for (DataType type : newProject.getDataTypeHolder().getDataTypes()) {
-                    listTypes.getItems().add(type);
+                    listData.add(type);
                 }
 
                 newProject.getDataTypeHolder().addDataTypesChangedListener(listenerTypes);
