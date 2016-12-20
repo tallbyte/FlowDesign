@@ -54,12 +54,15 @@ public class ApplicationManager {
      * Logging
      */
 
+
     private Logger               logger  = LogManager.getRootLogger();
 
     public ApplicationManager() throws IOException {
         setApplicationStoragePath();
         createApplicationStoragePath();
         checkApplicationStoragePath();
+
+        logger.info("initializing application");
 
         loadHistory();
     }
