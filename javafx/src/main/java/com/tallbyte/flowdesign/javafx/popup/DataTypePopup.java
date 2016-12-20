@@ -74,6 +74,8 @@ public class DataTypePopup extends Popup {
                 close();
 
                 event.consume();
+            } else if (event.getCode() == KeyCode.ESCAPE) {
+                hide();
             }
         });
 
