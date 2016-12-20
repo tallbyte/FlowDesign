@@ -250,6 +250,9 @@ public class ApplicationPane extends BorderPane {
     public ContextMenu createDiagramContextMenu(Diagram diagram) {
         ContextMenu menu = new ContextMenu();
         MenuItem itemRemove = new MenuItem(getResourceString("context.diagram.remove"));
+        itemRemove.setOnAction(event -> {
+            getProject().removeDiagram(diagram);
+        });
         MenuItem itemRename = new MenuItem(getResourceString("context.diagram.rename"));
         menu.getItems().addAll(itemRemove, itemRename);
 
@@ -531,6 +534,7 @@ public class ApplicationPane extends BorderPane {
          * Removes internal listeners.
          */
         public void remove() {
+            paneDiagrams.removeDiagram(diagram);
             diagram.removePropertyChangeListener(listener);
         }
     }

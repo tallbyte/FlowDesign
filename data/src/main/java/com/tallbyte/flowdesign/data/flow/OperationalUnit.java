@@ -41,6 +41,7 @@ public class OperationalUnit extends FlowDiagramElement {
     protected Diagram reference = null;
 
     protected DiagramsChangedListener listenerDiagrams;
+    protected PropertyChangeListener  listenerProject;
     protected PropertyChangeListener  listenerName;
 
     /**
@@ -54,18 +55,34 @@ public class OperationalUnit extends FlowDiagramElement {
 
         addPropertyChangeListener(evt -> {
             if (evt.getPropertyName().equals("text")) {
-                setReference(getDiagram().getProject().getDiagram((String) evt.getNewValue()));
+                Diagram diagram = getDiagram();
+
+                if (diagram != null) {
+                    Project project = diagram.getProject();
+
+                    if (project != null) {
+                        setReference(project.getDiagram((String) evt.getNewValue()));
+                    }
+                }
             }
 
             if (evt.getPropertyName().equals("reference")) {
-                listenerName = evtName -> {
-                    if (evtName.getPropertyName().equals("name")) {
+                if (evt.getOldValue() != null) {
+                    ((Diagram) evt.getOldValue()).removePropertyChangeListener(listenerName);
 
-                    }
-                };
+                    System.out.println("rem ref="+evt.getNewValue());
+                }
 
-                reference.getProject().addDiagramsChangedListener(listenerDiagrams);
-                System.out.println("ref="+evt.getNewValue());
+                if (evt.getNewValue() != null) {
+                    listenerName = evtName -> {
+                        if (evtName.getPropertyName().equals("name")) {
+                            setText((String) evtName.getNewValue());
+                        }
+                    };
+
+                    ((Diagram) evt.getNewValue()).addPropertyChangeListener(listenerName);
+                    System.out.println("add ref="+evt.getNewValue());
+                }
             }
         });
     }
@@ -73,17 +90,35 @@ public class OperationalUnit extends FlowDiagramElement {
     @Override
     protected void setDiagram(Diagram diagram) {
         if (this.diagram != null) {
-            this.diagram.getProject().removeDiagramsChangedListener(listenerDiagrams);
+            diagram.removePropertyChangeListener(listenerProject);
         }
 
         if (diagram != null) {
-            listenerDiagrams = (diagramChanged, added) -> {
-                if (!added && diagramChanged == this.reference) {
-                    setReference(null);
+            listenerProject = evt -> {
+                if (evt.getPropertyName().equals("project")) {
+                    if (evt.getOldValue() != null) {
+                        ((Project) evt.getOldValue()).removeDiagramsChangedListener(listenerDiagrams);
+                    }
+
+                    if (evt.getNewValue() != null) {
+                        listenerDiagrams = (diagramChanged, added) -> {
+                            if (!added && diagramChanged == this.reference) {
+                                setReference(null);
+                            }
+
+                            if (added && diagramChanged.getName().equals(getText())) {
+                                setReference(diagramChanged);
+                            }
+                        };
+
+                        ((Project) evt.getNewValue()).addDiagramsChangedListener(listenerDiagrams);
+                    }
+
+
                 }
             };
 
-            diagram.addPropertyChangeListener(listenerName);
+            diagram.addPropertyChangeListener(listenerProject);
         }
 
         super.setDiagram(diagram);
