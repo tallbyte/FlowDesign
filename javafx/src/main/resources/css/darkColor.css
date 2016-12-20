@@ -31,6 +31,7 @@
     /*
      * Draw related
      */
+    -fx-referenced-accent: #878787;
     -fx-draw-accent:        black;
     -fx-connection-accent:  black;
     -fx-joint-accent:       black;

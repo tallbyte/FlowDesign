@@ -69,8 +69,6 @@ public class OperationalUnit extends FlowDiagramElement {
             if (evt.getPropertyName().equals("reference")) {
                 if (evt.getOldValue() != null) {
                     ((Diagram) evt.getOldValue()).removePropertyChangeListener(listenerName);
-
-                    System.out.println("rem ref="+evt.getNewValue());
                 }
 
                 if (evt.getNewValue() != null) {
@@ -82,7 +80,6 @@ public class OperationalUnit extends FlowDiagramElement {
                     };
 
                     ((Diagram) evt.getNewValue()).addPropertyChangeListener(listenerName);
-                    System.out.println("add ref="+evt.getNewValue());
                 }
             }
         });
@@ -142,8 +139,9 @@ public class OperationalUnit extends FlowDiagramElement {
     }
 
     private void setReference(Diagram diagram) {
-        this.changeSupport.firePropertyChange("reference", this.reference, diagram);
+        Diagram old = this.reference;
         this.reference = diagram;
+        this.changeSupport.firePropertyChange("reference", old, diagram);
     }
 
     public Diagram getReference() {

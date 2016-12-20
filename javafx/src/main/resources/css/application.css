@@ -374,6 +374,10 @@ SwitchPane .boxButtons {
     -fx-default-color: -fx-draw-accent;
 }
 
+.elementNode:referenced .text-field {
+    -fx-text-fill: -fx-referenced-accent;
+}
+
 .propertyColorBox {
     -fx-spacing: 3px;
 }

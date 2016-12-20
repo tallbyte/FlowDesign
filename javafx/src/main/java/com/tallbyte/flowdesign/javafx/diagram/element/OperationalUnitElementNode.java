@@ -18,12 +18,16 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.element;
 
+import com.tallbyte.flowdesign.data.Diagram;
 import com.tallbyte.flowdesign.data.flow.Operation;
 import com.tallbyte.flowdesign.data.flow.OperationalUnit;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.JointNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
+import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
 
 /**
@@ -36,10 +40,27 @@ public class OperationalUnitElementNode extends ElementNode {
 
     private final OperationalUnit operation;
 
+    protected ObjectProperty<?> reference;
+
     public OperationalUnitElementNode(OperationalUnit element, DiagramImage content) {
         super(element, content, Pos.CENTER);
 
+        try {
+            reference  = JavaBeanObjectPropertyBuilder.create().setter(getClass().getMethod("setDummy", Diagram.class)).bean(element).name("reference").build();
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException("Could not create properties. This should never happen?!", e);
+        }
+
+        reference.addListener((observable, oldValue, newValue) -> {
+            pseudoClassStateChanged(PseudoClass.getPseudoClass("referenced"), newValue != null);
+        });
+        pseudoClassStateChanged(PseudoClass.getPseudoClass("referenced"), reference.getValue() != null);
+
         this.operation = element;
+    }
+
+    public void setDummy(Diagram diagram) {
+
     }
 
     @Override

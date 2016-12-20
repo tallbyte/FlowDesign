@@ -21,30 +21,24 @@ package com.tallbyte.flowdesign.javafx.diagram;
 import com.tallbyte.flowdesign.data.Diagram;
 import com.tallbyte.flowdesign.data.Element;
 import com.tallbyte.flowdesign.data.Joint;
-import com.tallbyte.flowdesign.javafx.ColorHandler;
 import com.tallbyte.flowdesign.javafx.control.AutoSizeTextField;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import com.tallbyte.flowdesign.javafx.property.ColorProperty;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.*;
-import javafx.beans.property.adapter.JavaBeanDoublePropertyBuilder;
-import javafx.beans.property.adapter.JavaBeanStringProperty;
-import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
+import javafx.beans.property.adapter.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.css.*;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -106,12 +100,12 @@ public class ElementNode extends Pane implements SelectableNode {
      * Outside properties
      */
 
-    protected DoubleProperty realX;
-    protected DoubleProperty realY;
-    protected DoubleProperty realWidth;
-    protected DoubleProperty realHeight;
-    protected StringProperty text;
-    protected ColorProperty  color;
+    protected DoubleProperty    realX;
+    protected DoubleProperty    realY;
+    protected DoubleProperty    realWidth;
+    protected DoubleProperty    realHeight;
+    protected StringProperty    text;
+    protected ColorProperty     color;
 
     /*
      * Working variables
@@ -133,9 +127,10 @@ public class ElementNode extends Pane implements SelectableNode {
             realWidth  = JavaBeanDoublePropertyBuilder.create().bean(element).name("width").build();
             realHeight = JavaBeanDoublePropertyBuilder.create().bean(element).name("height").build();
             text       = JavaBeanStringPropertyBuilder.create().bean(element).name("text").build();
+
             color      = new ColorProperty(this, "color", null);
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException("Could not create properties. This should never happen?!");
+            throw new RuntimeException("Could not create properties. This should never happen?!", e);
         }
 
         content.colorProperty().bind(Bindings.when(color.isNotNull()).then(color).otherwise(defaultColor));
