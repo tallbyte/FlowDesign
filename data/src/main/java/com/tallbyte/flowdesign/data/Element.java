@@ -74,8 +74,9 @@ public abstract class Element {
      * @param text the new text
      */
     public void setText(String text) {
-        this.changeSupport.firePropertyChange("text", this.text, text);
+        String old = this.text;
         this.text = text;
+        this.changeSupport.firePropertyChange("text", old, text);
     }
 
     /**
@@ -91,8 +92,9 @@ public abstract class Element {
      * @param x the coordinate
      */
     public void setX(double x) {
-        this.changeSupport.firePropertyChange("x", this.x, x);
+        double old = this.x;
         this.x = x;
+        this.changeSupport.firePropertyChange("x", old, x);
     }
 
     /**
@@ -108,8 +110,9 @@ public abstract class Element {
      * @param y the coordinate
      */
     public void setY(double y) {
-        this.changeSupport.firePropertyChange("y", this.y, y);
+        double old = this.y;
         this.y = y;
+        this.changeSupport.firePropertyChange("y", old, y);
     }
 
     /**
@@ -125,8 +128,9 @@ public abstract class Element {
      * @param width the width
      */
     public void setWidth(double width) {
-        this.changeSupport.firePropertyChange("width", this.width, width);
+        double old = this.width;
         this.width = width;
+        this.changeSupport.firePropertyChange("width", old, width);
     }
 
     /**
@@ -142,8 +146,9 @@ public abstract class Element {
      * @param height the height
      */
     public void setHeight(double height) {
-        this.changeSupport.firePropertyChange("height", this.height, height);
+        double old = this.height;
         this.height = height;
+        this.changeSupport.firePropertyChange("height", old, height);
     }
 
     /**
@@ -159,8 +164,9 @@ public abstract class Element {
      * @param deletable the deletable state
      */
     public void setDeletable(boolean deletable) {
-        this.changeSupport.firePropertyChange("deletable", this.deletable, deletable);
+        boolean old = this.deletable;
         this.deletable = deletable;
+        this.changeSupport.firePropertyChange("deletable", old, deletable);
     }
 
     /**

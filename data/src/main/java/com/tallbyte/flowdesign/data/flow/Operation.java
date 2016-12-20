@@ -22,6 +22,8 @@ import com.tallbyte.flowdesign.data.DependencyJoint;
 import com.tallbyte.flowdesign.data.FlowJoint;
 import com.tallbyte.flowdesign.data.JointType;
 
+import java.beans.PropertyChangeListener;
+
 /**
  * This file is part of project flowDesign.
  * <p/>
@@ -29,5 +31,15 @@ import com.tallbyte.flowdesign.data.JointType;
  * - julian (2016-12-09)<br/>
  */
 public class Operation extends OperationalUnit {
+
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        super.addPropertyChangeListener(listener);
+    }
+
+    @Override
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        super.removePropertyChangeListener(listener);
+    }
 
 }

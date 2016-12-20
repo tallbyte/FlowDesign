@@ -18,6 +18,7 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
+import com.tallbyte.flowdesign.data.Diagram;
 import com.tallbyte.flowdesign.data.Element;
 import com.tallbyte.flowdesign.data.Joint;
 import com.tallbyte.flowdesign.javafx.ColorHandler;
@@ -43,6 +44,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -132,7 +134,6 @@ public class ElementNode extends Pane implements SelectableNode {
             realHeight = JavaBeanDoublePropertyBuilder.create().bean(element).name("height").build();
             text       = JavaBeanStringPropertyBuilder.create().bean(element).name("text").build();
             color      = new ColorProperty(this, "color", null);
-
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("Could not create properties. This should never happen?!");
         }

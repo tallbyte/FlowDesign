@@ -69,9 +69,9 @@ public abstract class Diagram<E extends Element> {
         if (project != null) {
             project.notifyNameChange(this, this.name, name);
         }
-        this.changeSupport.firePropertyChange("name", this.name, name);
-
+        String old = this.name;
         this.name = name;
+        this.changeSupport.firePropertyChange("name", old, name);
     }
 
     /**
@@ -97,9 +97,9 @@ public abstract class Diagram<E extends Element> {
      * @param project the new {@link Project}
      */
     void setProject(Project project) {
-        this.changeSupport.firePropertyChange("project", this.project, project);
-
+        Project old = this.project;
         this.project = project;
+        this.changeSupport.firePropertyChange("project", old, project);
     }
 
     /**

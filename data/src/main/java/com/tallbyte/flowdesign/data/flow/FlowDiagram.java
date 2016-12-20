@@ -20,6 +20,8 @@ package com.tallbyte.flowdesign.data.flow;
 
 import com.tallbyte.flowdesign.data.Diagram;
 
+import java.beans.PropertyChangeListener;
+
 /**
  * This file is part of project flowDesign.
  * <p/>

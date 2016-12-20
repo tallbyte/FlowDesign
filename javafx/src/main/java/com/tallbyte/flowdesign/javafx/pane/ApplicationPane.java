@@ -249,11 +249,19 @@ public class ApplicationPane extends BorderPane {
 
     public ContextMenu createDiagramContextMenu(Diagram diagram) {
         ContextMenu menu = new ContextMenu();
+
         MenuItem itemRemove = new MenuItem(getResourceString("context.diagram.remove"));
-        itemRemove.setOnAction(event -> {
-            getProject().removeDiagram(diagram);
-        });
+        itemRemove.setOnAction(event -> getProject().removeDiagram(diagram));
+
         MenuItem itemRename = new MenuItem(getResourceString("context.diagram.rename"));
+        itemRename.setOnAction(event -> {
+            application.setupSimpleDialog(
+                    new TextInputDialog(),
+                    "popup.rename.title",
+                    "popup.rename.field.name"
+            ).showAndWait().ifPresent(diagram::setName);
+        });
+
         menu.getItems().addAll(itemRemove, itemRename);
 
         return menu;
