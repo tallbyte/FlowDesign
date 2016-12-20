@@ -31,6 +31,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * This file is part of project flowDesign.
@@ -40,10 +41,20 @@ import java.util.Map;
  */
 public class ApplicationManager {
 
+    /*
+     * Storage
+     */
+
     private File                 storageFile;
 
-    private ProjectStorage storage = new ProjectStorage();
+    private ProjectStorage       storage = new ProjectStorage();
     private Map<Project, String> paths   = new HashMap<>();
+
+    /*
+     * Logging
+     */
+
+    private Logger logger = Logger.getLogger("flowDesign");
 
     public ApplicationManager() throws IOException {
         setApplicationStoragePath();
@@ -135,4 +146,7 @@ public class ApplicationManager {
         return storage.getHistory();
     }
 
+    public Logger getLogger() {
+        return logger;
+    }
 }
