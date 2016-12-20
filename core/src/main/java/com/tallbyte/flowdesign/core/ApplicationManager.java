@@ -18,20 +18,20 @@
 
 package com.tallbyte.flowdesign.core;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import com.tallbyte.flowdesign.core.storage.NoPathSpecifiedException;
 import com.tallbyte.flowdesign.core.storage.ProjectNotFoundException;
 import com.tallbyte.flowdesign.core.storage.ProjectStorage;
 import com.tallbyte.flowdesign.data.Project;
 import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistory;
 import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistoryEntry;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * This file is part of project flowDesign.
@@ -54,7 +54,7 @@ public class ApplicationManager {
      * Logging
      */
 
-    private Logger logger = Logger.getLogger("flowDesign");
+    private Logger               logger  = LogManager.getRootLogger();
 
     public ApplicationManager() throws IOException {
         setApplicationStoragePath();
@@ -144,9 +144,5 @@ public class ApplicationManager {
 
     public ProjectStorageHistory getHistory() {
         return storage.getHistory();
-    }
-
-    public Logger getLogger() {
-        return logger;
     }
 }
