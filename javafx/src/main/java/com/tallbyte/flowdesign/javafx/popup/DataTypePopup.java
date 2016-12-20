@@ -72,10 +72,11 @@ public class DataTypePopup extends Popup {
         list.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 close();
-
                 event.consume();
+
             } else if (event.getCode() == KeyCode.ESCAPE) {
                 hide();
+                event.consume();
             }
         });
 
