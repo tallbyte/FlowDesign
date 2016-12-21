@@ -73,6 +73,18 @@ public class DataTypeHolder {
         return false;
     }
 
+    public void clear() {
+        clear(false);
+    }
+
+    public void clear(boolean clearListeners) {
+        types.clear();
+
+        if (clearListeners) {
+            listeners.clear();
+        }
+    }
+
     public void removeDataType(DataType type) {
         types.remove(type);
 
