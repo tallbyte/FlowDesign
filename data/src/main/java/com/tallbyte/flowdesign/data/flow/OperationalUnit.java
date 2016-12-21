@@ -64,9 +64,9 @@ public class OperationalUnit extends FlowDiagramElement {
                         Diagram d = project.getDiagram((String) evt.getNewValue());
 
                         if (d instanceof FlowDiagram) {
-                            setReference(d);
+                            setInternalReference(d);
                         } else {
-                            setReference(null);
+                            setInternalReference(null);
                         }
                     }
                 }
@@ -106,11 +106,11 @@ public class OperationalUnit extends FlowDiagramElement {
                     if (evt.getNewValue() != null) {
                         listenerDiagrams = (diagramChanged, added) -> {
                             if (!added && diagramChanged == this.reference) {
-                                setReference(null);
+                                setInternalReference(null);
                             }
 
                             if (added && diagramChanged.getName().equals(getText())) {
-                                setReference(diagramChanged);
+                                setInternalReference(diagramChanged);
                             }
                         };
 
@@ -143,10 +143,14 @@ public class OperationalUnit extends FlowDiagramElement {
         this.output = output;
     }
 
-    private void setReference(Diagram diagram) {
+    private void setInternalReference(Diagram diagram) {
         Diagram old = this.reference;
         this.reference = diagram;
         this.changeSupport.firePropertyChange("reference", old, diagram);
+    }
+
+    public void setReference(Diagram diagram) {
+        throw new UnsupportedOperationException("This method only exists because a setter is required (looking at you, JavaFX");
     }
 
     public Diagram getReference() {

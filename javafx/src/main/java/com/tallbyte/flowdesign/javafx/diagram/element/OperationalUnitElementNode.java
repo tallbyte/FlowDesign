@@ -50,7 +50,7 @@ public class OperationalUnitElementNode extends ElementNode {
         super(element, content, Pos.CENTER);
 
         try {
-            reference  = JavaBeanObjectPropertyBuilder.create().setter(getClass().getMethod("setDummy", Diagram.class)).bean(element).name("reference").build();
+            reference  = JavaBeanObjectPropertyBuilder.create().bean(element).name("reference").build();
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("Could not create properties. This should never happen?!", e);
         }
@@ -68,15 +68,9 @@ public class OperationalUnitElementNode extends ElementNode {
             }
         });
 
-        setOnMousePressed(event -> {
-            requestFocus();
-        });
+        setOnMousePressed(event -> requestFocus());
 
         this.operation = element;
-    }
-
-    public void setDummy(Diagram diagram) {
-
     }
 
     @Override

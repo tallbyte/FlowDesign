@@ -68,6 +68,11 @@ public class ArrowConnectionNode extends ConnectionNode {
     private final HBox      boxText = new HBox();
     private final TextField text    = new AutoSizeTextField();
 
+    /**
+     * Creates a new {@link ArrowConnectionNode}.
+     * @param application the main application
+     * @param connection the surrounding {@link Connection}
+     */
     public ArrowConnectionNode(FlowDesignFxApplication application, Connection connection) {
         super(connection);
 
@@ -138,27 +143,26 @@ public class ArrowConnectionNode extends ConnectionNode {
         text.setOnKeyPressed(event -> {
             if (event.isControlDown() && event.getCode() == KeyCode.SPACE) {
                 attemptAutoResolve();
+
+                event.consume();
             }
         });
 
-        for (Node node : popup.getContent()) {
-            node.setOnKeyPressed(event -> {
-                if (event.getCode() == KeyCode.ENTER) {
-                    popup.hide();
-                    event.consume();
+        popup.setKeyHandler(event -> {
+            if (event.getCode() == KeyCode.SPACE && event.isControlDown()) {
+                attemptAutoResolve();
 
-                } else if (event.getCode() == KeyCode.ESCAPE) {
-                    popup.hide();
-                    event.consume();
-                } else if (event.getCode() == KeyCode.SPACE && event.isControlDown()) {
-                    attemptAutoResolve();
-                }
-            });
-        }
+                event.consume();
+            }
+        });
 
         update();
     }
 
+    /**
+     * Attempts to expand the text. If not possible (i.e. more than one result)
+     * the popup will be shown.
+     */
     private void attemptAutoResolve() {
         Bounds bounds = text.localToScreen(text.getBoundsInLocal());
         if (bounds != null) {
@@ -174,6 +178,9 @@ public class ArrowConnectionNode extends ConnectionNode {
         }
     }
 
+    /**
+     * Shows the popup directly
+     */
     private void showPopup() {
         Bounds bounds = text.localToScreen(text.getBoundsInLocal());
         if (bounds != null) {
@@ -184,6 +191,9 @@ public class ArrowConnectionNode extends ConnectionNode {
         }
     }
 
+    /**
+     * Updates the arrow and labels.
+     */
     private void update() {
         double al = 10;
 
