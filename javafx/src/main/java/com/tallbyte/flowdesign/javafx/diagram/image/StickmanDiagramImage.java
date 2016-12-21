@@ -50,13 +50,6 @@ public class StickmanDiagramImage extends DiagramImage {
         context.clearRect(0, 0, width, height);
         context.save();
 
-        if (width >= height) {
-            width = height*0.6;
-            context.translate(((getWidth()-width)*0.5),0);
-        } else {
-
-        }
-
         //context.getTransform().append(transform);
 
         double mid = width*0.5;
