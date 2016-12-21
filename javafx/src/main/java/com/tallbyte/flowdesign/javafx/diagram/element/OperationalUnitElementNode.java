@@ -68,9 +68,7 @@ public class OperationalUnitElementNode extends ElementNode {
             }
         });
 
-        setOnMousePressed(event -> {
-            requestFocus();
-        });
+        setOnMousePressed(event -> requestFocus());
 
         this.operation = element;
     }
