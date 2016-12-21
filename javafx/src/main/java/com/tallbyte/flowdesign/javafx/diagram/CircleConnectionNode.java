@@ -40,7 +40,7 @@ public class CircleConnectionNode extends ConnectionNode {
 
 
     public CircleConnectionNode(FlowDesignFxApplication application, Connection connection) {
-        super(application, connection, null, null);
+        super(application, connection, "[", "]");
 
         circle.getStyleClass().add("connectionBlob");
     }

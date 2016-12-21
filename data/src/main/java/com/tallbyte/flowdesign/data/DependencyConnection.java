@@ -18,6 +18,10 @@
 
 package com.tallbyte.flowdesign.data;
 
+import com.tallbyte.flowdesign.data.flow.OperationalUnit;
+
+import java.beans.PropertyChangeListener;
+
 /**
  * This file is part of project flowDesign.
  * <p/>
@@ -25,6 +29,41 @@ package com.tallbyte.flowdesign.data;
  * - julian (2016-12-12)<br/>
  */
 public class DependencyConnection extends Connection {
+
+    protected ReferenceHandler referenceHandler = new ReferenceHandler("text", "reference", "name", "project", new ReferenceHolder() {
+        @Override
+        public void setText(String text) {
+            DependencyConnection.this.setText(text);
+        }
+
+        @Override
+        public String getText() {
+            return DependencyConnection.this.getText();
+        }
+
+        @Override
+        public Diagram getDiagram() {
+            return DependencyConnection.this.getTarget().getElement().getDiagram();
+        }
+
+        @Override
+        public void setReference(Diagram reference) {
+            DependencyConnection.this.setInternalReference(reference);
+        }
+
+        @Override
+        public Diagram getReference() {
+            return DependencyConnection.this.getReference();
+        }
+
+        @Override
+        public void addPropertyChangeListener(PropertyChangeListener listener) {
+            DependencyConnection.this.addPropertyChangeListener(listener);
+        }
+    });
+
+    protected Diagram reference;
+
     /**
      * Creates a new {@link Connection} between two {@link Joint}s.
      *
@@ -33,5 +72,21 @@ public class DependencyConnection extends Connection {
      */
     public DependencyConnection(Joint source, Joint target) {
         super(source, target);
+
+        referenceHandler.setDiagram(source.getElement().getDiagram());
+    }
+
+    private void setInternalReference(Diagram diagram) {
+        Diagram old = this.reference;
+        this.reference = diagram;
+        this.changeSupport.firePropertyChange("reference", old, diagram);
+    }
+
+    public void setReference(Diagram diagram) {
+        throw new UnsupportedOperationException("This method only exists because a setter is required (looking at you, JavaFX");
+    }
+
+    public Diagram getReference() {
+        return reference;
     }
 }

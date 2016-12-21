@@ -18,6 +18,7 @@
 
 package com.tallbyte.flowdesign.data;
 
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 /**
@@ -82,6 +83,22 @@ public class Connection {
      */
     public Joint getTarget() {
         return target;
+    }
+
+    /**
+     * Registers an {@link PropertyChangeListener}.
+     * @param listener the {@link PropertyChangeListener} to register
+     */
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.addPropertyChangeListener(listener);
+    }
+
+    /**
+     * Unregisters an {@link PropertyChangeListener}.
+     * @param listener the {@link PropertyChangeListener} to unregister
+     */
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.removePropertyChangeListener(listener);
     }
 
     @Override

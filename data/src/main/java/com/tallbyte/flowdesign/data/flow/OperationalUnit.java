@@ -35,14 +35,39 @@ public class OperationalUnit extends FlowDiagramElement {
     public static final String JOINT_DEPENDENCY_INPUT  = "dependencyInput";
     public static final String JOINT_DEPENDENCY_OUTPUT = "dependencyOutput";
 
-    protected String input  = "";
-    protected String output = "";
+    protected ReferenceHandler referenceHandler = new ReferenceHandler("text", "reference", "name", "project", new ReferenceHolder() {
+        @Override
+        public void setText(String text) {
+            OperationalUnit.this.setText(text);
+        }
 
-    protected Diagram reference = null;
+        @Override
+        public String getText() {
+            return OperationalUnit.this.getText();
+        }
 
-    protected DiagramsChangedListener listenerDiagrams;
-    protected PropertyChangeListener  listenerProject;
-    protected PropertyChangeListener  listenerName;
+        @Override
+        public Diagram getDiagram() {
+            return OperationalUnit.this.getDiagram();
+        }
+
+        @Override
+        public void setReference(Diagram reference) {
+            OperationalUnit.this.setInternalReference(reference);
+        }
+
+        @Override
+        public Diagram getReference() {
+            return OperationalUnit.this.getReference();
+        }
+
+        @Override
+        public void addPropertyChangeListener(PropertyChangeListener listener) {
+            OperationalUnit.this.addPropertyChangeListener(listener);
+        }
+    });
+
+    protected Diagram reference;
 
     /**
      * Creats an new {@link OperationalUnit}.
@@ -52,95 +77,13 @@ public class OperationalUnit extends FlowDiagramElement {
         addJoint(new FlowJoint(this, JOINT_OUTPUT0, JointType.OUTPUT, 1));
         addJoint(new DependencyJoint(this, JOINT_DEPENDENCY_INPUT , JointType.INPUT , 0));
         addJoint(new DependencyJoint(this, JOINT_DEPENDENCY_OUTPUT, JointType.OUTPUT, 0));
-
-        addPropertyChangeListener(evt -> {
-            if (evt.getPropertyName().equals("text")) {
-                Diagram diagram = getDiagram();
-
-                if (diagram != null) {
-                    Project project = diagram.getProject();
-
-                    if (project != null) {
-                        Diagram d = project.getDiagram((String) evt.getNewValue());
-
-                        if (d instanceof FlowDiagram) {
-                            setInternalReference(d);
-                        } else {
-                            setInternalReference(null);
-                        }
-                    }
-                }
-            }
-
-            if (evt.getPropertyName().equals("reference")) {
-                if (evt.getOldValue() != null) {
-                    ((Diagram) evt.getOldValue()).removePropertyChangeListener(listenerName);
-                }
-
-                if (evt.getNewValue() != null) {
-                    listenerName = evtName -> {
-                        if (evtName.getPropertyName().equals("name")) {
-                            setText((String) evtName.getNewValue());
-                        }
-                    };
-
-                    ((Diagram) evt.getNewValue()).addPropertyChangeListener(listenerName);
-                }
-            }
-        });
     }
 
     @Override
     protected void setDiagram(Diagram diagram) {
-        if (this.diagram != null) {
-            this.diagram.removePropertyChangeListener(listenerProject);
-        }
-
-        if (diagram != null) {
-            listenerProject = evt -> {
-                if (evt.getPropertyName().equals("project")) {
-                    if (evt.getOldValue() != null) {
-                        ((Project) evt.getOldValue()).removeDiagramsChangedListener(listenerDiagrams);
-                    }
-
-                    if (evt.getNewValue() != null) {
-                        listenerDiagrams = (diagramChanged, added) -> {
-                            if (!added && diagramChanged == this.reference) {
-                                setInternalReference(null);
-                            }
-
-                            if (added && diagramChanged.getName().equals(getText())) {
-                                setInternalReference(diagramChanged);
-                            }
-                        };
-
-                        ((Project) evt.getNewValue()).addDiagramsChangedListener(listenerDiagrams);
-                    }
-
-
-                }
-            };
-
-            diagram.addPropertyChangeListener(listenerProject);
-        }
+        referenceHandler.setDiagram(diagram);
 
         super.setDiagram(diagram);
-    }
-
-    public String getInput() {
-        return input;
-    }
-
-    public void setInput(String input) {
-        this.input = input;
-    }
-
-    public String getOutput() {
-        return output;
-    }
-
-    public void setOutput(String output) {
-        this.output = output;
     }
 
     private void setInternalReference(Diagram diagram) {

@@ -38,7 +38,7 @@ public class EnvironmentDiagram extends Diagram<EnvironmentDiagramElement> {
      * @param name the desired name
      */
     public EnvironmentDiagram(String name) {
-        super(name, new System());
+        super(name, null);
     }
 
     /**

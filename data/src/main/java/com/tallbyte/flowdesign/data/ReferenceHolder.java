@@ -16,9 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.data.flow;
-
-import com.tallbyte.flowdesign.data.Diagram;
+package com.tallbyte.flowdesign.data;
 
 import java.beans.PropertyChangeListener;
 
@@ -26,31 +24,20 @@ import java.beans.PropertyChangeListener;
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-11-07)<br/>
- * <br/>
- * A {@link FlowDiagram} describes a data flow trough operations etc. .
+ * - julian (2016-12-21)<br/>
  */
-public class FlowDiagram extends Diagram<FlowDiagramElement> {
+public interface ReferenceHolder {
 
-    /**
-     * Creates a new {@link FlowDiagram} using name only.
-     * @param name the desired name
-     */
-    public FlowDiagram(String name) {
-        super(name, null);
-    }
+    public void setText(String text);
 
-    /**
-     * Creates a new {@link FlowDiagram} with a given {@link Start} as root.
-     * @param name the desired name
-     * @param root the desired root
-     */
-    public FlowDiagram(String name, Start root) {
-        super(name, root);
-    }
+    public String getText();
 
-    @Override
-    public Start getRoot() {
-        return (Start) super.getRoot();
-    }
+    public Diagram getDiagram();
+
+    public void setReference(Diagram reference);
+
+    public Diagram getReference();
+
+    public void addPropertyChangeListener(PropertyChangeListener listener);
+
 }
