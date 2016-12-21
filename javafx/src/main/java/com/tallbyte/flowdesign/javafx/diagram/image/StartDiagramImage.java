@@ -33,7 +33,7 @@ public class StartDiagramImage extends EllipseDiagramImage {
      * Creates a new {@link StartDiagramImage} with default dimension.
      */
     public StartDiagramImage() {
-        setWidth(50);
-        setHeight(50);
+        setWidth(25);
+        setHeight(25);
     }
 }

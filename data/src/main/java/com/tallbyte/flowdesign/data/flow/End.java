@@ -18,9 +18,7 @@
 
 package com.tallbyte.flowdesign.data.flow;
 
-import com.tallbyte.flowdesign.data.DependencyJoint;
 import com.tallbyte.flowdesign.data.FlowJoint;
-import com.tallbyte.flowdesign.data.Joint;
 import com.tallbyte.flowdesign.data.JointType;
 
 /**
@@ -29,15 +27,15 @@ import com.tallbyte.flowdesign.data.JointType;
  * Authors:<br/>
  * - julian (2016-12-09)<br/>
  */
-public class Start extends FlowDiagramElement {
+public class End extends FlowDiagramElement {
 
-    public static final String JOINT_OUTPUT = "output";
+    public static final String JOINT_INPUT = "input";
 
     /**
-     * Creats an new {@link Start}.
+     * Creats an new {@link End}.
      */
-    public Start() {
-        addJoint(new FlowJoint(this, JOINT_OUTPUT, JointType.OUTPUT, 0));
+    public End() {
+        addJoint(new FlowJoint(this, JOINT_INPUT, JointType.INPUT, 0));
         setText("");
     }
 
