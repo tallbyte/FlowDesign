@@ -138,13 +138,15 @@ public class ArrowConnectionNode extends ConnectionNode {
         text.setOnKeyPressed(event -> {
             if (event.isControlDown() && event.getCode() == KeyCode.SPACE) {
                 attemptAutoResolve();
+
+                event.consume();
             }
         });
 
         for (Node node : popup.getContent()) {
             node.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
-                    popup.hide();
+                    popup.close();
                     event.consume();
 
                 } else if (event.getCode() == KeyCode.ESCAPE) {
@@ -152,6 +154,8 @@ public class ArrowConnectionNode extends ConnectionNode {
                     event.consume();
                 } else if (event.getCode() == KeyCode.SPACE && event.isControlDown()) {
                     attemptAutoResolve();
+
+                    event.consume();
                 }
             });
         }
