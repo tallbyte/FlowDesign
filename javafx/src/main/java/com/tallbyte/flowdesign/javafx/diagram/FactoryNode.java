@@ -20,6 +20,8 @@ package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.javafx.diagram.factory.DiagramImageFactory;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
+import com.tallbyte.flowdesign.javafx.property.ColorProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Label;
 import javafx.scene.input.ClipboardContent;
@@ -44,10 +46,11 @@ public class FactoryNode extends Label {
      * @param name the display-name
      * @param text the display text
      */
-    public FactoryNode(DiagramImageFactory factory, String name, String text) {
+    public FactoryNode(DiagramImageFactory factory, String name, String text, ObjectProperty<Color> colorProperty) {
         this.name = name;
 
         DiagramImage image = factory.createDiagramImage();
+        image.colorProperty().bind(colorProperty);
         setGraphic(image);
         setText(text);
         /*image.setWidth(image.getWidth()*0.75);

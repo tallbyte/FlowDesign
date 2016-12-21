@@ -374,6 +374,10 @@ SwitchPane .boxButtons {
 
 }
 
+.factoryPane {
+    -fx-default-color: -fx-draw-accent;
+}
+
 .elementNode {
     -fx-default-color: -fx-draw-accent;
 }
