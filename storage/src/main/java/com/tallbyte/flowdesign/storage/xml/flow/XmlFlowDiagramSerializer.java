@@ -76,13 +76,11 @@ public class XmlFlowDiagramSerializer extends XmlDiagramSerializer implements Xm
             );
 
             FlowDiagram diagram = new FlowDiagram(
-                    attributes.get(ATTRIBUTE_NAME),
-                    (Start) queue.peek().getValue()
+                    attributes.get(ATTRIBUTE_NAME)
             );
 
             // load all the elements with proper values
             deserializeElements(reader, queue, FlowDiagramElement.class, helper);
-            queue.poll(); // the first one is the root element, don#t add it twice (first time is the constructor)
             queue.stream()
                     .map(Map.Entry::getValue)
                     .forEach(diagram::addElement);
