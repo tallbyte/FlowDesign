@@ -61,7 +61,13 @@ public class OperationalUnit extends FlowDiagramElement {
                     Project project = diagram.getProject();
 
                     if (project != null) {
-                        setReference(project.getDiagram((String) evt.getNewValue()));
+                        Diagram d = project.getDiagram((String) evt.getNewValue());
+
+                        if (d instanceof FlowDiagram) {
+                            setReference(d);
+                        } else {
+                            setReference(null);
+                        }
                     }
                 }
             }

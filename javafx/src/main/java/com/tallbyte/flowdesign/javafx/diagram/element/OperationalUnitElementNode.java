@@ -19,6 +19,7 @@
 package com.tallbyte.flowdesign.javafx.diagram.element;
 
 import com.tallbyte.flowdesign.data.Diagram;
+import com.tallbyte.flowdesign.data.flow.FlowDiagram;
 import com.tallbyte.flowdesign.data.flow.Operation;
 import com.tallbyte.flowdesign.data.flow.OperationalUnit;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
@@ -60,11 +61,9 @@ public class OperationalUnitElementNode extends ElementNode {
         pseudoClassStateChanged(PseudoClass.getPseudoClass("referenced"), reference.getValue() != null);
 
         addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            System.out.println(("code=" + event.getCode()));
-
             Object ref = reference.get();
 
-            if (event.isControlDown() && event.getCode() == KeyCode.B && ref instanceof Diagram) {
+            if (event.isControlDown() && event.getCode() == KeyCode.B && ref instanceof FlowDiagram) {
                 diagramPane.getDiagramsPane().addDiagram((Diagram) ref);
             }
         });
