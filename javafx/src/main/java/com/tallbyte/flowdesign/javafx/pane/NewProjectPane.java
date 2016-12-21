@@ -57,6 +57,16 @@ public class NewProjectPane extends SwitchContentPane {
         okProperty().bind(textFieldName.textProperty().isNotEmpty().and(textFieldDirectory.textProperty().isNotEmpty()));
     }
 
+    @Override
+    public void onOpen(SwitchPane pane) {
+        textFieldName.requestFocus();
+    }
+
+    @Override
+    public void onOpen() {
+        textFieldName.requestFocus();
+    }
+
     @FXML
     private void onChoose() {
         DirectoryChooser chooser = new DirectoryChooser();
@@ -66,6 +76,14 @@ public class NewProjectPane extends SwitchContentPane {
         if (file != null) {
             textFieldDirectory.setText(file.getPath());
         }
+    }
+
+    public String getName() {
+        return textFieldName.getText();
+    }
+
+    public String getDirectory() {
+        return textFieldDirectory.getText();
     }
 
     @Override

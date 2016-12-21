@@ -79,7 +79,7 @@ public class ArrowConnectionNode extends ConnectionNode {
         popup = new DataTypePopup(text.textProperty());
         popup.setAutoHide(true);
         popup.setHideOnEscape(true);
-        application.setupPopup(popup);
+        application.getPopupHandler().setupPopup(popup);
 
         this.application = application;
     }

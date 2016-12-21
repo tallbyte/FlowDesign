@@ -55,7 +55,7 @@
                         </graphic>
                     </Button>
 
-                    <Button text="%pane.welcome.load" styleClass="openButton" onAction="#onOpen">
+                    <Button text="%pane.welcome.load" styleClass="openButton" onAction="#onDirectoryOpen">
                         <graphic>
                             <Glyph textFill="burlywood" fontFamily="FontAwesome" icon="FOLDER"/>
                         </graphic>

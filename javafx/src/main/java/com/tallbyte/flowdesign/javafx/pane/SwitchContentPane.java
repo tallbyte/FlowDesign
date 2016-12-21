@@ -40,6 +40,10 @@ public abstract class SwitchContentPane extends BorderPane {
 
     }
 
+    public void onOpen() {
+
+    }
+
     public String getTitle() {
         return "";
     }

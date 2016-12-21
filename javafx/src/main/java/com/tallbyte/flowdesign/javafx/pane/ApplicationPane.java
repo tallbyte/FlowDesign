@@ -29,6 +29,7 @@ import com.tallbyte.flowdesign.javafx.ColorHandler;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
@@ -255,11 +256,8 @@ public class ApplicationPane extends BorderPane {
 
         MenuItem itemRename = new MenuItem(getResourceString("context.diagram.rename"));
         itemRename.setOnAction(event -> {
-            application.setupSimpleDialog(
-                    new TextInputDialog(),
-                    "popup.rename.title",
-                    "popup.rename.field.name"
-            ).showAndWait().ifPresent(diagram::setName);
+            application.getPopupHandler().createRenameDiagramDialog(diagram)
+                    .showAndWait().ifPresent(diagram::setName);
         });
 
         menu.getItems().addAll(itemRemove, itemRename);
@@ -276,11 +274,8 @@ public class ApplicationPane extends BorderPane {
      * @param clazz the target {@link Class}
      */
     private void createDiagram(Class<? extends Diagram> clazz) {
-        application.setupSimpleDialog(
-                new TextInputDialog(),
-                "popup.new."+clazz.getSimpleName()+".title",
-                "popup.new."+clazz.getSimpleName()+".field.name"
-        ).showAndWait().ifPresent(response -> {
+        application.getPopupHandler().createCreateDiagramDialog(clazz, getProject())
+                .showAndWait().ifPresent(response -> {
             Project project = getProject();
             if (project != null) {
                 Diagram diagram = paneDiagrams.getDiagramManager().createDiagram(response, clazz);
@@ -296,11 +291,8 @@ public class ApplicationPane extends BorderPane {
      */
     @FXML
     public void onCreateProject() {
-        application.setupSimpleDialog(
-                new TextInputDialog(),
-                "popup.newProject.title",
-                "popup.newProject.field.name"
-        ).showAndWait().ifPresent(response -> project.set(new Project(response)));
+        application.getPopupHandler().createCreateProjectDialog()
+                .showAndWait().ifPresent(response -> project.set(new Project(response)));
     }
 
     /**
@@ -413,7 +405,7 @@ public class ApplicationPane extends BorderPane {
     @FXML
     public void onAbout() {
         try  {
-            application.setupManualDialog(new Stage(), new AboutPane(), "popup.about.title", 400).show();
+            application.getPopupHandler().setupManualDialog(new Stage(), new AboutPane(), "popup.about.title", 400).show();
         } catch (LoadException e) {
             // TODO
             e.printStackTrace();

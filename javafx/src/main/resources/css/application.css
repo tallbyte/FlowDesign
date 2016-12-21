@@ -431,3 +431,7 @@ SwitchPane .boxButtons {
 .subtleList {
     -fx-border-color: -fx-off-divider-accent;
 }
+
+.dialogPaneContent {
+    -fx-hgap: 10px;
+}
