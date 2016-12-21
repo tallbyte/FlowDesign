@@ -85,8 +85,9 @@ public class XmlMaskDiagramSerializer extends XmlDiagramSerializer implements Xm
                     .map(Map.Entry::getValue)
                     .forEach(diagram::addElement);
 
+            // there are no connections to read
             // build all the connections
-            deserializeConnections(reader, Connection.class, helper);
+            // deserializeConnections(reader, Connection.class, helper);
 
             return diagram;
 
