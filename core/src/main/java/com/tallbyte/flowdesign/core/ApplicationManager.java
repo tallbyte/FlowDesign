@@ -95,7 +95,11 @@ public class ApplicationManager {
     }
 
     private void saveHistory() throws IOException {
+        logger.info("saving history");
+
         storage.serializeHistory(new File(storageFile, "history.xml").getPath());
+
+        logger.info("saved history");
     }
 
     public void saveProject(Project project) throws IOException, NoPathSpecifiedException {
@@ -106,13 +110,19 @@ public class ApplicationManager {
         } else {
             throw new NoPathSpecifiedException("could not find a suitable save location");
         }
+
+
     }
 
     public void saveProject(Project project, String path) throws IOException {
+        logger.info("attempting to save project "+project.getName());
         storage.serialize(path, project);
         paths.put(project, path);
+        logger.info("saved project "+project.getName());
 
         saveHistory();
+
+
     }
 
     public void serialize(Object target, String path) throws IOException {
@@ -120,9 +130,13 @@ public class ApplicationManager {
     }
 
     public Project loadProject(ProjectStorageHistoryEntry entry) throws IOException, ProjectNotFoundException {
+        logger.info("attempting to load project from " + entry.getPath());
+
         try {
             Project project = storage.deserialize(entry.getPath(), Project.class);
             paths.put(project, entry.getPath());
+
+            logger.info("loaded project " + project.getName());
 
             return project;
         } catch (FileNotFoundException e) {
@@ -131,9 +145,13 @@ public class ApplicationManager {
     }
 
     public Project loadProject(String path) throws IOException, ProjectNotFoundException {
+        logger.info("attempting to load project from " + path);
+
         try {
             Project project = storage.deserialize(path, Project.class);
             paths.put(project, path);
+
+            logger.info("loaded project " + project.getName());
 
             return project;
         } catch (FileNotFoundException e) {

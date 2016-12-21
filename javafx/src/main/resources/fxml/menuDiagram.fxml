@@ -29,7 +29,7 @@
         <SeparatorMenuItem/>
 
         <MenuItem fx:id="itemAddFlow" accelerator="Ctrl+D" text="%menu.diagram.addFlow"/>
-        <MenuItem fx:id="itemAddDependency" accelerator="Ctrl+S" text="%menu.diagram.addDependency"/>
+        <MenuItem fx:id="itemAddDependency" accelerator="Ctrl+W" text="%menu.diagram.addDependency"/>
     </items>
 
 </fx:root>
