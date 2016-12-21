@@ -25,10 +25,11 @@
 <?import javafx.scene.layout.*?>
 <?import org.controlsfx.glyphfont.*?>
 <?import com.tallbyte.flowdesign.javafx.pane.DataTypePane?>
+<?import com.tallbyte.flowdesign.javafx.pane.DiagramMenu?>
 <fx:root type="BorderPane" xmlns:fx="http://javafx.com/fxml">
     <top>
         <VBox>
-            <MenuBar>
+            <MenuBar useSystemMenuBar="true">
                 <Menu text="%menu.file">
                     <MenuItem accelerator="Ctrl+N" text="%menu.file.newProject" onAction="#onCreateProject"/>
 
@@ -47,6 +48,7 @@
                 <Menu fx:id="menuEdit" text="%menu.edit">
 
                 </Menu>
+                <DiagramMenu/>
                 <Menu text="%menu.help">
                     <MenuItem visible="true" text="Test" onAction="#onTest"/>
                     <MenuItem accelerator="Ctrl+A" text="%menu.help.about" onAction="#onAbout"/>
