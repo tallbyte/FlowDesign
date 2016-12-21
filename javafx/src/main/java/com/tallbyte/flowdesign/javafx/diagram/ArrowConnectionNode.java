@@ -30,6 +30,8 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
@@ -57,16 +59,11 @@ import static javafx.scene.layout.Region.USE_PREF_SIZE;
  */
 public class ArrowConnectionNode extends ConnectionNode {
 
-    private final FlowDesignFxApplication application;
     private final DataTypePopup           popup;
 
-    private       JointNode               sourceNode;
-    private       JointNode               targetNode;
+    private final Line           arrow0  = new Line();
+    private final Line           arrow1  = new Line();
 
-    private final Line      arrow0  = new Line();
-    private final Line      arrow1  = new Line();
-    private final HBox      boxText = new HBox();
-    private final TextField text    = new AutoSizeTextField();
 
     /**
      * Creates a new {@link ArrowConnectionNode}.
@@ -74,37 +71,17 @@ public class ArrowConnectionNode extends ConnectionNode {
      * @param connection the surrounding {@link Connection}
      */
     public ArrowConnectionNode(FlowDesignFxApplication application, Connection connection) {
-        super(connection);
+        super(application, connection, "(", ")");
 
-        popup = new DataTypePopup(text.textProperty());
+        popup = new DataTypePopup(textField.textProperty());
         popup.setAutoHide(true);
         popup.setHideOnEscape(true);
         application.getPopupHandler().setupPopup(popup);
-
-        this.application = application;
     }
 
     @Override
     protected void setup() {
-        Joint source = connection.getSource();
-        Joint target = connection.getTarget();
-
-        sourceNode = diagramPane.getJointNode(source);
-        targetNode = diagramPane.getJointNode(target);
-
-        startXProperty().bind(sourceNode.layoutXProperty()
-                .add(sourceNode.centerXProperty())
-                .add(sourceNode.getNode().realXProperty()));
-        startYProperty().bind(sourceNode.layoutYProperty()
-                .add(sourceNode.centerYProperty())
-                .add(sourceNode.getNode().realYProperty()));
-
-        endXProperty().bind(targetNode.layoutXProperty()
-                .add(targetNode.centerXProperty())
-                .add(targetNode.getNode().realXProperty()));
-        endYProperty().bind(targetNode.layoutYProperty()
-                .add(targetNode.centerYProperty())
-                .add(targetNode.getNode().realYProperty()));
+        super.setup();
 
         arrow0.startXProperty().bind(line.endXProperty());
         arrow0.startYProperty().bind(line.endYProperty());
@@ -112,44 +89,22 @@ public class ArrowConnectionNode extends ConnectionNode {
         arrow1.startXProperty().bind(line.endXProperty());
         arrow1.startYProperty().bind(line.endYProperty());
 
-        getChildren().addAll(arrow0, arrow1, boxText);
-        boxText.getChildren().addAll(new Label("("), text, new Label(")"));
+        getChildren().addAll(arrow0, arrow1);
 
-
-        line.startXProperty().addListener((observable, oldValue, newValue) -> {
-            update();
-        });
-        line.startYProperty().addListener((observable, oldValue, newValue) -> {
-            update();
-        });
-        line.endXProperty().addListener((observable, oldValue, newValue) -> {
-            update();
-        });
-        line.endYProperty().addListener((observable, oldValue, newValue) -> {
-            update();
-        });
-        text.heightProperty().addListener((observable, oldValue, newValue) -> {
-            update();
-        });
-        text.widthProperty().addListener((observable, oldValue, newValue) -> {
-            update();
-        });
-
-
-        boxText.setPadding(new Insets(0, 0, 5, 0));
-        text.textProperty().addListener((observable, oldValue, newValue) -> {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
             showPopup();
         });
-        text.setOnKeyPressed(event -> {
-            if (event.isControlDown() && event.getCode() == KeyCode.SPACE) {
+
+        popup.setKeyHandler(event -> {
+            if (event.getCode() == KeyCode.SPACE && event.isControlDown()) {
                 attemptAutoResolve();
 
                 event.consume();
             }
         });
 
-        popup.setKeyHandler(event -> {
-            if (event.getCode() == KeyCode.SPACE && event.isControlDown()) {
+        textField.setOnKeyPressed(event -> {
+            if (event.isControlDown() && event.getCode() == KeyCode.SPACE) {
                 attemptAutoResolve();
 
                 event.consume();
@@ -164,15 +119,15 @@ public class ArrowConnectionNode extends ConnectionNode {
      * the popup will be shown.
      */
     private void attemptAutoResolve() {
-        Bounds bounds = text.localToScreen(text.getBoundsInLocal());
+        Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
         if (bounds != null) {
             String auto = popup.attemptAutoResolve(this, bounds.getMinX()+10, bounds.getMinY()-100,
                     sourceNode.getJoint().getElement().getDiagram().getProject(),
-                    text.getText()
+                    textField.getText()
             );
 
             if (auto != null) {
-                text.setText(auto);
+                textField.setText(auto);
                 popup.hide();
             }
         }
@@ -182,11 +137,15 @@ public class ArrowConnectionNode extends ConnectionNode {
      * Shows the popup directly
      */
     private void showPopup() {
-        Bounds bounds = text.localToScreen(text.getBoundsInLocal());
+        Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
         if (bounds != null) {
             popup.show(this, bounds.getMinX()+10, bounds.getMinY()-100,
-                    sourceNode.getJoint().getElement().getDiagram().getProject(),
-                    text.getText()
+                    sourceNode
+                            .getJoint()
+                            .getElement()
+                            .getDiagram()
+                            .getProject(),
+                    textField.getText()
             );
         }
     }
@@ -194,7 +153,9 @@ public class ArrowConnectionNode extends ConnectionNode {
     /**
      * Updates the arrow and labels.
      */
-    private void update() {
+    protected void update() {
+        super.update();
+
         double al = 10;
 
         double lenX = line.getEndX()-line.getStartX();
@@ -214,19 +175,5 @@ public class ArrowConnectionNode extends ConnectionNode {
         arrow0.getTransforms().add(new Rotate(30, line.getEndX(), line.getEndY()));
         arrow1.getTransforms().clear();
         arrow1.getTransforms().add(new Rotate(-30, line.getEndX(), line.getEndY()));
-
-        boxText.setLayoutX(line.getEndX()-sx*len*0.5- boxText.getWidth()/2);
-        boxText.setLayoutY(line.getEndY()-sy*len*0.5- boxText.getHeight());
-
-        Point2D normal = new Point2D(1, 0);
-        Point2D line   = new Point2D(lenX, lenY).normalize();
-        double  angle  = normal.angle(line);
-
-        if (getStartY() > getEndY()) {
-            angle = 360-angle;
-        }
-
-        boxText.getTransforms().clear();
-        boxText.getTransforms().add(new Rotate(angle, boxText.getWidth()/2, boxText.getHeight()));
     }
 }

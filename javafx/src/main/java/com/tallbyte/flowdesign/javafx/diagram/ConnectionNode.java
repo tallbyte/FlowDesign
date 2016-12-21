@@ -22,11 +22,12 @@ import com.sun.javafx.tk.FontMetrics;
 import com.sun.javafx.tk.Toolkit;
 import com.tallbyte.flowdesign.data.Joint;
 import com.tallbyte.flowdesign.data.Connection;
+import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
+import com.tallbyte.flowdesign.javafx.control.AutoSizeTextField;
 import com.tallbyte.flowdesign.javafx.popup.DataTypePopup;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.*;
+import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
@@ -47,17 +48,54 @@ import javafx.stage.Popup;
  */
 public class ConnectionNode extends Group implements SelectableNode {
 
-    protected final Line                    line = new Line();
-
-    protected final Connection              connection;
+    protected final FlowDesignFxApplication application;
     protected       DiagramPane             diagramPane;
 
+    protected final Connection              connection;
+
+    protected       JointNode               sourceNode;
+    protected       JointNode               targetNode;
+
+    protected final Line                    line      = new Line();
+    protected final HBox                    boxText   = new HBox();
+    protected final TextField               textField = new AutoSizeTextField();
+
+    protected final StringProperty          realText;
     protected       ReadOnlyBooleanProperty selected;
 
-    public ConnectionNode(Connection connection) {
+    public ConnectionNode(FlowDesignFxApplication application, Connection connection, String textLeft, String textRight) {
+        this.application = application;
         this.connection  = connection;
 
-        getChildren().add(line);
+        try {
+            if (connection != null) {
+                realText = JavaBeanStringPropertyBuilder.create().bean(connection).name("text").build();
+            } else {
+                realText = new SimpleStringProperty(this, "text", "");
+            }
+
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException("Could not create properties. This should never happen?!", e);
+        }
+
+        textField.textProperty().bindBidirectional(realText);
+
+        boxText.getStyleClass().add("boxText");
+
+        getChildren().addAll(line, boxText);
+
+        if (textLeft != null) {
+            Label labelLeft = new Label(textLeft);
+            labelLeft.getStyleClass().add("labelLeft");
+            boxText.getChildren().add(labelLeft);
+        }
+        boxText.getChildren().add(textField);
+        if (textRight != null) {
+            Label labelRight = new Label(textRight);
+            labelRight.getStyleClass().add("labelRight");
+            boxText.getChildren().add(labelRight);
+        }
+
         getStyleClass().add("connectionNode");
     }
 
@@ -74,8 +112,74 @@ public class ConnectionNode extends Group implements SelectableNode {
         }
     }
 
+    /**
+     * Does basic setup.
+     */
     protected void setup() {
+        sourceNode = diagramPane.getJointNode(connection.getSource());
+        targetNode = diagramPane.getJointNode(connection.getTarget());
 
+        startXProperty().bind(sourceNode.layoutXProperty()
+                .add(sourceNode.centerXProperty())
+                .add(sourceNode.getNode().realXProperty()));
+        startYProperty().bind(sourceNode.layoutYProperty()
+                .add(sourceNode.centerYProperty())
+                .add(sourceNode.getNode().realYProperty()));
+
+        endXProperty().bind(targetNode.layoutXProperty()
+                .add(targetNode.centerXProperty())
+                .add(targetNode.getNode().realXProperty()));
+        endYProperty().bind(targetNode.layoutYProperty()
+                .add(targetNode.centerYProperty())
+                .add(targetNode.getNode().realYProperty()));
+
+        line.startXProperty().addListener((observable, oldValue, newValue) -> {
+            update();
+        });
+        line.startYProperty().addListener((observable, oldValue, newValue) -> {
+            update();
+        });
+        line.endXProperty().addListener((observable, oldValue, newValue) -> {
+            update();
+        });
+        line.endYProperty().addListener((observable, oldValue, newValue) -> {
+            update();
+        });
+        textField.heightProperty().addListener((observable, oldValue, newValue) -> {
+            update();
+        });
+        textField.widthProperty().addListener((observable, oldValue, newValue) -> {
+            update();
+        });
+
+        // TODO remove
+        boxText.setPadding(new Insets(0, 0, 5, 0));
+    }
+
+    /**
+     * Updates the text box.
+     */
+    protected void update() {
+        double lenX = line.getEndX()-line.getStartX();
+        double lenY = line.getEndY()-line.getStartY();
+        double len  = Math.sqrt(lenX*lenX + lenY*lenY);
+
+        double sx   = lenX/len;
+        double sy   = lenY/len;
+
+        boxText.setLayoutX(line.getEndX()-sx*len*0.5- boxText.getWidth()/2);
+        boxText.setLayoutY(line.getEndY()-sy*len*0.5- boxText.getHeight());
+
+        Point2D normal = new Point2D(1, 0);
+        Point2D line   = new Point2D(lenX, lenY).normalize();
+        double  angle  = normal.angle(line);
+
+        if (getStartY() > getEndY()) {
+            angle = 360-angle;
+        }
+
+        boxText.getTransforms().clear();
+        boxText.getTransforms().add(new Rotate(angle, boxText.getWidth()/2, boxText.getHeight()));
     }
 
     public Connection getConnection() {

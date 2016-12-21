@@ -159,7 +159,7 @@ JointNode {
     -fx-font-size:        0.85em;
 }
 
-.nodeConnectionBlob {
+.connectionBlob {
     -fx-fill:               -fx-connection-accent;
 }
 
