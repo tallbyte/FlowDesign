@@ -21,6 +21,7 @@ package com.tallbyte.flowdesign.javafx.diagram;
 import com.sun.javafx.tk.FontMetrics;
 import com.sun.javafx.tk.Toolkit;
 import com.tallbyte.flowdesign.data.Connection;
+import com.tallbyte.flowdesign.data.DataType;
 import com.tallbyte.flowdesign.data.Joint;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import com.tallbyte.flowdesign.javafx.control.AutoSizeTextField;
@@ -33,6 +34,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -56,6 +58,10 @@ import static javafx.scene.layout.Region.USE_PREF_SIZE;
 public class ArrowConnectionNode extends ConnectionNode {
 
     private final FlowDesignFxApplication application;
+    private final DataTypePopup           popup;
+
+    private       JointNode               sourceNode;
+    private       JointNode               targetNode;
 
     private final Line      arrow0  = new Line();
     private final Line      arrow1  = new Line();
@@ -65,6 +71,11 @@ public class ArrowConnectionNode extends ConnectionNode {
     public ArrowConnectionNode(FlowDesignFxApplication application, Connection connection) {
         super(connection);
 
+        popup = new DataTypePopup(text.textProperty());
+        popup.setAutoHide(true);
+        popup.setHideOnEscape(true);
+        application.setupPopup(popup);
+
         this.application = application;
     }
 
@@ -73,8 +84,8 @@ public class ArrowConnectionNode extends ConnectionNode {
         Joint source = connection.getSource();
         Joint target = connection.getTarget();
 
-        JointNode sourceNode = diagramPane.getJointNode(source);
-        JointNode targetNode = diagramPane.getJointNode(target);
+        sourceNode = diagramPane.getJointNode(source);
+        targetNode = diagramPane.getJointNode(target);
 
         startXProperty().bind(sourceNode.layoutXProperty()
                 .add(sourceNode.centerXProperty())
@@ -119,26 +130,58 @@ public class ArrowConnectionNode extends ConnectionNode {
             update();
         });
 
-        final DataTypePopup popup = new DataTypePopup(text.textProperty());
-        popup.setAutoHide(true);
-        popup.setHideOnEscape(true);
-        application.setupPopup(popup);
 
         boxText.setPadding(new Insets(0, 0, 5, 0));
         text.textProperty().addListener((observable, oldValue, newValue) -> {
-            /**
-             * Popup handling
-             */
-            Bounds bounds = text.localToScreen(text.getBoundsInLocal());
-            if (bounds != null) {
-                popup.show(this, bounds.getMinX()+10, bounds.getMinY()-100,
-                        sourceNode.getJoint().getElement().getDiagram().getProject(),
-                        text.getText()
-                );
+            showPopup();
+        });
+        text.setOnKeyPressed(event -> {
+            if (event.isControlDown() && event.getCode() == KeyCode.SPACE) {
+                attemptAutoResolve();
             }
         });
 
+        for (Node node : popup.getContent()) {
+            node.setOnKeyPressed(event -> {
+                if (event.getCode() == KeyCode.ENTER) {
+                    popup.hide();
+                    event.consume();
+
+                } else if (event.getCode() == KeyCode.ESCAPE) {
+                    popup.hide();
+                    event.consume();
+                } else if (event.getCode() == KeyCode.SPACE && event.isControlDown()) {
+                    attemptAutoResolve();
+                }
+            });
+        }
+
         update();
+    }
+
+    private void attemptAutoResolve() {
+        Bounds bounds = text.localToScreen(text.getBoundsInLocal());
+        if (bounds != null) {
+            String auto = popup.attemptAutoResolve(this, bounds.getMinX()+10, bounds.getMinY()-100,
+                    sourceNode.getJoint().getElement().getDiagram().getProject(),
+                    text.getText()
+            );
+
+            if (auto != null) {
+                text.setText(auto);
+                popup.hide();
+            }
+        }
+    }
+
+    private void showPopup() {
+        Bounds bounds = text.localToScreen(text.getBoundsInLocal());
+        if (bounds != null) {
+            popup.show(this, bounds.getMinX()+10, bounds.getMinY()-100,
+                    sourceNode.getJoint().getElement().getDiagram().getProject(),
+                    text.getText()
+            );
+        }
     }
 
     private void update() {

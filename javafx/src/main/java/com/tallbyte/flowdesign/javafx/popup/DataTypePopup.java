@@ -69,36 +69,46 @@ public class DataTypePopup extends Popup {
             return cell;
         });
 
-        list.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                close();
-                event.consume();
+        list.getStyleClass().add("dataTypePopup");
 
-            } else if (event.getCode() == KeyCode.ESCAPE) {
-                hide();
-                event.consume();
+        getContent().add(list);
+    }
+
+    public String attemptAutoResolve(Node ownerNode, double anchorX, double anchorY, Project project, String start) {
+        String text = null;
+
+        for (DataType type : project.getDataTypeHolder()
+                .getDataTypes(start)) {
+
+            if (text == null) {
+                text = type.getClassName();
+            } else {
+                show(ownerNode, anchorX, anchorY, project, start);
+                return null;
             }
-        });
+        }
 
-        VBox vBox = new VBox(list);
-        vBox.getStyleClass().add("dataTypePopup");
-
-        getContent().add(vBox);
+        return text;
     }
 
     public void show(Node ownerNode, double anchorX, double anchorY, Project project, String start) {
-        super.show(ownerNode, anchorX, anchorY);
-
         list.getItems().clear();
 
         for (DataType type : project.getDataTypeHolder().getDataTypes(start)) {
             list.getItems().add(type);
         }
 
-        show(ownerNode, anchorX, anchorY);
+        if (list.getItems().size() > 0) {
+            DataType first = list.getItems().get(0);
+
+            if (!first.getClassName().equals(start)) {
+                show(ownerNode, anchorX, anchorY);
+            }
+        }
+
     }
 
-    private void close() {
+    public void close() {
         DataType selected = list.getSelectionModel().getSelectedItem();
 
         if (selected != null) {
