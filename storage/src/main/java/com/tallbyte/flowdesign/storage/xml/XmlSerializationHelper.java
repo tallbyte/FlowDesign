@@ -22,6 +22,7 @@ import com.tallbyte.flowdesign.data.Element;
 import com.tallbyte.flowdesign.storage.IdentifierResolver;
 import com.tallbyte.flowdesign.storage.SerializationResolver;
 
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,5 +61,18 @@ public class XmlSerializationHelper {
      */
     public SerializationResolver<XMLStreamWriter, XmlSerializationHelper> getSerializationResolver() {
         return serializationResolver;
+    }
+
+    /**
+     * @param writer {@link XMLStreamWriter} to write to
+     * @param map {@link Map} of values to write
+     * @throws XMLStreamException If writing failed
+     */
+    public void setAttributes(XMLStreamWriter writer, Map<String, String> map) throws XMLStreamException {
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (entry.getKey() != null && entry.getValue() != null) {
+                writer.writeAttribute(entry.getKey(), entry.getValue());
+            }
+        }
     }
 }
