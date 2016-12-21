@@ -23,13 +23,13 @@
 <fx:root type="Menu" text="%menu.diagram" xmlns:fx="http://javafx.com/fxml">
 
     <items>
-        <MenuItem accelerator="Ctrl+B" text="%menu.diagram.goToReference"/>
-        <MenuItem accelerator="Ctrl+SPACE" text="%menu.diagram.openSuggestions"/>
+        <MenuItem fx:id="itemGoToReference" accelerator="Ctrl+B" text="%menu.diagram.goToReference"/>
+        <MenuItem fx:id="itemOpenSuggestions" accelerator="Ctrl+SPACE" text="%menu.diagram.openSuggestions"/>
 
         <SeparatorMenuItem/>
 
-        <MenuItem accelerator="Ctrl+D" text="%menu.diagram.addFlow"/>
-        <MenuItem accelerator="Ctrl+S" text="%menu.diagram.addDependency"/>
+        <MenuItem fx:id="itemAddFlow" accelerator="Ctrl+D" text="%menu.diagram.addFlow"/>
+        <MenuItem fx:id="itemAddDependency" accelerator="Ctrl+S" text="%menu.diagram.addDependency"/>
     </items>
 
 </fx:root>

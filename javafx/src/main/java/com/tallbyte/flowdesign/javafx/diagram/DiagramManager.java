@@ -22,6 +22,7 @@ import com.tallbyte.flowdesign.data.Diagram;
 import com.tallbyte.flowdesign.data.Element;
 import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
 import com.tallbyte.flowdesign.data.flow.FlowDiagram;
+import com.tallbyte.flowdesign.data.mask.MaskDiagram;
 import com.tallbyte.flowdesign.javafx.diagram.factory.DiagramImageFactory;
 
 import java.util.HashMap;
@@ -40,6 +41,7 @@ public class DiagramManager {
     static {
         addHandler(EnvironmentDiagram.class, new EnvironmentDiagramHandler());
         addHandler(FlowDiagram.class       , new FlowDiagramHandler()       );
+        addHandler(MaskDiagram.class       , new MaskDiagramHandler()       );
     }
 
     public static <T extends Diagram> void addHandler(Class<T> clazz, DiagramHandler<T> handler) {

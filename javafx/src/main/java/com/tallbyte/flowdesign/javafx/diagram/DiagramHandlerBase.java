@@ -115,11 +115,13 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
         T diagram = createNewDiagramInstance(name);
 
         Element e = diagram.getRoot();
-        DiagramImageFactory factory = imageFactories.get(e.getClass());
-        if (factory != null) {
-            DiagramImage image = factory.createDiagramImage();
-            e.setWidth(image.getWidth());
-            e.setHeight(image.getHeight());
+        if (e != null) {
+            DiagramImageFactory factory = imageFactories.get(e.getClass());
+            if (factory != null) {
+                DiagramImage image = factory.createDiagramImage();
+                e.setWidth(image.getWidth());
+                e.setHeight(image.getHeight());
+            }
         }
 
         return diagram;

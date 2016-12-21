@@ -48,7 +48,7 @@
                 <Menu fx:id="menuEdit" text="%menu.edit">
 
                 </Menu>
-                <DiagramMenu/>
+                <DiagramMenu fx:id="menuDiagram"/>
                 <Menu text="%menu.help">
                     <MenuItem visible="false" text="Test" onAction="#onTest"/>
                     <MenuItem accelerator="Ctrl+A" text="%menu.help.about" onAction="#onAbout"/>

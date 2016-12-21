@@ -19,6 +19,7 @@
 package com.tallbyte.flowdesign.javafx.pane;
 
 import com.tallbyte.flowdesign.data.Diagram;
+import com.tallbyte.flowdesign.javafx.DiagramShortcutManager;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramManager;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
@@ -40,6 +41,7 @@ import java.util.Map;
 public class DiagramsPane extends TabPane {
 
     private       FlowDesignFxApplication application;
+    private       ApplicationPane         applicationPane;
 
     private final ListProperty<Diagram> diagrams        = new SimpleListProperty<>(this, "diagram", FXCollections.observableArrayList());
     private final Map<Diagram, Tab>     tabMap          = new HashMap<>();
@@ -50,6 +52,10 @@ public class DiagramsPane extends TabPane {
 
     public DiagramsPane() {
 
+    }
+
+    public DiagramShortcutManager getShortcutManager() {
+        return applicationPane.getShortcutManager();
     }
 
     public void addDiagram(Diagram diagram) {
@@ -77,7 +83,8 @@ public class DiagramsPane extends TabPane {
     }
 
     public void setup(ApplicationPane pane) {
-        application = pane.getApplication();
+        application     = pane.getApplication();
+        applicationPane = pane;
 
         setup();
     }
@@ -85,6 +92,7 @@ public class DiagramsPane extends TabPane {
     private void setup() {
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             diagram.setValue(paneMap.get(newValue));
+            getShortcutManager().reset();
         });
 
         diagrams.addListener((ListChangeListener<Diagram>) c -> {

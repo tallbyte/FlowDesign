@@ -26,6 +26,7 @@ import com.tallbyte.flowdesign.data.Project;
 import com.tallbyte.flowdesign.data.ui.storage.ApplicationChangelog;
 import com.tallbyte.flowdesign.data.ui.storage.ApplicationChangelogEntry;
 import com.tallbyte.flowdesign.javafx.ColorHandler;
+import com.tallbyte.flowdesign.javafx.DiagramShortcutManager;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
 import javafx.application.Platform;
@@ -65,11 +66,13 @@ public class ApplicationPane extends BorderPane {
     @FXML private PropertyPane        paneProperty;
     @FXML private DataTypePane        paneTypes;
     @FXML private Menu                menuEdit;
+    @FXML private DiagramMenu         menuDiagram;
     @FXML private MenuItem            menuItemLoad;
     @FXML private MenuItem            menuItemSave;
     @FXML private MenuItem            menuItemSaveAs;
 
     private final FlowDesignFxApplication  application;
+    private final DiagramShortcutManager   shortcutManager;
 
     private ObjectProperty<Project>        project           = new SimpleObjectProperty<>(this, "project", null);
     private List<DiagramsChangedListener>  listenersDiagrams = new ArrayList<>();
@@ -92,6 +95,8 @@ public class ApplicationPane extends BorderPane {
         sceneProperty().addListener((observable, oldValue, newValue) -> {
             updateTitle();
         });
+
+        this.shortcutManager = new DiagramShortcutManager(menuDiagram);
 
         /*
          * Prepare
@@ -267,6 +272,10 @@ public class ApplicationPane extends BorderPane {
 
     public FlowDesignFxApplication getApplication() {
         return application;
+    }
+
+    public DiagramShortcutManager getShortcutManager() {
+        return shortcutManager;
     }
 
     /**
