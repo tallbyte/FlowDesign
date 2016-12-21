@@ -20,6 +20,7 @@ package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.data.Connection;
 import com.tallbyte.flowdesign.data.Joint;
+import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.scene.Group;
@@ -38,31 +39,15 @@ public class CircleConnectionNode extends ConnectionNode {
     private final Circle circle = new Circle();
 
 
-    public CircleConnectionNode(Connection connection) {
-        super(connection);
+    public CircleConnectionNode(FlowDesignFxApplication application, Connection connection) {
+        super(application, connection, null, null);
+
+        circle.getStyleClass().add("connectionBlob");
     }
 
     @Override
     protected void setup() {
-        Joint source = connection.getSource();
-        Joint target = connection.getTarget();
-
-        JointNode sourceNode = diagramPane.getJointNode(source);
-        JointNode targetNode = diagramPane.getJointNode(target);
-
-        startXProperty().bind(sourceNode.layoutXProperty()
-                .add(sourceNode.centerXProperty())
-                .add(sourceNode.getNode().realXProperty()));
-        startYProperty().bind(sourceNode.layoutYProperty()
-                .add(sourceNode.centerYProperty())
-                .add(sourceNode.getNode().realYProperty()));
-
-        endXProperty().bind(targetNode.layoutXProperty()
-                .add(targetNode.centerXProperty())
-                .add(targetNode.getNode().realXProperty()));
-        endYProperty().bind(targetNode.layoutYProperty()
-                .add(targetNode.centerYProperty())
-                .add(targetNode.getNode().realYProperty()));
+        super.setup();
 
         circle.centerXProperty().bind(endXProperty());
         circle.centerYProperty().bind(endYProperty());

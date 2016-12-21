@@ -18,6 +18,8 @@
 
 package com.tallbyte.flowdesign.data;
 
+import java.beans.PropertyChangeSupport;
+
 /**
  * This file is part of project flowDesign.
  * <p/>
@@ -32,6 +34,10 @@ public class Connection {
     private final Joint source;
     private final Joint target;
 
+    private String text = "";
+
+    protected PropertyChangeSupport changeSupport;
+
     /**
      * Creates a new {@link Connection} between two {@link Joint}s.
      * @param source the source {@link Joint}
@@ -41,6 +47,25 @@ public class Connection {
         this.source = source;
         this.target = target;
 
+        changeSupport = new PropertyChangeSupport(this);
+    }
+
+    /**
+     * Gets the description text
+     * @return Returns the text.
+     */
+    public String getText() {
+        return text;
+    }
+
+    /**
+     * Sets the description text.
+     * @param text the new text
+     */
+    public void setText(String text) {
+        String old = this.text;
+        this.text = text;
+        this.changeSupport.firePropertyChange("text", old, text);
     }
 
     /**

@@ -314,7 +314,7 @@ public class DiagramPane extends ScrollPane {
             node = new ArrowConnectionNode(application, connection);
 
         } else if (connection instanceof DependencyConnection) {
-            node = new CircleConnectionNode(connection);
+            node = new CircleConnectionNode(application, connection);
 
         } else {
             node = null;
