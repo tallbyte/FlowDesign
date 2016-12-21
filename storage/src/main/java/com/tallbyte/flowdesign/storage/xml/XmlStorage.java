@@ -22,6 +22,7 @@ import com.tallbyte.flowdesign.data.*;
 import com.tallbyte.flowdesign.data.environment.*;
 import com.tallbyte.flowdesign.data.environment.System;
 import com.tallbyte.flowdesign.data.flow.*;
+import com.tallbyte.flowdesign.data.mask.MaskDiagram;
 import com.tallbyte.flowdesign.data.ui.storage.ApplicationChangelog;
 import com.tallbyte.flowdesign.data.ui.storage.ApplicationChangelogEntry;
 import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistory;
@@ -74,8 +75,10 @@ public class XmlStorage implements Storage<XmlStorage, XMLStreamReader, XMLStrea
                 this::deserialize
         );
 
+
         // register default entries
         register(Project                    .class, new XmlProjectSerializer());
+        register(DataType                   .class, new XmlDataTypeSerializer());
 
         register(ProjectStorageHistory      .class, new XmlProjectStorageHistorySerializer());
         register(ProjectStorageHistoryEntry .class, new XmlProjectStorageHistoryEntrySerializer());
@@ -107,6 +110,9 @@ public class XmlStorage implements Storage<XmlStorage, XMLStreamReader, XMLStrea
         register(ResourceAccess             .class, new XmlResourceAccessSerializer());
         register(StateAccess                .class, new XmlStateAccessSerializer());
         register(Operation                  .class, new XmlOperationSerializer());
+
+        // MaskDiagram and elements
+        register(MaskDiagram                .class, new XmlMaskDiagramSerializer());
     }
 
     /**
