@@ -75,7 +75,7 @@ public class XmlDeserializationHelper {
         // fast forward to the start of next element
         while (reader.hasNext()) {
             switch (reader.next()) {
-                case XMLStreamConstants.END_ELEMENT:
+                //case XMLStreamConstants.END_ELEMENT:
                 case XMLStreamConstants.START_ELEMENT:
                     return;
             }
