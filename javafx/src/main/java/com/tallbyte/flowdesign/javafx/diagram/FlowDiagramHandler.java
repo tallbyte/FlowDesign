@@ -73,6 +73,11 @@ public class FlowDiagramHandler extends DiagramHandlerBase<FlowDiagram, FlowDiag
                 PortalDiagramImage::new,
                 PortalElementNode::new
         );
+        addEntries("Comment", FlowComment.class,
+                FlowComment::new,
+                CommentDiagramImage::new,
+                FlowCommentElementNode::new
+        );
     }
 
     @Override

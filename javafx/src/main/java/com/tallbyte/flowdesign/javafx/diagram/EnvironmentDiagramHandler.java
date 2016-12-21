@@ -56,7 +56,7 @@ public class EnvironmentDiagramHandler extends DiagramHandlerBase<EnvironmentDia
         );
         addEntries("EnvironmentComment", EnvironmentComment.class,
                 EnvironmentComment::new,
-                RectangleDiagramImage::new,
+                CommentDiagramImage::new,
                 EnvironmentCommentElementNode::new
         );
     }

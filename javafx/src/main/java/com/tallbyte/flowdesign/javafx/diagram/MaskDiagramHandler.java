@@ -44,7 +44,7 @@ public class MaskDiagramHandler extends DiagramHandlerBase<MaskDiagram, MaskDiag
         );
         addEntries("MaskComment", MaskComment.class,
                 MaskComment::new,
-                RectangleDiagramImage::new,
+                CommentDiagramImage::new,
                 MaskCommentElementNode::new
         );
     }
