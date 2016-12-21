@@ -16,18 +16,18 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.storage.xml;
+package com.tallbyte.flowdesign.storage.xml.environment;
 
-import com.tallbyte.flowdesign.data.environment.System;
+import com.tallbyte.flowdesign.data.environment.Actor;
 
 /**
  * Created by michael on 09.12.16.
  */
-public class XmlSystemSerializer extends XmlEnvironmentDiagramElementSerializer<System> {
+public class XmlActorSerializer extends XmlEnvironmentDiagramElementSerializer<Actor> {
 
     @Override
-    public System instantiate() {
-        return new System();
+    public Actor instantiate() {
+        return new Actor();
     }
 
 }
