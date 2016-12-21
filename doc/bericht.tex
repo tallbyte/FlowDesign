@@ -29,6 +29,8 @@
 \usepackage{rotating}
 \usepackage{amsmath}
 
+\usepackage{pdfpages}
+
 \usepackage{tikz-uml}
 \usepackage{adjustbox}
 
@@ -143,7 +145,12 @@
 \newcommand{\textModModel}{Modul Model}
 \newcommand{\textModStorage}{Modul Storage}
 
-\newcommand{\refShorP }[1]{\ref{#1}}
+
+\newcommand{\textMeetingFirst}{Protokoll zum Kundentreffen am 13. Dezember 2016}
+
+
+
+\newcommand{\refShort }[1]{\ref{#1}}
 \newcommand{\refShortP}[1]{(\ref{#1})}
 \newcommand{\refLong} [1]{#1 \ref{#1}}
 \newcommand{\refLongP}[1]{#1 (\ref{#1})}
@@ -155,7 +162,6 @@
 	\maketitle
 	\clearpage
 	'Was?' - Julian Klissenbauer-Mathä, 2016-12-19	
-	
 	\clearpage
 	\tableofcontents
 	
@@ -182,6 +188,15 @@
 	
 	\clearpage
 	\include{expl_code}
+	
+	
+	\clearpage
+	\section{\textMeetingFirst}
+	\label{\textMeetingFirst}
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.95\textwidth]{meeting_2016-12-13.pdf}
+	\end{figure}  
 	
 	\clearpage
 	\addcontentsline{toc}{section}{\listfigurename}
