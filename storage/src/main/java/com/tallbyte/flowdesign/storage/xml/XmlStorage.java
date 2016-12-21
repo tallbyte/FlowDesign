@@ -64,13 +64,20 @@ public class XmlStorage implements Storage<XmlStorage, XMLStreamReader, XMLStrea
     protected XmlDeserializationHelper helperDeserialization;
 
     protected boolean indentation;
+    protected boolean bufferedWrite;
 
     public XmlStorage() {
-        this(true);
+        this(true, true);
     }
 
-    public XmlStorage(boolean indentation) {
-        this.indentation = indentation;
+    /**
+     * @param indentation Whether to use indentation in the output text
+     * @param bufferedWrite Whether to buffer serialize operation until complete which will
+     *                      prevent data-loss on errors but causes overhead
+     */
+    public XmlStorage(boolean indentation, boolean bufferedWrite) {
+        this.indentation   = indentation;
+        this.bufferedWrite = bufferedWrite;
 
         this.helperSerialization = new XmlSerializationHelper(
                 this::resolveIdentifier,
@@ -159,21 +166,35 @@ public class XmlStorage implements Storage<XmlStorage, XMLStreamReader, XMLStrea
      * @throws IOException If serialization failed
      */
     public void serialize(Object serializable, File destination) throws IOException {
-        try (FileOutputStream fos = new FileOutputStream(destination)) {
-            serialize(serializable, fos);
-        }
+        serialize(serializable, destination.getAbsolutePath());
     }
 
     @Override
     public void serialize(Object serializable, String fileOut) throws IOException {
-        try (FileOutputStream fos = new FileOutputStream(fileOut)) {
-            serialize(serializable, fos);
+        if (bufferedWrite) {
+            try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                // write to buffer
+                serialize(serializable, baos);
+
+                // write successful composed buffer to file
+                try (FileOutputStream fos = new FileOutputStream(fileOut)) {
+                    fos.write(baos.toByteArray());
+                    fos.flush();
+                }
+            }
+
+        } else {
+            try (FileOutputStream fos = new FileOutputStream(fileOut)) {
+                serialize(serializable, fos);
+            }
         }
     }
 
 
     /**
      * Adds indent to the output depending on the configuration of this {@link XmlStorage}
+     *
+     * No bufferedWrite, even if enabled
      *
      * @param serializable The serializable to serialize
      * @param outputStream The {@link OutputStream} to to write to
