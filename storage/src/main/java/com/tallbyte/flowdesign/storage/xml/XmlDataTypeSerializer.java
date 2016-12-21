@@ -33,14 +33,15 @@ import java.util.Map;
  */
 public class XmlDataTypeSerializer implements XmlSerializer<DataType> {
 
-    public static final String ATTRIBUTE_NAME       = "name";
-    public static final String ELEMENT_GENERICS     = "generics";
+    public static final String ATTRIBUTE_NAME           = "name";
+    public static final String ELEMENT_GENERICS         = "generics";
 
     @Override
     public void serialize(XMLStreamWriter writer, DataType dataType, XmlSerializationHelper helper) throws IOException {
         try {
             writer.writeAttribute(ATTRIBUTE_NAME, dataType.getFullClassName());
 
+            // serialize the generics
             writer.writeStartElement(ELEMENT_GENERICS);
             for (DataType generic : dataType.getGenerics()) {
                 helper.getSerializationResolver().serialize(
