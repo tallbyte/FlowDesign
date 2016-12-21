@@ -18,7 +18,6 @@
 
 package com.tallbyte.flowdesign.storage.xml.mask;
 
-import com.tallbyte.flowdesign.data.Connection;
 import com.tallbyte.flowdesign.data.mask.MaskDiagram;
 import com.tallbyte.flowdesign.data.mask.MaskDiagramElement;
 import com.tallbyte.flowdesign.storage.xml.XmlDeserializationHelper;
