@@ -22,11 +22,13 @@ import com.tallbyte.flowdesign.data.DataType;
 import com.tallbyte.flowdesign.data.Project;
 import com.tallbyte.flowdesign.javafx.pane.DataTypeEntry;
 import javafx.beans.property.StringProperty;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 
@@ -38,9 +40,15 @@ import javafx.stage.Popup;
  */
 public class DataTypePopup extends Popup {
 
-    private final ListView<DataType> list;
-    private final StringProperty     property;
+    private       EventHandler<KeyEvent>    eventHandler;
 
+    private final ListView<DataType>        list;
+    private final StringProperty            property;
+
+    /**
+     * Creates a new {@link DataTypePopup}.
+     * @param property the property that should be set
+     */
     public DataTypePopup(StringProperty property) {
 
         list          = new ListView<>();
@@ -69,11 +77,36 @@ public class DataTypePopup extends Popup {
             return cell;
         });
 
-        list.getStyleClass().add("dataTypePopup");
+        list.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                close();
+                event.consume();
 
-        getContent().add(list);
+            } else if (event.getCode() == KeyCode.ESCAPE) {
+                hide();
+                event.consume();
+
+            } else if (eventHandler != null) {
+                eventHandler.handle(event);
+            }
+        });
+
+        VBox vBox = new VBox(list);
+        vBox.getStyleClass().add("dataTypePopup");
+
+        getContent().add(vBox);
     }
 
+    /**
+     * Attempts to find a suitable value for the given string.
+     * This will open this popup if expansion as not successful.
+     * @param ownerNode the owning {@link Node} of the shown popup
+     * @param anchorX the x location in screen coordinates
+     * @param anchorY the y location in screen coordinates
+     * @param project the containing {@link Project}
+     * @param start the string that should be expanded
+     * @return Returns the expanded value or null if multiple choices were present.
+     */
     public String attemptAutoResolve(Node ownerNode, double anchorX, double anchorY, Project project, String start) {
         String text = null;
 
@@ -91,6 +124,14 @@ public class DataTypePopup extends Popup {
         return text;
     }
 
+    /**
+     * Shows this popup with all matching values.
+     * @param ownerNode the owning {@link Node} of the shown popup
+     * @param anchorX the x location in screen coordinates
+     * @param anchorY the y location in screen coordinates
+     * @param project the containing {@link Project}
+     * @param start the string that serves as base for the content.
+     */
     public void show(Node ownerNode, double anchorX, double anchorY, Project project, String start) {
         list.getItems().clear();
 
@@ -108,7 +149,10 @@ public class DataTypePopup extends Popup {
 
     }
 
-    public void close() {
+    /**
+     * Closes this {@link DataTypePopup} and sets the registered property to the selected value.
+     */
+    private void close() {
         DataType selected = list.getSelectionModel().getSelectedItem();
 
         if (selected != null) {
@@ -116,5 +160,13 @@ public class DataTypePopup extends Popup {
         }
 
         hide();
+    }
+
+    /**
+     * Registeres an additional handler for key events.
+     * @param eventHandler the handler
+     */
+    public void setKeyHandler(EventHandler<KeyEvent> eventHandler) {
+        this.eventHandler = eventHandler;
     }
 }
