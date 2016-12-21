@@ -33,6 +33,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
@@ -75,6 +76,10 @@ public class ConnectionNode extends Group implements SelectableNode {
 
     protected void setup() {
 
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 
     public DoubleProperty startYProperty() {

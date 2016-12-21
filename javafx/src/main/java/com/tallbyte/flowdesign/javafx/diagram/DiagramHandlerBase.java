@@ -78,8 +78,18 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
 
     @Override
     @SuppressWarnings("unchecked") // should be safe because of addEntries()
+    public void removeElement(T diagram, Element element) {
+        ElementNodeFactory<S> nodeFactory  = (ElementNodeFactory<S>) nodeFactories.get(element.getClass());
+
+        if (nodeFactory != null) {
+            diagram.removeElement((S) element);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked") // should be safe because of addEntries()
     public ElementNode createNode(Element element) {
-        DiagramImageFactory    imageFactory = imageFactories.get(element.getClass());
+        DiagramImageFactory   imageFactory = imageFactories.get(element.getClass());
         ElementNodeFactory<S> nodeFactory  = (ElementNodeFactory<S>) nodeFactories.get(element.getClass());
 
         if (imageFactory != null && nodeFactory != null) {

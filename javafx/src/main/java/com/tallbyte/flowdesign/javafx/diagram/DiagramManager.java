@@ -70,6 +70,16 @@ public class DiagramManager {
         }
     }
 
+    public <T extends Diagram> void removeElement(T diagram, Element element) {
+        DiagramHandler<T> handler = getHandler(diagram);
+
+        if (handler != null) {
+            handler.removeElement(diagram, element);
+        } else {
+            throw new IllegalStateException("unsupported diagram type");
+        }
+    }
+
     public ElementNode createNode(Diagram diagram, Element element) {
         DiagramHandler<?> handler = getHandler(diagram);
 

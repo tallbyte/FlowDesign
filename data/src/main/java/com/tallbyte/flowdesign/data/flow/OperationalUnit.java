@@ -93,7 +93,7 @@ public class OperationalUnit extends FlowDiagramElement {
     @Override
     protected void setDiagram(Diagram diagram) {
         if (this.diagram != null) {
-            diagram.removePropertyChangeListener(listenerProject);
+            this.diagram.removePropertyChangeListener(listenerProject);
         }
 
         if (diagram != null) {

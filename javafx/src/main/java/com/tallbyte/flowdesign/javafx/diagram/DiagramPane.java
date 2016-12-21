@@ -22,24 +22,27 @@ import com.tallbyte.flowdesign.data.*;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import com.tallbyte.flowdesign.javafx.pane.DiagramsPane;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Pair;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This file is part of project flowDesign.
@@ -72,7 +75,7 @@ public class DiagramPane extends ScrollPane {
 
     /*
      * ===============================================
-     * Dependencies and lookup maps
+     * Dependencies
      * ===============================================
      */
 
@@ -81,8 +84,14 @@ public class DiagramPane extends ScrollPane {
     protected final DiagramManager                                       diagramManager;
     protected final DiagramsPane                                         diagramsPane;
 
-    protected final Map<Joint, JointNode>                                jointNodes       = new HashMap<>();
-    protected final Map<SelectableNode, List<EventHandler<MouseEvent>>>  mouseHandlers    = new HashMap<>();
+    /*
+     * ===============================================
+     * Lookup maps
+     * ===============================================
+     */
+
+    protected final Map<Joint, JointNode>                                                             jointNodes       = new HashMap<>();
+    protected final Map<SelectableNode, List<Pair<EventType<MouseEvent>, EventHandler<MouseEvent>>>>  mouseHandlers    = new HashMap<>();
 
     /*
      * ===============================================
@@ -185,35 +194,34 @@ public class DiagramPane extends ScrollPane {
      * @param handler the handler itself
      * @return Returns the handler again.
      */
-    private EventHandler<MouseEvent> addMouseHandler(SelectableNode node, EventHandler<MouseEvent> handler) {
-        List<EventHandler<MouseEvent>> list = mouseHandlers.get(node);
+    private EventHandler<MouseEvent> addMouseHandler(SelectableNode node, EventType<MouseEvent> type, EventHandler<MouseEvent> handler) {
+        List<Pair<EventType<MouseEvent>, EventHandler<MouseEvent>>> list = mouseHandlers.get(node);
 
         if (list == null) {
             list = new ArrayList<>();
             mouseHandlers.put(node, list);
         }
 
-        list.add(handler);
+        list.add(new Pair<>(type, handler));
 
         return handler;
     }
 
     /**
-     * Removes an mouse handler of an node. This should only be called if the node is entirely removed.
+     * Removes all mouse handler of an node. This should only be called if the node is entirely removed.
      * Not calling this method will result in a memory leak.
      * @param node the {@link SelectableNode} that owns the handler
-     * @param handler the handler itself
      */
-    private void removeMouseHandler(SelectableNode node, EventHandler<MouseEvent> handler) {
-        List<EventHandler<MouseEvent>> list = mouseHandlers.get(node);
+    private void removeMouseHandlers(SelectableNode node) {
+        List<Pair<EventType<MouseEvent>, EventHandler<MouseEvent>>> list = mouseHandlers.get(node);
 
-        if (list != null) {
-            list.remove(handler);
-
-            if (list.size() == 0) {
-                mouseHandlers.remove(node);
+        if (list != null && node instanceof Node) {
+            for (Pair<EventType<MouseEvent>, EventHandler<MouseEvent>> pair : list) {
+                ((Node) node).removeEventHandler(pair.getKey(), pair.getValue());
             }
         }
+
+        mouseHandlers.remove(node);
     }
 
     /**
@@ -244,17 +252,19 @@ public class DiagramPane extends ScrollPane {
         ElementNode node = diagramManager.createNode(getDiagram(), element);
         if (node != null) {
             node.setDiagramPane(this, createSelectedProperty(node));
-            node.addEventHandler(MouseEvent.MOUSE_PRESSED, addMouseHandler(node, event -> {
+            node.addEventHandler(MouseEvent.MOUSE_PRESSED, addMouseHandler(node, MouseEvent.MOUSE_PRESSED, event -> {
                 this.selected.clear();
                 this.selected.add(node);
 
                 offsetX = event.getX();
                 offsetY = event.getY();
 
+                node.requestFocus();
+
                 event.consume();
             }));
 
-            node.addEventHandler(MouseEvent.MOUSE_DRAGGED, addMouseHandler(node,event -> {
+            node.addEventHandler(MouseEvent.MOUSE_DRAGGED, addMouseHandler(node, MouseEvent.MOUSE_DRAGGED, event -> {
                 for (Node child : groupContent.getChildren()) {
                     if (child instanceof ElementNode && this.selected.contains(child)) {
                         Bounds bounds = node.getBoundsInParent();
@@ -273,6 +283,20 @@ public class DiagramPane extends ScrollPane {
             }));
 
             groupContent.getChildren().add(node);
+        }
+    }
+
+    /**
+     * Removes an {@link Element} from this {@link DiagramPane}.
+     * @param element the {@link Element} to remove
+     */
+    private void removeElement(Element element) {
+        for (Node node : groupContent.getChildrenUnmodifiable()) {
+            if (node instanceof ElementNode && ((ElementNode) node).getElement().equals(element)) {
+                groupContent.getChildren().remove(node);
+                removeMouseHandlers((ElementNode) node);
+                break;
+            }
         }
     }
 
@@ -298,14 +322,30 @@ public class DiagramPane extends ScrollPane {
 
         if (node != null) {
             node.setDiagramPane(this, createSelectedProperty(node));
-            node.addEventHandler(MouseEvent.MOUSE_PRESSED, addMouseHandler(node, event -> {
+            node.addEventHandler(MouseEvent.MOUSE_PRESSED, addMouseHandler(node, MouseEvent.MOUSE_PRESSED, event -> {
                 this.selected.clear();
                 this.selected.add(node);
+
+                node.requestFocus();
 
                 event.consume();
             }));
 
             groupConnections.getChildren().add(node);
+        }
+    }
+
+    /**
+     * Removes a {@link Connection} to this {@link DiagramPane}.
+     * @param connection the {@link Connection} to remove
+     */
+    private void removeConnection(Connection connection) {
+        for (Node node : groupConnections.getChildrenUnmodifiable()) {
+            if (node instanceof ConnectionNode && ((ConnectionNode) node).getConnection().equals(connection)) {
+                groupConnections.getChildren().remove(node);
+                removeMouseHandlers((ConnectionNode) node);
+                break;
+            }
         }
     }
 
@@ -335,11 +375,15 @@ public class DiagramPane extends ScrollPane {
                 listenerElements = (element, added) -> {
                     if (added) {
                         addElement(element);
+                    } else {
+                        removeElement(element);
                     }
                 };
                 listenerConnections = (connection, added) -> {
                     if (added) {
                         addConnection(connection);
+                    } else {
+                        removeConnection(connection);
                     }
                 };
 
@@ -393,9 +437,26 @@ public class DiagramPane extends ScrollPane {
             }
         });
 
+        setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DELETE) {
+                // copy to be able to remove
+                List<SelectableNode> copy = new ArrayList<>(selected);
+
+                for (SelectableNode node : copy) {
+                    if (node instanceof ElementNode) {
+                        diagramManager.removeElement(getDiagram(), ((ElementNode) node).getElement());
+
+                    } else if (node instanceof ConnectionNode) {
+                        ((ConnectionNode) node).getConnection().getTarget().disjoin();
+                    }
+                }
+            }
+        });
+
         setOnMousePressed(event -> {
             selected.clear();
             node.set(null);
+            requestFocus();
             event.consume();
         });
 
