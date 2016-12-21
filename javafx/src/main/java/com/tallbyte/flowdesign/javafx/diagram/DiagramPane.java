@@ -55,8 +55,19 @@ public class DiagramPane extends ScrollPane {
      * ===============================================
      */
 
+    /**
+     * This is the group that will contain all {@link ElementNode}s.
+     */
     protected final Group                                                groupContent     = new Group();
+
+    /**
+     * This is the group that will contain all {@link ConnectionNode}s.
+     */
     protected final Group                                                groupConnections = new Group();
+
+    /**
+     * This is the group that will contain markers like the interactive drag-line for connection creation.
+     */
     protected final Group                                                groupMarker      = new Group();
 
     /*
@@ -80,12 +91,12 @@ public class DiagramPane extends ScrollPane {
      */
 
     /**
-     * The current diagram
+     * The current diagram.
      */
     protected final ObjectProperty<Diagram<?>>     diagram  = new SimpleObjectProperty<>(this, "diagram", null);
 
     /**
-     * A list of selected nodes
+     * A list of selected nodes.
      */
     protected final ObservableList<SelectableNode> selected = FXCollections.observableArrayList();
 
@@ -95,12 +106,12 @@ public class DiagramPane extends ScrollPane {
     protected       StringProperty                 name;
 
     /**
-     * The last actively selected node
+     * The last actively selected node.
      */
     protected final ObjectProperty<ElementNode>    node    = new SimpleObjectProperty<>(this, "node", null);
 
     /**
-     * The joint that is currently selected by the user
+     * The joint that is currently selected by the user.
      */
     protected final ObjectProperty<Joint>          joint   = new SimpleObjectProperty<>(this, "joint", null);
 
