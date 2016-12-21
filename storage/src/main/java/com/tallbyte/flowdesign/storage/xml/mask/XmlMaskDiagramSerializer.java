@@ -47,8 +47,9 @@ public class XmlMaskDiagramSerializer extends XmlDiagramSerializer implements Xm
             helper.getAssignedIdMap().clear();
             serializeElements(writer, diagram.getElements(), helper);
 
+            // there are no connections to write
             // write connections
-            serializeConnections(writer, diagram.getConnections(), helper);
+            // serializeConnections(writer, diagram.getConnections(), helper);
 
         } catch (XMLStreamException e) {
             throw new IOException(e);
@@ -80,7 +81,6 @@ public class XmlMaskDiagramSerializer extends XmlDiagramSerializer implements Xm
 
             // load all the elements with proper values
             deserializeElements(reader, queue, MaskDiagramElement.class, helper);
-            queue.poll(); // the first one is the root element, don#t add it twice (first time is the constructor)
             queue.stream()
                     .map(Map.Entry::getValue)
                     .forEach(diagram::addElement);
