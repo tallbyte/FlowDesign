@@ -16,26 +16,17 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.storage.xml;
+package com.tallbyte.flowdesign.storage.xml.flow;
 
-import com.tallbyte.flowdesign.data.flow.OperationalUnit;
-
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
+import com.tallbyte.flowdesign.data.flow.Operation;
 
 /**
  * Created by michael on 12.12.16.
  */
-public abstract class XmlOperationalUnitSerializer<O extends OperationalUnit> extends XmlFlowDiagramElementSerializer<O> {
+public class XmlOperationSerializer extends XmlFlowDiagramElementSerializer<Operation> {
 
     @Override
-    protected void writeAttributes(XMLStreamWriter writer, O element, XmlSerializationHelper helper) throws XMLStreamException {
-        super.writeAttributes(writer, element, helper);
-    }
-
-    @Override
-    protected void readAttributes(XMLStreamReader reader, O element, XmlDeserializationHelper helper) throws XMLStreamException {
-        super.readAttributes(reader, element, helper);
+    public Operation instantiate() {
+        return new Operation();
     }
 }

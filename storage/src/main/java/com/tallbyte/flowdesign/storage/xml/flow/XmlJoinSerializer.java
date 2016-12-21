@@ -16,26 +16,17 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.storage.xml;
+package com.tallbyte.flowdesign.storage.xml.flow;
 
-import com.tallbyte.flowdesign.data.flow.FlowDiagramElement;
-
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
+import com.tallbyte.flowdesign.data.flow.Join;
 
 /**
  * Created by michael on 12.12.16.
  */
-public abstract class XmlFlowDiagramElementSerializer<E extends FlowDiagramElement> extends XmlElementSerializer<E> {
+public class XmlJoinSerializer extends XmlFlowDiagramElementSerializer<Join> {
 
     @Override
-    protected void writeAttributes(XMLStreamWriter writer, E element, XmlSerializationHelper helper) throws XMLStreamException {
-        super.writeAttributes(writer, element, helper);
-    }
-
-    @Override
-    protected void readAttributes(XMLStreamReader reader, E element, XmlDeserializationHelper helper) throws XMLStreamException {
-        super.readAttributes(reader, element, helper);
+    public Join instantiate() {
+        return new Join();
     }
 }

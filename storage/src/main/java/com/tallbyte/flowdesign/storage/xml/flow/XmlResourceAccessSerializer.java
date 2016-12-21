@@ -16,17 +16,17 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.storage.xml;
+package com.tallbyte.flowdesign.storage.xml.flow;
 
-import com.tallbyte.flowdesign.data.flow.Join;
+import com.tallbyte.flowdesign.data.flow.ResourceAccess;
 
 /**
  * Created by michael on 12.12.16.
  */
-public class XmlJoinSerializer extends XmlFlowDiagramElementSerializer<Join> {
+public class XmlResourceAccessSerializer extends XmlOperationalUnitSerializer<ResourceAccess> {
 
     @Override
-    public Join instantiate() {
-        return new Join();
+    public ResourceAccess instantiate() {
+        return new ResourceAccess();
     }
 }

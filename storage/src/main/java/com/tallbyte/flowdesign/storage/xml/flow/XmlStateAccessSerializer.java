@@ -16,19 +16,16 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.storage.xml;
+package com.tallbyte.flowdesign.storage.xml.flow;
 
-import com.tallbyte.flowdesign.data.flow.Start;
+import com.tallbyte.flowdesign.data.flow.StateAccess;
 
 /**
  * Created by michael on 12.12.16.
  */
-public class XmlStartSerializer extends XmlFlowDiagramElementSerializer<Start> {
-
-
+public class XmlStateAccessSerializer extends XmlOperationalUnitSerializer<StateAccess> {
     @Override
-    public Start instantiate() {
-        return new Start();
+    public StateAccess instantiate() {
+        return new StateAccess();
     }
-
 }
