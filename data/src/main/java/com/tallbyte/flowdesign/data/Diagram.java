@@ -242,5 +242,15 @@ public abstract class Diagram<E extends Element> {
     public String toString() {
         return name;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Diagram) {
+            return obj.getClass() == getClass()
+                    && ((Diagram) obj).getName().toLowerCase().equals(getName().toLowerCase());
+        }
+
+        return false;
+    }
 }
 

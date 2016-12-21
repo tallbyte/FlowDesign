@@ -93,10 +93,13 @@ public class Project {
      * Adds a {@link Diagram}.
      * This will call all {@link DiagramsChangedListener}s.
      * @param diagram the {@link Diagram} to add
+     * @return Return true if the {@link Diagram} was added, else false.
+     *         Denying an addition might be caused because the name
+     *         might be already in use.
      */
-    public void addDiagram(Diagram diagram) {
+    public boolean addDiagram(Diagram diagram) {
         if (diagram == null) {
-            return;
+            return false;
         }
 
         List<Diagram> list = diagrams.get(diagram.getClass());
@@ -106,15 +109,22 @@ public class Project {
             diagrams.put(diagram.getClass(), list);
         }
 
-        // add to the local lists
-        list.add(diagram);
-        nameMap.put(diagram.getName(), diagram);
+        // do not allow duplicates
+        if (!list.contains(diagram)) {
+            // add to the local lists
+            list.add(diagram);
+            nameMap.put(diagram.getName(), diagram);
 
-        // set project
-        diagram.setProject(this);
+            // set project
+            diagram.setProject(this);
 
-        // call listeners
-        callListeners(diagram, true);
+            // call listeners
+            callListeners(diagram, true);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

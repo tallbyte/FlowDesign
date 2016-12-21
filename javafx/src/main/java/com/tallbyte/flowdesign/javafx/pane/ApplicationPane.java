@@ -284,8 +284,9 @@ public class ApplicationPane extends BorderPane {
             Project project = getProject();
             if (project != null) {
                 Diagram diagram = paneDiagrams.getDiagramManager().createDiagram(response, clazz);
-                project.addDiagram(diagram);
-                paneDiagrams.addDiagram(diagram);
+                if (project.addDiagram(diagram)) {
+                    paneDiagrams.addDiagram(diagram);
+                }
             }
         });
     }
