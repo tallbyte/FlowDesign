@@ -185,6 +185,7 @@ public class XmlStorage implements Storage<XmlStorage, XMLStreamReader, XMLStrea
                 Transformer transformer;
                 transformer = TransformerFactory.newInstance().newTransformer();
                 transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
                 transformer.transform(
                         new StreamSource(
                                 new ByteArrayInputStream(baos.toByteArray())
