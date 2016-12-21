@@ -311,10 +311,10 @@ public class DiagramPane extends ScrollPane {
 
         // TODO make using factories and map lookup
         if (connection instanceof FlowConnection) {
-            node = new ArrowConnectionNode(application, connection);
+            node = new FlowConnectionNode(application, connection);
 
         } else if (connection instanceof DependencyConnection) {
-            node = new CircleConnectionNode(application, connection);
+            node = new DependencyConnectionNode(application, (DependencyConnection) connection);
 
         } else {
             node = null;

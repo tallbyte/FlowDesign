@@ -18,38 +18,13 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
-import com.sun.javafx.tk.FontMetrics;
-import com.sun.javafx.tk.Toolkit;
 import com.tallbyte.flowdesign.data.Connection;
-import com.tallbyte.flowdesign.data.DataType;
-import com.tallbyte.flowdesign.data.Joint;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
-import com.tallbyte.flowdesign.javafx.control.AutoSizeTextField;
 import com.tallbyte.flowdesign.javafx.popup.DataTypePopup;
-import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
 import javafx.geometry.Bounds;
-import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
-import javafx.scene.layout.HBox;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
-import javafx.stage.Popup;
-import javafx.stage.Stage;
-
-import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
-import static javafx.scene.layout.Region.USE_PREF_SIZE;
 
 /**
  * This file is part of project flowDesign.
@@ -57,20 +32,20 @@ import static javafx.scene.layout.Region.USE_PREF_SIZE;
  * Authors:<br/>
  * - julian (2016-12-12)<br/>
  */
-public class ArrowConnectionNode extends ConnectionNode {
+public class FlowConnectionNode extends ConnectionNode {
 
-    private final DataTypePopup           popup;
+    private final DataTypePopup  popup;
 
     private final Line           arrow0  = new Line();
     private final Line           arrow1  = new Line();
 
 
     /**
-     * Creates a new {@link ArrowConnectionNode}.
+     * Creates a new {@link FlowConnectionNode}.
      * @param application the main application
      * @param connection the surrounding {@link Connection}
      */
-    public ArrowConnectionNode(FlowDesignFxApplication application, Connection connection) {
+    public FlowConnectionNode(FlowDesignFxApplication application, Connection connection) {
         super(application, connection, "(", ")");
 
         popup = new DataTypePopup(textField.textProperty());
