@@ -73,7 +73,13 @@ public class XmlDeserializationHelper {
      */
     public void fastForwardToElementStart(XMLStreamReader reader) throws XMLStreamException {
         // fast forward to the start of next element
-        while (reader.hasNext() && reader.next() != XMLStreamConstants.START_ELEMENT);
+        while (reader.hasNext()) {
+            switch (reader.next()) {
+                case XMLStreamConstants.END_ELEMENT:
+                case XMLStreamConstants.START_ELEMENT:
+                    return;
+            }
+        }
     }
 
     /**
@@ -117,7 +123,6 @@ public class XmlDeserializationHelper {
             switch (reader.next()) {
                 case XMLStreamConstants.START_ELEMENT:
                     // inform about the element start
-                    System.out.flush();
                     callback.call();
 
                     // for unknown reason, this is also called in the middle of the document... me does not understand
