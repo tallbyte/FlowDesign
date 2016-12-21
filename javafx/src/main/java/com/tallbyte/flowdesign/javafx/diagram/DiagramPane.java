@@ -327,6 +327,7 @@ public class DiagramPane extends ScrollPane {
                 this.selected.add(node);
 
                 node.requestFocus();
+                node.toFront();
 
                 event.consume();
             }));

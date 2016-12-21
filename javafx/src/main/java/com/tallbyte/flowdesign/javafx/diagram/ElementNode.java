@@ -138,10 +138,11 @@ public class ElementNode extends Pane implements SelectableNode {
                     if (object == null) {
                         return null;
                     }
-                    return String.format("#%02X%02X%02X",
-                            (int) (object.getRed()   * 255),
-                            (int) (object.getGreen() * 255),
-                            (int) (object.getBlue()  * 255)
+                    return String.format("#%02X%02X%02X%02X",
+                            (int) (object.getRed()    * 255),
+                            (int) (object.getGreen()  * 255),
+                            (int) (object.getBlue()   * 255),
+                            (int) (object.getOpacity()* 255)
                     );
                 }
 
