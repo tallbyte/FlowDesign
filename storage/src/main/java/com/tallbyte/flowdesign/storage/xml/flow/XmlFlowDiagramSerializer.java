@@ -16,12 +16,16 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.storage.xml;
+package com.tallbyte.flowdesign.storage.xml.flow;
 
 import com.tallbyte.flowdesign.data.Connection;
 import com.tallbyte.flowdesign.data.flow.FlowDiagram;
 import com.tallbyte.flowdesign.data.flow.FlowDiagramElement;
 import com.tallbyte.flowdesign.data.flow.Start;
+import com.tallbyte.flowdesign.storage.xml.XmlDeserializationHelper;
+import com.tallbyte.flowdesign.storage.xml.XmlDiagramSerializer;
+import com.tallbyte.flowdesign.storage.xml.XmlSerializationHelper;
+import com.tallbyte.flowdesign.storage.xml.XmlSerializer;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;

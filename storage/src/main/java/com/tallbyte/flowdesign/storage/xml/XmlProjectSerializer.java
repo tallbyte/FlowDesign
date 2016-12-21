@@ -18,6 +18,7 @@
 
 package com.tallbyte.flowdesign.storage.xml;
 
+import com.tallbyte.flowdesign.data.DataType;
 import com.tallbyte.flowdesign.data.Diagram;
 import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
 import com.tallbyte.flowdesign.data.Project;
@@ -35,8 +36,9 @@ import java.util.Map;
  */
 public class XmlProjectSerializer implements XmlSerializer<Project> {
 
-    public static final String ELEMENT_DIAGRAMS = "diagrams";
-    public static final String ATTRIBUTE_NAME   = "name";
+    public static final String ELEMENT_DIAGRAMS     = "diagrams";
+    public static final String ELEMENT_DATA_TYPES   = "dataTypes";
+    public static final String ATTRIBUTE_NAME       = "name";
 
 
 
@@ -45,6 +47,19 @@ public class XmlProjectSerializer implements XmlSerializer<Project> {
         try {
             writer.writeAttribute(ATTRIBUTE_NAME, project.getName());
 
+            // serialize all DataType definitions
+            writer.writeStartElement(ELEMENT_DATA_TYPES);
+            for (DataType dataType : project.getDataTypeHolder().getDataTypes()) {
+                helper.getSerializationResolver().serialize(
+                        writer,
+                        dataType,
+                        helper
+                );
+            }
+            writer.writeEndElement();
+
+
+            // serialize all diagrams
             writer.writeStartElement(ELEMENT_DIAGRAMS);
             for (Class<? extends Diagram> type : project.getDiagramTypes()) {
                 for (Diagram<?> diagram : project.getDiagrams(type)) {
@@ -56,6 +71,7 @@ public class XmlProjectSerializer implements XmlSerializer<Project> {
                 }
             }
             writer.writeEndElement();
+
 
         } catch (XMLStreamException e) {
             throw new IOException(e);
@@ -74,7 +90,23 @@ public class XmlProjectSerializer implements XmlSerializer<Project> {
 
             project.setName(attributes.get(ATTRIBUTE_NAME));
 
-            helper.fastForwardToElementStart(reader);
+
+            project.getDataTypeHolder().clear();
+
+            // deserialize all DataType definitions
+            helper.fastForwardToElementStart(reader, ELEMENT_DATA_TYPES);
+            helper.foreachElementStartUntil(reader, ELEMENT_DATA_TYPES, () -> {
+                project.getDataTypeHolder().addDataType(
+                        helper.getDeserializationResolver().deserialize(
+                                reader,
+                                DataType.class,
+                                helper
+                        )
+                );
+            });
+
+            // deserialize all Diagrams
+            helper.fastForwardToElementStart(reader, ELEMENT_DIAGRAMS);
             helper.foreachElementStartUntil(reader, ELEMENT_DIAGRAMS, () -> {
                 project.addDiagram(
                         helper.getDeserializationResolver().deserialize(

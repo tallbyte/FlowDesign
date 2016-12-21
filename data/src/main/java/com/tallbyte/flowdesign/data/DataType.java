@@ -19,6 +19,7 @@
 package com.tallbyte.flowdesign.data;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 /**
@@ -108,6 +109,17 @@ public class DataType {
      */
     public String getDisplayName() {
         return getDisplayName(false);
+    }
+
+    /**
+     * @return An {@link Iterable} over the generics of this {@link DataType}
+     */
+    public Iterable<DataType> getGenerics() {
+        return Collections.unmodifiableList(
+                Arrays.asList(
+                        generics
+                )
+        );
     }
 
     /**

@@ -16,17 +16,16 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.storage.xml;
+package com.tallbyte.flowdesign.storage.xml.flow;
 
-import com.tallbyte.flowdesign.data.flow.Portal;
+import com.tallbyte.flowdesign.data.flow.StateAccess;
 
 /**
  * Created by michael on 12.12.16.
  */
-public class XmlPortalSerializer extends XmlFlowDiagramElementSerializer<Portal> {
-
+public class XmlStateAccessSerializer extends XmlOperationalUnitSerializer<StateAccess> {
     @Override
-    public Portal instantiate() {
-        return new Portal();
+    public StateAccess instantiate() {
+        return new StateAccess();
     }
 }

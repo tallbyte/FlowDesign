@@ -16,10 +16,17 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core;
+package com.tallbyte.flowdesign.storage.xml.flow;
+
+import com.tallbyte.flowdesign.data.flow.Portal;
 
 /**
- * Created by michael on 11.12.16.
+ * Created by michael on 12.12.16.
  */
-public class _SpaceHolder {
+public class XmlPortalSerializer extends XmlFlowDiagramElementSerializer<Portal> {
+
+    @Override
+    public Portal instantiate() {
+        return new Portal();
+    }
 }

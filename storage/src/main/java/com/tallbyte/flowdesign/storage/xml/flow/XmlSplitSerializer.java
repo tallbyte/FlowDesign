@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.storage.xml;
+package com.tallbyte.flowdesign.storage.xml.flow;
 
 import com.tallbyte.flowdesign.data.flow.Split;
 

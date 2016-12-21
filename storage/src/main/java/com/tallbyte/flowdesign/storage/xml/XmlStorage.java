@@ -22,6 +22,8 @@ import com.tallbyte.flowdesign.data.*;
 import com.tallbyte.flowdesign.data.environment.*;
 import com.tallbyte.flowdesign.data.environment.System;
 import com.tallbyte.flowdesign.data.flow.*;
+import com.tallbyte.flowdesign.data.mask.MaskDiagram;
+import com.tallbyte.flowdesign.data.mask.Rectangle;
 import com.tallbyte.flowdesign.data.ui.storage.ApplicationChangelog;
 import com.tallbyte.flowdesign.data.ui.storage.ApplicationChangelogEntry;
 import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistory;
@@ -29,6 +31,10 @@ import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistoryEntry;
 import com.tallbyte.flowdesign.storage.Serializer;
 import com.tallbyte.flowdesign.storage.Storage;
 import com.tallbyte.flowdesign.storage.UnknownIdentifierException;
+import com.tallbyte.flowdesign.storage.xml.environment.*;
+import com.tallbyte.flowdesign.storage.xml.flow.*;
+import com.tallbyte.flowdesign.storage.xml.mask.XmlRectangleSerializer;
+import com.tallbyte.flowdesign.storage.xml.mask.XmlMaskDiagramSerializer;
 
 import javax.xml.stream.*;
 import javax.xml.transform.OutputKeys;
@@ -74,8 +80,10 @@ public class XmlStorage implements Storage<XmlStorage, XMLStreamReader, XMLStrea
                 this::deserialize
         );
 
+
         // register default entries
         register(Project                    .class, new XmlProjectSerializer());
+        register(DataType                   .class, new XmlDataTypeSerializer());
 
         register(ProjectStorageHistory      .class, new XmlProjectStorageHistorySerializer());
         register(ProjectStorageHistoryEntry .class, new XmlProjectStorageHistoryEntrySerializer());
@@ -107,6 +115,10 @@ public class XmlStorage implements Storage<XmlStorage, XMLStreamReader, XMLStrea
         register(ResourceAccess             .class, new XmlResourceAccessSerializer());
         register(StateAccess                .class, new XmlStateAccessSerializer());
         register(Operation                  .class, new XmlOperationSerializer());
+
+        // MaskDiagram and elements
+        register(MaskDiagram                .class, new XmlMaskDiagramSerializer());
+        register(Rectangle                  .class, new XmlRectangleSerializer());
     }
 
     /**

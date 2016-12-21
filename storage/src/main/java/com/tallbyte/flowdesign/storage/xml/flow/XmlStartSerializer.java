@@ -16,17 +16,19 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.storage.xml;
+package com.tallbyte.flowdesign.storage.xml.flow;
 
-import com.tallbyte.flowdesign.data.environment.Resource;
+import com.tallbyte.flowdesign.data.flow.Start;
 
 /**
  * Created by michael on 12.12.16.
  */
-public class XmlResourceSerializer extends XmlEnvironmentDiagramElementSerializer<Resource> {
+public class XmlStartSerializer extends XmlFlowDiagramElementSerializer<Start> {
+
 
     @Override
-    public Resource instantiate() {
-        return new Resource();
+    public Start instantiate() {
+        return new Start();
     }
+
 }
