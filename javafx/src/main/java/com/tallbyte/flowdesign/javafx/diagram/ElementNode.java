@@ -38,6 +38,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.StringConverter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -105,6 +106,7 @@ public class ElementNode extends Pane implements SelectableNode {
     protected DoubleProperty    realWidth;
     protected DoubleProperty    realHeight;
     protected StringProperty    text;
+    protected StringProperty    colorString;
     protected ColorProperty     color;
 
     /*
@@ -127,8 +129,39 @@ public class ElementNode extends Pane implements SelectableNode {
             realWidth  = JavaBeanDoublePropertyBuilder.create().bean(element).name("width").build();
             realHeight = JavaBeanDoublePropertyBuilder.create().bean(element).name("height").build();
             text       = JavaBeanStringPropertyBuilder.create().bean(element).name("text").build();
-
+            colorString= JavaBeanStringPropertyBuilder.create().bean(element).name("color").build();
             color      = new ColorProperty(this, "color", null);
+
+            StringConverter<Color> converter = new StringConverter<Color>() {
+                @Override
+                public String toString(Color object) {
+                    if (object == null) {
+                        return null;
+                    }
+                    return String.format("#%02X%02X%02X",
+                            (int) (object.getRed()   * 255),
+                            (int) (object.getGreen() * 255),
+                            (int) (object.getBlue()  * 255)
+                    );
+                }
+
+                @Override
+                public Color fromString(String string) {
+                    if (string == null || string.isEmpty()) {
+                        return null;
+                    }
+
+                    try {
+                        return Color.web(string);
+                    } catch (IllegalArgumentException e) {
+                        return null;
+                    }
+                }
+            };
+
+            String old = colorString.getValue();
+            colorString.bindBidirectional(color, converter);
+            colorString.setValue(old);
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("Could not create properties. This should never happen?!", e);
         }

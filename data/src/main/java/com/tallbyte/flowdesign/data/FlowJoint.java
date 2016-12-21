@@ -18,6 +18,8 @@
 
 package com.tallbyte.flowdesign.data;
 
+import java.beans.PropertyChangeListener;
+
 /**
  * This file is part of project flowDesign.
  * <p/>
@@ -70,7 +72,9 @@ public class FlowJoint extends Joint {
      * @param dataType the new type
      */
     public void setDataType(String dataType) {
+        String old = this.dataType;
         this.dataType = dataType;
+        changeSupport.firePropertyChange("dataType", old, dataType);
     }
 
     @Override

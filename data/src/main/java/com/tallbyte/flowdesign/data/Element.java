@@ -37,6 +37,7 @@ public abstract class Element {
     protected final Map<String, Joint> joints = new HashMap<>();
 
     protected String text       = "Label";
+    protected String color      = null;
     protected double x          = 0;
     protected double y          = 0;
     protected double width      = 75;
@@ -76,6 +77,26 @@ public abstract class Element {
         String old = this.text;
         this.text = text;
         this.changeSupport.firePropertyChange("text", old, text);
+    }
+
+    /**
+     * Gets the desired color in web-format.
+     * @return Returns the color.
+     */
+    public String getColor() {
+        return color;
+    }
+
+    /**
+     * Sets the description color.
+     * @param color the new color in web-format
+     */
+    public void setColor(String color) {
+        String old = this.color;
+        this.color = color;
+        this.changeSupport.firePropertyChange("text", old, color);
+
+        // TODO check for format maybe?
     }
 
     /**

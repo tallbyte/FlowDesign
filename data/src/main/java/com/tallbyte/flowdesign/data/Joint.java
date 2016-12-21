@@ -18,6 +18,8 @@
 
 package com.tallbyte.flowdesign.data;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +44,8 @@ public abstract class Joint {
     private final JointType                     type;
     private final int                           maxOut;
 
+    protected PropertyChangeSupport changeSupport;
+
     /**
      * Creates a new {@link Joint} based on given configuration.
      * @param element the containing {@link Element}
@@ -60,6 +64,8 @@ public abstract class Joint {
         this.location = location;
         this.type     = type;
         this.maxOut   = maxOut;
+
+        changeSupport = new PropertyChangeSupport(this);
     }
 
     /**
@@ -199,5 +205,21 @@ public abstract class Joint {
             notifyDisjoin(incoming);
             incoming = null;
         }
+    }
+
+    /**
+     * Registers an {@link PropertyChangeListener}.
+     * @param listener the {@link PropertyChangeListener} to register
+     */
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.addPropertyChangeListener(listener);
+    }
+
+    /**
+     * Unregisters an {@link PropertyChangeListener}.
+     * @param listener the {@link PropertyChangeListener} to unregister
+     */
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        changeSupport.removePropertyChangeListener(listener);
     }
 }
