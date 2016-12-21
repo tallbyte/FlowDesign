@@ -19,6 +19,7 @@
 package com.tallbyte.flowdesign.data.flow;
 
 import com.tallbyte.flowdesign.data.*;
+import javafx.fxml.LoadException;
 
 import java.beans.PropertyChangeListener;
 
@@ -81,9 +82,9 @@ public class OperationalUnit extends FlowDiagramElement {
 
     @Override
     protected void setDiagram(Diagram diagram) {
-        referenceHandler.setDiagram(diagram);
-
         super.setDiagram(diagram);
+
+        referenceHandler.setDiagram(diagram);
     }
 
     private void setInternalReference(Diagram diagram) {

@@ -16,7 +16,12 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.data;
+package com.tallbyte.flowdesign.data.mask;
+
+import com.tallbyte.flowdesign.data.Diagram;
+import com.tallbyte.flowdesign.data.ReferenceHandler;
+import com.tallbyte.flowdesign.data.ReferenceHolder;
+import com.tallbyte.flowdesign.data.flow.OperationalUnit;
 
 import java.beans.PropertyChangeListener;
 
@@ -24,54 +29,49 @@ import java.beans.PropertyChangeListener;
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-12-12)<br/>
+ * - julian (2016-12-21)<br/>
  */
-public class DependencyConnection extends Connection {
+public class SelfReference extends MaskDiagramElement {
 
     protected ReferenceHandler referenceHandler = new ReferenceHandler("text", "reference", "name", "project", new ReferenceHolder() {
         @Override
         public void setText(String text) {
-            DependencyConnection.this.setText(text);
+            SelfReference.this.setText(text);
         }
 
         @Override
         public String getText() {
-            return DependencyConnection.this.getText();
+            return SelfReference.this.getText();
         }
 
         @Override
         public Diagram getDiagram() {
-            return DependencyConnection.this.getTarget().getElement().getDiagram();
+            return SelfReference.this.getDiagram();
         }
 
         @Override
         public void setReference(Diagram reference) {
-            DependencyConnection.this.setInternalReference(reference);
+            SelfReference.this.setInternalReference(reference);
         }
 
         @Override
         public Diagram getReference() {
-            return DependencyConnection.this.getReference();
+            return SelfReference.this.getReference();
         }
 
         @Override
         public void addPropertyChangeListener(PropertyChangeListener listener) {
-            DependencyConnection.this.addPropertyChangeListener(listener);
+            SelfReference.this.addPropertyChangeListener(listener);
         }
     });
 
     protected Diagram reference;
 
-    /**
-     * Creates a new {@link Connection} between two {@link Joint}s.
-     *
-     * @param source the source {@link Joint}
-     * @param target the target {@link Joint}
-     */
-    public DependencyConnection(Joint source, Joint target) {
-        super(source, target);
+    @Override
+    protected void setDiagram(Diagram diagram) {
+        super.setDiagram(diagram);
 
-        referenceHandler.setDiagram(source.getElement().getDiagram());
+        referenceHandler.setDiagram(diagram);
     }
 
     private void setInternalReference(Diagram diagram) {
@@ -87,4 +87,5 @@ public class DependencyConnection extends Connection {
     public Diagram getReference() {
         return reference;
     }
+
 }

@@ -94,7 +94,7 @@ public abstract class Element {
     public void setColor(String color) {
         String old = this.color;
         this.color = color;
-        this.changeSupport.firePropertyChange("text", old, color);
+        this.changeSupport.firePropertyChange("color", old, color);
 
         // TODO check for format maybe?
     }

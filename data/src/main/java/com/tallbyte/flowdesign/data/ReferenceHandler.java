@@ -51,21 +51,7 @@ public class ReferenceHandler {
 
         holder.addPropertyChangeListener(evt -> {
             if (evt.getPropertyName().equals(propertyText)) {
-                Diagram diagram = holder.getDiagram();
-
-                if (diagram != null) {
-                    Project project = diagram.getProject();
-
-                    if (project != null) {
-                        Diagram d = project.getDiagram((String) evt.getNewValue());
-
-                        if (d instanceof FlowDiagram) {
-                            holder.setReference(d);
-                        } else {
-                            holder.setReference(null);
-                        }
-                    }
-                }
+                initText((String) evt.getOldValue(), (String) evt.getNewValue());
             }
 
             if (evt.getPropertyName().equals(propertyReference)) {
@@ -91,6 +77,8 @@ public class ReferenceHandler {
             this.diagram.removePropertyChangeListener(listenerProject);
         }
 
+        this.diagram = diagram;
+
         if (diagram != null) {
             listenerProject = evt -> {
                 if (evt.getPropertyName().equals(propertyProject)) {
@@ -101,6 +89,25 @@ public class ReferenceHandler {
             diagram.addPropertyChangeListener(listenerProject);
 
             initProject(null, diagram.getProject());
+            initText(null, holder.getText());
+        }
+    }
+
+    private void initText(String oldText, String newText) {
+        Diagram diagram = holder.getDiagram();
+
+        if (diagram != null) {
+            Project project = diagram.getProject();
+
+            if (project != null) {
+                Diagram d = project.getDiagram(newText);
+
+                if (d instanceof FlowDiagram) {
+                    holder.setReference(d);
+                } else {
+                    holder.setReference(null);
+                }
+            }
         }
     }
 
@@ -115,11 +122,14 @@ public class ReferenceHandler {
                     holder.setReference(null);
                 }
 
-                if (added && diagramChanged.getName().equals(holder.getText())) {
+                if (added && diagramChanged.getName().equals(holder.getText())
+                        && diagramChanged instanceof FlowDiagram) {
+
                     holder.setReference(diagramChanged);
                 }
             };
 
+            initText(null, holder.getText());
             newValue.addDiagramsChangedListener(listenerDiagrams);
         }
     }
