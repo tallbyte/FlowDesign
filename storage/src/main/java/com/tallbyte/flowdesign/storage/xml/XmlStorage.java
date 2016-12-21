@@ -22,6 +22,7 @@ import com.tallbyte.flowdesign.data.*;
 import com.tallbyte.flowdesign.data.environment.*;
 import com.tallbyte.flowdesign.data.environment.System;
 import com.tallbyte.flowdesign.data.flow.*;
+import com.tallbyte.flowdesign.data.mask.MaskComment;
 import com.tallbyte.flowdesign.data.mask.MaskDiagram;
 import com.tallbyte.flowdesign.data.mask.Rectangle;
 import com.tallbyte.flowdesign.data.mask.SelfReference;
@@ -34,6 +35,7 @@ import com.tallbyte.flowdesign.storage.Storage;
 import com.tallbyte.flowdesign.storage.UnknownIdentifierException;
 import com.tallbyte.flowdesign.storage.xml.environment.*;
 import com.tallbyte.flowdesign.storage.xml.flow.*;
+import com.tallbyte.flowdesign.storage.xml.mask.XmlMaskCommentSerializer;
 import com.tallbyte.flowdesign.storage.xml.mask.XmlRectangleSerializer;
 import com.tallbyte.flowdesign.storage.xml.mask.XmlMaskDiagramSerializer;
 import com.tallbyte.flowdesign.storage.xml.mask.XmlSelfReferenceSerializer;
@@ -110,6 +112,7 @@ public class XmlStorage implements Storage<XmlStorage, XMLStreamReader, XMLStrea
 
         // EnvironmentDiagram and elements
         register(EnvironmentDiagram         .class, new XmlEnvironmentDiagramSerializer());
+        register(EnvironmentComment         .class, new XmlEnvironmentCommentSerializer());
         register(Actor                      .class, new XmlActorSerializer());
         register(Adapter                    .class, new XmlAdapterSerializer());
         register(Resource                   .class, new XmlResourceSerializer());
@@ -117,6 +120,7 @@ public class XmlStorage implements Storage<XmlStorage, XMLStreamReader, XMLStrea
 
         // FlowDiagram and elements
         register(FlowDiagram                .class, new XmlFlowDiagramSerializer());
+        register(FlowComment                .class, new XmlFlowCommentSerializer());
         register(Start                      .class, new XmlStartSerializer());
         register(Portal                     .class, new XmlPortalSerializer());
         register(Split                      .class, new XmlSplitSerializer());
@@ -128,6 +132,7 @@ public class XmlStorage implements Storage<XmlStorage, XMLStreamReader, XMLStrea
 
         // MaskDiagram and elements
         register(MaskDiagram                .class, new XmlMaskDiagramSerializer());
+        register(MaskComment                .class, new XmlMaskCommentSerializer());
         register(Rectangle                  .class, new XmlRectangleSerializer());
         register(SelfReference              .class, new XmlSelfReferenceSerializer());
     }
