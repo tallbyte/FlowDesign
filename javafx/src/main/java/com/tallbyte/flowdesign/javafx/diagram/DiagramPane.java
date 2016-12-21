@@ -115,7 +115,7 @@ public class DiagramPane extends ScrollPane {
 
     /*
      * ===============================================
-     * Variables required for movement of
+     * Variables required for movement of nodes
      * ===============================================
      */
 
