@@ -50,7 +50,7 @@
                 </Menu>
                 <DiagramMenu/>
                 <Menu text="%menu.help">
-                    <MenuItem visible="true" text="Test" onAction="#onTest"/>
+                    <MenuItem visible="false" text="Test" onAction="#onTest"/>
                     <MenuItem accelerator="Ctrl+A" text="%menu.help.about" onAction="#onAbout"/>
                 </Menu>
             </MenuBar>
