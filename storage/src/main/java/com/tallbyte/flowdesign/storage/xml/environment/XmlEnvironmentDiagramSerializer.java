@@ -80,13 +80,11 @@ public class XmlEnvironmentDiagramSerializer extends XmlDiagramSerializer implem
             );
 
             EnvironmentDiagram  diagram    = new EnvironmentDiagram(
-                    attributes.get(ATTRIBUTE_NAME),
-                    (System) queue.peek().getValue()
+                    attributes.get(ATTRIBUTE_NAME)
             );
 
             // load all the elements with proper values
             deserializeElements(reader, queue, EnvironmentDiagramElement.class, helper);
-            queue.poll(); // the first one is the root element, don#t add it twice (first time is the constructor)
             queue.stream()
                     .map(Map.Entry::getValue)
                     .forEach(diagram::addElement);
