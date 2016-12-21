@@ -23,6 +23,7 @@ import com.tallbyte.flowdesign.data.environment.*;
 import com.tallbyte.flowdesign.data.environment.System;
 import com.tallbyte.flowdesign.data.flow.*;
 import com.tallbyte.flowdesign.data.mask.MaskDiagram;
+import com.tallbyte.flowdesign.data.mask.Rectangle;
 import com.tallbyte.flowdesign.data.ui.storage.ApplicationChangelog;
 import com.tallbyte.flowdesign.data.ui.storage.ApplicationChangelogEntry;
 import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistory;
@@ -30,6 +31,8 @@ import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistoryEntry;
 import com.tallbyte.flowdesign.storage.Serializer;
 import com.tallbyte.flowdesign.storage.Storage;
 import com.tallbyte.flowdesign.storage.UnknownIdentifierException;
+import com.tallbyte.flowdesign.storage.xml.mask.XmlRectangleSerializer;
+import com.tallbyte.flowdesign.storage.xml.mask.XmlMaskDiagramSerializer;
 
 import javax.xml.stream.*;
 import javax.xml.transform.OutputKeys;
@@ -113,6 +116,7 @@ public class XmlStorage implements Storage<XmlStorage, XMLStreamReader, XMLStrea
 
         // MaskDiagram and elements
         register(MaskDiagram                .class, new XmlMaskDiagramSerializer());
+        register(Rectangle                  .class, new XmlRectangleSerializer());
     }
 
     /**

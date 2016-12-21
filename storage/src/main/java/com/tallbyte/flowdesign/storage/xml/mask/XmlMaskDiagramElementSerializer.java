@@ -16,30 +16,29 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.storage.xml;
+package com.tallbyte.flowdesign.storage.xml.mask;
 
-import com.tallbyte.flowdesign.data.mask.MaskDiagram;
+import com.tallbyte.flowdesign.data.mask.MaskDiagramElement;
+import com.tallbyte.flowdesign.storage.xml.XmlDeserializationHelper;
+import com.tallbyte.flowdesign.storage.xml.XmlElementSerializer;
+import com.tallbyte.flowdesign.storage.xml.XmlSerializationHelper;
 
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
-import java.io.IOException;
 
 /**
  * Created by michael on 21.12.16.
  */
-public class XmlMaskDiagramSerializer implements XmlSerializer<MaskDiagram> {
-    @Override
-    public void serialize(XMLStreamWriter writer, MaskDiagram serializable, XmlSerializationHelper helper) throws IOException {
+public abstract class XmlMaskDiagramElementSerializer<T extends MaskDiagramElement> extends XmlElementSerializer<T> {
 
+    @Override
+    protected void writeAttributes(XMLStreamWriter writer, T element, XmlSerializationHelper helper) throws XMLStreamException {
+        super.writeAttributes(writer, element, helper);
     }
 
     @Override
-    public MaskDiagram instantiate() {
-        return new MaskDiagram(null);
-    }
-
-    @Override
-    public MaskDiagram deserialize(XMLStreamReader reader, MaskDiagram serializable, XmlDeserializationHelper helper) throws IOException {
-        return serializable;
+    protected void readAttributes(XMLStreamReader reader, T element, XmlDeserializationHelper helper) throws XMLStreamException {
+        super.readAttributes(reader, element, helper);
     }
 }
