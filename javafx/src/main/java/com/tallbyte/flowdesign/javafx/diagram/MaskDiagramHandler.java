@@ -19,10 +19,7 @@
 package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.data.flow.*;
-import com.tallbyte.flowdesign.data.mask.MaskDiagram;
-import com.tallbyte.flowdesign.data.mask.MaskDiagramElement;
-import com.tallbyte.flowdesign.data.mask.Rectangle;
-import com.tallbyte.flowdesign.data.mask.SelfReference;
+import com.tallbyte.flowdesign.data.mask.*;
 import com.tallbyte.flowdesign.javafx.diagram.element.*;
 import com.tallbyte.flowdesign.javafx.diagram.image.*;
 
@@ -44,6 +41,11 @@ public class MaskDiagramHandler extends DiagramHandlerBase<MaskDiagram, MaskDiag
                 SelfReference::new,
                 SelfReferenceDiagramImage::new,
                 SelfReferenceElementNode::new
+        );
+        addEntries("MaskComment", MaskComment.class,
+                MaskComment::new,
+                CommentDiagramImage::new,
+                MaskCommentElementNode::new
         );
     }
 

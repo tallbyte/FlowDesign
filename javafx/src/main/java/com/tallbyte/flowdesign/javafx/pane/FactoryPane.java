@@ -22,11 +22,14 @@ import com.tallbyte.flowdesign.data.Diagram;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramManager;
 import com.tallbyte.flowdesign.javafx.diagram.FactoryNode;
 import javafx.beans.value.ChangeListener;
+import javafx.css.*;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,6 +44,31 @@ import static com.tallbyte.flowdesign.javafx.ResourceUtils.getResourceString;
  */
 public class FactoryPane extends GridPane {
 
+    private static final List<CssMetaData<? extends Styleable, ?>> STYLABLES;
+    private static final CssMetaData<FactoryPane, Color>           DEFAULT_COLOR = new CssMetaData<FactoryPane, Color>(
+            "-fx-default-color",
+            StyleConverter.getColorConverter(),
+            Color.BLACK ) {
+
+        @Override
+        public boolean isSettable(FactoryPane styleable) {
+            return !styleable.defaultColorProperty().isBound();
+        }
+
+        @Override
+        public StyleableProperty<Color> getStyleableProperty(FactoryPane styleable) {
+            return styleable.defaultColorProperty();
+        }
+    };
+
+    static {
+        List<CssMetaData<? extends Styleable, ?>> list = new ArrayList<>(getClassCssMetaData());
+        list.add(DEFAULT_COLOR);
+        STYLABLES = Collections.unmodifiableList(list);
+    }
+
+    protected StyleableObjectProperty<Color> defaultColor = new SimpleStyleableObjectProperty<>(DEFAULT_COLOR);
+
     protected ChangeListener<Diagram> listener = null;
 
     /**
@@ -48,6 +76,8 @@ public class FactoryPane extends GridPane {
      */
     public FactoryPane() {
         getChildren().add(new Label(getResourceString("pane.factory.default")));
+
+        getStyleClass().add("factoryPane");
     }
 
     public void setup(DiagramsPane pane) {
@@ -71,7 +101,8 @@ public class FactoryPane extends GridPane {
                                             -> new FactoryNode(
                                                 factory.getValue(),
                                                 factory.getKey(),
-                                                getResourceString("pane.factory.node."+factory.getKey(), factory.getKey())
+                                                getResourceString("pane.factory.node."+factory.getKey(), factory.getKey()),
+                                                defaultColorProperty()
                                             )
                                     ).collect(Collectors.toList());
                             Collections.sort(list, (o1, o2) -> o1.getName().compareTo(o2.getName()));
@@ -99,6 +130,23 @@ public class FactoryPane extends GridPane {
                 newPane.diagramProperty().addListener(listener);
             }
         });
+    }
+
+    public Color getDefaultColor() {
+        return defaultColor.get();
+    }
+
+    public void setDefaultColor(Color defaultColor) {
+        this.defaultColor.set(defaultColor);
+    }
+
+    public StyleableObjectProperty<Color> defaultColorProperty() {
+        return defaultColor;
+    }
+
+    @Override
+    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
+        return STYLABLES;
     }
 
 }

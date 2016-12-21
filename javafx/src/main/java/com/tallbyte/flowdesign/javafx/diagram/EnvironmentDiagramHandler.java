@@ -20,15 +20,10 @@ package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.data.environment.*;
 import com.tallbyte.flowdesign.data.environment.System;
-import com.tallbyte.flowdesign.javafx.diagram.element.ActorElementNode;
-import com.tallbyte.flowdesign.javafx.diagram.element.AdapterElementNode;
-import com.tallbyte.flowdesign.javafx.diagram.element.ResourceElementNode;
-import com.tallbyte.flowdesign.javafx.diagram.element.SystemElementNode;
+import com.tallbyte.flowdesign.data.mask.MaskComment;
+import com.tallbyte.flowdesign.javafx.diagram.element.*;
 import com.tallbyte.flowdesign.javafx.diagram.factory.*;
-import com.tallbyte.flowdesign.javafx.diagram.image.AdapterDiagramImage;
-import com.tallbyte.flowdesign.javafx.diagram.image.EllipseDiagramImage;
-import com.tallbyte.flowdesign.javafx.diagram.image.StickmanDiagramImage;
-import com.tallbyte.flowdesign.javafx.diagram.image.SystemResourceDiagramImage;
+import com.tallbyte.flowdesign.javafx.diagram.image.*;
 
 /**
  * This file is part of project flowDesign.
@@ -58,6 +53,11 @@ public class EnvironmentDiagramHandler extends DiagramHandlerBase<EnvironmentDia
                 Adapter::new,
                 AdapterDiagramImage::new,
                 AdapterElementNode::new
+        );
+        addEntries("EnvironmentComment", EnvironmentComment.class,
+                EnvironmentComment::new,
+                CommentDiagramImage::new,
+                EnvironmentCommentElementNode::new
         );
     }
 
