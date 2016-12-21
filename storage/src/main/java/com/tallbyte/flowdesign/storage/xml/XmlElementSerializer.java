@@ -36,6 +36,7 @@ public abstract class XmlElementSerializer<T extends Element> implements XmlSeri
     public static final String ATTRIBUTE_WIDTH      = "width";
     public static final String ATTRIBUTE_HEIGHT     = "height";
     public static final String ATTRIBUTE_TEXT       = "text";
+    public static final String ATTRIBUTE_COLOR      = "color";
     public static final String ATTRIBUTE_DELETABLE  = "deletable";
 
 
@@ -47,6 +48,7 @@ public abstract class XmlElementSerializer<T extends Element> implements XmlSeri
         writer.writeAttribute(ATTRIBUTE_WIDTH,      Double.toString(element.getWidth()));
         writer.writeAttribute(ATTRIBUTE_HEIGHT,     Double.toString(element.getHeight()));
         writer.writeAttribute(ATTRIBUTE_TEXT,       element.getText());
+        writer.writeAttribute(ATTRIBUTE_COLOR,      element.getColor());
 
         writer.writeAttribute(ATTRIBUTE_DELETABLE,  Boolean.toString(element.isDeletable()));
     }
@@ -61,6 +63,7 @@ public abstract class XmlElementSerializer<T extends Element> implements XmlSeri
         element.setWidth   (Double.valueOf(attributes.get(ATTRIBUTE_WIDTH)));
         element.setHeight  (Double.valueOf(attributes.get(ATTRIBUTE_HEIGHT)));
         element.setText    (               attributes.get(ATTRIBUTE_TEXT));
+        element.setColor   (               attributes.get(ATTRIBUTE_COLOR));
 
         element.setDeletable(Boolean.valueOf(attributes.get(ATTRIBUTE_DELETABLE)));
     }
