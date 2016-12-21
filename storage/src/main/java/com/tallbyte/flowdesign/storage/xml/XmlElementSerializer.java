@@ -48,7 +48,10 @@ public abstract class XmlElementSerializer<T extends Element> implements XmlSeri
         writer.writeAttribute(ATTRIBUTE_WIDTH,      Double.toString(element.getWidth()));
         writer.writeAttribute(ATTRIBUTE_HEIGHT,     Double.toString(element.getHeight()));
         writer.writeAttribute(ATTRIBUTE_TEXT,       element.getText());
-        writer.writeAttribute(ATTRIBUTE_COLOR,      element.getColor());
+
+        if (element.getColor() != null) {
+            writer.writeAttribute(ATTRIBUTE_COLOR,  element.getColor());
+        }
 
         writer.writeAttribute(ATTRIBUTE_DELETABLE,  Boolean.toString(element.isDeletable()));
     }
