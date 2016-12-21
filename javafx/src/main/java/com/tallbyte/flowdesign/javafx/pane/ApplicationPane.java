@@ -233,7 +233,7 @@ public class ApplicationPane extends BorderPane {
                     for (TreeItem<TreeEntry> item : overview.getChildren()) {
                         TreeEntry value = item.getValue();
 
-                        if (value instanceof DiagramEntry) {
+                        if (value instanceof DiagramEntry && ((DiagramEntry) value).diagram == diagram) {
                             ((DiagramEntry) value).remove();
                             remove = item;
                         }
@@ -251,7 +251,10 @@ public class ApplicationPane extends BorderPane {
         ContextMenu menu = new ContextMenu();
 
         MenuItem itemRemove = new MenuItem(getResourceString("context.diagram.remove"));
-        itemRemove.setOnAction(event -> getProject().removeDiagram(diagram));
+        itemRemove.setOnAction(event -> {
+            System.out.println(diagram.getName());
+            getProject().removeDiagram(diagram);
+        });
 
         MenuItem itemRename = new MenuItem(getResourceString("context.diagram.rename"));
         itemRename.setOnAction(event -> {
