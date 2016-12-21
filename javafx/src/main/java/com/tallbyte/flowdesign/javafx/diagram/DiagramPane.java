@@ -49,28 +49,84 @@ import java.util.*;
  */
 public class DiagramPane extends ScrollPane {
 
+    /*
+     * ===============================================
+     * Layout related
+     * ===============================================
+     */
+
+    protected final Group                                                groupContent     = new Group();
+    protected final Group                                                groupConnections = new Group();
+    protected final Group                                                groupMarker      = new Group();
+
+    /*
+     * ===============================================
+     * Dependencies and lookup maps
+     * ===============================================
+     */
+
     protected final FlowDesignFxApplication                              application;
 
     protected final DiagramManager                                       diagramManager;
     protected final DiagramsPane                                         diagramsPane;
-    protected final Group                                                groupContent     = new Group();
-    protected final Group                                                groupConnections = new Group();
-    protected final Group                                                groupMarker      = new Group();
+
     protected final Map<Joint, JointNode>                                jointNodes       = new HashMap<>();
     protected final Map<SelectableNode, List<EventHandler<MouseEvent>>>  mouseHandlers    = new HashMap<>();
 
+    /*
+     * ===============================================
+     * Properties
+     * ===============================================
+     */
+
+    /**
+     * The current diagram
+     */
     protected final ObjectProperty<Diagram<?>>     diagram  = new SimpleObjectProperty<>(this, "diagram", null);
+
+    /**
+     * A list of selected nodes
+     */
     protected final ObservableList<SelectableNode> selected = FXCollections.observableArrayList();
 
+    /**
+     * The diagrams name bound to the internal representation. Will be null if no diagram was registered.
+     */
     protected       StringProperty                 name;
+
+    /**
+     * The last actively selected node
+     */
     protected final ObjectProperty<ElementNode>    node    = new SimpleObjectProperty<>(this, "node", null);
+
+    /**
+     * The joint that is currently selected by the user
+     */
     protected final ObjectProperty<Joint>          joint   = new SimpleObjectProperty<>(this, "joint", null);
+
+    /*
+     * ===============================================
+     * Variables required for drag / drop
+     * ===============================================
+     */
 
     protected double mouseX;
     protected double mouseY;
 
+    /*
+     * ===============================================
+     * Variables required for movement of
+     * ===============================================
+     */
+
     protected double offsetX;
     protected double offsetY;
+
+    /*
+     * ===============================================
+     * Registered listeners
+     * ===============================================
+     */
 
     protected ElementsChangedListener listenerElements         = null;
     protected ConnectionsChangedListener listenerConnections   = null;
@@ -80,6 +136,7 @@ public class DiagramPane extends ScrollPane {
     /**
      * Creates a new {@link DiagramPane} with a default set of factories.
      * @param application the {@link FlowDesignFxApplication}
+     * @param pane the {@link DiagramsPane} that surrounds this {@link DiagramPane}
      * @param diagramManager the {@link DiagramManager} used for e.g. element creation
      */
     public DiagramPane(FlowDesignFxApplication application, DiagramsPane pane, DiagramManager diagramManager) {
@@ -95,6 +152,13 @@ public class DiagramPane extends ScrollPane {
         setup();
     }
 
+    /**
+     * Creates a new {@link DiagramPane} with a default set of factories.
+     * @param application the {@link FlowDesignFxApplication}
+     * @param pane the {@link DiagramsPane} that surrounds this {@link DiagramPane}
+     * @param diagram the {@link Diagram} that will be set initially
+     * @param diagramManager the {@link DiagramManager} used for e.g. element creation
+     */
     public DiagramPane(FlowDesignFxApplication application, DiagramsPane pane, Diagram diagram, DiagramManager diagramManager) {
         this(application, pane, diagramManager);
 
@@ -103,6 +167,13 @@ public class DiagramPane extends ScrollPane {
         this.diagram.setValue(diagram);
     }
 
+    /**
+     * Registers an mouse handler for a given node. This is necessary as the listeners have to be removed again
+     * if the node is removed
+     * @param node the {@link SelectableNode} that owns the handler
+     * @param handler the handler itself
+     * @return Returns the handler again.
+     */
     private EventHandler<MouseEvent> addMouseHandler(SelectableNode node, EventHandler<MouseEvent> handler) {
         List<EventHandler<MouseEvent>> list = mouseHandlers.get(node);
 
@@ -116,18 +187,12 @@ public class DiagramPane extends ScrollPane {
         return handler;
     }
 
-    private BooleanProperty createSelectedProperty(SelectableNode node) {
-        BooleanProperty selected = new SimpleBooleanProperty();
-        selected.bind(Bindings.createBooleanBinding(() -> this.selected.contains(node), this.selected));
-        selected.addListener((observable, oldValue, newValue) -> {
-            if (node instanceof Node) {
-                ((Node) node).pseudoClassStateChanged(PseudoClass.getPseudoClass("activeSelected"), newValue);
-            }
-        });
-
-        return selected;
-    }
-
+    /**
+     * Removes an mouse handler of an node. This should only be called if the node is entirely removed.
+     * Not calling this method will result in a memory leak.
+     * @param node the {@link SelectableNode} that owns the handler
+     * @param handler the handler itself
+     */
     private void removeMouseHandler(SelectableNode node, EventHandler<MouseEvent> handler) {
         List<EventHandler<MouseEvent>> list = mouseHandlers.get(node);
 
@@ -140,6 +205,30 @@ public class DiagramPane extends ScrollPane {
         }
     }
 
+    /**
+     * Creates the property that displays if a certain {@link SelectableNode} is actually selected.
+     * The property also manages pseudo-class creation / removal for the given node.
+     * @param node the {@link SelectableNode} to check for
+     * @return Returns the created property.
+     */
+    private BooleanProperty createSelectedProperty(SelectableNode node) {
+        BooleanProperty selected = new SimpleBooleanProperty();
+        selected.bind(Bindings.createBooleanBinding(() -> this.selected.contains(node), this.selected));
+        selected.addListener((observable, oldValue, newValue) -> {
+            if (node instanceof Node) {
+                ((Node) node).pseudoClassStateChanged(PseudoClass.getPseudoClass("activeSelected"), newValue);
+            }
+        });
+
+        return selected;
+    }
+
+    /**
+     * Adds an {@link Element} to this {@link DiagramPane}.
+     * This will use the registered <code>diagramManager</code>
+     * to create matching {@link ElementNode}s.
+     * @param element the {@link Element} to add
+     */
     private void addElement(Element element) {
         ElementNode node = diagramManager.createNode(getDiagram(), element);
         if (node != null) {
@@ -176,6 +265,12 @@ public class DiagramPane extends ScrollPane {
         }
     }
 
+    /**
+     * Adds a {@link Connection} to this {@link DiagramPane}.
+     * Depending on the type of connection different nodes will be
+     * created.
+     * @param connection the {@link Connection} to register
+     */
     private void addConnection(Connection connection) {
         ConnectionNode node;
 
@@ -203,6 +298,9 @@ public class DiagramPane extends ScrollPane {
         }
     }
 
+    /**
+     * Internal setup and handler creation.
+     */
     private void setup() {
         getStyleClass().add("diagramNode");
 
@@ -305,18 +403,35 @@ public class DiagramPane extends ScrollPane {
         addEventFilter(MouseEvent.MOUSE_RELEASED, listenerRelease);
     }
 
+    /**
+     * Internally map the given {@link JointNode} to its {@link Joint} for later lookup.
+     * @param jointNode the {@link JointNode} to register
+     */
     void registerJointNode(JointNode jointNode) {
         jointNodes.put(jointNode.getJoint(), jointNode);
     }
 
+    /**
+     * Unregisters an {@link JointNode}.
+     * @param jointNode the {@link JointNode} to unregister
+     */
     void unregisterJointNode(JointNode jointNode) {
         jointNodes.remove(jointNode.getJoint(), jointNode);
     }
 
+    /**
+     * Gets the {@link JointNode} if a {@link Joint}.
+     * @param joint the {@link Joint} to look up
+     * @return Returns the {@link JointNode} or null if none was registered.
+     */
     JointNode getJointNode(Joint joint) {
         return jointNodes.get(joint);
     }
 
+    /**
+     * Gets the containing {@link DiagramsPane}.
+     * @return Returns the pane.
+     */
     public DiagramsPane getDiagramsPane() {
         return diagramsPane;
     }
@@ -347,14 +462,26 @@ public class DiagramPane extends ScrollPane {
         groupMarker.getChildren().remove(node);
     }
 
+    /**
+     * Gets the name.
+     * @return Returns the name.
+     */
     public String getName() {
         return name.get();
     }
 
+    /**
+     * Sets the name. This might be restricted by data implementation.
+     * @param name the new name
+     */
     public void setName(String name) {
         this.name.set(name);
     }
 
+    /**
+     * Gets the name property.
+     * @return Returns the property.
+     */
     public StringProperty nameProperty() {
         return name;
     }
@@ -375,30 +502,58 @@ public class DiagramPane extends ScrollPane {
         this.diagram.set(diagram);
     }
 
+    /**
+     * Gets the diagram property.
+     * @return Returns the property.
+     */
     public ObjectProperty<Diagram<?>> diagramProperty() {
         return diagram;
     }
 
+    /**
+     * Gets the currently selected {@link Node}.
+     * @return Returns the node or null if none is set.
+     */
     public ElementNode getNode() {
         return node.get();
     }
 
+    /**
+     * Sets the currently selected {@link ElementNode}.
+     * @param node the new node
+     */
     public void setNode(ElementNode node) {
         this.node.set(node);
     }
 
+    /**
+     * Gets the node property.
+     * @return Returns the property.
+     */
     public ReadOnlyObjectProperty<ElementNode> nodeProperty() {
         return node;
     }
 
+    /**
+     * Gets the currently selected {@link Joint}.
+     * @return Returns the {@link Joint} or null if none is set.
+     */
     public Joint getJoint() {
         return joint.get();
     }
 
+    /**
+     * Sets the currently selected {@link Joint}.
+     * @param joint the new {@link Joint}
+     */
     void setJoint(Joint joint) {
         this.joint.set(joint);
     }
 
+    /**
+     * Gets the {@link Joint} property.
+     * @return Returns the property.
+     */
     ObjectProperty<Joint> jointProperty() {
         return joint;
     }
