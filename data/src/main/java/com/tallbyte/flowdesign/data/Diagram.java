@@ -58,17 +58,28 @@ public abstract class Diagram<E extends Element> {
         this.root = root;
 
         addElement(root);
+
         this.changeSupport = new PropertyChangeSupport(this);
     }
 
     /**
      * Sets the name.
      * @param name the new name
+     * @throws IllegalArgumentException Is thrown if the name is already used in the projcet
      */
     public void setName(String name) {
+        // check if the name is already in use
+        Project project = getProject();
         if (project != null) {
+            for (Diagram d : project.getDiagrams(getClass())) {
+                if (name.equals(d.getName())) {
+                    throw new IllegalArgumentException("diagram name already used in project");
+                }
+            }
+
             project.notifyNameChange(this, this.name, name);
         }
+
         String old = this.name;
         this.name = name;
         this.changeSupport.firePropertyChange("name", old, name);
@@ -116,6 +127,10 @@ public abstract class Diagram<E extends Element> {
      * @param element the @{link Element} to add
      */
     public void addElement(E element) {
+        if (element == null) {
+            return;
+        }
+
         this.elements.add(element);
         element.setDiagram(this);
 

@@ -18,8 +18,7 @@
 
 package com.tallbyte.flowdesign.data;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+import java.beans.*;
 import java.util.*;
 
 /**
