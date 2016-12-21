@@ -251,10 +251,7 @@ public class ApplicationPane extends BorderPane {
         ContextMenu menu = new ContextMenu();
 
         MenuItem itemRemove = new MenuItem(getResourceString("context.diagram.remove"));
-        itemRemove.setOnAction(event -> {
-            System.out.println(diagram.getName());
-            getProject().removeDiagram(diagram);
-        });
+        itemRemove.setOnAction(event -> getProject().removeDiagram(diagram));
 
         MenuItem itemRename = new MenuItem(getResourceString("context.diagram.rename"));
         itemRename.setOnAction(event -> {
