@@ -79,7 +79,6 @@ public class OperationalUnit extends FlowDiagramElement {
 
                 if (evt.getNewValue() != null) {
                     listenerName = evtName -> {
-                        System.out.println(("propertyChanged=" + evtName.getPropertyName()));
                         if (evtName.getPropertyName().equals("name")) {
                             setText((String) evtName.getNewValue());
                         }
