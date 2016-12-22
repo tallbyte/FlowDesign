@@ -20,7 +20,7 @@
     /*
  * Text
  */
-    -fx-text-fill: #e5e5e5;
+    /*-fx-text-fill: #e5e5e5;*/
 
     /*
      * ScrollBar
@@ -31,7 +31,7 @@
     /*
      * Draw related
      */
-    -fx-referenced-accent:  red;
+    -fx-referenced-accent: #7c7c7c;
     -fx-draw-accent:        black;
     -fx-connection-accent:  black;
     -fx-joint-accent:       black;
@@ -40,40 +40,40 @@
      * Tab
      */
 
-    -fx-tab-accent: #5d5d5d;
+    -fx-tab-accent: #c5c5c5;
 
     /*
      * Input
      */
 
-    -fx-input-accent:        #686868;
-    -fx-input-border-accent: gray;
+    -fx-input-accent: #f7f7f7;
+    -fx-input-border-accent: #d6d6d6;
 
     /*
      * Button and action
      */
 
-    -fx-action-accent:       #686868;
-    -fx-action-border-accent:gray;
+    -fx-action-accent: #ebebeb;
+    -fx-action-border-accent: #d0d0d0;
 
     /*
      * Main accents
      */
 
-    -fx-menu-accent: #404040;
-    -fx-bar-accent: #3b3e40;
+    -fx-menu-accent: #e7e7e7;
+    -fx-bar-accent: #dedede;
     -fx-bar-border-accent:   #747474;
 
-    -fx-main-divider-accent: black;
-    -fx-off-divider-accent: #5c5c5c;
+    -fx-main-divider-accent: #828282;
+    -fx-off-divider-accent: #afafaf;
 
-    -fx-pane-accent:         #ededed;
+    -fx-pane-accent:         #eaeaea;
 
-    -fx-title-accent: #3a3a3a;
-    -fx-control-pane-accent: #474a4d;
+    -fx-title-accent: #d6d6d6;
+    -fx-control-pane-accent: #f3f3f3;
 
-    -fx-main-pane-accent: #3a3a3a;
-    -fx-accent:              #4a84ff;
-    -fx-diabled-accent:      #2f4493;
+    -fx-main-pane-accent: #fafafa;
+    -fx-accent: #4a84ff;
+    -fx-diabled-accent: #5e8ae3;
     -fx-focus-color:         -fx-accent;
 }
