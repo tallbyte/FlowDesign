@@ -35,7 +35,8 @@ import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Popup;
@@ -57,6 +58,7 @@ public class ConnectionNode extends Group implements SelectableNode {
     protected       JointNode               targetNode;
 
     protected final Line                    line      = new Line();
+    protected final Pane                    paneMarker= new Pane();
     protected final HBox                    boxText   = new HBox();
     protected final TextField               textField = new AutoSizeTextField();
 
@@ -82,7 +84,7 @@ public class ConnectionNode extends Group implements SelectableNode {
 
         boxText.getStyleClass().add("boxText");
 
-        getChildren().addAll(line, boxText);
+        getChildren().addAll(paneMarker, line, boxText);
 
         if (textLeft != null) {
             Label labelLeft = new Label(textLeft);
@@ -95,6 +97,11 @@ public class ConnectionNode extends Group implements SelectableNode {
             labelRight.getStyleClass().add("labelRight");
             boxText.getChildren().add(labelRight);
         }
+
+        paneMarker.setOnMousePressed(event -> textField.requestFocus());
+        focusedProperty().addListener((observable, oldValue, newValue) -> {
+            textField.requestFocus();
+        });
 
         getStyleClass().add("connectionNode");
     }
@@ -167,19 +174,27 @@ public class ConnectionNode extends Group implements SelectableNode {
         double sx   = lenX/len;
         double sy   = lenY/len;
 
-        boxText.setLayoutX(line.getEndX()-sx*len*0.5- boxText.getWidth()/2);
-        boxText.setLayoutY(line.getEndY()-sy*len*0.5- boxText.getHeight());
-
         Point2D normal = new Point2D(1, 0);
-        Point2D line   = new Point2D(lenX, lenY).normalize();
-        double  angle  = normal.angle(line);
+        Point2D se     = new Point2D(lenX, lenY).normalize();
+        double  angle  = normal.angle(se);
 
         if (getStartY() > getEndY()) {
             angle = 360-angle;
         }
 
+        boxText.setLayoutX(line.getEndX()-sx*len*0.5- boxText.getWidth()/2);
+        boxText.setLayoutY(line.getEndY()-sy*len*0.5- boxText.getHeight());
+
         boxText.getTransforms().clear();
         boxText.getTransforms().add(new Rotate(angle, boxText.getWidth()/2, boxText.getHeight()));
+
+        paneMarker.setPrefWidth(len);
+        paneMarker.setPrefHeight(20);
+        paneMarker.setLayoutX(line.getStartX());
+        paneMarker.setLayoutY(line.getStartY()-paneMarker.getHeight()/2);
+
+        paneMarker.getTransforms().clear();
+        paneMarker.getTransforms().add(new Rotate(angle, 0, paneMarker.getHeight()/2));
     }
 
     public Connection getConnection() {

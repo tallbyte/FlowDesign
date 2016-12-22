@@ -26,7 +26,7 @@ import java.beans.PropertyChangeListener;
  * Authors:<br/>
  * - julian (2016-12-12)<br/>
  */
-public class DependencyConnection extends Connection {
+public class DependencyConnection extends Connection<Joint> {
 
     protected ReferenceHandler referenceHandler = new ReferenceHandler("text", "reference", "name", "project", new ReferenceHolder() {
         @Override

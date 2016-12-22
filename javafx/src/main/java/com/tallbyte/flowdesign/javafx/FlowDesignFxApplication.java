@@ -83,8 +83,8 @@ public class FlowDesignFxApplication extends Application {
         stage.setTitle("FlowDesign");
         Scene scene = new Scene(pane);
         stage.setScene(scene);
-        stage.setWidth(1200);
-        stage.setHeight(800);
+        stage.setWidth(1600);
+        stage.setHeight(900);
         popupHandler.setupStage(stage);
         stage.show();
 

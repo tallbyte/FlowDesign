@@ -83,7 +83,7 @@ public class FlowJoint extends Joint {
     }
 
     @Override
-    protected Connection createConnection(Joint source, Joint target) {
-        return new FlowConnection(source, target);
+    protected Connection createConnection(Joint target) {
+        return new FlowConnection(this, (FlowJoint) target);
     }
 }

@@ -44,14 +44,15 @@ public class AutoSizeTextField extends TextField {
              * As of now (December 2016) JavaFX has no public text measurement API...
              */
             com.sun.javafx.tk.FontMetrics metrics = com.sun.javafx.tk.Toolkit.getToolkit().getFontLoader().getFontMetrics(getFont());
-            setPrefWidth(metrics.computeStringWidth(newText)+5);
+            setPrefWidth(metrics.computeStringWidth(newText)+3);
 
             /**
              * Otherwise the textfield will "scroll" when updated, despite getting bigger
              */
             Platform.runLater(() -> {
+                final int loc = getCaretPosition();
                 positionCaret(0);
-                Platform.runLater(() -> positionCaret(newText.length()));
+                Platform.runLater(() -> positionCaret(loc));
             });
 
         });

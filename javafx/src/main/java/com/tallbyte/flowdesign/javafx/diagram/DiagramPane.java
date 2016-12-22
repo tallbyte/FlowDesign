@@ -218,6 +218,7 @@ public class DiagramPane extends ScrollPane {
         if (list != null && node instanceof Node) {
             for (Pair<EventType<MouseEvent>, EventHandler<MouseEvent>> pair : list) {
                 ((Node) node).removeEventHandler(pair.getKey(), pair.getValue());
+                ((Node) node).removeEventFilter(pair.getKey(), pair.getValue());
             }
         }
 
@@ -252,6 +253,15 @@ public class DiagramPane extends ScrollPane {
         ElementNode node = diagramManager.createNode(getDiagram(), element);
         if (node != null) {
             node.setDiagramPane(this, createSelectedProperty(node));
+            node.addEventFilter(MouseEvent.MOUSE_PRESSED, addMouseHandler(node, MouseEvent.MOUSE_PRESSED, event -> {
+                this.selected.clear();
+                this.selected.add(node);
+
+                offsetX = event.getX();
+                offsetY = event.getY();
+
+                node.requestFocus();
+            }));
             node.addEventHandler(MouseEvent.MOUSE_PRESSED, addMouseHandler(node, MouseEvent.MOUSE_PRESSED, event -> {
                 this.selected.clear();
                 this.selected.add(node);

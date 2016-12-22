@@ -46,7 +46,7 @@ public class FlowConnectionNode extends ConnectionNode {
      * @param connection the surrounding {@link Connection}
      */
     public FlowConnectionNode(FlowDesignFxApplication application, Connection connection) {
-        super(application, connection, "(", ")");
+        super(application, connection, null, null);
 
         popup = new DataTypePopup(textField.textProperty());
         popup.setAutoHide(true);

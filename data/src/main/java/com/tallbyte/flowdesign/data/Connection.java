@@ -30,10 +30,10 @@ import java.beans.PropertyChangeSupport;
  * A {@link Connection} describes a connection between two {@link Joint}s, which
  * basically means a connection between two {@link Element}s.
  */
-public class Connection {
+public class Connection<J extends Joint> {
 
-    private final Joint source;
-    private final Joint target;
+    protected final J source;
+    protected final J target;
 
     private String text = "";
 
@@ -44,7 +44,7 @@ public class Connection {
      * @param source the source {@link Joint}
      * @param target the target {@link Joint}
      */
-    public Connection(Joint source, Joint target) {
+    public Connection(J source, J target) {
         this.source = source;
         this.target = target;
 
@@ -73,7 +73,7 @@ public class Connection {
      * Gets the source {@link Joint}.
      * @return Returns the {@link Joint}.
      */
-    public Joint getSource() {
+    public J getSource() {
         return source;
     }
 
@@ -81,7 +81,7 @@ public class Connection {
      * Gets the target {@link Joint}.
      * @return Returns the {@link Joint}.
      */
-    public Joint getTarget() {
+    public J getTarget() {
         return target;
     }
 

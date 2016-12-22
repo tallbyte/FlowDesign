@@ -131,6 +131,10 @@ JointNode {
     -fx-stroke-width:       1.5px;
 }
 
+.connectionNode .label {
+    -fx-insets: 0;
+}
+
 .connectionNode:referenced .text-field {
     -fx-text-fill: -fx-referenced-accent;
 }

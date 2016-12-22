@@ -24,14 +24,22 @@ package com.tallbyte.flowdesign.data;
  * Authors:<br/>
  * - julian (2016-12-12)<br/>
  */
-public class FlowConnection extends Connection {
+public class FlowConnection extends Connection<FlowJoint> {
     /**
      * Creates a new {@link Connection} between two {@link Joint}s.
      *
      * @param source the source {@link Joint}
      * @param target the target {@link Joint}
      */
-    public FlowConnection(Joint source, Joint target) {
+    public FlowConnection(FlowJoint source, FlowJoint target) {
         super(source, target);
+    }
+
+    @Override
+    public void setText(String text) {
+        super.setText(text);
+
+        source.setDataType(text);
+        target.setDataType(text);
     }
 }

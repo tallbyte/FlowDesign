@@ -48,7 +48,7 @@ public class DependencyConnectionNode extends ConnectionNode {
     protected       ObjectProperty<?> reference;
 
     public DependencyConnectionNode(FlowDesignFxApplication application, DependencyConnection connection) {
-        super(application, connection, "[", "]");
+        super(application, connection, null, null);
 
         try {
             reference = JavaBeanObjectPropertyBuilder.create().bean(connection).name("reference").build();

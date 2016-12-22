@@ -44,7 +44,7 @@ public class DependencyJoint extends Joint {
     }
 
     @Override
-    protected Connection createConnection(Joint source, Joint target) {
-        return new DependencyConnection(source, target);
+    protected Connection createConnection(Joint target) {
+        return new DependencyConnection(this, target);
     }
 }

@@ -149,11 +149,10 @@ public abstract class Joint {
 
     /**
      * Creates a new {@link Connection} between the two {@link Joint}s.
-     * @param source the source {@link Joint}
      * @param target the target {@link Joint}
      * @return Returns the new {@link Connection}.
      */
-    protected abstract Connection createConnection(Joint source, Joint target);
+    protected abstract Connection createConnection(Joint target);
 
     /**
      * Joins two {@link Joint}s. This assumes this {@link Joint} is source and the given one is target.
@@ -175,7 +174,7 @@ public abstract class Joint {
             throw new JointJoinException("can not join " + target + " and " + this + ": joints do not match");
         }
 
-        Connection connection = createConnection(this, target);
+        Connection connection = createConnection(target);
 
         target.checkJoint(this);
 

@@ -476,7 +476,7 @@ public class ElementNode extends Pane implements SelectableNode {
         addContent();
         addBorder();
 
-        addText(text, "nodeTextHolder", posLabel, true);
+        TextField field = addText(text, "nodeTextHolder", posLabel, true);
 
         addModificator(NodeModificator.Location.TOP_RIGHT);
         addModificator(NodeModificator.Location.TOP_LEFT);
