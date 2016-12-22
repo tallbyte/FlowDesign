@@ -70,10 +70,10 @@
     -fx-pane-accent:         #ededed;
 
     -fx-title-accent: #3a3a3a;
-    -fx-control-pane-accent: #474a4d;
+    -fx-control-pane-accent: #3d4043;
 
-    -fx-main-pane-accent: #3a3a3a;
+    -fx-main-pane-accent: #343434;
     -fx-accent:              #4a84ff;
-    -fx-diabled-accent:      #2f4493;
+    -fx-diabled-accent:      transparent;
     -fx-focus-color:         -fx-accent;
 }

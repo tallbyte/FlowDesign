@@ -23,7 +23,7 @@
 <fx:root type="BorderPane" styleClass="newProjectPane" xmlns:fx="http://javafx.com/fxml">
 
     <center>
-        <ListView fx:id="listChangelog" styleClass="undecoratedList"/>
+        <ListView fx:id="listChangelog" styleClass="changelogList, undecoratedList"/>
     </center>
 
 </fx:root>

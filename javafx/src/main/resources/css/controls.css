@@ -34,7 +34,7 @@
 }
 
 .list-view .list-cell:filled:hover {
-    -fx-background-color: #7d7d7d;
+    -fx-background-color: -fx-diabled-accent;
 }
 
 .tree-view {
@@ -216,6 +216,12 @@
     -fx-background-color:   -fx-title-accent;
     -fx-border-color:       -fx-main-divider-accent;
     -fx-border-width:       0 1 1 0;
+    -fx-background-radius:  0;
+
+}
+
+.tab .focus-indicator {
+    -fx-border-color: transparent;
 }
 
 .tab:selected {

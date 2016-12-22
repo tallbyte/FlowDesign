@@ -74,6 +74,6 @@
 
     -fx-main-pane-accent: #fafafa;
     -fx-accent: #4a84ff;
-    -fx-diabled-accent: #5e8ae3;
+    -fx-diabled-accent: transparent;
     -fx-focus-color:         -fx-accent;
 }
