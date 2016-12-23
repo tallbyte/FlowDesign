@@ -30,10 +30,12 @@ public class Type implements FlowAction, TupelContainment{
 
     private DataType type;
     private String   name;
+    private boolean  repeated;
 
-    public Type(DataType type, String name) {
-        this.type = type;
-        this.name = name;
+    public Type(DataType type, String name, boolean repeated) {
+        this.type     = type;
+        this.name     = name;
+        this.repeated = repeated;
     }
 
     public DataType getType() {
@@ -42,5 +44,9 @@ public class Type implements FlowAction, TupelContainment{
 
     public String getName() {
         return name;
+    }
+
+    public boolean isRepeated() {
+        return repeated;
     }
 }

@@ -160,7 +160,12 @@ public class NotationParserTest {
                         Tupel.class, Type.class,
                         Tupel.class, Type.class
         );
-
+        assertDeepEqual("{(x,y*)*}",
+                MultiStream.class,
+                    Tupel.class,
+                        Tupel.class, Type.class,
+                        Tupel.class, Type.class
+        );
     }
 
     @Test(expected = FlowNotationParserException.class)
