@@ -46,7 +46,7 @@ public class ResourceElementNode extends ElementNode {
     protected void setup() {
         super.setup();
 
-        JointNode left = addJoint(resource.getJoint(Resource.JOINT_LEFT));
+        /*JointNode left = addJoint(resource.getJoint(Resource.JOINT_LEFT));
         left.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
         left.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
 
@@ -60,6 +60,6 @@ public class ResourceElementNode extends ElementNode {
 
         JointNode bottom = addJoint(resource.getJoint(Resource.JOINT_BOTTOM));
         bottom.centerXProperty().bind(widthProperty().subtract(widthExtend).multiply(0.5));
-        bottom.centerYProperty().bind(heightProperty().subtract(heightExtend));
+        bottom.centerYProperty().bind(heightProperty().subtract(heightExtend));*/
     }
 }

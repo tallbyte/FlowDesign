@@ -31,21 +31,15 @@ import com.tallbyte.flowdesign.data.JointType;
  */
 public class Adapter extends EnvironmentDiagramElement {
 
-    public static final String JOINT_LEFT   = "left";
-    public static final String JOINT_RIGHT  = "right";
-
-    public static final String JOINT_TOP    = "top";
-    public static final String JOINT_BOTTOM = "bottom";
-
     /**
      * Create a new {@link Adapter}.
      */
     public Adapter() {
-        addJoint(new DependencyJoint(this, JOINT_LEFT  , JointType.INPUT_OUTPUT, 0));
-        addJoint(new DependencyJoint(this, JOINT_RIGHT , JointType.INPUT_OUTPUT, 0));
+        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0));
+        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0));
 
-        addJoint(new DependencyJoint(this, JOINT_TOP   , JointType.INPUT_OUTPUT, 0));
-        addJoint(new DependencyJoint(this, JOINT_BOTTOM, JointType.INPUT_OUTPUT, 0));
+        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0));
+        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0));
     }
 
 }

@@ -18,6 +18,7 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.element;
 
+import com.tallbyte.flowdesign.data.FlowJoint;
 import com.tallbyte.flowdesign.data.flow.Start;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.JointNode;
@@ -44,8 +45,10 @@ public class StartElementNode extends ElementNode {
     protected void setup() {
         super.setup();
 
-        JointNode output = addJoint(start.getJoint(Start.JOINT_OUTPUT));
+        addJointsAcrossCircleCentered(new JointGroup(start, FlowJoint.class, false, true, 0, 0.0));
+
+        /*JointNode output = addJoint(start.getJoint(Start.JOINT_OUTPUT));
         output.centerXProperty().bind(widthProperty().subtract(widthExtend));
-        output.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
+        output.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));*/
     }
 }

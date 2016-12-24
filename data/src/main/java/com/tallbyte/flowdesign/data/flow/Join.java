@@ -31,17 +31,13 @@ import com.tallbyte.flowdesign.data.JointType;
  */
 public class Join extends FlowDiagramElement {
 
-    public static final String JOINT_INPUT0 = "input0";
-    public static final String JOINT_INPUT1 = "input1";
-    public static final String JOINT_OUTPUT = "output";
-
     /**
      * Creats an new {@link Join}.
      */
     public Join() {
-        addJoint(new FlowJoint(this, JOINT_INPUT0, JointType.INPUT, 1));
-        addJoint(new FlowJoint(this, JOINT_INPUT1, JointType.INPUT, 1));
-        addJoint(new FlowJoint(this, JOINT_OUTPUT, JointType.OUTPUT, 0));
+        addJoint(new FlowJoint(this, JointType.INPUT, 1));
+        addJoint(new FlowJoint(this, JointType.INPUT, 1));
+        addJoint(new FlowJoint(this, JointType.OUTPUT, 0));
     }
 
 }

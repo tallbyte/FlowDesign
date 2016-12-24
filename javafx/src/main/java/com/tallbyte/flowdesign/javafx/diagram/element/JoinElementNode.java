@@ -18,6 +18,7 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.element;
 
+import com.tallbyte.flowdesign.data.FlowJoint;
 import com.tallbyte.flowdesign.data.flow.Join;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.JointNode;
@@ -45,7 +46,11 @@ public class JoinElementNode extends ElementNode {
     protected void setup() {
         super.setup();
 
-        JointNode input0 = addJoint(join.getJoint(Join.JOINT_INPUT0));
+
+        addJointsAcrossRectangleCentered(new JointGroup(join, FlowJoint.class, true, false, 0.5, 0.5), false, 0.5);
+        //addJointsAcrossRectangleCentered(new JointGroup(join, FlowJoint.class, false, true, 0, 0.5), false, 0.5);
+
+        /*JointNode input0 = addJoint(join.getJoint(Join.JOINT_INPUT0));
         input0.centerXProperty().bind(widthProperty().subtract(widthExtend).multiply(0.5));
         input0.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.2));
 
@@ -55,6 +60,6 @@ public class JoinElementNode extends ElementNode {
 
         JointNode output = addJoint(join.getJoint(Join.JOINT_OUTPUT));
         output.centerXProperty().bind(widthProperty().subtract(widthExtend).multiply(0.5));
-        output.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
+        output.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));*/
     }
 }

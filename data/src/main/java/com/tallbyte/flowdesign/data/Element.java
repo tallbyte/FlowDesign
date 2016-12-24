@@ -18,8 +18,11 @@
 
 package com.tallbyte.flowdesign.data;
 
+import com.tallbyte.flowdesign.data.flow.Join;
+
 import java.beans.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This file is part of project flowDesign.
@@ -33,8 +36,8 @@ import java.util.*;
  */
 public abstract class Element {
 
-    protected       Diagram            diagram;
-    protected final Map<String, Joint> joints = new HashMap<>();
+    protected                                   Diagram      diagram;
+    protected final Map<Class<? extends Joint>, List<Joint>> joints = new HashMap<>();
 
     protected String text       = "Label";
     protected String color      = null;
@@ -44,7 +47,8 @@ public abstract class Element {
     protected double height     = 75;
     protected boolean deletable = true;
 
-    protected PropertyChangeSupport changeSupport;
+    protected List<JointsChangedListener> listenersJoints = new ArrayList<>();
+    protected PropertyChangeSupport       changeSupport;
 
     /**
      * Creats a new {@link Element} with a given set of {@link Joint}s.
@@ -58,7 +62,30 @@ public abstract class Element {
      * @param joint the {@link Joint} to add
      */
     protected void addJoint(Joint joint) {
-        joints.put(joint.getLocation(), joint);
+        List<Joint> list = joints.get(joint.getClass());
+
+        if (list == null) {
+            list = new ArrayList<>();
+            joints.put(joint.getClass(), list);
+        }
+
+        list.add(joint);
+    }
+
+    /**
+     * Removes a {@link Joint}.
+     * @param joint the {@link Joint} to remove
+     */
+    protected void removeJoint(Joint joint) {
+        List<Joint> list = joints.get(joint.getClass());
+
+        if (list != null) {
+            list.remove(joint);
+            if (list.size() == 0) {
+                joints.remove(joint.getClass());
+            }
+
+        }
     }
 
     /**
@@ -206,21 +233,68 @@ public abstract class Element {
     }
 
     /**
-     * Gets a specific {@link Joint} based on his location. The available locations
-     * are usually defined as constants in the corresponding {@link Element} class.
-     * @param location the location of the {@link Joint}
-     * @return Returns the {@link Joint} or null if none exists for the specified location.
+     * Gets the registered {@link Joint}s. The returned list is unmodifiable.
+     * @param clazz the type of {@link Joint}s
+     * @return Returns an {@link Iterable} containing the {@link Joint}s.
      */
-    public Joint getJoint(String location) {
-        return joints.get(location);
+    public Iterable<Joint> getJoints(Class<? extends Joint> clazz) {
+        return Collections.unmodifiableList(joints.get(clazz));
     }
 
     /**
      * Gets the registered {@link Joint}s. The returned list is unmodifiable.
+     * Only input joints are returned.
+     * @param clazz the type of {@link Joint}s
      * @return Returns an {@link Iterable} containing the {@link Joint}s.
      */
-    public Iterable<Joint> getJoints() {
-        return joints.values();
+    public Iterable<Joint> getInputJoints(Class<? extends Joint> clazz) {
+        return Collections.unmodifiableList(joints.get(clazz).stream().filter(Joint::isInput).collect(Collectors.toList()));
+    }
+
+    /**
+     * Gets the registered {@link Joint}s. The returned list is unmodifiable.
+     * Only output joints are returned.
+     * @param clazz the type of {@link Joint}s
+     * @return Returns an {@link Iterable} containing the {@link Joint}s.
+     */
+    public Iterable<Joint> getOutputJoints(Class<? extends Joint> clazz) {
+        return Collections.unmodifiableList(joints.get(clazz).stream().filter(Joint::isOutput).collect(Collectors.toList()));
+    }
+
+    /**
+     * Gets the registered {@link Joint}s. The returned list is unmodifiable.
+     * @param clazz the type of {@link Joint}s
+     * @param in is the requested joint input?
+     * @param out is the requested joint output?
+     * @param index the index of the node
+     * @return Returns an {@link Iterable} containing the {@link Joint}s.
+     */
+    public Joint getJoints(Class<? extends Joint> clazz, boolean in, boolean out, int index) {
+        int i = 0;
+        for (Joint joint : Collections.unmodifiableList(joints.get(clazz))) {
+            if ((in == joint.isInput()) && (out == joint.isOutput()) && index == i) {
+                return joint;
+            }
+            ++i;
+        }
+
+        throw new JointNotFoundException("");
+    }
+
+    /**
+     * Registers an {@link JointsChangedListener}.
+     * @param listener the {@link JointsChangedListener} to register
+     */
+    public void addJointsChangedListener(JointsChangedListener listener) {
+        listenersJoints.add(listener);
+    }
+
+    /**
+     * Unregisters an {@link JointsChangedListener}.
+     * @param listener the {@link JointsChangedListener} to unregister
+     */
+    public void removeJointsChangedListener(JointsChangedListener listener) {
+        listenersJoints.remove(listener);
     }
 
     /**

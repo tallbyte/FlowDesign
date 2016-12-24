@@ -83,9 +83,9 @@ public class XmlStorageTest {
         Actor actor = new Actor();
 
         diagram.addElement(actor);
-        actor.getJoints().iterator().next().join(
+        /*actor.getJoints().iterator().next().join(
                 diagram.getRoot().getJoints().iterator().next()
-        );
+        );*/
 
         project.addDiagram(diagram);
         return project;

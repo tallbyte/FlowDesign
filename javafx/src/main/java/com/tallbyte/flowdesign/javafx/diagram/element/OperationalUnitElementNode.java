@@ -18,18 +18,16 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.element;
 
+import com.tallbyte.flowdesign.data.DependencyJoint;
 import com.tallbyte.flowdesign.data.Diagram;
+import com.tallbyte.flowdesign.data.FlowJoint;
 import com.tallbyte.flowdesign.data.flow.FlowDiagram;
-import com.tallbyte.flowdesign.data.flow.Operation;
 import com.tallbyte.flowdesign.data.flow.OperationalUnit;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
-import com.tallbyte.flowdesign.javafx.diagram.JointNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import javafx.css.PseudoClass;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -77,7 +75,13 @@ public class OperationalUnitElementNode extends ElementNode {
     protected void setup() {
         super.setup();
 
-        JointNode input0 = addJoint(operation.getJoint(Operation.JOINT_INPUT0));
+        addJointsAcrossCircleCentered(new JointGroup(operation, FlowJoint.class, true, false, 0.5, 0.3));
+        addJointsAcrossCircleCentered(new JointGroup(operation, FlowJoint.class, false, true, 0.0, 0.3));
+
+        addJointsAcrossCircleCentered(new JointGroup(operation, DependencyJoint.class, true, false, 0.75, 0.0));
+        addJointsAcrossCircleCentered(new JointGroup(operation, DependencyJoint.class, false, true, 0.25, 0.0));
+
+        /*JointNode input0 = addJoint(operation.getJoint(Operation.JOINT_INPUT0));
         input0.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
         input0.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
 
@@ -91,6 +95,6 @@ public class OperationalUnitElementNode extends ElementNode {
 
         JointNode dependencyOutput = addJoint(operation.getJoint(Operation.JOINT_DEPENDENCY_OUTPUT));
         dependencyOutput.centerXProperty().bind(widthProperty().subtract(widthExtend).multiply(0.5));
-        dependencyOutput.centerYProperty().bind(heightProperty().subtract(heightExtend));
+        dependencyOutput.centerYProperty().bind(heightProperty().subtract(heightExtend));**/
     }
 }

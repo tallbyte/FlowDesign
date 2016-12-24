@@ -16,29 +16,32 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.data.environment;
-
-import com.tallbyte.flowdesign.data.DependencyJoint;
-import com.tallbyte.flowdesign.data.Joint;
-import com.tallbyte.flowdesign.data.JointType;
+package com.tallbyte.flowdesign.data;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-11-07)<br/>
- * <br/>
- * The {@link Actor} describes an external human or non-human influence or "user"
- * of a {@link System}.
+ * - julian (2016-12-23)<br/>
  */
-public class Actor extends EnvironmentDiagramElement {
+public class JointNotFoundException extends RuntimeException {
 
-    /**
-     * Creats an new {@link Actor}.
-     */
-    public Actor() {
-        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0));
-        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0));
+    public JointNotFoundException() {
     }
 
+    public JointNotFoundException(String message) {
+        super(message);
+    }
+
+    public JointNotFoundException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public JointNotFoundException(Throwable cause) {
+        super(cause);
+    }
+
+    public JointNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 }

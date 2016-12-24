@@ -29,15 +29,12 @@ import com.tallbyte.flowdesign.data.JointType;
  */
 public class Split extends FlowDiagramElement {
 
-    public static final String JOINT_INPUT  = "input";
-    public static final String JOINT_OUTPUT = "output";
-
     /**
      * Creats an new {@link Split}.
      */
     public Split() {
-        addJoint(new FlowJoint(this, JOINT_INPUT , JointType.INPUT, 1));
-        addJoint(new FlowJoint(this, JOINT_OUTPUT, JointType.OUTPUT, 0));
+        addJoint(new FlowJoint(this, JointType.INPUT, 1));
+        addJoint(new FlowJoint(this, JointType.OUTPUT, 0));
     }
 
 }

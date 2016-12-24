@@ -40,7 +40,6 @@ public abstract class Joint {
     private final List<Joint>                   outgoing = new ArrayList<>();
     private       Joint                         incoming;
 
-    private final String                        location;
     private final JointType                     type;
     private final int                           maxOut;
 
@@ -49,19 +48,16 @@ public abstract class Joint {
     /**
      * Creates a new {@link Joint} based on given configuration.
      * @param element the containing {@link Element}
-     * @param location the location (e.g. name)
      * @param type the type
      * @param maxOut the maximum amount of outgoing
      *               connections or 0 for infinite
      *               (for OUTPUT type only)
      */
     public Joint(Element element,
-                 String location,
                  JointType type,
                  int maxOut) {
 
         this.element  = element;
-        this.location = location;
         this.type     = type;
         this.maxOut   = maxOut;
 
@@ -82,16 +78,6 @@ public abstract class Joint {
      */
     public Joint getIncoming() {
         return incoming;
-    }
-
-    /**
-     * Gets the location of this {@link Joint}.
-     * The location is some kind of name which can be arbitary,
-     * but is unique per {@link Element}.
-     * @return Returns the location.
-     */
-    public String getLocation() {
-        return location;
     }
 
     /**

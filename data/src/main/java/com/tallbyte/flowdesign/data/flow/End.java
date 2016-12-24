@@ -29,13 +29,11 @@ import com.tallbyte.flowdesign.data.JointType;
  */
 public class End extends FlowDiagramElement {
 
-    public static final String JOINT_INPUT = "input";
-
     /**
      * Creats an new {@link End}.
      */
     public End() {
-        addJoint(new FlowJoint(this, JOINT_INPUT, JointType.INPUT, 0));
+        addJoint(new FlowJoint(this, JointType.INPUT, 0));
         setText("");
     }
 

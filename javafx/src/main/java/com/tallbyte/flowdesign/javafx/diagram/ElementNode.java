@@ -21,6 +21,8 @@ package com.tallbyte.flowdesign.javafx.diagram;
 import com.tallbyte.flowdesign.data.Diagram;
 import com.tallbyte.flowdesign.data.Element;
 import com.tallbyte.flowdesign.data.Joint;
+import com.tallbyte.flowdesign.data.JointsChangedListener;
+import com.tallbyte.flowdesign.data.environment.Adapter;
 import com.tallbyte.flowdesign.javafx.control.AutoSizeTextField;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import com.tallbyte.flowdesign.javafx.property.ColorProperty;
@@ -415,6 +417,128 @@ public class ElementNode extends Pane implements SelectableNode {
         return element;
     }
 
+    protected void addJointsAcrossRectangle(JointGroup group, boolean horizontal, double sec) {
+        group.setLayoutHandler(g -> {
+            double main  = g.getOffset();
+            double range = g.getRange();
+
+            if (group.getNodes().size() > 1) {
+                range /= (group.getNodes().size()-1);
+            }
+
+            for (JointNode node : g.getNodes()) {
+                final double cMain = main;
+
+                setNodeForRectangle(node, horizontal, cMain, sec);
+
+                main += range;
+            }
+        });
+    }
+
+    protected void addJointsAcrossRectangleCentered(JointGroup group, boolean horizontal, double sec) {
+        group.setLayoutHandler(g -> {
+            double main  = g.getOffset();
+            double range = g.getRange();
+
+            if (group.getNodes().size() > 1) {
+                range /= (group.getNodes().size()-1);
+            }
+
+            int i = 1;
+            for (JointNode node : g.getNodes()) {
+                double dir    = ((i % 2)*2-1);
+                double cMain = main+(i / 2)*range*dir;
+
+                setNodeForRectangle(node, horizontal, cMain, sec);
+
+                ++i;
+            }
+        });
+    }
+
+    protected void setNodeForRectangle(JointNode node, boolean horizontal, double main, double sec) {
+        node.centerXProperty().bind(Bindings.createDoubleBinding(() -> {
+                    double x;
+
+                    if (horizontal) {
+                        x = (main) * realWidth.get();
+                    } else {
+                        x = sec * realWidth.get();
+                    }
+
+                    return x;
+                }, realWidth)
+        );
+        node.centerYProperty().bind(Bindings.createDoubleBinding(() -> {
+                    double y;
+
+                    if (horizontal) {
+                        y = sec * realHeight.get();
+                    } else {
+                        y = (main) * realHeight.get();
+                    }
+
+                    return y;
+                }, realWidth)
+        );
+    }
+
+    protected void addJointsAcrossCircle(JointGroup group) {
+        group.setLayoutHandler(g -> {
+            double angle = g.getOffset()*360;
+            double range = g.getRange()*360;
+
+            if (group.getNodes().size() >= 1) {
+                range /= (group.getNodes().size());
+            }
+
+            System.out.println(g.getNodes());
+
+            for (JointNode node : g.getNodes()) {
+                final double cAngle = angle;
+
+                System.out.println(cAngle);
+
+                node.centerXProperty().bind(Bindings.createDoubleBinding(()
+                                -> realWidth.get()/2+Math.cos(Math.toRadians(cAngle))*(realWidth.get()/2),
+                        realWidth)
+                );
+                node.centerYProperty().bind(Bindings.createDoubleBinding(()
+                                -> realHeight.get()/2+Math.sin(Math.toRadians(cAngle))*(realHeight.get()/2),
+                        realHeight)
+                );
+
+                angle += range;
+            }
+        });
+    }
+
+    protected void addJointsAcrossCircleCentered(JointGroup group) {
+        group.setLayoutHandler(g -> {
+            double angle = g.getOffset()*360;
+            double range = g.getRange()*360 / 2;
+
+
+
+            int i = 1;
+            for (JointNode node : g.getNodes()) {
+                double dir    = ((i % 2)*2-1);
+                double cAngle = angle+(i / 2)*range*dir;
+
+                node.centerXProperty().bind(Bindings.createDoubleBinding(()
+                        -> realWidth.get()/2+Math.cos(Math.toRadians(cAngle))*(realWidth.get()/2),
+                        realWidth)
+                );
+                node.centerYProperty().bind(Bindings.createDoubleBinding(()
+                                -> realHeight.get()/2+Math.sin(Math.toRadians(cAngle))*(realHeight.get()/2),
+                        realHeight)
+                );
+                ++i;
+            }
+        });
+    }
+
     private TextField addText(StringProperty bind, String cssClass, Pos position, boolean extend) {
 
         TextField element = new AutoSizeTextField();
@@ -516,5 +640,95 @@ public class ElementNode extends Pane implements SelectableNode {
     @Override
     public ReadOnlyBooleanProperty selectedProperty() {
         return selected;
+    }
+
+    protected interface JointGroupLayoutHandler {
+
+        void layout(JointGroup group);
+
+    }
+
+    protected class JointGroup {
+
+        protected final Element                 element;
+        protected final Class<? extends Joint>  clazz;
+        protected final boolean                 input;
+        protected final boolean                 output;
+
+        protected final double                  offset;
+        protected final double                  range;
+
+        protected       JointsChangedListener   listener;
+        protected       JointGroupLayoutHandler layoutHandler;
+        protected       List<JointNode>         nodes = new ArrayList<>();
+
+        public JointGroup(Element element, Class<? extends Joint> clazz, boolean input, boolean output, double offset, double range) {
+            this.element= element;
+            this.clazz  = clazz;
+            this.input  = input;
+            this.output = output;
+            this.offset = offset;
+            this.range  = range;
+
+            for (Joint joint : element.getJoints(clazz)) {
+                if ((joint.isInput() == input) && (joint.isOutput() == output)) {
+                    nodes.add(addJoint(joint));
+                }
+            }
+
+            element.addJointsChangedListener(listener = (joint, added) -> {
+                if (added) {
+                    nodes.add(addJoint(joint));
+                } else {
+                    // TODO
+                }
+
+                if (layoutHandler != null) {
+                    layoutHandler.layout(this);
+                }
+            });
+        }
+
+        public Element getElement() {
+            return element;
+        }
+
+        public Class<? extends Joint> getClazz() {
+            return clazz;
+        }
+
+        public boolean isInput() {
+            return input;
+        }
+
+        public boolean isOutput() {
+            return output;
+        }
+
+        public double getOffset() {
+            return offset;
+        }
+
+        public double getRange() {
+            return range;
+        }
+
+        private JointsChangedListener getListener() {
+            return listener;
+        }
+
+        private void setLayoutHandler(JointGroupLayoutHandler layoutHandler) {
+            this.layoutHandler = layoutHandler;
+
+            layoutHandler.layout(this);
+        }
+
+        private JointGroupLayoutHandler getLayoutHandler() {
+            return layoutHandler;
+        }
+
+        private List<JointNode> getNodes() {
+            return nodes;
+        }
     }
 }

@@ -18,6 +18,8 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.element;
 
+import com.tallbyte.flowdesign.data.DependencyJoint;
+import com.tallbyte.flowdesign.data.Joint;
 import com.tallbyte.flowdesign.data.environment.Actor;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.JointNode;
@@ -45,11 +47,11 @@ public class ActorElementNode extends ElementNode {
     protected void setup() {
         super.setup();
 
-        JointNode left = addJoint(actor.getJoint(Actor.JOINT_LEFT));
+        JointNode left = addJoint(actor.getJoints(DependencyJoint.class, true, true, 0));
         left.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
         left.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.4));
 
-        JointNode right = addJoint(actor.getJoint(Actor.JOINT_RIGHT));
+        JointNode right = addJoint(actor.getJoints(DependencyJoint.class, true, true, 1));
         right.centerXProperty().bind(widthProperty().subtract(widthExtend));
         right.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.4));
     }

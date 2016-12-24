@@ -18,6 +18,7 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.element;
 
+import com.tallbyte.flowdesign.data.DependencyJoint;
 import com.tallbyte.flowdesign.data.environment.System;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.JointNode;
@@ -45,7 +46,9 @@ public class SystemElementNode extends ElementNode {
     protected void setup() {
         super.setup();
 
-        JointNode left = addJoint(system.getJoint(System.JOINT_LEFT));
+        addJointsAcrossCircle(new JointGroup(system, DependencyJoint.class, true, true, 0, 1));
+
+        /*JointNode left = addJoint(system.getJoint(System.JOINT_LEFT));
         left.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
         left.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
 
@@ -59,6 +62,6 @@ public class SystemElementNode extends ElementNode {
 
         JointNode bottom = addJoint(system.getJoint(System.JOINT_BOTTOM));
         bottom.centerXProperty().bind(widthProperty().subtract(widthExtend).multiply(0.5));
-        bottom.centerYProperty().bind(heightProperty().subtract(heightExtend));
+        bottom.centerYProperty().bind(heightProperty().subtract(heightExtend));*/
     }
 }

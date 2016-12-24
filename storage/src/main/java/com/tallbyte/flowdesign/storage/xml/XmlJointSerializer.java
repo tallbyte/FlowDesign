@@ -38,7 +38,7 @@ public class XmlJointSerializer<T extends Joint> implements XmlSerializer<T> {
     @Override
     public void serialize(XMLStreamWriter writer, T joint, XmlSerializationHelper helper) throws IOException {
         try {
-            writer.writeAttribute(ATTRIBUTE_LOCATION, joint.getLocation());
+            //writer.writeAttribute(ATTRIBUTE_LOCATION, joint.getLocation());
             writer.writeAttribute(ATTRIBUTE_ENTITY,   helper.getAssignedIdMap().get(joint.getElement()));
 
         } catch (XMLStreamException e) {
@@ -69,11 +69,11 @@ public class XmlJointSerializer<T extends Joint> implements XmlSerializer<T> {
                 );
             }
 
-            for (Joint j : element.getJoints()) {
+            /* for (Joint j : element.getJoints()) {
                 if (j.getLocation().equals(location)) {
                     return (T)j;
                 }
-            }
+            }*/
 
             throw new IOException(
                     "Failed to find requested joint for location: "+location +

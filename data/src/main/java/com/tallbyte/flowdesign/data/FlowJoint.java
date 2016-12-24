@@ -34,27 +34,25 @@ public class FlowJoint extends Joint {
      * Creates a new {@link Joint} based on given configuration.
      *
      * @param element  the containing {@link Element}
-     * @param location the location (e.g. name)
      * @param type     the type
      * @param maxOut   the maximum amount of outgoing
      *                 connections or 0 for infinite
      */
-    public FlowJoint(Element element, String location, JointType type, int maxOut) {
-        this(element, location, type, "", maxOut);
+    public FlowJoint(Element element, JointType type, int maxOut) {
+        this(element, type, "", maxOut);
     }
 
     /**
      * Creates a new {@link Joint} based on given configuration.
      *
      * @param element  the containing {@link Element}
-     * @param location the location (e.g. name)
      * @param type     the type
      * @param dataType the desired data type
      * @param maxOut   the maximum amount of outgoing
      *                 connections or 0 for infinite
      */
-    public FlowJoint(Element element, String location, JointType type, String dataType, int maxOut) {
-        super(element, location, type, maxOut);
+    public FlowJoint(Element element, JointType type, String dataType, int maxOut) {
+        super(element, type, maxOut);
 
         this.dataType = dataType;
     }

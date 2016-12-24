@@ -18,6 +18,7 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.element;
 
+import com.tallbyte.flowdesign.data.FlowJoint;
 import com.tallbyte.flowdesign.data.flow.Operation;
 import com.tallbyte.flowdesign.data.flow.Split;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
@@ -46,12 +47,14 @@ public class SplitElementNode extends ElementNode {
     protected void setup() {
         super.setup();
 
-        JointNode input = addJoint(split.getJoint(Split.JOINT_INPUT));
+
+
+        /*JointNode input = addJoint(split.getJoint(Split.JOINT_INPUT));
         input.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
         input.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
 
         JointNode output = addJoint(split.getJoint(Split.JOINT_OUTPUT));
         output.centerXProperty().bind(widthProperty().subtract(widthExtend));
-        output.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
+        output.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));*/
     }
 }

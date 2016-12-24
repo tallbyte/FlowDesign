@@ -18,8 +18,8 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.element;
 
+import com.tallbyte.flowdesign.data.DependencyJoint;
 import com.tallbyte.flowdesign.data.environment.Adapter;
-import com.tallbyte.flowdesign.data.environment.Resource;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.JointNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
@@ -46,7 +46,9 @@ public class AdapterElementNode extends ElementNode {
     protected void setup() {
         super.setup();
 
-        JointNode left = addJoint(adapter.getJoint(Adapter.JOINT_LEFT));
+        addJointsAcrossCircleCentered(new JointGroup(adapter, DependencyJoint.class, true, false, 0, 1));
+
+        /*JointNode left = addJoint(adapter.getJoint(Adapter.JOINT_LEFT));
         left.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
         left.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
 
@@ -60,6 +62,6 @@ public class AdapterElementNode extends ElementNode {
 
         JointNode bottom = addJoint(adapter.getJoint(Adapter.JOINT_BOTTOM));
         bottom.centerXProperty().bind(widthProperty().subtract(widthExtend).multiply(0.5));
-        bottom.centerYProperty().bind(heightProperty().subtract(heightExtend));
+        bottom.centerYProperty().bind(heightProperty().subtract(heightExtend));*/
     }
 }

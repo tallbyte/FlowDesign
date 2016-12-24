@@ -29,13 +29,12 @@ public class DependencyJoint extends Joint {
      * Creates a new {@link Joint} based on given configuration.
      *
      * @param element  the containing {@link Element}
-     * @param location the location (e.g. name)
      * @param type     the type
      * @param maxOut   the maximum amount of outgoing
      *                 connections or 0 for infinite
      */
-    public DependencyJoint(Element element, String location, JointType type, int maxOut) {
-        super(element, location, type, maxOut);
+    public DependencyJoint(Element element, JointType type, int maxOut) {
+        super(element, type, maxOut);
     }
 
     @Override

@@ -46,12 +46,12 @@ public class PortalElementNode extends ElementNode {
     protected void setup() {
         super.setup();
 
-        JointNode input = addJoint(portal.getJoint(Portal.JOINT_INPUT));
+        /*JointNode input = addJoint(portal.getJoint(Portal.JOINT_INPUT));
         input.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
         input.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
 
         JointNode output = addJoint(portal.getJoint(Portal.JOINT_OUTPUT));
         output.centerXProperty().bind(widthProperty().subtract(widthExtend));
-        output.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));
+        output.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));*/
     }
 }
