@@ -187,7 +187,7 @@ public abstract class Joint {
     public void disjoin() {
         if (incoming != null) {
             element.getDiagram().removeConnection(new Connection(incoming, this));
-            notifyDisjoin(incoming);
+            incoming.notifyDisjoin(this);
             incoming = null;
         }
     }
