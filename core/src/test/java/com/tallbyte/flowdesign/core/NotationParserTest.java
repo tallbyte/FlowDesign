@@ -166,6 +166,8 @@ public class NotationParserTest {
                         Tupel.class, Type.class,
                         Tupel.class, Type.class
         );
+
+        System.out.println(parser.parse("(name:String*,(Object,List))*"));
     }
 
     @Test(expected = FlowNotationParserException.class)

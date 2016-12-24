@@ -47,4 +47,17 @@ public class MultiStream implements FlowAction {
     public FlowAction getAction() {
         return action;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("{");
+        if (action != null) {
+            builder.append(action.toString());
+        }
+        builder.append("}");
+
+        return builder.toString();
+    }
 }

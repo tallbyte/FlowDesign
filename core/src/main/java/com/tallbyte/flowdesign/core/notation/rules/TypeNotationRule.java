@@ -60,22 +60,22 @@ public class TypeNotationRule extends FlowNotationRuleBase {
             nameFound = true;
         }
 
-        if (c == ':') {
-            if (nameFound) {
-                throw new IllegalNotationException("name already specified");
-            } else {
-                nameFound = true;
-            }
-        } else {
-            if (nameFound) {
-                type.append(c);
-            } else {
-                name.append(c);
-            }
-        }
-
         if (c == '*') {
             repeat = true;
+        } else {
+            if (c == ':') {
+                if (nameFound) {
+                    throw new IllegalNotationException("name already specified");
+                } else {
+                    nameFound = true;
+                }
+            } else {
+                if (nameFound) {
+                    type.append(c);
+                } else {
+                    name.append(c);
+                }
+            }
         }
 
         // we never know when a name ends

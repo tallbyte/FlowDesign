@@ -49,4 +49,22 @@ public class Type implements FlowAction, TupelContainment{
     public boolean isRepeated() {
         return repeated;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(name);
+        if (!name.isEmpty()&&type != null) {
+            builder.append(":");
+        }
+        if (type != null) {
+            builder.append(type.getClassName());
+        }
+        if (repeated) {
+            builder.append("*");
+        }
+
+        return builder.toString();
+    }
 }
