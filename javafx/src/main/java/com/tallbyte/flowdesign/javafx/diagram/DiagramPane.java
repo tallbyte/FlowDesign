@@ -305,6 +305,7 @@ public class DiagramPane extends ScrollPane {
             if (node instanceof ElementNode && ((ElementNode) node).getElement().equals(element)) {
                 groupContent.getChildren().remove(node);
                 removeMouseHandlers((ElementNode) node);
+                ((ElementNode) node).remove();
                 break;
             }
         }

@@ -47,7 +47,8 @@ public class SplitElementNode extends ElementNode {
     protected void setup() {
         super.setup();
 
-
+        addJointsAcrossRectangleCentered(new JointGroup(split, FlowJoint.class, true, false, 0.5, 0.8), false, 0.0);
+        addJointsAcrossRectangleCentered(new JointGroup(split, FlowJoint.class, false, true, 0.5, 0.8), false, 1.0);
 
         /*JointNode input = addJoint(split.getJoint(Split.JOINT_INPUT));
         input.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));

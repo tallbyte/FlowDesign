@@ -18,6 +18,7 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.element;
 
+import com.tallbyte.flowdesign.data.DependencyJoint;
 import com.tallbyte.flowdesign.data.environment.Resource;
 import com.tallbyte.flowdesign.data.environment.System;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
@@ -45,6 +46,8 @@ public class ResourceElementNode extends ElementNode {
     @Override
     protected void setup() {
         super.setup();
+
+        addJointsAcrossCircle(new JointGroup(resource, DependencyJoint.class, true, true, 0, 1));
 
         /*JointNode left = addJoint(resource.getJoint(Resource.JOINT_LEFT));
         left.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));

@@ -145,6 +145,17 @@ public abstract class Diagram<E extends Element> {
      */
 
     public void removeElement(E element) {
+        List<Connection> remove = new ArrayList<>();
+        for (Connection c : getConnections()) {
+            if (c.getSource().getElement() == element || c.getTarget().getElement() == element) {
+                remove.add(c);
+            }
+        }
+
+        for (Connection connection : remove) {
+            connection.getTarget().disjoin();
+        }
+
         this.elements.remove(element);
         element.setDiagram(null);
 

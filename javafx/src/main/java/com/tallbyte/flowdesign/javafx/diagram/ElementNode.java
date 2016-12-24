@@ -86,6 +86,7 @@ public class ElementNode extends Pane implements SelectableNode {
     protected Pos                         posLabel;
     protected DiagramImage                content;
     protected Element                     element;
+    protected List<JointGroup>            jointGroups = new ArrayList<>();
 
     /*
      * General properties
@@ -639,6 +640,10 @@ public class ElementNode extends Pane implements SelectableNode {
         return selected;
     }
 
+    void remove() {
+        jointGroups.forEach(JointGroup::remove);
+    }
+
     protected interface JointGroupLayoutHandler {
 
         void layout(JointGroup group);
@@ -726,6 +731,10 @@ public class ElementNode extends Pane implements SelectableNode {
 
         private List<JointNode> getNodes() {
             return nodes;
+        }
+
+        private void remove() {
+            element.removeJointsChangedListener(listener);
         }
     }
 }
