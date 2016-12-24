@@ -103,7 +103,7 @@ public class TupelNotationRule extends FlowNotationRuleBase {
 
         List<TupelContainment> list = new ArrayList<>();
         for (FlowNotationRule rule : childs) {
-            list.add(0, (TupelContainment) rule.build());
+            list.add((TupelContainment) rule.build());
         }
 
         return new Tupel(repeat, list);

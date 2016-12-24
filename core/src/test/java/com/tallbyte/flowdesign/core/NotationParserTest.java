@@ -45,7 +45,10 @@ public class NotationParserTest {
     private void assertDeepEqual(String toParse, Class<?>... clazz) throws FlowNotationParserException {
         Stack<FlowAction> stack = new Stack<>();
 
-        stack.push(parser.parse(toParse));
+        FlowAction root = parser.parse(toParse);
+        assertEquals(toParse.replace(" ", ""), root.toString());
+
+        stack.push(root);
 
         int i = 0;
         while (!stack.isEmpty()) {
@@ -59,7 +62,10 @@ public class NotationParserTest {
             if (action instanceof MultiStream) {
                 stack.push(((MultiStream) action).getAction());
             } else if (action instanceof Tupel) {
-                ((Tupel) action).getTypes().forEach(stack::push);
+                Tupel tupel = ((Tupel) action);
+                for (int n = tupel.getTypes().size() -1 ; n >= 0 ; --n) {
+                    stack.push(tupel.getTypes().get(n));
+                }
             }
 
             // increment array
@@ -89,85 +95,85 @@ public class NotationParserTest {
         assertDeepEqual("{(String, Integer)*}",
                 MultiStream.class,
                     Tupel.class,
-                        Tupel.class, Type.class,
-                        Tupel.class, Type.class
+                        Type.class,
+                        Type.class
         );
         assertDeepEqual("{(String, Integer)}",
                 MultiStream.class,
                     Tupel.class,
-                        Tupel.class, Type.class,
-                        Tupel.class, Type.class
+                        Type.class,
+                        Type.class
         );
         assertDeepEqual("{(String*, Integer*)}",
                 MultiStream.class,
                     Tupel.class,
-                        Tupel.class, Type.class,
-                        Tupel.class, Type.class
+                        Type.class,
+                        Type.class
         );
         assertDeepEqual("(String*, Integer*)",
                 Tupel.class,
-                    Tupel.class, Type.class,
-                    Tupel.class, Type.class
+                    Type.class,
+                    Type.class
         );
         assertDeepEqual("(String*, Integer*)*",
                 Tupel.class,
-                    Tupel.class, Type.class,
-                    Tupel.class, Type.class
+                    Type.class,
+                    Type.class
         );
         assertDeepEqual("(String)*",
                 Tupel.class,
-                    Tupel.class, Type.class
+                    Type.class
         );
         assertDeepEqual("{(String)*}",
                 MultiStream.class,
                     Tupel.class,
-                        Tupel.class, Type.class
+                        Type.class
         );
         assertDeepEqual("{((String,Object*),(List,HashMap)*)}",
                 MultiStream.class,
                     Tupel.class,
                         Tupel.class,
-                            Tupel.class, Type.class,
-                            Tupel.class, Type.class,
+                            Type.class,
+                            Type.class,
                         Tupel.class,
-                            Tupel.class, Type.class,
-                        Tupel.class, Type.class
+                            Type.class,
+                        Type.class
         );
         assertDeepEqual("(String)*",
                 Tupel.class,
-                    Tupel.class, Type.class
+                    Type.class
         );
         assertDeepEqual("(String)",
                 Tupel.class,
-                    Tupel.class, Type.class
+                    Type.class
         );
         assertDeepEqual("String",
-                Tupel.class, Type.class);
+                Type.class);
         assertDeepEqual("String*",
-                Tupel.class, Type.class);
+                Type.class);
         assertDeepEqual("(String*,sdf,(Object,List))*",
                 Tupel.class,
-                    Tupel.class, Type.class,
-                    Tupel.class, Type.class,
+                    Type.class,
+                    Type.class,
                     Tupel.class,
-                        Tupel.class, Type.class,
-                        Tupel.class, Type.class
+                        Type.class,
+                        Type.class
         );
         assertDeepEqual("(name:String,(Object,List))*",
                 Tupel.class,
-                    Tupel.class, Type.class,
+                    Type.class,
                     Tupel.class,
-                        Tupel.class, Type.class,
-                        Tupel.class, Type.class
+                        Type.class,
+                        Type.class
         );
         assertDeepEqual("{(x,y*)*}",
                 MultiStream.class,
                     Tupel.class,
-                        Tupel.class, Type.class,
-                        Tupel.class, Type.class
+                        Type.class,
+                        Type.class
         );
 
-        System.out.println(parser.parse("(name:String*,(Object,List))*"));
+        assertEquals("(name:String*,(Object,List))*", parser.parse("(name:String*,(Object,List))*").toString());
     }
 
     @Test(expected = FlowNotationParserException.class)

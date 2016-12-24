@@ -55,7 +55,7 @@ public class Type implements FlowAction, TupelContainment{
         StringBuilder builder = new StringBuilder();
 
         builder.append(name);
-        if (!name.isEmpty()&&type != null) {
+        if (!name.isEmpty() && type != null && !type.getClassName().isEmpty()) {
             builder.append(":");
         }
         if (type != null) {

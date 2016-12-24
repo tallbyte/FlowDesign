@@ -94,7 +94,7 @@ public class TypeNotationRule extends FlowNotationRuleBase {
 
     @Override
     public FlowAction doBuild() throws IllegalNotationException {
-        return new Tupel(false, new Type(new DataType(type.toString()), name.toString(), repeat));
+        return new Type(new DataType(type.toString()), name.toString(), repeat);
     }
 
 }
