@@ -30,7 +30,7 @@ import com.tallbyte.flowdesign.core.notation.actions.FlowAction;
  */
 public interface FlowNotationRule {
 
-    public boolean handleCharacter(char c) throws IllegalCharacterException, IllegalNotationException;
+    public boolean handleCharacter(char c, int i) throws IllegalCharacterException, IllegalNotationException;
 
     public void insert(FlowNotationRule rule) throws IllegalNotationException;
 

@@ -38,23 +38,23 @@ public class TypeNotationRule extends FlowNotationRuleBase {
     private boolean nameFound = false;
     private StringBuilder name = new StringBuilder();
     private StringBuilder type = new StringBuilder();
-    private TypeNotationRule() {
-        super("[a-zA-Z\\:\\*]");
+    private TypeNotationRule(int i) {
+        super("[a-zA-Z\\:\\*]", i);
     }
 
-    public TypeNotationRule(char c) throws IllegalCharacterException, IllegalNotationException {
-        this();
+    public TypeNotationRule(char c, int i) throws IllegalCharacterException, IllegalNotationException {
+        this(i);
 
         if (!Character.isLetter(c)) {
             throw new IllegalCharacterException("first character if type must be uppercase or lowercase letter");
         }
 
-        handleCharacter(c);
+        handleCharacter(c, i);
     }
 
     @Override
-    public boolean handleCharacter(char c) throws IllegalCharacterException, IllegalNotationException {
-        super.handleCharacter(c);
+    public boolean handleCharacter(char c, int i) throws IllegalCharacterException, IllegalNotationException {
+        super.handleCharacter(c, i);
 
         if (builder.length() == 1 && Character.isUpperCase(c)) {
             nameFound = true;
@@ -94,7 +94,7 @@ public class TypeNotationRule extends FlowNotationRuleBase {
 
     @Override
     public FlowAction doBuild() throws IllegalNotationException {
-        return new Type(new DataType(type.toString()), name.toString(), repeat);
+        return new Type(start, last, new DataType(type.toString()), name.toString(), repeat);
     }
 
 }

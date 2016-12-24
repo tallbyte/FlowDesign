@@ -28,17 +28,21 @@ import java.util.List;
  * Authors:<br/>
  * - julian (2016-12-23)<br/>
  */
-public class Tupel implements FlowAction, TupelContainment {
+public class Tupel extends TupelContainment {
 
     private List<TupelContainment> types;
     private boolean                repeated;
 
-    public Tupel(boolean repeated, List<TupelContainment> types) {
+    public Tupel(int start, int end, boolean repeated, List<TupelContainment> types) {
+        super(start, end);
+
         this.types = types;
         this.repeated = repeated;
     }
 
-    public Tupel(boolean repeated, TupelContainment... types) {
+    public Tupel(int start, int end, boolean repeated, TupelContainment... types) {
+        super(start, end);
+
         this.types = new ArrayList<>();
         for (TupelContainment type : types) {
             this.types.add(type);

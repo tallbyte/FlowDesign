@@ -24,5 +24,21 @@ package com.tallbyte.flowdesign.core.notation.actions;
  * Authors:<br/>
  * - julian (2016-12-23)<br/>
  */
-public interface FlowAction {
+public abstract class FlowAction {
+
+    protected int start;
+    protected int end;
+
+    public FlowAction(int start, int end) {
+        this.start = start;
+        this.end   = end;
+    }
+
+    public int getStart() {
+        return start;
+    }
+
+    public int getEnd() {
+        return end;
+    }
 }

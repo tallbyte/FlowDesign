@@ -33,12 +33,12 @@ public class MultiStreamNotationRule extends FlowNotationRuleBase {
 
     private boolean ended = false;
 
-    private MultiStreamNotationRule() {
-        super("[\\}]");
+    private MultiStreamNotationRule(int i) {
+        super("[\\}]", i);
     }
 
-    public MultiStreamNotationRule(char c) throws IllegalCharacterException, IllegalNotationException {
-        this();
+    public MultiStreamNotationRule(char c, int i) throws IllegalCharacterException, IllegalNotationException {
+        this(i);
 
         if (c != '{') {
             throw new IllegalCharacterException("multistream must start with an open curly braces");
@@ -48,12 +48,12 @@ public class MultiStreamNotationRule extends FlowNotationRuleBase {
     }
 
     @Override
-    public boolean handleCharacter(char c) throws IllegalCharacterException, IllegalNotationException {
+    public boolean handleCharacter(char c, int i) throws IllegalCharacterException, IllegalNotationException {
         if (c == '}') {
             ended = true;
         }
 
-        super.handleCharacter(c);
+        super.handleCharacter(c, i);
 
         return true;
     }
@@ -77,6 +77,6 @@ public class MultiStreamNotationRule extends FlowNotationRuleBase {
             throw new IllegalNotationException("only one containing element allowed");
         }
 
-        return new MultiStream(0, 0, childs.get(0).build());
+        return new MultiStream(start, last, 0, 0, childs.get(0).build());
     }
 }

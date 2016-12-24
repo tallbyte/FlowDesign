@@ -38,9 +38,13 @@ public abstract class FlowNotationRuleBase implements FlowNotationRule {
     protected String                 allowed;
     protected StringBuilder          builder = new StringBuilder();
     protected List<FlowNotationRule> childs  = new ArrayList<>();
+    protected int                    start;
+    protected int                    last;
 
-    public FlowNotationRuleBase(String allowed) {
+    public FlowNotationRuleBase(String allowed, int i) {
         this.allowed = allowed;
+        this.start = i;
+        this.last  = i;
     }
 
     @Override
@@ -57,7 +61,7 @@ public abstract class FlowNotationRuleBase implements FlowNotationRule {
     }
 
     @Override
-    public boolean handleCharacter(char c) throws IllegalCharacterException, IllegalNotationException {
+    public boolean handleCharacter(char c, int i) throws IllegalCharacterException, IllegalNotationException {
         if (compiled != null) {
             throw new IllegalStateException("already compiled");
         }
@@ -67,6 +71,8 @@ public abstract class FlowNotationRuleBase implements FlowNotationRule {
         } else {
             throw new IllegalCharacterException("character "+c+" not allowed here");
         }
+
+        this.last = i;
 
         return false;
     }

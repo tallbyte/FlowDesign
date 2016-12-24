@@ -26,13 +26,14 @@ import com.tallbyte.flowdesign.data.DataType;
  * Authors:<br/>
  * - julian (2016-12-23)<br/>
  */
-public class Type implements FlowAction, TupelContainment{
+public class Type extends TupelContainment{
 
     private DataType type;
     private String   name;
     private boolean  repeated;
 
-    public Type(DataType type, String name, boolean repeated) {
+    public Type(int start, int end, DataType type, String name, boolean repeated) {
+        super(start, end);
         this.type     = type;
         this.name     = name;
         this.repeated = repeated;

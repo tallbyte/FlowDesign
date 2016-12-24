@@ -24,13 +24,14 @@ package com.tallbyte.flowdesign.core.notation.actions;
  * Authors:<br/>
  * - julian (2016-12-23)<br/>
  */
-public class MultiStream implements FlowAction {
+public class MultiStream extends FlowAction {
 
     private int min;
     private int max;
     private FlowAction action;
 
-    public MultiStream(int min, int max, FlowAction action) {
+    public MultiStream(int start, int end, int min, int max, FlowAction action) {
+        super(start, end);
         this.min = min;
         this.max = max;
         this.action = action;

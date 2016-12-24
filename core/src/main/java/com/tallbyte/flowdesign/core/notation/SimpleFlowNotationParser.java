@@ -42,10 +42,10 @@ public class SimpleFlowNotationParser implements FlowNotationParser {
         factories.add(TypeNotationRule::new);
     }
 
-    private FlowNotationRule findRule(char c) throws IllegalNotationException {
+    private FlowNotationRule findRule(char c, int i) throws IllegalNotationException {
         for (FlowNotationRuleFactory factory : factories) {
             try {
-                return factory.create(c);
+                return factory.create(c, i);
             } catch (Exception e) { /*ignore*/ }
         }
 
@@ -80,7 +80,7 @@ public class SimpleFlowNotationParser implements FlowNotationParser {
 
         try {
             // push first
-            stack.push(findRule(string.charAt(0)));
+            stack.push(findRule(string.charAt(0), 0));
 
             for (int i = 1; i < string.length() ; ++i) {
                 char c = string.charAt(i);
@@ -98,14 +98,14 @@ public class SimpleFlowNotationParser implements FlowNotationParser {
                     boolean reapply   = false;
                     try {
                         // try to add a new character to the existing rule
-                        downwards = top.handleCharacter(c);
+                        downwards = top.handleCharacter(c, i);
 
                     } catch (IllegalCharacterException e) {
                         if (top.canHaveChildren()) {
                             // existing rule refuses to use the character, so try to create an embedded rule
                             FlowNotationRule rule = null;
                             try {
-                                rule = findRule(string.charAt(i));
+                                rule = findRule(c, i);
                                 stack.push(rule);
                             } catch (IllegalNotationException ie) {
                                 downwards = true;
@@ -137,7 +137,7 @@ public class SimpleFlowNotationParser implements FlowNotationParser {
 
                         // if an element was ended because of a bad character, the character was still unprocessed
                         if (reapply) {
-                            if (stack.peek().handleCharacter(c)) {
+                            if (stack.peek().handleCharacter(c, i)) {
                                 // now check again if ending is required
                                 if (checkEnd(stack, i, x, y, string)) {
                                     return stack.peek().build();

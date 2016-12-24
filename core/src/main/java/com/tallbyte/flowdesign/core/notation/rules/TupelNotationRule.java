@@ -40,12 +40,12 @@ public class TupelNotationRule extends FlowNotationRuleBase {
     private boolean ended = false;
     private boolean added = false;
 
-    private TupelNotationRule() {
-        super("[\\,\\)\\*]");
+    private TupelNotationRule(int i) {
+        super("[\\,\\)\\*]", i);
     }
 
-    public TupelNotationRule(char c) throws IllegalCharacterException, IllegalNotationException {
-        this();
+    public TupelNotationRule(char c, int i) throws IllegalCharacterException, IllegalNotationException {
+        this(i);
 
         if (c != '(') {
             throw new IllegalCharacterException("tupel must start with an open parenthesis");
@@ -55,7 +55,7 @@ public class TupelNotationRule extends FlowNotationRuleBase {
     }
 
     @Override
-    public boolean handleCharacter(char c) throws IllegalCharacterException, IllegalNotationException {
+    public boolean handleCharacter(char c, int i) throws IllegalCharacterException, IllegalNotationException {
         if (!ended && c == ')') {
             ended = true;
         } else if (ended && c != '*') {
@@ -70,7 +70,7 @@ public class TupelNotationRule extends FlowNotationRuleBase {
             throw new IllegalNotationException("tupel content should be separated by comma");
         }
 
-        super.handleCharacter(c);
+        super.handleCharacter(c, i);
 
         if (c == '*') {
             repeat = true;
@@ -106,6 +106,6 @@ public class TupelNotationRule extends FlowNotationRuleBase {
             list.add((TupelContainment) rule.build());
         }
 
-        return new Tupel(repeat, list);
+        return new Tupel(start, last, repeat, list);
     }
 }

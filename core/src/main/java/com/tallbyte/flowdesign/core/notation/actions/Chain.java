@@ -22,11 +22,11 @@ package com.tallbyte.flowdesign.core.notation.actions;
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-12-23)<br/>
+ * - julian (2016-12-24)<br/>
  */
-public abstract class TupelContainment extends FlowAction {
+public class Chain extends FlowAction {
 
-    public TupelContainment(int start, int end) {
+    public Chain(int start, int end) {
         super(start, end);
     }
 
