@@ -33,7 +33,7 @@ public class End extends FlowDiagramElement {
      * Creats an new {@link End}.
      */
     public End() {
-        addJoint(new FlowJoint(this, JointType.INPUT, 0));
+        addJoint(new FlowJoint(this, JointType.INPUT, 1, 0));
         setText("");
     }
 

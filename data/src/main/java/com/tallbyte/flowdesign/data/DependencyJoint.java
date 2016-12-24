@@ -30,11 +30,13 @@ public class DependencyJoint extends Joint {
      *
      * @param element  the containing {@link Element}
      * @param type     the type
+     * @param maxIn   the maximum amount of incoming
+     *                 connections or 0 for infinite
      * @param maxOut   the maximum amount of outgoing
      *                 connections or 0 for infinite
      */
-    public DependencyJoint(Element element, JointType type, int maxOut) {
-        super(element, type, maxOut);
+    public DependencyJoint(Element element, JointType type, int maxIn, int maxOut) {
+        super(element, type, maxIn, maxOut);
     }
 
     @Override

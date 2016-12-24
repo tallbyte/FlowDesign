@@ -41,6 +41,7 @@ public abstract class Joint {
     private final List<Connection>              incoming = new ArrayList<>();
 
     private final JointType                     type;
+    private final int                           maxIn;
     private final int                           maxOut;
 
     protected PropertyChangeSupport changeSupport;
@@ -55,10 +56,12 @@ public abstract class Joint {
      */
     public Joint(Element element,
                  JointType type,
+                 int maxIn,
                  int maxOut) {
 
         this.element  = element;
         this.type     = type;
+        this.maxIn    = maxIn;
         this.maxOut   = maxOut;
 
         changeSupport = new PropertyChangeSupport(this);
@@ -98,6 +101,7 @@ public abstract class Joint {
      */
     public boolean canJoin(Joint target) {
         return (outgoing.size() < maxOut || maxOut == 0)
+                && (target.incoming.size() < target.maxIn || target.maxIn == 0)
                 && target.getElement() != getElement()
                 && (
                         (type == JointType.INPUT_OUTPUT && target.type == JointType.INPUT_OUTPUT)

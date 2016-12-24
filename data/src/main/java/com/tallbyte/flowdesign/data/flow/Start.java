@@ -35,7 +35,7 @@ public class Start extends FlowDiagramElement {
      * Creats an new {@link Start}.
      */
     public Start() {
-        addJoint(new FlowJoint(this, JointType.OUTPUT, 0));
+        addJoint(new FlowJoint(this, JointType.OUTPUT, 0, 1));
         setText("");
     }
 

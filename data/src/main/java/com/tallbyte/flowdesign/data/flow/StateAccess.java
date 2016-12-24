@@ -34,10 +34,10 @@ public class StateAccess extends OperationalUnit {
      * Creats an new {@link StateAccess}.
      */
     public StateAccess() {
-        addJoint(new FlowJoint(this, JointType.INPUT, 1));
-        addJoint(new FlowJoint(this, JointType.OUTPUT, 1));
-        addJoint(new DependencyJoint(this, JointType.INPUT , 0));
-        addJoint(new DependencyJoint(this, JointType.OUTPUT, 0));
+        addJoint(new FlowJoint(this, JointType.INPUT, 1, 0));
+        addJoint(new FlowJoint(this, JointType.OUTPUT, 0, 1));
+        addJoint(new DependencyJoint(this, JointType.INPUT , 1, 0));
+        addJoint(new DependencyJoint(this, JointType.OUTPUT, 0, 1));
     }
 
 }

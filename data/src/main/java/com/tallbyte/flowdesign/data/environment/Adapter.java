@@ -35,11 +35,11 @@ public class Adapter extends EnvironmentDiagramElement {
      * Create a new {@link Adapter}.
      */
     public Adapter() {
-        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0));
-        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0));
+        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0, 0));
+        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0, 0));
 
-        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0));
-        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0));
+        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0, 0));
+        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0, 0));
     }
 
 }

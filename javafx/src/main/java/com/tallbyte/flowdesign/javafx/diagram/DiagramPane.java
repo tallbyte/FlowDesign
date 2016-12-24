@@ -164,7 +164,7 @@ public class DiagramPane extends ScrollPane {
         this.diagramsPane   = pane;
         this.diagramManager = diagramManager;
         Group group = new Group();
-        group.getChildren().addAll(groupContent, groupConnections, groupMarker);
+        group.getChildren().addAll(groupConnections, groupContent, groupMarker);
 
         setContent(group);
         setPannable(true);

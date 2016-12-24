@@ -36,11 +36,11 @@ public class System extends EnvironmentDiagramElement {
      * Create a new {@link System}.
      */
     public System() {
-        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0));
-        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0));
+        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0, 0));
+        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0, 0));
 
-        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0));
-        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0));
+        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0, 0));
+        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0, 0));
     }
 
 }

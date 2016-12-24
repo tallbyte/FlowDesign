@@ -35,9 +35,9 @@ public class Join extends FlowDiagramElement {
      * Creats an new {@link Join}.
      */
     public Join() {
-        addJoint(new FlowJoint(this, JointType.INPUT, 1));
-        addJoint(new FlowJoint(this, JointType.INPUT, 1));
-        addJoint(new FlowJoint(this, JointType.OUTPUT, 0));
+        addJoint(new FlowJoint(this, JointType.INPUT, 1, 0));
+        addJoint(new FlowJoint(this, JointType.INPUT, 1, 0));
+        addJoint(new FlowJoint(this, JointType.OUTPUT, 0, 1));
     }
 
 }

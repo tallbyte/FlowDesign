@@ -37,8 +37,8 @@ public class Actor extends EnvironmentDiagramElement {
      * Creats an new {@link Actor}.
      */
     public Actor() {
-        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0));
-        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0));
+        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0, 0));
+        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0, 0));
     }
 
 }

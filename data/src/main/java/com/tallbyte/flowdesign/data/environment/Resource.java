@@ -35,11 +35,11 @@ public class Resource extends EnvironmentDiagramElement {
      * Create a new {@link Resource}.
      */
     public Resource() {
-        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0));
-        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0));
+        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0, 0));
+        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0, 0));
 
-        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0));
-        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0));
+        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0, 0));
+        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0, 0));
     }
 
 }
