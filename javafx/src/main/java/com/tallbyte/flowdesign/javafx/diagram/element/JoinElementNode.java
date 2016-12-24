@@ -47,7 +47,7 @@ public class JoinElementNode extends ElementNode {
         super.setup();
 
 
-        addJointsAcrossRectangleCentered(new JointGroup(join, FlowJoint.class, true, false, 0.5, 0.5), false, 0.5);
+        addJointsAcrossRectangleCentered(new JointGroup(join, FlowJoint.class, true, false, 0.5, 0.8), false, 0.5);
         //addJointsAcrossRectangleCentered(new JointGroup(join, FlowJoint.class, false, true, 0, 0.5), false, 0.5);
 
         /*JointNode input0 = addJoint(join.getJoint(Join.JOINT_INPUT0));

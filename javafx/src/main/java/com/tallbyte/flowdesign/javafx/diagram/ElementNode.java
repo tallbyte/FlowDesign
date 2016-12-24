@@ -422,8 +422,8 @@ public class ElementNode extends Pane implements SelectableNode {
             double main  = g.getOffset();
             double range = g.getRange();
 
-            if (group.getNodes().size() > 1) {
-                range /= (group.getNodes().size()-1);
+            if (group.getNodes().size() >= 1) {
+                range /= (group.getNodes().size());
             }
 
             for (JointNode node : g.getNodes()) {
@@ -442,17 +442,16 @@ public class ElementNode extends Pane implements SelectableNode {
             double range = g.getRange();
 
             if (group.getNodes().size() > 1) {
-                range /= (group.getNodes().size()-1);
+                range /= (group.getNodes().size() -1);
+                main -= g.getRange() / 2;
             }
 
-            int i = 1;
             for (JointNode node : g.getNodes()) {
-                double dir    = ((i % 2)*2-1);
-                double cMain = main+(i / 2)*range*dir;
+                final double cMain = main;
 
                 setNodeForRectangle(node, horizontal, cMain, sec);
 
-                ++i;
+                main += range;
             }
         });
     }
@@ -493,12 +492,8 @@ public class ElementNode extends Pane implements SelectableNode {
                 range /= (group.getNodes().size());
             }
 
-            System.out.println(g.getNodes());
-
             for (JointNode node : g.getNodes()) {
                 final double cAngle = angle;
-
-                System.out.println(cAngle);
 
                 node.centerXProperty().bind(Bindings.createDoubleBinding(()
                                 -> realWidth.get()/2+Math.cos(Math.toRadians(cAngle))*(realWidth.get()/2),
@@ -516,15 +511,16 @@ public class ElementNode extends Pane implements SelectableNode {
 
     protected void addJointsAcrossCircleCentered(JointGroup group) {
         group.setLayoutHandler(g -> {
-            double angle = g.getOffset()*360;
-            double range = g.getRange()*360 / 2;
+            double main  = g.getOffset();
+            double range = g.getRange();
 
+            if (group.getNodes().size() > 1) {
+                range /= (group.getNodes().size() -1);
+                main -= g.getRange() / 2;
+            }
 
-
-            int i = 1;
             for (JointNode node : g.getNodes()) {
-                double dir    = ((i % 2)*2-1);
-                double cAngle = angle+(i / 2)*range*dir;
+                final double cAngle = main*360;
 
                 node.centerXProperty().bind(Bindings.createDoubleBinding(()
                         -> realWidth.get()/2+Math.cos(Math.toRadians(cAngle))*(realWidth.get()/2),
@@ -534,7 +530,8 @@ public class ElementNode extends Pane implements SelectableNode {
                                 -> realHeight.get()/2+Math.sin(Math.toRadians(cAngle))*(realHeight.get()/2),
                         realHeight)
                 );
-                ++i;
+
+                main += range;
             }
         });
     }
