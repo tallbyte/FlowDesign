@@ -459,7 +459,11 @@ public class DiagramPane extends ScrollPane {
                         diagramManager.removeElement(getDiagram(), ((ElementNode) node).getElement());
 
                     } else if (node instanceof ConnectionNode) {
-                        ((ConnectionNode) node).getConnection().getTarget().disjoin();
+                        try {
+                            ((ConnectionNode) node).getConnection().getSource().disjoin(((ConnectionNode) node).getConnection().getTarget());
+                        } catch (JointJoinException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }

@@ -37,8 +37,8 @@ public abstract class Joint {
 
     private final Element                       element;
 
-    private final List<Joint>                   outgoing = new ArrayList<>();
-    private       Joint                         incoming;
+    private final List<Connection>              outgoing = new ArrayList<>();
+    private final List<Connection>              incoming = new ArrayList<>();
 
     private final JointType                     type;
     private final int                           maxOut;
@@ -70,14 +70,6 @@ public abstract class Joint {
      */
     public Element getElement() {
         return element;
-    }
-
-    /**
-     * Gets the incoming {@link Joint}.
-     * @return Returns the {@link Joint} or null if none is set.
-     */
-    public Joint getIncoming() {
-        return incoming;
     }
 
     /**
@@ -114,23 +106,11 @@ public abstract class Joint {
     }
 
     /**
-     * Checks whether this {@link Joint} can be connected to the given one, assuming the given one is the source.
-     * For internal use only.
-     * @param source the source {@link Joint}
-     * @throws JointJoinException if no connection can be made.
-     */
-    private void checkJoint(Joint source) throws JointJoinException {
-        if (this.incoming != null) {
-            throw new JointJoinException("can not join " + this + " and " + source + ": target already joined");
-        }
-    }
-
-    /**
      * Internal notify method.
-     * @param source the source {@link Joint}
+     * @param connection the connection
      */
-    private void notifyJoin(Joint source) {
-        this.incoming = source;
+    private void notifyJoin(Connection connection) {
+        incoming.add(connection);
     }
 
     /**
@@ -162,11 +142,15 @@ public abstract class Joint {
 
         Connection connection = createConnection(target);
 
-        target.checkJoint(this);
+        for (Connection c : outgoing) {
+            if (c.getTarget() == target) {
+                throw new JointJoinException("can not join " + this + " and " + target + ": target already joined");
+            }
+        }
 
         if (element.getDiagram().addConnection(connection)) {
-            target.notifyJoin(this);
-            outgoing.add(target);
+            target.notifyJoin(connection);
+            outgoing.add(connection);
             return connection;
         } else {
             throw new JointJoinException("can not join " + target + " and " + this + ": already joined");
@@ -175,20 +159,32 @@ public abstract class Joint {
 
     /**
      * Internal notify method.
-     * @param target the target {@link Joint}
+     * @param connection the connection
      */
-    private void notifyDisjoin(Joint target) {
-        outgoing.remove(target);
+    private void notifyDisjoin(Connection connection) {
+        incoming.remove(connection);
     }
 
     /**
      * Removes the incoming connection if none is present.
      */
-    public void disjoin() {
-        if (incoming != null) {
-            element.getDiagram().removeConnection(new Connection(incoming, this));
-            incoming.notifyDisjoin(this);
-            incoming = null;
+    public void disjoin(Joint target) throws JointJoinException {
+        Connection connection = null;
+
+        for (Connection c : outgoing) {
+            if (c.getTarget() == target) {
+                connection = c;
+                break;
+            }
+        }
+
+        if (connection != null) {
+            outgoing.remove(connection);
+            target.notifyDisjoin(connection);
+            element.getDiagram().removeConnection(connection);
+
+        } else {
+            throw new JointJoinException("can not disjoin " + this + " and " + target + ": not connected");
         }
     }
 

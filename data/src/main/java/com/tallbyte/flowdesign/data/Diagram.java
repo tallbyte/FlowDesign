@@ -153,7 +153,11 @@ public abstract class Diagram<E extends Element> {
         }
 
         for (Connection connection : remove) {
-            connection.getTarget().disjoin();
+            try {
+                connection.getSource().disjoin(connection.getTarget());
+            } catch (JointJoinException e) {
+                e.printStackTrace();
+            }
         }
 
         this.elements.remove(element);

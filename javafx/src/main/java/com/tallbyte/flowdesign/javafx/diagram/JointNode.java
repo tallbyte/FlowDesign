@@ -78,8 +78,6 @@ public class JointNode extends Circle {
             if (source != null && source != joint) {
                 try {
                     if (source.join(joint) != null) {
-                        System.out.println(source);
-                        System.out.println(joint);
                     }
                 } catch (JointJoinException e) {
                     // this should never happen
