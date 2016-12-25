@@ -44,7 +44,7 @@ public class AdapterElementNode extends ElementNode {
     protected void setup() {
         super.setup();
 
-        addJointsAcrossCircleCentered(new JointGroupHandler(adapter.getJointGroup(), 0, 1));
+        addJointsAcrossCircle(new JointGroupHandler(adapter.getJointGroup(), 0, 1));
 
         /*JointNode left = addJoint(adapter.getJoint(Adapter.JOINT_LEFT));
         left.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
