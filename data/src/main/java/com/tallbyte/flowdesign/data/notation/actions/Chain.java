@@ -16,26 +16,28 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core.notation.rules;
-
-import com.tallbyte.flowdesign.core.notation.IllegalCharacterException;
-import com.tallbyte.flowdesign.core.notation.IllegalNotationException;
-import com.tallbyte.flowdesign.core.notation.actions.FlowAction;
+package com.tallbyte.flowdesign.data.notation.actions;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-12-23)<br/>
+ * - julian (2016-12-24)<br/>
  */
-public interface FlowNotationRule {
+public class Chain extends FlowAction {
 
-    public boolean handleCharacter(char c, int i) throws IllegalCharacterException, IllegalNotationException;
+    protected FlowAction first;
+    protected FlowAction second;
 
-    public void insert(FlowNotationRule rule) throws IllegalNotationException;
+    public Chain(int start, int end, FlowAction first, FlowAction second) {
+        super(start, end);
+    }
 
-    public boolean canHaveChildren();
+    public FlowAction getFirst() {
+        return first;
+    }
 
-    public FlowAction build() throws IllegalNotationException;
-
+    public FlowAction getSecond() {
+        return second;
+    }
 }

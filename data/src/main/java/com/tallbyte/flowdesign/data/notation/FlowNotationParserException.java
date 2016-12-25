@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core.notation;
+package com.tallbyte.flowdesign.data.notation;
 
 /**
  * This file is part of project flowDesign.

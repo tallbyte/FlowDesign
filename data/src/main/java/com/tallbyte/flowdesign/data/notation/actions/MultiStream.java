@@ -16,9 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core.notation.actions;
-
-import com.tallbyte.flowdesign.data.DataType;
+package com.tallbyte.flowdesign.data.notation.actions;
 
 /**
  * This file is part of project flowDesign.
@@ -26,45 +24,40 @@ import com.tallbyte.flowdesign.data.DataType;
  * Authors:<br/>
  * - julian (2016-12-23)<br/>
  */
-public class Type extends TupelContainment{
+public class MultiStream extends FlowAction {
 
-    private DataType type;
-    private String   name;
-    private boolean  repeated;
+    private int min;
+    private int max;
+    private FlowAction action;
 
-    public Type(int start, int end, DataType type, String name, boolean repeated) {
+    public MultiStream(int start, int end, int min, int max, FlowAction action) {
         super(start, end);
-        this.type     = type;
-        this.name     = name;
-        this.repeated = repeated;
+        this.min = min;
+        this.max = max;
+        this.action = action;
     }
 
-    public DataType getType() {
-        return type;
+    public int getMin() {
+        return min;
     }
 
-    public String getName() {
-        return name;
+    public int getMax() {
+        return max;
     }
 
-    public boolean isRepeated() {
-        return repeated;
+    public FlowAction getAction() {
+        return action;
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
 
-        builder.append(name);
-        if (!name.isEmpty() && type != null && !type.getClassName().isEmpty()) {
-            builder.append(":");
+        builder.append("{");
+        if (action != null) {
+            builder.append(action.toString());
         }
-        if (type != null) {
-            builder.append(type.getClassName());
-        }
-        if (repeated) {
-            builder.append("*");
-        }
+        builder.append("}");
 
         return builder.toString();
     }

@@ -16,10 +16,10 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core.notation;
+package com.tallbyte.flowdesign.data.notation;
 
-import com.tallbyte.flowdesign.core.notation.actions.FlowAction;
-import com.tallbyte.flowdesign.core.notation.rules.*;
+import com.tallbyte.flowdesign.data.notation.actions.FlowAction;
+import com.tallbyte.flowdesign.data.notation.rules.*;
 
 import java.util.ArrayList;
 import java.util.EmptyStackException;

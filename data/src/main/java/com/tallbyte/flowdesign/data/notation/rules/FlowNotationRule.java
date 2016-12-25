@@ -16,7 +16,11 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core.notation;
+package com.tallbyte.flowdesign.data.notation.rules;
+
+import com.tallbyte.flowdesign.data.notation.IllegalCharacterException;
+import com.tallbyte.flowdesign.data.notation.IllegalNotationException;
+import com.tallbyte.flowdesign.data.notation.actions.FlowAction;
 
 /**
  * This file is part of project flowDesign.
@@ -24,24 +28,14 @@ package com.tallbyte.flowdesign.core.notation;
  * Authors:<br/>
  * - julian (2016-12-23)<br/>
  */
-public class IllegalCharacterException extends Exception {
+public interface FlowNotationRule {
 
-    public IllegalCharacterException() {
-    }
+    public boolean handleCharacter(char c, int i) throws IllegalCharacterException, IllegalNotationException;
 
-    public IllegalCharacterException(String message) {
-        super(message);
-    }
+    public void insert(FlowNotationRule rule) throws IllegalNotationException;
 
-    public IllegalCharacterException(String message, Throwable cause) {
-        super(message, cause);
-    }
+    public boolean canHaveChildren();
 
-    public IllegalCharacterException(Throwable cause) {
-        super(cause);
-    }
+    public FlowAction build() throws IllegalNotationException;
 
-    public IllegalCharacterException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
 }

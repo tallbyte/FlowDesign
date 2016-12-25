@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core.notation;
+package com.tallbyte.flowdesign.data.notation.actions;
 
 /**
  * This file is part of project flowDesign.
@@ -24,24 +24,21 @@ package com.tallbyte.flowdesign.core.notation;
  * Authors:<br/>
  * - julian (2016-12-23)<br/>
  */
-public class IllegalNotationException extends Exception {
+public abstract class FlowAction {
 
-    public IllegalNotationException() {
+    protected int start;
+    protected int end;
+
+    public FlowAction(int start, int end) {
+        this.start = start;
+        this.end   = end;
     }
 
-    public IllegalNotationException(String message) {
-        super(message);
+    public int getStart() {
+        return start;
     }
 
-    public IllegalNotationException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public IllegalNotationException(Throwable cause) {
-        super(cause);
-    }
-
-    public IllegalNotationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    public int getEnd() {
+        return end;
     }
 }

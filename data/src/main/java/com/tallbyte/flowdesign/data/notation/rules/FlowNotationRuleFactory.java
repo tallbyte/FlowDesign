@@ -16,9 +16,10 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core.notation;
+package com.tallbyte.flowdesign.data.notation.rules;
 
-import com.tallbyte.flowdesign.core.notation.actions.FlowAction;
+import com.tallbyte.flowdesign.data.notation.IllegalCharacterException;
+import com.tallbyte.flowdesign.data.notation.IllegalNotationException;
 
 /**
  * This file is part of project flowDesign.
@@ -26,8 +27,8 @@ import com.tallbyte.flowdesign.core.notation.actions.FlowAction;
  * Authors:<br/>
  * - julian (2016-12-23)<br/>
  */
-public interface FlowNotationParser {
+public interface FlowNotationRuleFactory {
 
-    public FlowAction parse(String string) throws FlowNotationParserException;
+    public FlowNotationRule create(char c, int i) throws IllegalNotationException, IllegalCharacterException;
 
 }

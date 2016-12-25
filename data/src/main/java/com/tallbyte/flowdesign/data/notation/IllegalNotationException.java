@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core.notation.actions;
+package com.tallbyte.flowdesign.data.notation;
 
 /**
  * This file is part of project flowDesign.
@@ -24,10 +24,24 @@ package com.tallbyte.flowdesign.core.notation.actions;
  * Authors:<br/>
  * - julian (2016-12-23)<br/>
  */
-public abstract class TupelContainment extends FlowAction {
+public class IllegalNotationException extends Exception {
 
-    public TupelContainment(int start, int end) {
-        super(start, end);
+    public IllegalNotationException() {
     }
 
+    public IllegalNotationException(String message) {
+        super(message);
+    }
+
+    public IllegalNotationException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public IllegalNotationException(Throwable cause) {
+        super(cause);
+    }
+
+    public IllegalNotationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 }

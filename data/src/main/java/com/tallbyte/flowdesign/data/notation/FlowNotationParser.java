@@ -16,7 +16,9 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core.notation.actions;
+package com.tallbyte.flowdesign.data.notation;
+
+import com.tallbyte.flowdesign.data.notation.actions.FlowAction;
 
 /**
  * This file is part of project flowDesign.
@@ -24,21 +26,8 @@ package com.tallbyte.flowdesign.core.notation.actions;
  * Authors:<br/>
  * - julian (2016-12-23)<br/>
  */
-public abstract class FlowAction {
+public interface FlowNotationParser {
 
-    protected int start;
-    protected int end;
+    public FlowAction parse(String string) throws FlowNotationParserException;
 
-    public FlowAction(int start, int end) {
-        this.start = start;
-        this.end   = end;
-    }
-
-    public int getStart() {
-        return start;
-    }
-
-    public int getEnd() {
-        return end;
-    }
 }

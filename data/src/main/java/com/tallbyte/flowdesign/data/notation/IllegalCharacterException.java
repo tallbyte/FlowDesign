@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core.notation.actions;
+package com.tallbyte.flowdesign.data.notation;
 
 /**
  * This file is part of project flowDesign.
@@ -24,41 +24,24 @@ package com.tallbyte.flowdesign.core.notation.actions;
  * Authors:<br/>
  * - julian (2016-12-23)<br/>
  */
-public class MultiStream extends FlowAction {
+public class IllegalCharacterException extends Exception {
 
-    private int min;
-    private int max;
-    private FlowAction action;
-
-    public MultiStream(int start, int end, int min, int max, FlowAction action) {
-        super(start, end);
-        this.min = min;
-        this.max = max;
-        this.action = action;
+    public IllegalCharacterException() {
     }
 
-    public int getMin() {
-        return min;
+    public IllegalCharacterException(String message) {
+        super(message);
     }
 
-    public int getMax() {
-        return max;
+    public IllegalCharacterException(String message, Throwable cause) {
+        super(message, cause);
     }
 
-    public FlowAction getAction() {
-        return action;
+    public IllegalCharacterException(Throwable cause) {
+        super(cause);
     }
 
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-
-        builder.append("{");
-        if (action != null) {
-            builder.append(action.toString());
-        }
-        builder.append("}");
-
-        return builder.toString();
+    public IllegalCharacterException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

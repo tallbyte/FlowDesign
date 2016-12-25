@@ -16,28 +16,18 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core.notation.actions;
+package com.tallbyte.flowdesign.data.notation.actions;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-12-24)<br/>
+ * - julian (2016-12-23)<br/>
  */
-public class Chain extends FlowAction {
+public abstract class TupelContainment extends FlowAction {
 
-    protected FlowAction first;
-    protected FlowAction second;
-
-    public Chain(int start, int end, FlowAction first, FlowAction second) {
+    public TupelContainment(int start, int end) {
         super(start, end);
     }
 
-    public FlowAction getFirst() {
-        return first;
-    }
-
-    public FlowAction getSecond() {
-        return second;
-    }
 }

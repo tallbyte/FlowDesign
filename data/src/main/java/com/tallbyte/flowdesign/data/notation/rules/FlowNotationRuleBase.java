@@ -16,11 +16,11 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core.notation.rules;
+package com.tallbyte.flowdesign.data.notation.rules;
 
-import com.tallbyte.flowdesign.core.notation.IllegalCharacterException;
-import com.tallbyte.flowdesign.core.notation.IllegalNotationException;
-import com.tallbyte.flowdesign.core.notation.actions.FlowAction;
+import com.tallbyte.flowdesign.data.notation.IllegalCharacterException;
+import com.tallbyte.flowdesign.data.notation.IllegalNotationException;
+import com.tallbyte.flowdesign.data.notation.actions.FlowAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
  */
 public abstract class FlowNotationRuleBase implements FlowNotationRule {
 
-    protected FlowAction             compiled = null;
+    protected FlowAction compiled = null;
     protected String                 allowed;
     protected StringBuilder          builder = new StringBuilder();
     protected List<FlowNotationRule> childs  = new ArrayList<>();

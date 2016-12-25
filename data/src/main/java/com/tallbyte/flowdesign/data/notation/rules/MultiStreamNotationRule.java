@@ -16,12 +16,12 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core.notation.rules;
+package com.tallbyte.flowdesign.data.notation.rules;
 
-import com.tallbyte.flowdesign.core.notation.IllegalCharacterException;
-import com.tallbyte.flowdesign.core.notation.IllegalNotationException;
-import com.tallbyte.flowdesign.core.notation.actions.FlowAction;
-import com.tallbyte.flowdesign.core.notation.actions.MultiStream;
+import com.tallbyte.flowdesign.data.notation.IllegalCharacterException;
+import com.tallbyte.flowdesign.data.notation.IllegalNotationException;
+import com.tallbyte.flowdesign.data.notation.actions.FlowAction;
+import com.tallbyte.flowdesign.data.notation.actions.MultiStream;
 
 /**
  * This file is part of project flowDesign.

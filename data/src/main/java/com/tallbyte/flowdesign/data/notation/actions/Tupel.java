@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.core.notation.actions;
+package com.tallbyte.flowdesign.data.notation.actions;
 
 import java.util.ArrayList;
 import java.util.Collections;

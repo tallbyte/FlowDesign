@@ -18,14 +18,13 @@
 
 package com.tallbyte.flowdesign.core;
 
-import com.tallbyte.flowdesign.core.notation.FlowNotationParser;
-import com.tallbyte.flowdesign.core.notation.FlowNotationParserException;
-import com.tallbyte.flowdesign.core.notation.SimpleFlowNotationParser;
-import com.tallbyte.flowdesign.core.notation.actions.FlowAction;
-import com.tallbyte.flowdesign.core.notation.actions.MultiStream;
-import com.tallbyte.flowdesign.core.notation.actions.Tupel;
-import com.tallbyte.flowdesign.core.notation.actions.Type;
-import junit.framework.TestCase;
+import com.tallbyte.flowdesign.data.notation.FlowNotationParser;
+import com.tallbyte.flowdesign.data.notation.FlowNotationParserException;
+import com.tallbyte.flowdesign.data.notation.SimpleFlowNotationParser;
+import com.tallbyte.flowdesign.data.notation.actions.FlowAction;
+import com.tallbyte.flowdesign.data.notation.actions.MultiStream;
+import com.tallbyte.flowdesign.data.notation.actions.Tupel;
+import com.tallbyte.flowdesign.data.notation.actions.Type;
 import org.junit.Test;
 
 import java.util.Stack;
