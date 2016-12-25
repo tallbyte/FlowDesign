@@ -36,8 +36,8 @@ import java.util.stream.Collectors;
  */
 public abstract class Element {
 
-    protected                                   Diagram      diagram;
-    protected final Map<Class<? extends Joint>, List<Joint>> joints = new HashMap<>();
+    protected Diagram                    diagram;
+    protected Map<String, JointGroup<?>> jointGroups;
 
     protected String text       = "Label";
     protected String color      = null;
@@ -47,45 +47,23 @@ public abstract class Element {
     protected double height     = 75;
     protected boolean deletable = true;
 
-    protected List<JointsChangedListener> listenersJoints = new ArrayList<>();
     protected PropertyChangeSupport       changeSupport;
 
     /**
-     * Creats a new {@link Element} with a given set of {@link Joint}s.
+     * Creates a new {@link Element}.
      */
     public Element() {
         changeSupport = new PropertyChangeSupport(this);
+
+        HashMap<String, JointGroup<?>> map = new HashMap<>();
+        for (JointGroup group : createJointGroups()) {
+            map.put(group.getName(), group);
+        }
+        this.jointGroups = Collections.unmodifiableMap(map);
     }
 
-    /**
-     * Adds a {@link Joint}.
-     * @param joint the {@link Joint} to add
-     */
-    protected void addJoint(Joint joint) {
-        List<Joint> list = joints.get(joint.getClass());
-
-        if (list == null) {
-            list = new ArrayList<>();
-            joints.put(joint.getClass(), list);
-        }
-
-        list.add(joint);
-    }
-
-    /**
-     * Removes a {@link Joint}.
-     * @param joint the {@link Joint} to remove
-     */
-    protected void removeJoint(Joint joint) {
-        List<Joint> list = joints.get(joint.getClass());
-
-        if (list != null) {
-            list.remove(joint);
-            if (list.size() == 0) {
-                joints.remove(joint.getClass());
-            }
-
-        }
+    protected Iterable<JointGroup<?>> createJointGroups() {
+        return new ArrayList<>();
     }
 
     /**
@@ -233,68 +211,20 @@ public abstract class Element {
     }
 
     /**
-     * Gets the registered {@link Joint}s. The returned list is unmodifiable.
-     * @param clazz the type of {@link Joint}s
-     * @return Returns an {@link Iterable} containing the {@link Joint}s.
+     * Gets all available {@link JointGroup}s names.
+     * @return Returns the names
      */
-    public Iterable<Joint> getJoints(Class<? extends Joint> clazz) {
-        return Collections.unmodifiableList(joints.get(clazz));
+    public Iterable<String> getJointGroups() {
+        return jointGroups.keySet();
     }
 
     /**
-     * Gets the registered {@link Joint}s. The returned list is unmodifiable.
-     * Only input joints are returned.
-     * @param clazz the type of {@link Joint}s
-     * @return Returns an {@link Iterable} containing the {@link Joint}s.
+     * Gets a {@link JointGroup} registered for a certain name.
+     * @param name the name
+     * @return Returns the group or null if none was found.
      */
-    public Iterable<Joint> getInputJoints(Class<? extends Joint> clazz) {
-        return Collections.unmodifiableList(joints.get(clazz).stream().filter(Joint::isInput).collect(Collectors.toList()));
-    }
-
-    /**
-     * Gets the registered {@link Joint}s. The returned list is unmodifiable.
-     * Only output joints are returned.
-     * @param clazz the type of {@link Joint}s
-     * @return Returns an {@link Iterable} containing the {@link Joint}s.
-     */
-    public Iterable<Joint> getOutputJoints(Class<? extends Joint> clazz) {
-        return Collections.unmodifiableList(joints.get(clazz).stream().filter(Joint::isOutput).collect(Collectors.toList()));
-    }
-
-    /**
-     * Gets the registered {@link Joint}s. The returned list is unmodifiable.
-     * @param clazz the type of {@link Joint}s
-     * @param in is the requested joint input?
-     * @param out is the requested joint output?
-     * @param index the index of the node
-     * @return Returns an {@link Iterable} containing the {@link Joint}s.
-     */
-    public Joint getJoints(Class<? extends Joint> clazz, boolean in, boolean out, int index) {
-        int i = 0;
-        for (Joint joint : Collections.unmodifiableList(joints.get(clazz))) {
-            if ((in == joint.isInput()) && (out == joint.isOutput()) && index == i) {
-                return joint;
-            }
-            ++i;
-        }
-
-        throw new JointNotFoundException("");
-    }
-
-    /**
-     * Registers an {@link JointsChangedListener}.
-     * @param listener the {@link JointsChangedListener} to register
-     */
-    public void addJointsChangedListener(JointsChangedListener listener) {
-        listenersJoints.add(listener);
-    }
-
-    /**
-     * Unregisters an {@link JointsChangedListener}.
-     * @param listener the {@link JointsChangedListener} to unregister
-     */
-    public void removeJointsChangedListener(JointsChangedListener listener) {
-        listenersJoints.remove(listener);
+    public JointGroup getJointGroup(String name) {
+        return jointGroups.get(name);
     }
 
     /**

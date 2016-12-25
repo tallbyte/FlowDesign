@@ -18,9 +18,9 @@
 
 package com.tallbyte.flowdesign.data.environment;
 
-import com.tallbyte.flowdesign.data.DependencyJoint;
-import com.tallbyte.flowdesign.data.Joint;
-import com.tallbyte.flowdesign.data.JointType;
+import com.tallbyte.flowdesign.data.*;
+
+import java.util.ArrayList;
 
 /**
  * This file is part of project flowDesign.
@@ -33,12 +33,22 @@ import com.tallbyte.flowdesign.data.JointType;
  */
 public class Actor extends EnvironmentDiagramElement {
 
+    public static final String JOINT_GROUP = "io";
+
     /**
      * Creats an new {@link Actor}.
      */
     public Actor() {
-        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0, 0));
-        addJoint(new DependencyJoint(this, JointType.INPUT_OUTPUT, 0, 0));
     }
 
+    @Override
+    protected Iterable<JointGroup<?>> createJointGroups() {
+        return new ArrayList<JointGroup<?>>() {{
+            add(new JointGroup<>(Actor.this, JOINT_GROUP , 2, 2, element -> new DependencyJoint(element, JointType.INPUT_OUTPUT, 0, 0), 2));
+        }};
+    }
+
+    public JointGroup<?> getJointGroup() {
+        return getJointGroup(JOINT_GROUP);
+    }
 }

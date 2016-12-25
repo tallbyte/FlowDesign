@@ -18,6 +18,9 @@
 
 package com.tallbyte.flowdesign.data;
 
+import com.tallbyte.flowdesign.data.notation.FlowNotationParser;
+import com.tallbyte.flowdesign.data.notation.SimpleFlowNotationParser;
+
 /**
  * This file is part of project flowDesign.
  * <p/>
@@ -26,10 +29,17 @@ package com.tallbyte.flowdesign.data;
  */
 public class FlowJoint extends Joint {
 
-    private String dataType;
+    private final static FlowNotationParser PARSER = new SimpleFlowNotationParser();
+
+    private JointValidator validator;
+
+    private String  dataType;
+    private boolean valid;
 
     /**
      * Creates a new {@link Joint} based on given configuration.
+     * This will create an default {@link JointValidator} that
+     * always returns true.
      *
      * @param element  the containing {@link Element}
      * @param type     the type
@@ -39,7 +49,7 @@ public class FlowJoint extends Joint {
      *                 connections or 0 for infinite
      */
     public FlowJoint(Element element, JointType type, int maxIn, int maxOut) {
-        this(element, type, "", maxIn, maxOut);
+        this(element, type, maxIn, maxOut, joint -> true);
     }
 
     /**
@@ -47,16 +57,28 @@ public class FlowJoint extends Joint {
      *
      * @param element  the containing {@link Element}
      * @param type     the type
-     * @param dataType the desired data type
      * @param maxIn    the maximum amount of incoming
      *                 connections or 0 for infinite
      * @param maxOut   the maximum amount of outgoing
      *                 connections or 0 for infinite
+     * @param validator the {@link JointValidator} used to check
+     *                  if the content of this {@link Joint} matches
+     *                  rules.
      */
-    public FlowJoint(Element element, JointType type, String dataType, int maxIn, int maxOut) {
+    public FlowJoint(Element element, JointType type, int maxIn, int maxOut, JointValidator validator) {
         super(element, type, maxIn, maxOut);
 
-        this.dataType = dataType;
+        this.validator = validator;
+        setValid(validator.isValid(this));
+    }
+
+    /**
+     * Gets a {@link FlowNotationParser} suitable for parsing this {@link FlowJoint}s
+     * content.
+     * @return Returns the parser.
+     */
+    public FlowNotationParser getParser() {
+        return PARSER;
     }
 
     /**
@@ -74,7 +96,26 @@ public class FlowJoint extends Joint {
     public void setDataType(String dataType) {
         String old = this.dataType;
         this.dataType = dataType;
+        setValid(validator.isValid(this));
         changeSupport.firePropertyChange("dataType", old, dataType);
+    }
+
+    /**
+     * Checks if this {@link FlowJoint} has valid type.
+     * @return Returns true if it has, else false.
+     */
+    public boolean isValid() {
+        return valid;
+    }
+
+    /**
+     * Sets the current valid value.
+     * @param valid current value valid?
+     */
+    protected void setValid(boolean valid) {
+        boolean old = this.valid;
+        this.valid = valid;
+        changeSupport.firePropertyChange("valid", old, valid);
     }
 
     @Override

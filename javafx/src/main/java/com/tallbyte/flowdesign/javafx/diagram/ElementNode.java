@@ -18,11 +18,10 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
-import com.tallbyte.flowdesign.data.Diagram;
 import com.tallbyte.flowdesign.data.Element;
 import com.tallbyte.flowdesign.data.Joint;
+import com.tallbyte.flowdesign.data.JointGroup;
 import com.tallbyte.flowdesign.data.JointsChangedListener;
-import com.tallbyte.flowdesign.data.environment.Adapter;
 import com.tallbyte.flowdesign.javafx.control.AutoSizeTextField;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import com.tallbyte.flowdesign.javafx.property.ColorProperty;
@@ -45,6 +44,7 @@ import javafx.util.StringConverter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This file is part of project flowDesign.
@@ -86,7 +86,7 @@ public class ElementNode extends Pane implements SelectableNode {
     protected Pos                         posLabel;
     protected DiagramImage                content;
     protected Element                     element;
-    protected List<JointGroup>            jointGroups = new ArrayList<>();
+    protected List<JointGroupHandler> jointGroupHandlers = new ArrayList<>();
 
     /*
      * General properties
@@ -418,7 +418,7 @@ public class ElementNode extends Pane implements SelectableNode {
         return element;
     }
 
-    protected void addJointsAcrossRectangle(JointGroup group, boolean horizontal, double sec) {
+    protected void addJointsAcrossRectangle(JointGroupHandler group, boolean horizontal, double sec) {
         group.setLayoutHandler(g -> {
             double main  = g.getOffset();
             double range = g.getRange();
@@ -437,7 +437,7 @@ public class ElementNode extends Pane implements SelectableNode {
         });
     }
 
-    protected void addJointsAcrossRectangleCentered(JointGroup group, boolean horizontal, double sec) {
+    protected void addJointsAcrossRectangleCentered(JointGroupHandler group, boolean horizontal, double sec) {
         group.setLayoutHandler(g -> {
             double main  = g.getOffset();
             double range = g.getRange();
@@ -484,7 +484,7 @@ public class ElementNode extends Pane implements SelectableNode {
         );
     }
 
-    protected void addJointsAcrossCircle(JointGroup group) {
+    protected void addJointsAcrossCircle(JointGroupHandler group) {
         group.setLayoutHandler(g -> {
             double angle = g.getOffset()*360;
             double range = g.getRange()*360;
@@ -510,7 +510,7 @@ public class ElementNode extends Pane implements SelectableNode {
         });
     }
 
-    protected void addJointsAcrossCircleCentered(JointGroup group) {
+    protected void addJointsAcrossCircleCentered(JointGroupHandler group) {
         group.setLayoutHandler(g -> {
             double main  = g.getOffset();
             double range = g.getRange();
@@ -641,21 +641,18 @@ public class ElementNode extends Pane implements SelectableNode {
     }
 
     void remove() {
-        jointGroups.forEach(JointGroup::remove);
+        jointGroupHandlers.forEach(JointGroupHandler::remove);
     }
 
     protected interface JointGroupLayoutHandler {
 
-        void layout(JointGroup group);
+        void layout(JointGroupHandler group);
 
     }
 
-    protected class JointGroup {
+    protected class JointGroupHandler {
 
-        protected final Element                 element;
-        protected final Class<? extends Joint>  clazz;
-        protected final boolean                 input;
-        protected final boolean                 output;
+        protected final JointGroup<?>           group;
 
         protected final double                  offset;
         protected final double                  range;
@@ -664,21 +661,14 @@ public class ElementNode extends Pane implements SelectableNode {
         protected       JointGroupLayoutHandler layoutHandler;
         protected       List<JointNode>         nodes = new ArrayList<>();
 
-        public JointGroup(Element element, Class<? extends Joint> clazz, boolean input, boolean output, double offset, double range) {
-            this.element= element;
-            this.clazz  = clazz;
-            this.input  = input;
-            this.output = output;
+        public JointGroupHandler(JointGroup<?> group, double offset, double range) {
+            this.group  = group;
             this.offset = offset;
             this.range  = range;
 
-            for (Joint joint : element.getJoints(clazz)) {
-                if ((joint.isInput() == input) && (joint.isOutput() == output)) {
-                    nodes.add(addJoint(joint));
-                }
-            }
+            nodes.addAll(group.getJoints().stream().map(ElementNode.this::addJoint).collect(Collectors.toList()));
 
-            element.addJointsChangedListener(listener = (joint, added) -> {
+            group.addJointsChangedListener(listener = (joint, added) -> {
                 if (added) {
                     nodes.add(addJoint(joint));
                 } else {
@@ -691,20 +681,8 @@ public class ElementNode extends Pane implements SelectableNode {
             });
         }
 
-        public Element getElement() {
-            return element;
-        }
-
-        public Class<? extends Joint> getClazz() {
-            return clazz;
-        }
-
-        public boolean isInput() {
-            return input;
-        }
-
-        public boolean isOutput() {
-            return output;
+        public JointGroup<?> getGroup() {
+            return group;
         }
 
         public double getOffset() {
@@ -734,7 +712,7 @@ public class ElementNode extends Pane implements SelectableNode {
         }
 
         private void remove() {
-            element.removeJointsChangedListener(listener);
+            group.removeJointsChangedListener(listener);
         }
     }
 }

@@ -19,6 +19,8 @@
 package com.tallbyte.flowdesign.data.environment;
 
 import com.tallbyte.flowdesign.data.Element;
+import com.tallbyte.flowdesign.data.Joint;
+import com.tallbyte.flowdesign.data.JointGroup;
 
 /**
  * This file is part of project flowDesign.
@@ -31,8 +33,9 @@ import com.tallbyte.flowdesign.data.Element;
 public abstract class EnvironmentDiagramElement extends Element {
 
     /**
-     * Creates an new {@link EnvironmentDiagramElement}.
+     * Creates a new {@link EnvironmentDiagramElement}.
      */
-    protected EnvironmentDiagramElement() {
+    public EnvironmentDiagramElement() {
+
     }
 }

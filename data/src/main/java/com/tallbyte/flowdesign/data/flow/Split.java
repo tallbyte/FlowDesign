@@ -19,7 +19,10 @@
 package com.tallbyte.flowdesign.data.flow;
 
 import com.tallbyte.flowdesign.data.FlowJoint;
+import com.tallbyte.flowdesign.data.JointGroup;
 import com.tallbyte.flowdesign.data.JointType;
+
+import java.util.ArrayList;
 
 /**
  * This file is part of project flowDesign.
@@ -29,12 +32,29 @@ import com.tallbyte.flowdesign.data.JointType;
  */
 public class Split extends FlowDiagramElement {
 
+    public static final String JOINT_GROUP_IN  = "in";
+    public static final String JOINT_GROUP_OUT = "out";
+
     /**
      * Creats an new {@link Split}.
      */
     public Split() {
-        addJoint(new FlowJoint(this, JointType.INPUT, 1, 0));
-        addJoint(new FlowJoint(this, JointType.OUTPUT, 0, 1));
+    }
+
+    @Override
+    protected Iterable<JointGroup<?>> createJointGroups() {
+        return new ArrayList<JointGroup<?>>() {{
+            add(new JointGroup<>(Split.this, JOINT_GROUP_IN , 1, 1, element -> new FlowJoint(element, JointType.INPUT , 1, 0), 1));
+            add(new JointGroup<>(Split.this, JOINT_GROUP_OUT, 1, 1, element -> new FlowJoint(element, JointType.OUTPUT, 0, 0), 1));
+        }};
+    }
+
+    public JointGroup<?> getInputGroup() {
+        return getJointGroup(JOINT_GROUP_IN);
+    }
+
+    public JointGroup<?> getOutputGroup() {
+        return getJointGroup(JOINT_GROUP_OUT);
     }
 
 }

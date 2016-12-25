@@ -16,38 +16,16 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.data.flow;
-
-import com.tallbyte.flowdesign.data.*;
-
-import java.util.ArrayList;
+package com.tallbyte.flowdesign.data;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-12-09)<br/>
+ * - julian (2016-12-25)<br/>
  */
-public class Start extends FlowDiagramElement {
+public interface JointFactory<J extends Joint> {
 
-    public static final String JOINT_GROUP = "out";
-
-    /**
-     * Creats an new {@link Start}.
-     */
-    public Start() {
-        setText("");
-    }
-
-    @Override
-    protected Iterable<JointGroup<?>> createJointGroups() {
-        return new ArrayList<JointGroup<?>>() {{
-            add(new JointGroup<>(Start.this, JOINT_GROUP , 1, 1, element -> new FlowJoint(element, JointType.OUTPUT, 0, 1), 1));
-        }};
-    }
-
-    public JointGroup<?> getOutputGroup() {
-        return getJointGroup(JOINT_GROUP);
-    }
+    public J createJoint(Element element);
 
 }

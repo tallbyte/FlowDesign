@@ -19,6 +19,8 @@
 package com.tallbyte.flowdesign.data.flow;
 
 import com.tallbyte.flowdesign.data.Element;
+import com.tallbyte.flowdesign.data.Joint;
+import com.tallbyte.flowdesign.data.JointGroup;
 import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
 
 /**
@@ -32,8 +34,8 @@ import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
 public abstract class FlowDiagramElement extends Element {
 
     /**
-     * Creates an new {@link FlowDiagramElement}.
+     * Creates a new {@link FlowDiagramElement}.
      */
-    protected FlowDiagramElement() {
+    public FlowDiagramElement() {
     }
 }

@@ -20,11 +20,8 @@ package com.tallbyte.flowdesign.javafx.diagram.element;
 
 import com.tallbyte.flowdesign.data.FlowJoint;
 import com.tallbyte.flowdesign.data.flow.Portal;
-import com.tallbyte.flowdesign.data.flow.Split;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
-import com.tallbyte.flowdesign.javafx.diagram.JointNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
-import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 
 /**
@@ -47,8 +44,8 @@ public class PortalElementNode extends ElementNode {
     protected void setup() {
         super.setup();
 
-        addJointsAcrossRectangleCentered(new JointGroup(portal, FlowJoint.class, true, false, 0.5, 0.8), false, 0.0);
-        addJointsAcrossRectangleCentered(new JointGroup(portal, FlowJoint.class, false, true, 0.5, 0.8), false, 1.0);
+        addJointsAcrossRectangleCentered(new JointGroupHandler(portal.getInputGroup(), 0.5, 0.8), false, 0.0);
+        addJointsAcrossRectangleCentered(new JointGroupHandler(portal.getOutputGroup(), 0.5, 0.8), false, 1.0);
 
         /*JointNode input = addJoint(portal.getJoint(Portal.JOINT_INPUT));
         input.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));

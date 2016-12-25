@@ -75,11 +75,11 @@ public class OperationalUnitElementNode extends ElementNode {
     protected void setup() {
         super.setup();
 
-        addJointsAcrossCircleCentered(new JointGroup(operation, FlowJoint.class, true, false, 0.5, 0.3));
-        addJointsAcrossCircleCentered(new JointGroup(operation, FlowJoint.class, false, true, 0.0, 0.3));
+        addJointsAcrossCircleCentered(new JointGroupHandler(operation.getInputGroup(), 0.5, 0.3));
+        addJointsAcrossCircleCentered(new JointGroupHandler(operation.getOutputGroup(), 0.0, 0.3));
 
-        addJointsAcrossCircleCentered(new JointGroup(operation, DependencyJoint.class, true, false, 0.75, 0.0));
-        addJointsAcrossCircleCentered(new JointGroup(operation, DependencyJoint.class, false, true, 0.25, 0.0));
+        addJointsAcrossCircleCentered(new JointGroupHandler(operation.getDependencyInputGroup(), 0.75, 0.0));
+        addJointsAcrossCircleCentered(new JointGroupHandler(operation.getDependencyOutputGroup(), 0.25, 0.0));
 
         /*JointNode input0 = addJoint(operation.getJoint(Operation.JOINT_INPUT0));
         input0.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));

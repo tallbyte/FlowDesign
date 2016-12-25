@@ -18,10 +18,6 @@
 
 package com.tallbyte.flowdesign.data.flow;
 
-import com.tallbyte.flowdesign.data.DependencyJoint;
-import com.tallbyte.flowdesign.data.FlowJoint;
-import com.tallbyte.flowdesign.data.JointType;
-
 /**
  * This file is part of project flowDesign.
  * <p/>
@@ -29,15 +25,5 @@ import com.tallbyte.flowdesign.data.JointType;
  * - julian (2016-12-09)<br/>
  */
 public class StateAccess extends OperationalUnit {
-
-    /**
-     * Creats an new {@link StateAccess}.
-     */
-    public StateAccess() {
-        addJoint(new FlowJoint(this, JointType.INPUT, 1, 0));
-        addJoint(new FlowJoint(this, JointType.OUTPUT, 0, 1));
-        addJoint(new DependencyJoint(this, JointType.INPUT , 1, 0));
-        addJoint(new DependencyJoint(this, JointType.OUTPUT, 0, 1));
-    }
 
 }

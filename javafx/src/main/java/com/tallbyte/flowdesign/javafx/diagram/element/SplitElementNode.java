@@ -19,12 +19,9 @@
 package com.tallbyte.flowdesign.javafx.diagram.element;
 
 import com.tallbyte.flowdesign.data.FlowJoint;
-import com.tallbyte.flowdesign.data.flow.Operation;
 import com.tallbyte.flowdesign.data.flow.Split;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
-import com.tallbyte.flowdesign.javafx.diagram.JointNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
-import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 
 /**
@@ -47,8 +44,8 @@ public class SplitElementNode extends ElementNode {
     protected void setup() {
         super.setup();
 
-        addJointsAcrossRectangleCentered(new JointGroup(split, FlowJoint.class, true, false, 0.5, 0.8), false, 0.0);
-        addJointsAcrossRectangleCentered(new JointGroup(split, FlowJoint.class, false, true, 0.5, 0.8), false, 1.0);
+        addJointsAcrossRectangleCentered(new JointGroupHandler(split.getInputGroup(), 0.5, 0.8), false, 0.0);
+        addJointsAcrossRectangleCentered(new JointGroupHandler(split.getOutputGroup(), 0.5, 0.8), false, 1.0);
 
         /*JointNode input = addJoint(split.getJoint(Split.JOINT_INPUT));
         input.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));

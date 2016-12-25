@@ -22,6 +22,7 @@ import com.tallbyte.flowdesign.data.*;
 import javafx.fxml.LoadException;
 
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 
 /**
  * This file is part of project flowDesign.
@@ -65,14 +66,42 @@ public class OperationalUnit extends FlowDiagramElement {
 
     protected Diagram reference;
 
+    public static final String JOINT_GROUP_IN  = "in";
+    public static final String JOINT_GROUP_OUT = "out";
+
+    public static final String JOINT_GROUP_DEP_IN  = "depIn";
+    public static final String JOINT_GROUP_DEP_OUT = "depOut";
+
     /**
      * Creats an new {@link OperationalUnit}.
      */
     public OperationalUnit() {
-        addJoint(new FlowJoint(this, JointType.INPUT, 1, 0));
-        addJoint(new FlowJoint(this, JointType.OUTPUT, 0, 1));
-        addJoint(new DependencyJoint(this, JointType.INPUT , 1, 0));
-        addJoint(new DependencyJoint(this, JointType.OUTPUT, 0, 1));
+    }
+
+    @Override
+    protected Iterable<JointGroup<?>> createJointGroups() {
+        return new ArrayList<JointGroup<?>>() {{
+            add(new JointGroup<>(OperationalUnit.this, JOINT_GROUP_IN     , 1, 1, element -> new FlowJoint(element, JointType.INPUT , 1, 0), 1));
+            add(new JointGroup<>(OperationalUnit.this, JOINT_GROUP_OUT    , 1, 1, element -> new FlowJoint(element, JointType.OUTPUT, 0, 1), 1));
+            add(new JointGroup<>(OperationalUnit.this, JOINT_GROUP_DEP_IN , 1, 1, element -> new DependencyJoint(element, JointType.INPUT , 1, 0), 1));
+            add(new JointGroup<>(OperationalUnit.this, JOINT_GROUP_DEP_OUT, 1, 1, element -> new DependencyJoint(element, JointType.OUTPUT, 0, 1), 1));
+        }};
+    }
+
+    public JointGroup<?> getInputGroup() {
+        return getJointGroup(JOINT_GROUP_IN);
+    }
+
+    public JointGroup<?> getOutputGroup() {
+        return getJointGroup(JOINT_GROUP_OUT);
+    }
+
+    public JointGroup<?> getDependencyInputGroup() {
+        return getJointGroup(JOINT_GROUP_DEP_IN);
+    }
+
+    public JointGroup<?> getDependencyOutputGroup() {
+        return getJointGroup(JOINT_GROUP_DEP_OUT);
     }
 
     @Override

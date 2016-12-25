@@ -21,7 +21,6 @@ package com.tallbyte.flowdesign.javafx.diagram.element;
 import com.tallbyte.flowdesign.data.FlowJoint;
 import com.tallbyte.flowdesign.data.flow.Start;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
-import com.tallbyte.flowdesign.javafx.diagram.JointNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import javafx.geometry.Pos;
 
@@ -45,7 +44,7 @@ public class StartElementNode extends ElementNode {
     protected void setup() {
         super.setup();
 
-        addJointsAcrossCircleCentered(new JointGroup(start, FlowJoint.class, false, true, 0, 0.0));
+        addJointsAcrossCircleCentered(new JointGroupHandler(start.getOutputGroup(), 0, 0.0));
 
         /*JointNode output = addJoint(start.getJoint(Start.JOINT_OUTPUT));
         output.centerXProperty().bind(widthProperty().subtract(widthExtend));

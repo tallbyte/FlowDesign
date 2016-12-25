@@ -20,11 +20,8 @@ package com.tallbyte.flowdesign.javafx.diagram.element;
 
 import com.tallbyte.flowdesign.data.DependencyJoint;
 import com.tallbyte.flowdesign.data.environment.Resource;
-import com.tallbyte.flowdesign.data.environment.System;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
-import com.tallbyte.flowdesign.javafx.diagram.JointNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
-import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 
 /**
@@ -47,7 +44,7 @@ public class ResourceElementNode extends ElementNode {
     protected void setup() {
         super.setup();
 
-        addJointsAcrossCircle(new JointGroup(resource, DependencyJoint.class, true, true, 0, 1));
+        addJointsAcrossCircle(new JointGroupHandler(resource.getJointGroup(), 0, 1));
 
         /*JointNode left = addJoint(resource.getJoint(Resource.JOINT_LEFT));
         left.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
