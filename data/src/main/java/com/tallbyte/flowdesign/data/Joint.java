@@ -84,6 +84,14 @@ public abstract class Joint {
     }
 
     /**
+     * Gets whether or not this {@link Joint} can be used to initiate new connections.
+     * @return Returns true if it can, else false.
+     */
+    public boolean canOutput() {
+        return isOutput() && outgoing.size() < maxOut;
+    }
+
+    /**
      * Gets whether or not this {@link Joint} is suitable for outgoing connections.
      * This will not check whether the maximum amount of outgoing connections
      * is already reached.
@@ -91,6 +99,14 @@ public abstract class Joint {
      */
     public boolean isOutput() {
         return type == JointType.OUTPUT || type == JointType.INPUT_OUTPUT;
+    }
+
+    /**
+     * Gets whether or not this {@link Joint} can be used as a target for new connections.
+     * @return Returns true if it can, else false.
+     */
+    public boolean canInput() {
+        return isInput() && incoming.size() < maxIn;
     }
 
     /**

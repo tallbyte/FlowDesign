@@ -408,7 +408,7 @@ public class ElementNode extends Pane implements SelectableNode {
                         }, diagramPane.jointProperty())
                 ).otherwise(
                         selected.or(hoverProperty()).and(
-                                Bindings.createBooleanBinding(joint::isOutput)
+                                Bindings.createBooleanBinding(joint::canOutput, diagramPane.jointProperty())
                         )
                 )
         );
