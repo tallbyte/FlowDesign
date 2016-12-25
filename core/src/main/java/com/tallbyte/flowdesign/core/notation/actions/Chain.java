@@ -26,8 +26,18 @@ package com.tallbyte.flowdesign.core.notation.actions;
  */
 public class Chain extends FlowAction {
 
-    public Chain(int start, int end) {
+    protected FlowAction first;
+    protected FlowAction second;
+
+    public Chain(int start, int end, FlowAction first, FlowAction second) {
         super(start, end);
     }
 
+    public FlowAction getFirst() {
+        return first;
+    }
+
+    public FlowAction getSecond() {
+        return second;
+    }
 }
