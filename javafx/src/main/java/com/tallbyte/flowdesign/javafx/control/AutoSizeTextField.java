@@ -18,10 +18,6 @@
 
 package com.tallbyte.flowdesign.javafx.control;
 
-import com.sun.javafx.tk.*;
-import com.tallbyte.flowdesign.javafx.popup.DataTypePopup;
-import javafx.application.Platform;
-import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
