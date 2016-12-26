@@ -91,6 +91,11 @@ public class TypeNotationRule extends FlowNotationRuleBase {
     }
 
     @Override
+    public boolean isFinished(int i, int len) {
+        return repeat;
+    }
+
+    @Override
     public FlowAction doBuild() throws IllegalNotationException {
         return new Type(start, last, new DataType(type.toString()), name.toString(), repeat);
     }

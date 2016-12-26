@@ -64,6 +64,20 @@ public class MultiStreamNotationRule extends FlowNotationRuleBase {
     }
 
     @Override
+    public void insert(FlowNotationRule rule) throws IllegalNotationException {
+        if (childs.size() == 1) {
+            throw new IllegalNotationException("only one containing element allowed");
+        }
+
+        super.insert(rule);
+    }
+
+    @Override
+    public boolean isFinished(int i, int len) {
+        return ended;
+    }
+
+    @Override
     public FlowAction doBuild() throws IllegalNotationException {
         if (!ended) {
             throw new IllegalNotationException("not closed");

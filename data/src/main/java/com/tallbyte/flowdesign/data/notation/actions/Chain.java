@@ -31,6 +31,9 @@ public class Chain extends FlowAction {
 
     public Chain(int start, int end, FlowAction first, FlowAction second) {
         super(start, end);
+
+        this.first  = first;
+        this.second = second;
     }
 
     public FlowAction getFirst() {
@@ -39,5 +42,10 @@ public class Chain extends FlowAction {
 
     public FlowAction getSecond() {
         return second;
+    }
+
+    @Override
+    public String toString() {
+        return first.toString()+"/"+second.toString();
     }
 }

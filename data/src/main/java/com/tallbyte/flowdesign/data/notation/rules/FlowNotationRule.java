@@ -36,6 +36,8 @@ public interface FlowNotationRule {
 
     public boolean canHaveChildren();
 
+    public boolean isFinished(int i, int len);
+
     public FlowAction build() throws IllegalNotationException;
 
 }

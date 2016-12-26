@@ -85,6 +85,11 @@ public class TupelNotationRule extends FlowNotationRuleBase {
     }
 
     @Override
+    public boolean isFinished(int i, int len) {
+        return repeat;
+    }
+
+    @Override
     public void insert(FlowNotationRule rule) throws IllegalNotationException {
         if (!(rule instanceof TupelNotationRule) && !(rule instanceof TypeNotationRule)) {
             throw new IllegalNotationException("tupel can only contain tupels or types");
@@ -99,6 +104,10 @@ public class TupelNotationRule extends FlowNotationRuleBase {
     public FlowAction doBuild() throws IllegalNotationException {
         if (!ended) {
             throw new IllegalNotationException("not closed");
+        }
+
+        if (childs.size()==0) {
+            throw new IllegalNotationException("at least one containing element required");
         }
 
         List<TupelContainment> list = new ArrayList<>();

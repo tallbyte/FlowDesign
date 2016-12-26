@@ -55,7 +55,7 @@ public class SimpleFlowNotationParser implements FlowNotationParser {
     private boolean checkEnd(Stack<?> stack ,int i, int x, int y, String string) throws FlowNotationParserException {
         if (stack.size() == 1) {
             if (i < string.length() - 1) {
-                throw new FlowNotationParserException("statement already closed", x, y);
+                throw new FlowNotationParserException("statement not finished", x, y);
             } else {
                 if (i != string.length() -1) {
                     throw new FlowNotationParserException("statement already closed", x, y);
@@ -80,9 +80,11 @@ public class SimpleFlowNotationParser implements FlowNotationParser {
 
         try {
             // push first
-            stack.push(findRule(string.charAt(0), 0));
+            FlowNotationRule base = new BaseNotationRule(0);
 
-            for (int i = 1; i < string.length() ; ++i) {
+            stack.push(base);
+
+            for (int i = 0; i < string.length() ; ++i) {
                 char c = string.charAt(i);
 
                 // ignore whitespace
@@ -92,62 +94,56 @@ public class SimpleFlowNotationParser implements FlowNotationParser {
                      * Main logic
                      */
 
-                    FlowNotationRule top = stack.peek();
+                    boolean accepted;
+                    boolean down;
+                    do {
+                        FlowNotationRule top = stack.peek();
 
-                    boolean downwards = false;
-                    boolean reapply   = false;
-                    try {
-                        // try to add a new character to the existing rule
-                        downwards = top.handleCharacter(c, i);
+                        accepted = true;
+                        down     = false;
 
-                    } catch (IllegalCharacterException e) {
-                        if (top.canHaveChildren()) {
-                            // existing rule refuses to use the character, so try to create an embedded rule
-                            FlowNotationRule rule = null;
-                            try {
-                                rule = findRule(c, i);
-                                stack.push(rule);
-                            } catch (IllegalNotationException ie) {
-                                downwards = true;
-                            }
+                        try {
+                            // try to add a new character to the existing rule
+                            down = top.handleCharacter(c, i);
 
-                            // inserting might not be allowed at all times -> out of try block
-                            if (rule != null) {
-                                top.insert(rule);
-                            }
+                            down |= top.isFinished(i, string.length());
 
-                        } else {
-                            downwards = true;
-                        }
-
-                        // character could not be applied -> has to be done one layer below
-                        reapply = true;
-                    }
-
-                    // we go downwards in the stack
-                    if (downwards) {
-                        // check if we could return
-                        if (checkEnd(stack, i, x, y, string)) {
-                            return top.build();
-                        }
-
-                        // don't return, but proceed
-                        top.build();
-                        stack.pop();
-
-                        // if an element was ended because of a bad character, the character was still unprocessed
-                        if (reapply) {
-                            if (stack.peek().handleCharacter(c, i)) {
-                                // now check again if ending is required
-                                if (checkEnd(stack, i, x, y, string)) {
-                                    return stack.peek().build();
+                        } catch (IllegalCharacterException e) {
+                            if (top.canHaveChildren()) {
+                                // existing rule refuses to use the character, so try to create an embedded rule
+                                FlowNotationRule rule = null;
+                                try {
+                                    rule = findRule(c, i);
+                                    stack.push(rule);
+                                } catch (IllegalNotationException ie) {
+                                    down     = true;
+                                    accepted = false;
                                 }
 
-                                // finally remove from the stack
-                                stack.pop();
+                                // inserting might not be allowed at all times -> out of try block
+                                if (rule != null) {
+                                    top.insert(rule);
+                                }
+
+                            } else {
+                                // character could not be applied -> has to be done one layer below
+                                down     = true;
+                                accepted = false;
                             }
                         }
-                    }
+
+                        if (down) {
+                            // check if we could return
+                            if (checkEnd(stack, i-1, x, y, string)) {
+                                return top.build();
+                            }
+
+                            // don't return, but proceed
+                            top.build();
+                            stack.pop();
+                        }
+
+                    } while(down && !accepted);
                 }
 
                 /*
@@ -170,13 +166,22 @@ public class SimpleFlowNotationParser implements FlowNotationParser {
         }
 
         try {
+
             if (checkEnd(stack, string.length()-1, x, y, string)) {
                 return stack.peek().build();
             }
 
+            if (stack.size() == 2) {
+                FlowNotationRule rule = stack.pop();
+                FlowNotationRule base = stack.pop();
+
+                rule.build();
+                return base.build();
+            }
+
             throw new FlowNotationParserException("statement unfinished", x, y);
         } catch (IllegalNotationException e) {
-            throw new FlowNotationParserException("unfinished statement", x, y);
+            throw new FlowNotationParserException("unfinished statement", e, x, y);
         }
     }
 }

@@ -29,14 +29,14 @@ import com.tallbyte.flowdesign.data.notation.actions.FlowAction;
  * Authors:<br/>
  * - julian (2016-12-23)<br/>
  */
-public class ChainNotationRule extends FlowNotationRuleBase {
+public class BaseNotationRule extends FlowNotationRuleBase {
 
     private boolean ended         = false;
 
     private boolean splitRequired = false;
     private boolean split         = false;
 
-    private ChainNotationRule(int i) {
+    public BaseNotationRule(int i) {
         super("[\\/]", i);
     }
 
@@ -61,9 +61,14 @@ public class ChainNotationRule extends FlowNotationRuleBase {
     }
 
     @Override
+    public boolean isFinished(int i, int len) {
+        return childs.size() == 2 || (childs.size() == 1 && !split && i == len - 1);
+    }
+
+    @Override
     public void insert(FlowNotationRule rule) throws IllegalNotationException {
-        if (rule instanceof ChainNotationRule) {
-            throw new IllegalNotationException("chain can not contain chains");
+        if (rule instanceof BaseNotationRule) {
+            throw new IllegalNotationException("base can not contain base");
         }
 
         if (splitRequired) {
@@ -83,8 +88,18 @@ public class ChainNotationRule extends FlowNotationRuleBase {
 
     @Override
     public FlowAction doBuild() throws IllegalNotationException {
+        if (childs.size() == 1 && !split) {
+            return childs.get(0).build();
+        }
+
         if (!ended) {
             throw new IllegalNotationException("not closed");
+        }
+
+        for (FlowNotationRule rule : childs)  {
+            if (rule instanceof MultiStreamNotationRule) {
+                throw new IllegalNotationException("multi streams can not be inside a chain");
+            }
         }
 
         return new Chain(start, last, childs.get(0).build(), childs.get(1).build());

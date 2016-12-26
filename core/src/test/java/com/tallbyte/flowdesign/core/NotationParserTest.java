@@ -21,10 +21,7 @@ package com.tallbyte.flowdesign.core;
 import com.tallbyte.flowdesign.data.notation.FlowNotationParser;
 import com.tallbyte.flowdesign.data.notation.FlowNotationParserException;
 import com.tallbyte.flowdesign.data.notation.SimpleFlowNotationParser;
-import com.tallbyte.flowdesign.data.notation.actions.FlowAction;
-import com.tallbyte.flowdesign.data.notation.actions.MultiStream;
-import com.tallbyte.flowdesign.data.notation.actions.Tupel;
-import com.tallbyte.flowdesign.data.notation.actions.Type;
+import com.tallbyte.flowdesign.data.notation.actions.*;
 import org.junit.Test;
 
 import java.util.Stack;
@@ -60,11 +57,16 @@ public class NotationParserTest {
 
             if (action instanceof MultiStream) {
                 stack.push(((MultiStream) action).getAction());
+
             } else if (action instanceof Tupel) {
                 Tupel tupel = ((Tupel) action);
                 for (int n = tupel.getTypes().size() -1 ; n >= 0 ; --n) {
                     stack.push(tupel.getTypes().get(n));
                 }
+
+            } else if (action instanceof Chain) {
+                stack.push(((Chain) action).getSecond());
+                stack.push(((Chain) action).getFirst());
             }
 
             // increment array
@@ -171,6 +173,25 @@ public class NotationParserTest {
                         Type.class,
                         Type.class
         );
+        assertDeepEqual("(x,y*)/(x)",
+                Chain.class,
+                    Tupel.class,
+                        Type.class,
+                        Type.class,
+                    Tupel.class,
+                        Type.class
+        );
+        assertDeepEqual("(x,y*)/((x*),(y)*)",
+                Chain.class,
+                    Tupel.class,
+                        Type.class,
+                        Type.class,
+                    Tupel.class,
+                        Tupel.class,
+                            Type.class,
+                        Tupel.class,
+                            Type.class
+        );
 
         assertEquals("(name:String*,(Object,List))*", parser.parse("(name:String*,(Object,List))*").toString());
     }
@@ -193,6 +214,21 @@ public class NotationParserTest {
     @Test(expected = FlowNotationParserException.class)
     public void testNested() throws FlowNotationParserException {
         parser.parse("({String})*");
+    }
+
+    @Test(expected = FlowNotationParserException.class)
+    public void testMultiSplit() throws FlowNotationParserException {
+        parser.parse("(x,y*)/(x)/(y)");
+    }
+
+    @Test(expected = FlowNotationParserException.class)
+    public void testUnmergedSplit() throws FlowNotationParserException {
+        parser.parse("(x,y*)/(x)(y)");
+    }
+
+    @Test(expected = FlowNotationParserException.class)
+    public void testMultiInSplit() throws FlowNotationParserException {
+        parser.parse("(x,y*)/{(x)(y)}");
     }
 
     @Test
