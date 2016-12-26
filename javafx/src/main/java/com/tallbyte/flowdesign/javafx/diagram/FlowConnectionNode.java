@@ -19,12 +19,17 @@
 package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.data.Connection;
+import com.tallbyte.flowdesign.data.FlowConnection;
+import com.tallbyte.flowdesign.data.FlowJoint;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import com.tallbyte.flowdesign.javafx.popup.DataTypePopup;
+import javafx.css.PseudoClass;
 import javafx.geometry.Bounds;
 import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
+
+import java.beans.PropertyChangeListener;
 
 /**
  * This file is part of project flowDesign.
@@ -36,22 +41,48 @@ public class FlowConnectionNode extends ConnectionNode {
 
     private final DataTypePopup  popup;
 
+    private final FlowJoint      source;
+    private final FlowJoint      target;
+
     private final Line           arrow0  = new Line();
     private final Line           arrow1  = new Line();
 
+    private final PropertyChangeListener listenerSource;
+    private final PropertyChangeListener listenerTarget;
 
     /**
      * Creates a new {@link FlowConnectionNode}.
      * @param application the main application
      * @param connection the surrounding {@link Connection}
      */
-    public FlowConnectionNode(FlowDesignFxApplication application, Connection connection) {
+    public FlowConnectionNode(FlowDesignFxApplication application, FlowConnection connection) {
         super(application, connection, null, null);
 
         popup = new DataTypePopup(textField.textProperty());
         popup.setAutoHide(true);
         popup.setHideOnEscape(true);
         application.getPopupHandler().setupPopup(popup);
+
+        source = connection.getSource();
+        target = connection.getTarget();
+
+        listenerSource = evt -> {
+            if (evt.getPropertyName().equals("valid")) {
+                handleValid();
+            }
+        };
+        listenerTarget = evt -> {
+            if (evt.getPropertyName().equals("valid")) {
+                handleValid();
+            }
+        };
+
+        connection.getSource().addPropertyChangeListener(listenerSource);
+        connection.getTarget().addPropertyChangeListener(listenerSource);
+    }
+
+    private void handleValid() {
+        pseudoClassStateChanged(PseudoClass.getPseudoClass("invalid"), !source.isValid() || !target.isValid());
     }
 
     @Override
@@ -150,5 +181,12 @@ public class FlowConnectionNode extends ConnectionNode {
         arrow0.getTransforms().add(new Rotate(30, line.getEndX(), line.getEndY()));
         arrow1.getTransforms().clear();
         arrow1.getTransforms().add(new Rotate(-30, line.getEndX(), line.getEndY()));
+    }
+
+    @Override
+    protected void remove() {
+        super.remove();
+
+
     }
 }

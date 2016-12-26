@@ -198,6 +198,9 @@ public class ConnectionNode extends Group implements SelectableNode {
         paneMarker.getTransforms().add(new Rotate(angle, 0, paneMarker.getHeight()/2));
     }
 
+    protected void remove() {
+    }
+
     public Connection getConnection() {
         return connection;
     }

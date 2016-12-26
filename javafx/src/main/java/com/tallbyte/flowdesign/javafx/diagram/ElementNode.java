@@ -640,7 +640,7 @@ public class ElementNode extends Pane implements SelectableNode {
         return selected;
     }
 
-    void remove() {
+    protected void remove() {
         jointGroupHandlers.forEach(JointGroupHandler::remove);
     }
 

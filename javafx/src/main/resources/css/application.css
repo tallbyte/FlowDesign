@@ -139,6 +139,10 @@ JointNode {
     -fx-text-fill: -fx-referenced-accent;
 }
 
+.connectionNode:invalid .text-field {
+    -fx-text-fill: red;
+}
+
 .connectionNode:activeSelected Line {
     -fx-stroke:             -fx-focus-color;
     -fx-fill:               -fx-focus-color;

@@ -322,7 +322,7 @@ public class DiagramPane extends ScrollPane {
 
         // TODO make using factories and map lookup
         if (connection instanceof FlowConnection) {
-            node = new FlowConnectionNode(application, connection);
+            node = new FlowConnectionNode(application, (FlowConnection) connection);
 
         } else if (connection instanceof DependencyConnection) {
             node = new DependencyConnectionNode(application, (DependencyConnection) connection);
@@ -356,6 +356,7 @@ public class DiagramPane extends ScrollPane {
             if (node instanceof ConnectionNode && ((ConnectionNode) node).getConnection().equals(connection)) {
                 groupConnections.getChildren().remove(node);
                 removeMouseHandlers((ConnectionNode) node);
+                ((ConnectionNode) node).remove();
                 break;
             }
         }

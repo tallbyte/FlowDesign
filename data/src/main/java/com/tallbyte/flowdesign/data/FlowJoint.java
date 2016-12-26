@@ -19,7 +19,10 @@
 package com.tallbyte.flowdesign.data;
 
 import com.tallbyte.flowdesign.data.notation.FlowNotationParser;
+import com.tallbyte.flowdesign.data.notation.FlowNotationParserException;
 import com.tallbyte.flowdesign.data.notation.SimpleFlowNotationParser;
+import com.tallbyte.flowdesign.data.notation.actions.FlowAction;
+import com.tallbyte.flowdesign.data.notation.actions.Type;
 
 /**
  * This file is part of project flowDesign.
@@ -49,7 +52,15 @@ public class FlowJoint extends Joint {
      *                 connections or 0 for infinite
      */
     public FlowJoint(Element element, JointType type, int maxIn, int maxOut) {
-        this(element, type, maxIn, maxOut, joint -> true);
+        this(element, type, maxIn, maxOut, joint -> {
+            try {
+                FlowAction f = PARSER.parse(joint.getDataType());
+
+                return !(f instanceof Type);
+            } catch (FlowNotationParserException e) {
+                return false;
+            }
+        });
     }
 
     /**
