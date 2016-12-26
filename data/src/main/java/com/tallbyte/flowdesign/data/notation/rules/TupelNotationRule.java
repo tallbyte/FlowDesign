@@ -37,8 +37,9 @@ public class TupelNotationRule extends FlowNotationRuleBase {
 
     private boolean repeat = false;
 
-    private boolean ended = false;
-    private boolean added = false;
+    private boolean ended    = false;
+    private boolean added    = false;
+    private boolean expected = true;
 
     private TupelNotationRule(int i) {
         super("[\\,\\)\\*]", i);
@@ -63,7 +64,8 @@ public class TupelNotationRule extends FlowNotationRuleBase {
         }
 
         if (c == ',') {
-            added = false;
+            added    = false;
+            expected = true;
         }
 
         if (!ended && added) {
@@ -95,7 +97,8 @@ public class TupelNotationRule extends FlowNotationRuleBase {
             throw new IllegalNotationException("tupel can only contain tupels or types");
         }
 
-        added = true;
+        expected = false;
+        added    = true;
 
         super.insert(rule);
     }
@@ -104,6 +107,10 @@ public class TupelNotationRule extends FlowNotationRuleBase {
     public FlowAction doBuild() throws IllegalNotationException {
         if (!ended) {
             throw new IllegalNotationException("not closed");
+        }
+
+        if (expected) {
+            throw new IllegalNotationException("expecting child");
         }
 
         if (childs.size()==0) {
