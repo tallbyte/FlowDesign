@@ -23,6 +23,7 @@ import com.tallbyte.flowdesign.javafx.popup.DataTypePopup;
 import javafx.application.Platform;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 
 
@@ -36,6 +37,7 @@ public class AutoSizeTextField extends TextField {
 
     public AutoSizeTextField() {
         setPadding(new Insets(0));
+        setAlignment(Pos.BASELINE_CENTER);
         textProperty().addListener((observable, oldValue, newValue) -> {
             final String newText = newValue != null ? newValue : "";
             /**
@@ -45,16 +47,6 @@ public class AutoSizeTextField extends TextField {
              */
             com.sun.javafx.tk.FontMetrics metrics = com.sun.javafx.tk.Toolkit.getToolkit().getFontLoader().getFontMetrics(getFont());
             setPrefWidth(metrics.computeStringWidth(newText)+3);
-
-            /**
-             * Otherwise the textfield will "scroll" when updated, despite getting bigger
-             */
-            Platform.runLater(() -> {
-                final int loc = getCaretPosition();
-                positionCaret(0);
-                Platform.runLater(() -> positionCaret(loc));
-            });
-
         });
         setText(null);
         setText("");
