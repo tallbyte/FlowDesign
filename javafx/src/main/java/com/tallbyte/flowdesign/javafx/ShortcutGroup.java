@@ -51,4 +51,10 @@ public class ShortcutGroup {
     public Iterable<Shortcut> getShortcuts() {
         return shortcuts.values();
     }
+
+    public void reset() {
+        for (Shortcut c : getShortcuts()) {
+            c.setAction(null);
+        }
+    }
 }
