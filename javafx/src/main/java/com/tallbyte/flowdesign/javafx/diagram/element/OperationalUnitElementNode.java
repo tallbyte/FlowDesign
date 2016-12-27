@@ -23,14 +23,24 @@ import com.tallbyte.flowdesign.data.Diagram;
 import com.tallbyte.flowdesign.data.FlowJoint;
 import com.tallbyte.flowdesign.data.flow.FlowDiagram;
 import com.tallbyte.flowdesign.data.flow.OperationalUnit;
+import com.tallbyte.flowdesign.javafx.control.AutoSizeTextField;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
+import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
 import javafx.css.PseudoClass;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 
 /**
  * This file is part of project flowDesign.
@@ -40,23 +50,13 @@ import javafx.scene.input.KeyEvent;
  */
 public class OperationalUnitElementNode extends ElementNode {
 
-    private final OperationalUnit operation;
+    protected final OperationalUnit   operation;
 
-    protected ObjectProperty<?> reference;
+    protected       StringProperty    state;
+    protected       ObjectProperty<?> reference;
 
     public OperationalUnitElementNode(OperationalUnit element, DiagramImage content) {
         super(element, content, Pos.CENTER);
-
-        try {
-            reference = JavaBeanObjectPropertyBuilder.create().bean(element).name("reference").build();
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException("Could not create properties. This should never happen?!", e);
-        }
-
-        reference.addListener((observable, oldValue, newValue) -> {
-            pseudoClassStateChanged(PseudoClass.getPseudoClass("referenced"), newValue != null);
-        });
-        pseudoClassStateChanged(PseudoClass.getPseudoClass("referenced"), reference.getValue() != null);
 
         addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             Object ref = reference.get();
@@ -71,9 +71,70 @@ public class OperationalUnitElementNode extends ElementNode {
         this.operation = element;
     }
 
+    private void setupProperties() {
+        try {
+            state     = JavaBeanStringPropertyBuilder.create().bean(element).name("state").build();
+            reference = JavaBeanObjectPropertyBuilder.create().bean(element).name("reference").build();
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException("Could not create properties. This should never happen?!", e);
+        }
+
+        reference.addListener((observable, oldValue, newValue) -> {
+            pseudoClassStateChanged(PseudoClass.getPseudoClass("referenced"), newValue != null);
+        });
+        pseudoClassStateChanged(PseudoClass.getPseudoClass("referenced"), reference.getValue() != null);
+    }
+
+    @Override
+    protected void addDefaultProperties() {
+        super.addDefaultProperties();
+
+        setupProperties();
+
+        properties.add(state);
+    }
+
+    public String getState() {
+        return state.get();
+    }
+
+    public void setState(String state) {
+        this.state.set(state);
+    }
+
+    public StringProperty stateProperty() {
+        return state;
+    }
+
     @Override
     protected void setup() {
         super.setup();
+
+        TextField textField = setupText(new AutoSizeTextField(), state, "nodeTextHolder", Pos.BOTTOM_RIGHT);
+        textField.setAlignment(Pos.BASELINE_LEFT);
+        textField.getStyleClass().add("nodeStateTextHolder");
+        textField.layoutXProperty().bind(wrap.widthProperty().multiply(0.8));
+        textField.layoutYProperty().bind(wrap.heightProperty().multiply(0.7));
+        textField.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, new Insets(0))));
+        textField.layoutXProperty().bind(Bindings.createDoubleBinding(() -> {
+            double rx = (1+Math.cos(2*Math.PI*0.125))*0.5*getRealWidth();
+            double rw = getRealWidth()*0.25;
+
+            rx -= rw*0.75;
+
+            return rx + rw;
+        }, wrap.widthProperty()));
+        textField.layoutYProperty().bind(Bindings.createDoubleBinding(() -> {
+            double ry = (1+Math.sin(2*Math.PI*0.125))*0.5*getRealHeight();
+            double rh = getRealHeight()*0.25;
+
+            ry -= rh*0.75;
+            ry += rh*0.5;
+            ry -= textField.getHeight()*0.5;
+
+            return ry;
+        }, wrap.heightProperty(), textField.heightProperty()));
+        getChildren().add(textField);
 
         addJointsAcrossCircleCentered(new JointGroupHandler(operation.getInputGroup(), 0.5, 0.3));
         addJointsAcrossCircleCentered(new JointGroupHandler(operation.getOutputGroup(), 0.0, 0.3));

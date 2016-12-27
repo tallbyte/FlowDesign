@@ -20,9 +20,7 @@ package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.data.flow.*;
 import com.tallbyte.flowdesign.javafx.diagram.element.*;
-import com.tallbyte.flowdesign.javafx.diagram.factory.*;
 import com.tallbyte.flowdesign.javafx.diagram.image.*;
-import javafx.geometry.Pos;
 
 /**
  * This file is part of project flowDesign.
@@ -50,17 +48,12 @@ public class FlowDiagramHandler extends DiagramHandlerBase<FlowDiagram, FlowDiag
         );
         addEntries("Operation", Operation.class,
                 Operation::new,
-                EllipseDiagramImage::new,
+                OperationalUnitDiagramImage::new,
                 OperationalUnitElementNode::new
         );
         addEntries("ResourceAccess", ResourceAccess.class,
                 ResourceAccess::new,
                 ResourceDiagramImage::new,
-                OperationalUnitElementNode::new
-        );
-        addEntries("StateAccess", StateAccess.class,
-                StateAccess::new,
-                StateDiagramImage::new,
                 OperationalUnitElementNode::new
         );
         addEntries("Split", Split.class,

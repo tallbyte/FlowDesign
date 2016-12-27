@@ -49,10 +49,10 @@ public class ActorElementNode extends ElementNode {
 
         JointNode left = addJoint(actor.getJointGroup().getJoint(0));
         left.centerXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
-        left.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.4));
+        left.centerYProperty().bind(wrap.heightProperty().subtract(heightExtend).multiply(0.4));
 
         JointNode right = addJoint(actor.getJointGroup().getJoint(1));
-        right.centerXProperty().bind(widthProperty().subtract(widthExtend));
-        right.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.4));
+        right.centerXProperty().bind(wrap.widthProperty().subtract(widthExtend));
+        right.centerYProperty().bind(wrap.heightProperty().subtract(heightExtend).multiply(0.4));
     }
 }

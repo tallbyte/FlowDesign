@@ -18,6 +18,7 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.image;
 
+import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.canvas.Canvas;
@@ -31,7 +32,8 @@ import javafx.scene.paint.Color;
  */
 public abstract class DiagramImage extends Canvas {
 
-    protected ObjectProperty<Color> color = new SimpleObjectProperty<>(this, "color", Color.BLACK);
+    protected ObjectProperty<Color> color   = new SimpleObjectProperty<>(this, "color", Color.BLACK);
+    protected ElementNode           element = null;
 
     /**
      * Creates a new {@link DiagramImage}.
@@ -71,4 +73,11 @@ public abstract class DiagramImage extends Canvas {
      */
     protected abstract void repaint();
 
+    public ElementNode getElement() {
+        return element;
+    }
+
+    public void setElement(ElementNode element) {
+        this.element = element;
+    }
 }

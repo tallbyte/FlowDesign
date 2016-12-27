@@ -34,6 +34,7 @@ import javafx.collections.ObservableList;
 import javafx.css.*;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -52,7 +53,7 @@ import java.util.stream.Collectors;
  * Authors:<br/>
  * - julian (2016-10-28)<br/>
  */
-public class ElementNode extends Pane implements SelectableNode {
+public class ElementNode extends Group implements SelectableNode {
 
     private static final List<CssMetaData<? extends Styleable, ?>> STYLABLES;
     private static final CssMetaData<ElementNode, Color>           DEFAULT_COLOR = new CssMetaData<ElementNode, Color>(
@@ -83,6 +84,7 @@ public class ElementNode extends Pane implements SelectableNode {
 
     protected ObservableList<Property<?>> properties  = FXCollections.observableArrayList();
     protected DiagramPane                 diagramPane = null;
+    protected Pane                        wrap        = new Pane();
     protected Pos                         posLabel;
     protected DiagramImage                content;
     protected Element                     element;
@@ -125,6 +127,7 @@ public class ElementNode extends Pane implements SelectableNode {
         this.posLabel    = posLabel;
 
         getStyleClass().add("elementNode");
+        getChildren().add(wrap);
 
         try {
             realX      = JavaBeanDoublePropertyBuilder.create().bean(element).name("x").build();
@@ -173,6 +176,8 @@ public class ElementNode extends Pane implements SelectableNode {
         content.colorProperty().bind(Bindings.when(color.isNotNull()).then(color).otherwise(defaultColor));
 
         addDefaultProperties();
+
+        content.setElement(this);
     }
 
     /**
@@ -343,7 +348,7 @@ public class ElementNode extends Pane implements SelectableNode {
     /**
      * Adds the according properties to the externally-accessible list.
      */
-    private void addDefaultProperties() {
+    protected void addDefaultProperties() {
         properties.add(realX);
         properties.add(realY);
         properties.add(realWidth);
@@ -358,7 +363,7 @@ public class ElementNode extends Pane implements SelectableNode {
         switch (modLoc) {
             case TOP_LEFT:
                 element.setCursor(Cursor.NW_RESIZE);
-                getChildren().add(element);
+                wrap.getChildren().add(element);
                 StackPane.setAlignment(element, Pos.TOP_LEFT);
                 element.layoutXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
                 element.layoutYProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
@@ -366,26 +371,26 @@ public class ElementNode extends Pane implements SelectableNode {
 
             case TOP_RIGHT:
                 element.setCursor(Cursor.NE_RESIZE);
-                getChildren().add(element);
+                wrap.getChildren().add(element);
                 StackPane.setAlignment(element, Pos.TOP_RIGHT);
-                element.layoutXProperty().bind(widthProperty().subtract(element.widthProperty()));
+                element.layoutXProperty().bind(wrap.widthProperty().subtract(element.widthProperty()));
                 element.layoutYProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
                 break;
 
             case BOTTOM_LEFT:
                 element.setCursor(Cursor.SW_RESIZE);
-                getChildren().add(element);
+                wrap.getChildren().add(element);
                 StackPane.setAlignment(element, Pos.BOTTOM_LEFT);
                 element.layoutXProperty().bind(Bindings.createDoubleBinding(() -> 0.0));
-                element.layoutYProperty().bind(heightProperty().subtract(element.heightProperty()));
+                element.layoutYProperty().bind(wrap.heightProperty().subtract(element.heightProperty()));
                 break;
 
             case BOTTOM_RIGHT:
                 element.setCursor(Cursor.SE_RESIZE);
-                getChildren().add(element);
+                wrap.getChildren().add(element);
                 StackPane.setAlignment(element, Pos.BOTTOM_RIGHT);
-                element.layoutXProperty().bind(widthProperty().subtract(element.widthProperty()));
-                element.layoutYProperty().bind(heightProperty().subtract(element.heightProperty()));
+                element.layoutXProperty().bind(wrap.widthProperty().subtract(element.widthProperty()));
+                element.layoutYProperty().bind(wrap.heightProperty().subtract(element.heightProperty()));
                 break;
         }
 
@@ -412,7 +417,7 @@ public class ElementNode extends Pane implements SelectableNode {
                         )
                 )
         );
-        getChildren().add(element);
+        wrap.getChildren().add(element);
         diagramPane.registerJointNode(element);
 
         return element;
@@ -537,19 +542,31 @@ public class ElementNode extends Pane implements SelectableNode {
         });
     }
 
-    private TextField addText(StringProperty bind, String cssClass, Pos position, boolean extend) {
-
-        TextField element = new AutoSizeTextField();
-        getChildren().add(element);
-        layout();
+    protected TextField setupText(TextField element, StringProperty bind, String cssClass, Pos position) {
         element.setPrefHeight(15);
         element.applyCss();
         element.layout();
+        element.textProperty().bindBidirectional(bind);
+        element.getStyleClass().add(cssClass);
+        StackPane.setAlignment(element, position);
+        element.minWidthProperty().bind(Bindings.createDoubleBinding(() -> 10.0));
+
+        return element;
+    }
+
+    protected TextField addText(StringProperty bind, String cssClass, Pos position, boolean extend) {
+        return addText(new AutoSizeTextField(), bind, cssClass, position, extend);
+    }
+
+    protected TextField addText(TextField element, StringProperty bind, String cssClass, Pos position, boolean extend) {
+        setupText(element, bind, cssClass, position);
+
+        wrap.getChildren().add(element);
 
         switch (position) {
             case BOTTOM_CENTER:
-                element.layoutXProperty().bind(widthProperty().divide(2).subtract(element.widthProperty().divide(2)));
-                element.layoutYProperty().bind(heightProperty().subtract(element.heightProperty()));
+                element.layoutXProperty().bind(wrap.widthProperty().divide(2).subtract(element.widthProperty().divide(2)));
+                element.layoutYProperty().bind(wrap.heightProperty().subtract(element.heightProperty()));
 
                 if (extend) {
                     heightExtend = heightExtend.add(element.prefHeightProperty().multiply(1.1));
@@ -557,16 +574,13 @@ public class ElementNode extends Pane implements SelectableNode {
                 break;
 
             case CENTER:
-            default:
-                element.layoutXProperty().bind(widthProperty().divide(2).subtract(element.widthProperty().divide(2)));
-                element.layoutYProperty().bind(heightProperty().divide(2).subtract(element.heightProperty().divide(2)));
-        }
+                element.layoutXProperty().bind(wrap.widthProperty().divide(2).subtract(element.widthProperty().divide(2)));
+                element.layoutYProperty().bind(wrap.heightProperty().divide(2).subtract(element.heightProperty().divide(2)));
+                break;
 
-        element.textProperty().bindBidirectional(bind);
-        element.getStyleClass().add(cssClass);
-        StackPane.setAlignment(element, position);
-        element.minWidthProperty().bind(Bindings.createDoubleBinding(() -> 10.0));
-        element.maxWidthProperty().bind(widthProperty().multiply(0.8));
+            default:
+
+        }
 
         return element;
     }
@@ -574,9 +588,9 @@ public class ElementNode extends Pane implements SelectableNode {
     private void addBorder() {
         Rectangle border = new Rectangle();
         border.getStyleClass().add("nodeBorderRectangle");
-        getChildren().add(border);
-        border.widthProperty().bind(widthProperty());
-        border.heightProperty().bind(heightProperty());
+        wrap.getChildren().add(border);
+        border.widthProperty().bind(wrap.widthProperty());
+        border.heightProperty().bind(wrap.heightProperty());
         border.setStrokeWidth(2);
         border.setMouseTransparent(true);
         border.setFill(Color.TRANSPARENT);
@@ -584,7 +598,7 @@ public class ElementNode extends Pane implements SelectableNode {
     }
 
     private void addContent() {
-        getChildren().add(content);
+        wrap.getChildren().add(content);
     }
 
     /**
@@ -598,7 +612,7 @@ public class ElementNode extends Pane implements SelectableNode {
         addContent();
         addBorder();
 
-        TextField field = addText(text, "nodeTextHolder", posLabel, true);
+        addText(text, "nodeTextHolder", posLabel, true);
 
         addModificator(NodeModificator.Location.TOP_RIGHT);
         addModificator(NodeModificator.Location.TOP_LEFT);
@@ -619,8 +633,8 @@ public class ElementNode extends Pane implements SelectableNode {
         content.widthProperty().bindBidirectional(realWidth);
         content.heightProperty().bindBidirectional(realHeight);
 
-        prefWidthProperty().bind(realWidth.add(widthExtend));
-        prefHeightProperty().bind(realHeight.add(heightExtend));
+        wrap.prefWidthProperty().bind(realWidth.add(widthExtend));
+        wrap.prefHeightProperty().bind(realHeight.add(heightExtend));
 
         setCursor(Cursor.MOVE);
     }

@@ -65,6 +65,7 @@ public class OperationalUnit extends FlowDiagramElement {
     });
 
     protected Diagram reference;
+    protected String  state = "";
 
     public static final String JOINT_GROUP_IN  = "in";
     public static final String JOINT_GROUP_OUT = "out";
@@ -123,5 +124,15 @@ public class OperationalUnit extends FlowDiagramElement {
 
     public Diagram getReference() {
         return reference;
+    }
+
+    public void setState(String state) {
+        String old = this.state;
+        this.state = state;
+        this.changeSupport.firePropertyChange("state", old, state);
+    }
+
+    public String getState() {
+        return state;
     }
 }

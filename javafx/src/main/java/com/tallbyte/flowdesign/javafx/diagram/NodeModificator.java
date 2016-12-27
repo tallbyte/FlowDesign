@@ -54,11 +54,17 @@ public class NodeModificator extends Rectangle {
                 double dx = event.getSceneX() - trans.getMinX();
                 double dy = event.getSceneY() - trans.getMinY();
 
+                double minX = trans.getMinX();
+                double maxX = minX + node.getRealWidth();
+
+                double minY = trans.getMinY();
+                double maxY = minY + node.getRealHeight();
+                
                 switch (location) {
 
                     case TOP_LEFT:
-                        dx = Math.min(trans.getMaxX()-20, trans.getMinX()+dx) - trans.getMinX();
-                        dy = Math.min(trans.getMaxY()-20, trans.getMinY()+dy) - trans.getMinY();
+                        dx = Math.min(maxX-20, minX+dx) - minX;
+                        dy = Math.min(maxY-20, minY+dy) - minY;
 
                         node.setRealX(node.getRealX()+dx);
                         node.setRealY(node.getRealY()+dy);
@@ -68,8 +74,8 @@ public class NodeModificator extends Rectangle {
                         break;
 
                     case TOP_RIGHT:
-                        dx = Math.max(trans.getMinX()+20, trans.getMaxX()+dx-trans.getWidth()) - trans.getMaxX();
-                        dy = Math.min(trans.getMaxY()-20, trans.getMinY()+dy) - trans.getMinY();
+                        dx = Math.max(minX+20, maxX+dx-trans.getWidth()) - maxX;
+                        dy = Math.min(maxY-20, minY+dy) - minY;
 
                         node.setRealY(node.getRealY()+dy);
 
@@ -78,8 +84,8 @@ public class NodeModificator extends Rectangle {
                         break;
 
                     case BOTTOM_LEFT:
-                        dx = Math.min(trans.getMaxX()-20, trans.getMinX()+dx) - trans.getMinX();
-                        dy = Math.max(trans.getMinY()+20, trans.getMaxY()+dy-trans.getHeight()) - trans.getMaxY();
+                        dx = Math.min(maxX-20, minX+dx) - minX;
+                        dy = Math.max(minY+20, maxY+dy-trans.getHeight()) - maxY;
 
                         node.setRealX(node.getRealX()+dx);
 
@@ -88,8 +94,8 @@ public class NodeModificator extends Rectangle {
                         break;
 
                     case BOTTOM_RIGHT:
-                        dx = Math.max(trans.getMinX()+20, trans.getMaxX()+dx-trans.getWidth()) - trans.getMaxX();
-                        dy = Math.max(trans.getMinY()+20, trans.getMaxY()+dy-trans.getHeight()) - trans.getMaxY();
+                        dx = Math.max(minX+20, maxX+dx-trans.getWidth()) - maxX;
+                        dy = Math.max(minY+20, maxY+dy-trans.getHeight()) - maxY;
 
                         node.setRealWidth(node.getRealWidth()+dx);
                         node.setRealHeight(node.getRealHeight()+dy);

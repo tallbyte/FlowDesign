@@ -52,6 +52,14 @@ public class Connection<J extends Joint> {
     }
 
     /**
+     * Handler that is being executed when the {@link Connection}
+     * is being removed.
+     */
+    protected void destroy() {
+
+    }
+
+    /**
      * Gets the description text
      * @return Returns the text.
      */
@@ -66,6 +74,7 @@ public class Connection<J extends Joint> {
     public void setText(String text) {
         String old = this.text;
         this.text = text;
+        System.out.println(text);
         this.changeSupport.firePropertyChange("text", old, text);
     }
 

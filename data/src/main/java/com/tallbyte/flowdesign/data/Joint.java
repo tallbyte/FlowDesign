@@ -201,6 +201,7 @@ public abstract class Joint {
         if (connection != null) {
             outgoing.remove(connection);
             target.notifyDisjoin(connection);
+            connection.destroy();
             element.getDiagram().removeConnection(connection);
 
         } else {

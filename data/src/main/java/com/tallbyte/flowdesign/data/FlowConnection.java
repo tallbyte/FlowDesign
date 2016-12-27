@@ -18,6 +18,12 @@
 
 package com.tallbyte.flowdesign.data;
 
+import com.tallbyte.flowdesign.data.notation.FlowNotationParserException;
+import com.tallbyte.flowdesign.data.notation.actions.Chain;
+import com.tallbyte.flowdesign.data.notation.actions.FlowAction;
+
+import java.beans.PropertyChangeListener;
+
 /**
  * This file is part of project flowDesign.
  * <p/>
@@ -25,6 +31,10 @@ package com.tallbyte.flowdesign.data;
  * - julian (2016-12-12)<br/>
  */
 public class FlowConnection extends Connection<FlowJoint> {
+
+    protected final PropertyChangeListener listenerSource;
+    protected final PropertyChangeListener listenerTarget;
+
     /**
      * Creates a new {@link Connection} between two {@link Joint}s.
      *
@@ -33,6 +43,65 @@ public class FlowConnection extends Connection<FlowJoint> {
      */
     public FlowConnection(FlowJoint source, FlowJoint target) {
         super(source, target);
+
+        listenerSource = evt -> {
+            if (evt.getPropertyName().equals("dataType")) {
+                updateText();
+            }
+        };
+        listenerTarget = evt -> {
+            if (evt.getPropertyName().equals("dataType")) {
+                updateText();
+            }
+        };
+        source.addPropertyChangeListener(listenerSource);
+        target.addPropertyChangeListener(listenerTarget);
+    }
+
+    private void updateText() {
+        String sourceText = source.getDataType();
+        String targetText = target.getDataType();
+
+        if (sourceText.equals(targetText)) {
+            super.setText(sourceText);
+        } else {
+            FlowAction actionSource = null;
+            FlowAction actionTarget = null;
+
+            try {
+                actionSource = source.getParser().parse(sourceText);
+            } catch (FlowNotationParserException e) {
+                System.out.println(e.getMessage());
+                // ignore
+            }
+            try {
+                actionTarget = target.getParser().parse(targetText);
+            } catch (FlowNotationParserException e) {
+                System.out.println(e.getMessage());
+                // ignore
+            }
+
+            boolean setAuto = actionSource != null && actionTarget != null;
+            if (setAuto) {
+                try {
+                    super.setText(new Chain(0, 0, actionSource, actionTarget).toString());
+                } catch (Exception e) {
+                    setAuto = false;
+                }
+            }
+
+            if (!setAuto) {
+                super.setText(sourceText);
+            }
+        }
+    }
+
+    @Override
+    protected void destroy() {
+        super.destroy();
+
+        source.removePropertyChangeListener(listenerSource);
+        target.removePropertyChangeListener(listenerTarget);
     }
 
     @Override

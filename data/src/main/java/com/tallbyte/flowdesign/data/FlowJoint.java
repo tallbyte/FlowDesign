@@ -36,7 +36,7 @@ public class FlowJoint extends Joint {
 
     private JointValidator validator;
 
-    private String  dataType;
+    private String  dataType = "";
     private boolean valid;
 
     /**

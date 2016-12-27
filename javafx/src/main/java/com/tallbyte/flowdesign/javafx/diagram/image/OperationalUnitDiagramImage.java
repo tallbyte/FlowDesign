@@ -18,8 +18,9 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.image;
 
+import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
+import com.tallbyte.flowdesign.javafx.diagram.element.OperationalUnitElementNode;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 
 /**
@@ -28,13 +29,22 @@ import javafx.scene.shape.ArcType;
  * Authors:<br/>
  * - julian (2016-10-30)<br/>
  */
-public class StateDiagramImage extends DiagramImage {
+public class OperationalUnitDiagramImage extends DiagramImage {
 
     /**
-     * Creates a new {@link StateDiagramImage} with default dimension.
+     * Creates a new {@link OperationalUnitDiagramImage} with default dimension.
      */
-    public StateDiagramImage() {
+    public OperationalUnitDiagramImage() {
 
+    }
+
+    @Override
+    public void setElement(ElementNode element) {
+        super.setElement(element);
+
+        if (element instanceof OperationalUnitElementNode) {
+            ((OperationalUnitElementNode) element).stateProperty().addListener(observable -> repaint());
+        }
     }
 
     @Override
@@ -59,7 +69,14 @@ public class StateDiagramImage extends DiagramImage {
         rx -= rw*0.75;
         ry -= rh*0.75;
 
-        strokeCylinder(context, rx, ry, rw, rh);
+        if (element instanceof OperationalUnitElementNode) {
+            String state = ((OperationalUnitElementNode) element).getState();
+
+            if (state != null && !state.isEmpty()) {
+                context.clearRect(rx, ry, rw-2, rh-2);
+                strokeCylinder(context, rx, ry, rw, rh);
+            }
+        }
     }
 
     private void strokeCylinder(GraphicsContext context, double x, double y, double w, double h) {

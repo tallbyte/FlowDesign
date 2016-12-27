@@ -207,6 +207,10 @@ PropertyPane > TextField {
     -fx-font-size:        0.85em;
 }
 
+.nodeStateTextHolder {
+    -fx-text-fill: #8396b1;
+}
+
 .nodeBorderRectangle {
     -fx-stroke:           -fx-accent;
     -fx-stroke:           transparent;

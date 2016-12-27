@@ -148,6 +148,14 @@ public class NotationParserTest {
                 Tupel.class,
                     Type.class
         );
+        assertDeepEqual("(int)",
+                Tupel.class,
+                    Type.class
+        );
+        assertDeepEqual("(int)*",
+                Tupel.class,
+                    Type.class
+        );
         assertDeepEqual("String",
                 Type.class);
         assertDeepEqual("String*",
