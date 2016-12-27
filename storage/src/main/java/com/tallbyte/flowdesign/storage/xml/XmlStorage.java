@@ -126,7 +126,6 @@ public class XmlStorage implements Storage<XmlStorage, XMLStreamReader, XMLStrea
         register(Split                      .class, new XmlSplitSerializer());
         register(Join                       .class, new XmlJoinSerializer());
         register(ResourceAccess             .class, new XmlResourceAccessSerializer());
-        register(StateAccess                .class, new XmlStateAccessSerializer());
         register(Operation                  .class, new XmlOperationSerializer());
         register(End                        .class, new XmlEndSerializer());
 
