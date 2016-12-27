@@ -18,6 +18,8 @@
 
 package com.tallbyte.flowdesign.javafx;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
@@ -30,18 +32,32 @@ import javafx.scene.control.MenuItem;
  */
 public class Shortcut {
 
-    private final MenuItem                  item;
-    private       EventHandler<ActionEvent> actionEvent = null;
+    protected final String                                    name;
+    protected final String                                    keyCombo;
+    protected final ObjectProperty<EventHandler<ActionEvent>> action = new SimpleObjectProperty<>(this, "action", null);
 
-    public Shortcut(MenuItem item) {
-        this.item = item;
-
-        setActionEvent(null);
+    public Shortcut(String name, String keyCombo) {
+        this.name     = name;
+        this.keyCombo = keyCombo;
     }
 
-    public void setActionEvent(EventHandler<ActionEvent> actionEvent) {
-        this.actionEvent = actionEvent;
+    public String getName() {
+        return name;
+    }
 
-        item.setDisable(actionEvent == null);
+    public String getKeyCombo() {
+        return keyCombo;
+    }
+
+    public void setAction(EventHandler<ActionEvent> action) {
+        this.action.set(action);
+    }
+
+    public EventHandler<ActionEvent> getAction() {
+        return action.get();
+    }
+
+    public ObjectProperty<EventHandler<ActionEvent>> actionProperty() {
+        return action;
     }
 }

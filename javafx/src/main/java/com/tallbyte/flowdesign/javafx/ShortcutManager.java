@@ -18,6 +18,9 @@
 
 package com.tallbyte.flowdesign.javafx;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * This file is part of project flowDesign.
  * <p/>
@@ -25,4 +28,15 @@ package com.tallbyte.flowdesign.javafx;
  * - julian (2016-12-27)<br/>
  */
 public class ShortcutManager {
+
+    private final Map<String, ShortcutGroup> groups = new HashMap<>();
+
+    public ShortcutGroup getShortcutGroup(String name) {
+        return groups.get(name);
+    }
+
+    public void addGroup(ShortcutGroup shortcut) {
+        this.groups.putIfAbsent(shortcut.getName(), shortcut);
+    }
+
 }
