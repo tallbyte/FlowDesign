@@ -23,6 +23,7 @@ import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import com.tallbyte.flowdesign.javafx.Shortcuts;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramManager;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
+import com.tallbyte.flowdesign.javafx.diagram.SelectableNode;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -89,6 +90,14 @@ public class DiagramsPane extends TabPane {
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             diagram.setValue(paneMap.get(newValue));
             application.getShortcutManager().getShortcutGroup(Shortcuts.GROUP_DIAGRAM).reset();
+            DiagramPane pane = diagram.getValue();
+            if (pane != null) {
+                SelectableNode node = pane.getNode();
+
+                if (node != null) {
+                    node.registerShortcuts(application.getShortcutManager().getShortcutGroup(Shortcuts.GROUP_DIAGRAM));
+                }
+            }
         });
 
         diagrams.addListener((ListChangeListener<Diagram>) c -> {
