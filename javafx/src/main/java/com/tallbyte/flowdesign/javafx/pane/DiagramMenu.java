@@ -19,6 +19,8 @@
 package com.tallbyte.flowdesign.javafx.pane;
 
 import com.tallbyte.flowdesign.data.ui.storage.ProjectStorageHistoryEntry;
+import com.tallbyte.flowdesign.javafx.Shortcut;
+import com.tallbyte.flowdesign.javafx.ShortcutGroup;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
@@ -28,11 +30,13 @@ import javafx.fxml.LoadException;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 
 import static com.tallbyte.flowdesign.javafx.ResourceUtils.getResourceBundle;
+import static com.tallbyte.flowdesign.javafx.ResourceUtils.getResourceString;
 
 /**
  * This file is part of project flowDesign.
@@ -41,11 +45,6 @@ import static com.tallbyte.flowdesign.javafx.ResourceUtils.getResourceBundle;
  * - julian (2016-10-26)<br/>
  */
 public class DiagramMenu extends Menu {
-
-    @FXML private MenuItem itemGoToReference;
-    @FXML private MenuItem itemOpenSuggestions;
-    @FXML private MenuItem itemAddFlow;
-    @FXML private MenuItem itemAddDependency;
 
     /**
      * Creates a new {@link DiagramMenu} by loading from a fxml-file
@@ -65,19 +64,17 @@ public class DiagramMenu extends Menu {
 
     }
 
-    public MenuItem getItemGoToReference() {
-        return itemGoToReference;
-    }
+    public void setup(ShortcutGroup group) {
+        for (Shortcut shortcut : group.getShortcuts()) {
+            MenuItem item = new MenuItem();
+            item.setText(getResourceString("menu.diagram.title."+shortcut.getName()));
+            item.setAccelerator(KeyCombination.valueOf(getResourceString("menu.diagram.keyCombo."+shortcut.getKeyCombo())));
+            item.disableProperty().bind(shortcut.actionProperty().isNull());
+            shortcut.actionProperty().addListener((observable, oldValue, newValue) -> {
+                item.setOnAction(newValue);
+            });
 
-    public MenuItem getItemOpenSuggestions() {
-        return itemOpenSuggestions;
-    }
-
-    public MenuItem getItemAddFlow() {
-        return itemAddFlow;
-    }
-
-    public MenuItem getItemAddDependency() {
-        return itemAddDependency;
+            getItems().add(item);
+        }
     }
 }

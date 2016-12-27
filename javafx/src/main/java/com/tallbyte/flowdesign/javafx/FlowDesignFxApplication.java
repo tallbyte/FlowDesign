@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.tallbyte.flowdesign.javafx.Shortcuts.*;
+
 /**
  * This file is part of project flowDesign.
  * <p/>
@@ -38,6 +40,7 @@ import java.util.List;
  */
 public class FlowDesignFxApplication extends Application {
 
+    private ShortcutManager     shortcutManager;
     private ApplicationManager  applicationManager;
     private ColorHandler        colorHandler;
     private PopupHandler        popupHandler;
@@ -45,9 +48,12 @@ public class FlowDesignFxApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        this.shortcutManager    = new ShortcutManager();
         this.applicationManager = new ApplicationManager();
         this.colorHandler       = new ColorHandler(this);
         this.popupHandler       = new PopupHandler(this);
+
+        setupShortcuts();
 
         SwitchPane  switchPane  = new SwitchPane();
         WelcomePane defaultPane = new WelcomePane(this);
@@ -62,6 +68,20 @@ public class FlowDesignFxApplication extends Application {
         popupHandler.setupStage(primaryStage);
 
         primaryStage.show();
+    }
+
+    private void setupShortcuts() {
+        ShortcutGroup groupDiagram = new ShortcutGroup(GROUP_DIAGRAM);
+        groupDiagram.addShortcut(new Shortcut(SHORTCUT_GO_TO_REFERENCE, SHORTCUT_GO_TO_REFERENCE));
+        groupDiagram.addShortcut(new Shortcut(SHORTCUT_OPEN_SUGGESTIONS, SHORTCUT_OPEN_SUGGESTIONS));
+        groupDiagram.addShortcut(new Shortcut(SHORTCUT_ADD_FLOW, SHORTCUT_ADD_FLOW));
+        groupDiagram.addShortcut(new Shortcut(SHORTCUT_ADD_DEPENDENCY, SHORTCUT_ADD_DEPENDENCY));
+
+        shortcutManager.addGroup(groupDiagram);
+    }
+
+    public ShortcutManager getShortcutManager() {
+        return shortcutManager;
     }
 
     public ApplicationManager getApplicationManager() {

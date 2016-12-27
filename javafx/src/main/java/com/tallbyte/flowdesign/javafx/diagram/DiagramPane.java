@@ -20,6 +20,8 @@ package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.data.*;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
+import com.tallbyte.flowdesign.javafx.ShortcutGroup;
+import com.tallbyte.flowdesign.javafx.Shortcuts;
 import com.tallbyte.flowdesign.javafx.pane.DiagramsPane;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
@@ -482,6 +484,14 @@ public class DiagramPane extends ScrollPane {
                 c.getAddedSubList().stream()
                         .filter(node1 -> node1 instanceof ElementNode)
                         .forEach(node1 -> DiagramPane.this.node.set((ElementNode) node1));
+            }
+        });
+
+        node.addListener((observable, oldValue, newValue) -> {
+            ShortcutGroup group = application.getShortcutManager().getShortcutGroup(Shortcuts.GROUP_DIAGRAM);
+            group.reset();
+            if (newValue != null) {
+                newValue.registerShortcuts(group);
             }
         });
 

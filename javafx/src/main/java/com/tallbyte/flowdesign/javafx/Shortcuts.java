@@ -16,38 +16,21 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.tallbyte.flowdesign.javafx.diagram;
-
-import com.tallbyte.flowdesign.javafx.ShortcutGroup;
-import javafx.beans.property.ReadOnlyBooleanProperty;
+package com.tallbyte.flowdesign.javafx;
 
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
- * - julian (2016-12-19)<br/>
+ * - julian (2016-12-27)<br/>
  */
-public interface SelectableNode {
+public class Shortcuts {
 
-    /**
-     * Gets whether this {@link SelectableNode} is selected or not.
-     * @return Returns true if it is, else false.
-     */
-    boolean isSelected();
+    public static final String GROUP_DIAGRAM = "diagram";
 
-    /**
-     * Gets the selected property
-     * @return Returns the property.
-     */
-    ReadOnlyBooleanProperty selectedProperty();
-
-    /**
-     * Register all shortcuts.
-     * @param group the containing group
-     */
-    default void registerShortcuts(ShortcutGroup group) {
-        // do nothing
-    }
-
+    public static final String SHORTCUT_GO_TO_REFERENCE  = "goToReference";
+    public static final String SHORTCUT_OPEN_SUGGESTIONS = "openSuggestions";
+    public static final String SHORTCUT_ADD_FLOW         = "addFlow";
+    public static final String SHORTCUT_ADD_DEPENDENCY   = "addDependency";
 
 }

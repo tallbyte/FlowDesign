@@ -27,6 +27,7 @@ import com.tallbyte.flowdesign.data.ui.storage.ApplicationChangelog;
 import com.tallbyte.flowdesign.data.ui.storage.ApplicationChangelogEntry;
 import com.tallbyte.flowdesign.javafx.ColorHandler;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
+import com.tallbyte.flowdesign.javafx.Shortcuts;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -98,6 +99,7 @@ public class ApplicationPane extends BorderPane {
          * Prepare
          */
 
+        menuDiagram.setup(application.getShortcutManager().getShortcutGroup(Shortcuts.GROUP_DIAGRAM));
         paneDiagrams.setup(this);
         paneFactory.setup(paneDiagrams);
         paneProperty.setup(paneDiagrams);

@@ -23,6 +23,8 @@ import com.tallbyte.flowdesign.data.Diagram;
 import com.tallbyte.flowdesign.data.FlowJoint;
 import com.tallbyte.flowdesign.data.flow.FlowDiagram;
 import com.tallbyte.flowdesign.data.flow.OperationalUnit;
+import com.tallbyte.flowdesign.javafx.ShortcutGroup;
+import com.tallbyte.flowdesign.javafx.Shortcuts;
 import com.tallbyte.flowdesign.javafx.control.AutoSizeTextField;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
@@ -58,17 +60,21 @@ public class OperationalUnitElementNode extends ElementNode {
     public OperationalUnitElementNode(OperationalUnit element, DiagramImage content) {
         super(element, content, Pos.CENTER);
 
-        addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            Object ref = reference.get();
-
-            if (event.isControlDown() && event.getCode() == KeyCode.B && ref instanceof FlowDiagram) {
-                diagramPane.getDiagramsPane().addDiagram((Diagram) ref);
-            }
-        });
-
         setOnMousePressed(event -> requestFocus());
 
         this.operation = element;
+    }
+
+    @Override
+    public void registerShortcuts(ShortcutGroup group) {
+        super.registerShortcuts(group);
+
+        group.getShortcut(Shortcuts.SHORTCUT_GO_TO_REFERENCE).setAction(event -> {
+            Object reference = this.reference.get();
+            if (reference instanceof FlowDiagram) {
+                diagramPane.getDiagramsPane().addDiagram((FlowDiagram) reference);
+            }
+        });
     }
 
     private void setupProperties() {
