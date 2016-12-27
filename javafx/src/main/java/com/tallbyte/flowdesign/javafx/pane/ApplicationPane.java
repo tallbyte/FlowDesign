@@ -151,6 +151,10 @@ public class ApplicationPane extends BorderPane {
             }
         });
 
+        paneDiagrams.diagramProperty().addListener((observable, oldValue, newValue) -> {
+            selectTreeNode(newValue);
+        });
+
         project.addListener((observable, oldValue, newValue) -> {
             if (oldValue != null) {
                 listenersDiagrams.forEach(oldValue::removeDiagramsChangedListener);
@@ -253,7 +257,33 @@ public class ApplicationPane extends BorderPane {
         listeners.add(listenerDiagrams);
     }
 
-    public ContextMenu createDiagramContextMenu(Diagram diagram) {
+    protected boolean selectTreeNode(Diagram diagram, Iterable<TreeItem<TreeEntry>> items) {
+        for (TreeItem<TreeEntry> item : items) {
+            if (item.getValue() instanceof DiagramEntry) {
+                if (((DiagramEntry) item.getValue()).diagram == diagram) {
+                    treeProject.getSelectionModel().select(item);
+                    return true;
+                }
+            }
+
+            if (selectTreeNode(diagram, item.getChildren())) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    protected void selectTreeNode(DiagramPane diagram) {
+        if (diagram != null && diagram.getDiagram() != null) {
+            selectTreeNode(diagram.getDiagram(), treeProject.getRoot().getChildren());
+        } else {
+            treeProject.getSelectionModel().select(null);
+        }
+    }
+
+    protected ContextMenu createDiagramContextMenu(Diagram diagram) {
         ContextMenu menu = new ContextMenu();
 
         MenuItem itemRemove = new MenuItem(getResourceString("context.diagram.remove"));
