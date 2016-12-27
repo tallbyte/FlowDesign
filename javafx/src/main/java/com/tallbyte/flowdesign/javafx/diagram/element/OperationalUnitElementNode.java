@@ -21,7 +21,9 @@ package com.tallbyte.flowdesign.javafx.diagram.element;
 import com.tallbyte.flowdesign.data.DependencyJoint;
 import com.tallbyte.flowdesign.data.Diagram;
 import com.tallbyte.flowdesign.data.FlowJoint;
+import com.tallbyte.flowdesign.data.JointJoinException;
 import com.tallbyte.flowdesign.data.flow.FlowDiagram;
+import com.tallbyte.flowdesign.data.flow.Operation;
 import com.tallbyte.flowdesign.data.flow.OperationalUnit;
 import com.tallbyte.flowdesign.javafx.ShortcutGroup;
 import com.tallbyte.flowdesign.javafx.Shortcuts;
@@ -73,6 +75,26 @@ public class OperationalUnitElementNode extends ElementNode {
             Object reference = this.reference.get();
             if (reference instanceof FlowDiagram) {
                 diagramPane.getDiagramsPane().addDiagram((FlowDiagram) reference);
+            }
+        });
+        group.getShortcut(Shortcuts.SHORTCUT_ADD_FLOW).setAction(event -> {
+            double x = getRealX() + getRealWidth() + 300;
+            double y = getRealY();
+
+            Operation operation = new Operation();
+            operation.setX(x);
+            operation.setY(y);
+            operation.setWidth(getRealWidth());
+            operation.setHeight(getRealHeight());
+
+            FlowDiagram diagram = (FlowDiagram) diagramPane.getDiagram();
+            diagram.addElement(operation);
+
+            try {
+                this.operation.getOutputGroup().getJoint(0).join(operation.getInputGroup().getJoint(0));
+                operation.getInputGroup().getJoint(0).setDataType(this.operation.getOutputGroup().getJoint(0).getDataType());
+            } catch (JointJoinException e) {
+                // just try
             }
         });
     }

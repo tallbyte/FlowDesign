@@ -89,11 +89,13 @@ public class OperationalUnit extends FlowDiagramElement {
         }};
     }
 
-    public JointGroup<?> getInputGroup() {
+    @SuppressWarnings("unchecked")
+    public JointGroup<FlowJoint> getInputGroup() {
         return getJointGroup(JOINT_GROUP_IN);
     }
 
-    public JointGroup<?> getOutputGroup() {
+    @SuppressWarnings("unchecked")
+    public JointGroup<FlowJoint> getOutputGroup() {
         return getJointGroup(JOINT_GROUP_OUT);
     }
 

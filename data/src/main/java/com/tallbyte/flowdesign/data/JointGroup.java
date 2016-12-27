@@ -78,6 +78,7 @@ public class JointGroup<J extends Joint> {
 
         J joint = factory.createJoint(element);
         joints.add(joint);
+        setAmount(amount+1);
 
         for (JointsChangedListener listener : listenersJoints) {
             listener.onJointsChanged(joint, true);
