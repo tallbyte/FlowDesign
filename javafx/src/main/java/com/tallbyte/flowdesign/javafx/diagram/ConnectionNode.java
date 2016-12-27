@@ -28,6 +28,8 @@ import com.tallbyte.flowdesign.javafx.popup.DataTypePopup;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
@@ -261,5 +263,10 @@ public class ConnectionNode extends Group implements SelectableNode {
     @Override
     public ReadOnlyBooleanProperty selectedProperty() {
         return selected;
+    }
+
+    @Override
+    public ObservableList<Property<?>> getNodeProperties() {
+        return FXCollections.observableArrayList();
     }
 }

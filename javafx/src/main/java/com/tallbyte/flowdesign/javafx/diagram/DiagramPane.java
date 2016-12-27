@@ -20,6 +20,7 @@ package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.data.*;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
+import com.tallbyte.flowdesign.javafx.Shortcut;
 import com.tallbyte.flowdesign.javafx.ShortcutGroup;
 import com.tallbyte.flowdesign.javafx.Shortcuts;
 import com.tallbyte.flowdesign.javafx.pane.DiagramsPane;
@@ -37,6 +38,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Pair;
@@ -45,6 +47,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.tallbyte.flowdesign.javafx.Shortcuts.*;
 
 /**
  * This file is part of project flowDesign.
@@ -119,7 +123,7 @@ public class DiagramPane extends ScrollPane {
     /**
      * The last actively selected node.
      */
-    protected final ObjectProperty<ElementNode>    node    = new SimpleObjectProperty<>(this, "node", null);
+    protected final ObjectProperty<SelectableNode> node    = new SimpleObjectProperty<>(this, "node", null);
 
     /**
      * The joint that is currently selected by the user.
@@ -370,6 +374,12 @@ public class DiagramPane extends ScrollPane {
     private void setup() {
         getStyleClass().add("diagramNode");
 
+        selected.addListener((ListChangeListener<SelectableNode>) c -> {
+            while (c.next()) {
+                c.getAddedSubList().forEach(node::set);
+            }
+        });
+
         diagram.addListener((observable, oldValue, newValue) -> {
             if (oldValue != null) {
                 oldValue.removeElementsChangedListener(listenerElements);
@@ -454,21 +464,7 @@ public class DiagramPane extends ScrollPane {
 
         setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.DELETE) {
-                // copy to be able to remove
-                List<SelectableNode> copy = new ArrayList<>(selected);
 
-                for (SelectableNode node : copy) {
-                    if (node instanceof ElementNode) {
-                        diagramManager.removeElement(getDiagram(), ((ElementNode) node).getElement());
-
-                    } else if (node instanceof ConnectionNode) {
-                        try {
-                            ((ConnectionNode) node).getConnection().getSource().disjoin(((ConnectionNode) node).getConnection().getTarget());
-                        } catch (JointJoinException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
             }
         });
 
@@ -488,11 +484,7 @@ public class DiagramPane extends ScrollPane {
         });
 
         node.addListener((observable, oldValue, newValue) -> {
-            ShortcutGroup group = application.getShortcutManager().getShortcutGroup(Shortcuts.GROUP_DIAGRAM);
-            group.reset();
-            if (newValue != null) {
-                newValue.registerShortcuts(group);
-            }
+            reapplyShortcuts();
         });
 
         listenerRelease = event -> {
@@ -517,6 +509,8 @@ public class DiagramPane extends ScrollPane {
     void unregisterJointNode(JointNode jointNode) {
         jointNodes.remove(jointNode.getJoint(), jointNode);
     }
+
+
 
     /**
      * Gets the {@link JointNode} if a {@link Joint}.
@@ -610,10 +604,10 @@ public class DiagramPane extends ScrollPane {
     }
 
     /**
-     * Gets the currently selected {@link Node}.
+     * Gets the currently selected {@link SelectableNode}.
      * @return Returns the node or null if none is set.
      */
-    public ElementNode getNode() {
+    public SelectableNode getNode() {
         return node.get();
     }
 
@@ -621,7 +615,7 @@ public class DiagramPane extends ScrollPane {
      * Sets the currently selected {@link ElementNode}.
      * @param node the new node
      */
-    public void setNode(ElementNode node) {
+    public void setNode(SelectableNode node) {
         this.node.set(node);
     }
 
@@ -629,7 +623,7 @@ public class DiagramPane extends ScrollPane {
      * Gets the node property.
      * @return Returns the property.
      */
-    public ReadOnlyObjectProperty<ElementNode> nodeProperty() {
+    public ReadOnlyObjectProperty<SelectableNode> nodeProperty() {
         return node;
     }
 
@@ -655,5 +649,37 @@ public class DiagramPane extends ScrollPane {
      */
     ObjectProperty<Joint> jointProperty() {
         return joint;
+    }
+
+    protected void reapplyShortcuts() {
+        ShortcutGroup groupElements = application.getShortcutManager().getShortcutGroup(GROUP_DIAGRAM_ELEMENTS);
+        groupElements.reset();
+        SelectableNode currentNode = getNode();
+        if (currentNode != null) {
+            currentNode.registerShortcuts(groupElements);
+        }
+
+        ShortcutGroup groupDiagram = application.getShortcutManager().getShortcutGroup(GROUP_DIAGRAM);
+        groupDiagram.reset();
+        groupDiagram.getShortcut(SHORTCUT_REMOVE_SELECTED).setAction(event -> {
+            // copy to be able to remove
+            List<SelectableNode> copy = new ArrayList<>(selected);
+
+            for (SelectableNode node : copy) {
+                if (node instanceof ElementNode) {
+                    diagramManager.removeElement(getDiagram(), ((ElementNode) node).getElement());
+                } else if (node instanceof ConnectionNode) {
+                    try {
+                        ((ConnectionNode) node).getConnection().getSource().disjoin(((ConnectionNode) node).getConnection().getTarget());
+                    } catch (JointJoinException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    public void onOpen() {
+        reapplyShortcuts();
     }
 }

@@ -30,6 +30,7 @@ import javafx.fxml.LoadException;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 
@@ -64,17 +65,26 @@ public class DiagramMenu extends Menu {
 
     }
 
-    public void setup(ShortcutGroup group) {
-        for (Shortcut shortcut : group.getShortcuts()) {
-            MenuItem item = new MenuItem();
-            item.setText(getResourceString("menu.diagram.title."+shortcut.getName()));
-            item.setAccelerator(KeyCombination.valueOf(getResourceString("menu.diagram.keyCombo."+shortcut.getKeyCombo())));
-            item.disableProperty().bind(shortcut.actionProperty().isNull());
-            shortcut.actionProperty().addListener((observable, oldValue, newValue) -> {
-                item.setOnAction(newValue);
-            });
+    public void setup(ApplicationPane pane, ShortcutGroup... groups) {
+        for (int i = 0 ; i < groups.length ; ++i) {
+            ShortcutGroup group = groups[i];
 
-            getItems().add(item);
+            for (Shortcut shortcut : group.getShortcuts()) {
+                MenuItem item = new MenuItem();
+                item.setText(getResourceString("menu.diagram.title."+shortcut.getName()));
+                item.setAccelerator(KeyCombination.valueOf(getResourceString("menu.diagram.keyCombo."+shortcut.getKeyCombo())));
+                item.disableProperty().bind(shortcut.actionProperty().isNull());
+                shortcut.actionProperty().addListener((observable, oldValue, newValue) -> {
+                    item.setOnAction(newValue);
+                });
+
+                getItems().add(item);
+            }
+
+            if (i < groups.length - 1) {
+                getItems().add(new SeparatorMenuItem());
+            }
         }
+
     }
 }

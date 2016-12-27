@@ -71,12 +71,17 @@ public class FlowDesignFxApplication extends Application {
     }
 
     private void setupShortcuts() {
-        ShortcutGroup groupDiagram = new ShortcutGroup(GROUP_DIAGRAM);
-        groupDiagram.addShortcut(new Shortcut(SHORTCUT_GO_TO_REFERENCE, SHORTCUT_GO_TO_REFERENCE));
-        groupDiagram.addShortcut(new Shortcut(SHORTCUT_OPEN_SUGGESTIONS, SHORTCUT_OPEN_SUGGESTIONS));
-        groupDiagram.addShortcut(new Shortcut(SHORTCUT_ADD_FLOW, SHORTCUT_ADD_FLOW));
-        groupDiagram.addShortcut(new Shortcut(SHORTCUT_ADD_DEPENDENCY, SHORTCUT_ADD_DEPENDENCY));
+        ShortcutGroup groupElements = new ShortcutGroup(GROUP_DIAGRAM_ELEMENTS);
+        groupElements.addShortcut(new Shortcut(SHORTCUT_GO_TO_REFERENCE, SHORTCUT_GO_TO_REFERENCE));
+        groupElements.addShortcut(new Shortcut(SHORTCUT_OPEN_SUGGESTIONS, SHORTCUT_OPEN_SUGGESTIONS));
+        groupElements.addShortcut(new Shortcut(SHORTCUT_APPLY_ACTION, SHORTCUT_APPLY_ACTION));
+        groupElements.addShortcut(new Shortcut(SHORTCUT_ADD_FLOW, SHORTCUT_ADD_FLOW));
+        groupElements.addShortcut(new Shortcut(SHORTCUT_ADD_DEPENDENCY, SHORTCUT_ADD_DEPENDENCY));
 
+        ShortcutGroup groupDiagram = new ShortcutGroup(GROUP_DIAGRAM);
+        groupDiagram.addShortcut(new Shortcut(SHORTCUT_REMOVE_SELECTED, SHORTCUT_REMOVE_SELECTED));
+
+        shortcutManager.addGroup(groupElements);
         shortcutManager.addGroup(groupDiagram);
     }
 

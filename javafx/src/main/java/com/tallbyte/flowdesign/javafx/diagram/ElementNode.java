@@ -325,11 +325,8 @@ public class ElementNode extends Group implements SelectableNode {
         return defaultColor;
     }
 
-    /**
-     * Gets the modifiable properties
-     * @return Returns a list of such properties.
-     */
-    public ObservableList<Property<?>> getElementProperties() {
+    @Override
+    public ObservableList<Property<?>> getNodeProperties() {
         return properties;
     }
 

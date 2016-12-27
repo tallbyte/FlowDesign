@@ -19,7 +19,9 @@
 package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.javafx.ShortcutGroup;
+import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.collections.ObservableList;
 
 /**
  * This file is part of project flowDesign.
@@ -48,6 +50,12 @@ public interface SelectableNode {
     default void registerShortcuts(ShortcutGroup group) {
         // do nothing
     }
+
+    /**
+     * Gets the modifiable properties
+     * @return Returns a list of such properties.
+     */
+    ObservableList<Property<?>> getNodeProperties();
 
 
 }

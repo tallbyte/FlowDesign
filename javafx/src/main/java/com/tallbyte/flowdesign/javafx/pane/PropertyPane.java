@@ -19,6 +19,7 @@
 package com.tallbyte.flowdesign.javafx.pane;
 
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
+import com.tallbyte.flowdesign.javafx.diagram.SelectableNode;
 import com.tallbyte.flowdesign.javafx.property.ColorProperty;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
@@ -51,7 +52,7 @@ import static com.tallbyte.flowdesign.javafx.ResourceUtils.*;
  */
 public class PropertyPane extends GridPane {
 
-    protected ChangeListener<ElementNode> listener = null;
+    protected ChangeListener<SelectableNode> listener = null;
 
     public void setup(DiagramsPane pane) {
         pane.diagramProperty().addListener((o, oldPane, newPane) -> {
@@ -66,7 +67,7 @@ public class PropertyPane extends GridPane {
 
                     if (newValue != null) {
                         int row = 0;
-                        for (Property<?> property : newValue.getElementProperties()) {
+                        for (Property<?> property : newValue.getNodeProperties()) {
                             row += addProperty(property, row) ? 1 : 0;
                         }
                     }

@@ -99,7 +99,7 @@ public class DataTypePopup extends Popup {
 
     /**
      * Attempts to find a suitable value for the given string.
-     * This will open this popup if expansion as not successful.
+     * This will onOpen this popup if expansion as not successful.
      * @param ownerNode the owning {@link Node} of the shown popup
      * @param anchorX the x location in screen coordinates
      * @param anchorY the y location in screen coordinates

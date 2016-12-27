@@ -99,7 +99,11 @@ public class ApplicationPane extends BorderPane {
          * Prepare
          */
 
-        menuDiagram.setup(application.getShortcutManager().getShortcutGroup(Shortcuts.GROUP_DIAGRAM));
+        menuDiagram.setup(
+                this,
+                application.getShortcutManager().getShortcutGroup(Shortcuts.GROUP_DIAGRAM),
+                application.getShortcutManager().getShortcutGroup(Shortcuts.GROUP_DIAGRAM_ELEMENTS)
+        );
         paneDiagrams.setup(this);
         paneFactory.setup(paneDiagrams);
         paneProperty.setup(paneDiagrams);

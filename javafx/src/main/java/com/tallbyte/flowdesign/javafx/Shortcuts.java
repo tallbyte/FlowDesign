@@ -26,11 +26,16 @@ package com.tallbyte.flowdesign.javafx;
  */
 public class Shortcuts {
 
-    public static final String GROUP_DIAGRAM = "diagram";
-
+    public static final String GROUP_DIAGRAM_ELEMENTS    = "diagramElements";
     public static final String SHORTCUT_GO_TO_REFERENCE  = "goToReference";
     public static final String SHORTCUT_OPEN_SUGGESTIONS = "openSuggestions";
+    public static final String SHORTCUT_APPLY_ACTION     = "applyAction";
     public static final String SHORTCUT_ADD_FLOW         = "addFlow";
     public static final String SHORTCUT_ADD_DEPENDENCY   = "addDependency";
+
+    public static final String GROUP_DIAGRAM             = "diagram";
+    public static final String SHORTCUT_REMOVE_SELECTED  = "removeSelected";
+
+
 
 }

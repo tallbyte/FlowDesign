@@ -21,6 +21,9 @@ package com.tallbyte.flowdesign.javafx.control;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 
 
 /**
@@ -48,6 +51,25 @@ public class AutoSizeTextField extends TextField {
         setText("");
         setPrefColumnCount(60);
         setMinWidth(10);
+
+        addEventHandler(KeyEvent.KEY_RELEASED, event -> {
+            if (!event.getCode().isModifierKey()) {
+                Runnable r = getScene().getAccelerators().get(
+                        new KeyCodeCombination(
+                                event.getCode(),
+                                event.isShiftDown() ? KeyCombination.ModifierValue.DOWN : KeyCombination.ModifierValue.UP,
+                                event.isControlDown() ? KeyCombination.ModifierValue.DOWN : KeyCombination.ModifierValue.UP,
+                                event.isAltDown() ? KeyCombination.ModifierValue.DOWN : KeyCombination.ModifierValue.UP,
+                                event.isMetaDown() ? KeyCombination.ModifierValue.DOWN : KeyCombination.ModifierValue.UP,
+                                KeyCombination.ModifierValue.UP
+                        )
+                );
+                if (r != null) {
+                    r.run();
+                }
+            }
+
+        });
     }
 
 }
