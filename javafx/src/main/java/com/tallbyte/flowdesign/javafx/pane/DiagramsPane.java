@@ -19,7 +19,6 @@
 package com.tallbyte.flowdesign.javafx.pane;
 
 import com.tallbyte.flowdesign.data.Diagram;
-import com.tallbyte.flowdesign.javafx.DiagramShortcutManager;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramManager;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
@@ -52,10 +51,6 @@ public class DiagramsPane extends TabPane {
 
     public DiagramsPane() {
 
-    }
-
-    public DiagramShortcutManager getShortcutManager() {
-        return applicationPane.getShortcutManager();
     }
 
     public void addDiagram(Diagram diagram) {
@@ -92,7 +87,6 @@ public class DiagramsPane extends TabPane {
     private void setup() {
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             diagram.setValue(paneMap.get(newValue));
-            getShortcutManager().reset();
         });
 
         diagrams.addListener((ListChangeListener<Diagram>) c -> {
