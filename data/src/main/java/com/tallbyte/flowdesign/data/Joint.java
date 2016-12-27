@@ -21,6 +21,7 @@ package com.tallbyte.flowdesign.data;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -207,6 +208,22 @@ public abstract class Joint {
         } else {
             throw new JointJoinException("can not disjoin " + this + " and " + target + ": not connected");
         }
+    }
+
+    /**
+     * Gets all incoming {@link Connection}s.
+     * @return Returns the {@link Connection}s.
+     */
+    public List<Connection> getIncoming() {
+        return Collections.unmodifiableList(incoming);
+    }
+
+    /**
+     * Gets all outgoing {@link Connection}s.
+     * @return Returns the {@link Connection}s.
+     */
+    public List<Connection> getOutgoing() {
+        return Collections.unmodifiableList(outgoing);
     }
 
     /**

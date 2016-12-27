@@ -91,7 +91,7 @@ public class FlowConnection extends Connection<FlowJoint> {
             }
 
             if (!setAuto) {
-                super.setText(sourceText);
+                super.setText(sourceText+"/"+targetText);
             }
         }
     }
