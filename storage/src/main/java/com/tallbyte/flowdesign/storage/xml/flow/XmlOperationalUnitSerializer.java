@@ -25,19 +25,28 @@ import com.tallbyte.flowdesign.storage.xml.XmlSerializationHelper;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
+import java.util.Map;
 
 /**
  * Created by michael on 12.12.16.
  */
 public abstract class XmlOperationalUnitSerializer<O extends OperationalUnit> extends XmlFlowDiagramElementSerializer<O> {
 
+    public static final String ATTRIBUTE_STATE = "state";
+
     @Override
     protected void writeAttributes(XMLStreamWriter writer, O element, XmlSerializationHelper helper) throws XMLStreamException {
         super.writeAttributes(writer, element, helper);
+
+        writer.writeAttribute(ATTRIBUTE_STATE, element.getState());
     }
 
     @Override
     protected void readAttributes(XMLStreamReader reader, O element, XmlDeserializationHelper helper) throws XMLStreamException {
         super.readAttributes(reader, element, helper);
+
+        Map<String, String> attributes = helper.getAttributes(reader);
+
+        element.setState(attributes.get(ATTRIBUTE_STATE));
     }
 }
