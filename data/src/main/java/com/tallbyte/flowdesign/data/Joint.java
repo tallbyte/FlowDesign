@@ -89,7 +89,7 @@ public abstract class Joint {
      * @return Returns true if it can, else false.
      */
     public boolean canOutput() {
-        return isOutput() && outgoing.size() < maxOut;
+        return isOutput() && (outgoing.size() < maxOut || maxOut == 0);
     }
 
     /**
@@ -107,7 +107,7 @@ public abstract class Joint {
      * @return Returns true if it can, else false.
      */
     public boolean canInput() {
-        return isInput() && incoming.size() < maxIn;
+        return isInput() && (incoming.size() < maxIn || maxIn == 0);
     }
 
     /**
