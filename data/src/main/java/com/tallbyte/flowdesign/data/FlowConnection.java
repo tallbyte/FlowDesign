@@ -71,17 +71,19 @@ public class FlowConnection extends Connection<FlowJoint> {
         String targetText = target.getDataType();
 
         if (sourceText.equals(targetText)) {
+            System.out.println(sourceText);
             try {
                 FlowAction action = source.getParser().parse(sourceText);
 
                 if (action instanceof Chain) {
-                    try {
-                        enableUpdater = false;
-                        source.setDataType(((Chain) action).getFirst().toString());
-                        target.setDataType(((Chain) action).getSecond().toString());
-                    } finally {
-                        enableUpdater = true;
-                    }
+                    updateJoints(
+                            ((Chain) action).getFirst().toString(),
+                            ((Chain) action).getSecond().toString()
+                    );
+
+                    super.setText(action.toString());
+                } else {
+                    super.setText(sourceText);
                 }
             } catch (FlowNotationParserException e) {
                 super.setText(sourceText);
@@ -94,13 +96,11 @@ public class FlowConnection extends Connection<FlowJoint> {
             try {
                 actionSource = source.getParser().parse(sourceText);
             } catch (FlowNotationParserException e) {
-                System.out.println(e.getMessage());
                 // ignore
             }
             try {
                 actionTarget = target.getParser().parse(targetText);
             } catch (FlowNotationParserException e) {
-                System.out.println(e.getMessage());
                 // ignore
             }
 
@@ -108,13 +108,7 @@ public class FlowConnection extends Connection<FlowJoint> {
             if (setAuto) {
                 try {
                     super.setText(new Chain(0, 0, actionSource, actionTarget).toString());
-                    try {
-                        enableUpdater = false;
-                        source.setDataType(actionSource.toString());
-                        target.setDataType(actionTarget.toString());
-                    } finally {
-                        enableUpdater = true;
-                    }
+                    updateJoints(actionSource.toString(), actionTarget.toString());
                 } catch (Exception e) {
                     setAuto = false;
                 }
@@ -123,6 +117,20 @@ public class FlowConnection extends Connection<FlowJoint> {
             if (!setAuto) {
                 super.setText(sourceText+"/"+targetText);
             }
+        }
+    }
+
+    private void updateJoints(String text) {
+        updateJoints(text, text);
+    }
+
+    private void updateJoints(String first, String second) {
+        try {
+            enableUpdater = false;
+            source.setDataType(first);
+            target.setDataType(second);
+        } finally {
+            enableUpdater = true;
         }
     }
 
@@ -138,12 +146,6 @@ public class FlowConnection extends Connection<FlowJoint> {
     public void setText(String text) {
         super.setText(text);
 
-        try {
-            enableUpdater = false;
-            source.setDataType(text);
-            target.setDataType(text);
-        } finally {
-            enableUpdater = true;
-        }
+        updateJoints(text);
     }
 }
