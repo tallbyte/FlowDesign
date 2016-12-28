@@ -20,26 +20,46 @@ package com.tallbyte.flowdesign.storage.xml;
 
 import com.tallbyte.flowdesign.data.Element;
 import com.tallbyte.flowdesign.data.Joint;
+import com.tallbyte.flowdesign.data.JointGroup;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by michael on 09.12.16.
  */
 public class XmlJointSerializer<T extends Joint> implements XmlSerializer<T> {
 
-    public static final String ATTRIBUTE_LOCATION = "location";
-    public static final String ATTRIBUTE_ENTITY   = "entity";
+    public static final String ATTRIBUTE_GROUP  = "group";
+    public static final String ATTRIBUTE_INDEX  = "index";
+    public static final String ATTRIBUTE_ENTITY = "entity";
 
     @Override
     public void serialize(XMLStreamWriter writer, T joint, XmlSerializationHelper helper) throws IOException {
         try {
             //writer.writeAttribute(ATTRIBUTE_LOCATION, joint.getLocation());
             writer.writeAttribute(ATTRIBUTE_ENTITY,   helper.getAssignedIdMap().get(joint.getElement()));
+
+            for (String groupName: joint.getElement().getJointGroups()) {
+                int index = 0;
+                for (Object j : joint.getElement().getJointGroup(groupName).getJoints()) {
+                    if (Objects.equals(j, joint)) {
+
+                        writer.writeAttribute(ATTRIBUTE_INDEX, Integer.toString(index));
+                        writer.writeAttribute(ATTRIBUTE_GROUP, groupName);
+
+                        return; // done
+                    }
+                    ++index;
+                }
+            }
+
+            throw new IOException("Could not resolve index of joint "+joint);
+
 
         } catch (XMLStreamException e) {
             throw new IOException(e);
@@ -57,7 +77,8 @@ public class XmlJointSerializer<T extends Joint> implements XmlSerializer<T> {
         try {
             Map<String, String> attributes = helper.getAttributes(reader);
 
-            String location = attributes.get(ATTRIBUTE_LOCATION);
+            int    index    = Integer.valueOf(attributes.get(ATTRIBUTE_INDEX));
+            String group    = attributes.get(ATTRIBUTE_GROUP);
             String entityId = attributes.get(ATTRIBUTE_ENTITY);
 
             Element element = helper.getAssignedIdMap().get(entityId);
@@ -69,16 +90,21 @@ public class XmlJointSerializer<T extends Joint> implements XmlSerializer<T> {
                 );
             }
 
-            /* for (Joint j : element.getJoints()) {
-                if (j.getLocation().equals(location)) {
-                    return (T)j;
-                }
-            }*/
+            JointGroup<?> jointGroup = element.getJointGroup(group);
 
-            throw new IOException(
-                    "Failed to find requested joint for location: "+location +
-                            " at line: "+reader.getLocation().getLineNumber()
-            );
+            if (jointGroup == null) {
+                throw new IOException("Failed to find requested joint group of name: "+group +
+                        " at line: "+reader.getLocation().getLineNumber()
+                );
+            }
+
+            if (index < 0 || index >= jointGroup.getMaxJoints()) {
+                throw new IOException("Invalid index="+index+" where max="+jointGroup.getMaxJoints() +
+                        " at line: "+reader.getLocation().getLineNumber()
+                );
+            }
+
+            return (T)jointGroup.getJoint(index);
 
         } catch (XMLStreamException e) {
             throw new IOException(e);
