@@ -20,7 +20,6 @@ package com.tallbyte.flowdesign.storage.xml;
 
 import com.tallbyte.flowdesign.data.DataType;
 import com.tallbyte.flowdesign.data.Diagram;
-import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
 import com.tallbyte.flowdesign.data.Project;
 
 import javax.xml.stream.XMLStreamException;

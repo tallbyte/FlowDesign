@@ -24,6 +24,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -40,26 +41,33 @@ public abstract class XmlElementSerializer<T extends Element> implements XmlSeri
     public static final String ATTRIBUTE_DELETABLE  = "deletable";
 
 
-
-    protected void writeAttributes(XMLStreamWriter writer, T element, XmlSerializationHelper helper) throws XMLStreamException {
+    /**
+     * @param attributes {@link Map} to put attributes into
+     * @param element {@link Element} to load attributes from
+     * @param helper {@link XmlSerializationHelper} assisting
+     * @return Given {@link Map}
+     * @throws XMLStreamException If attribute composing failed
+     */
+    protected Map<String, String> saveAttributes(Map<String, String> attributes, T element, XmlSerializationHelper helper) throws XMLStreamException {
         // Double#toString is locale independent
-        writer.writeAttribute(ATTRIBUTE_X,          Double.toString(element.getX()));
-        writer.writeAttribute(ATTRIBUTE_Y,          Double.toString(element.getY()));
-        writer.writeAttribute(ATTRIBUTE_WIDTH,      Double.toString(element.getWidth()));
-        writer.writeAttribute(ATTRIBUTE_HEIGHT,     Double.toString(element.getHeight()));
-        writer.writeAttribute(ATTRIBUTE_TEXT,       element.getText());
+        attributes.put(ATTRIBUTE_X,          Double.toString(element.getX()));
+        attributes.put(ATTRIBUTE_Y,          Double.toString(element.getY()));
+        attributes.put(ATTRIBUTE_WIDTH,      Double.toString(element.getWidth()));
+        attributes.put(ATTRIBUTE_HEIGHT,     Double.toString(element.getHeight()));
+        attributes.put(ATTRIBUTE_TEXT,       element.getText());
+        attributes.put(ATTRIBUTE_COLOR,      element.getColor());
+        attributes.put(ATTRIBUTE_DELETABLE,  Boolean.toString(element.isDeletable()));
 
-        if (element.getColor() != null) {
-            writer.writeAttribute(ATTRIBUTE_COLOR,  element.getColor());
-        }
-
-        writer.writeAttribute(ATTRIBUTE_DELETABLE,  Boolean.toString(element.isDeletable()));
+        return attributes;
     }
 
-    protected void readAttributes(XMLStreamReader reader, T element, XmlDeserializationHelper helper) throws XMLStreamException {
-        // read common attributes
-        Map<String, String> attributes = helper.getAttributes(reader);
-
+    /**
+     * @param attributes {@link Map} to load attributes from
+     * @param element {@link Element} to store loaded attributes into
+     * @param helper {@link XmlDeserializationHelper} assisting
+     * @throws XMLStreamException If attribute loading failed
+     */
+    protected void loadAttributes(Map<String, String> attributes, T element, XmlDeserializationHelper helper) throws XMLStreamException {
         // Double#valueOf is locale independent
         element.setX       (Double.valueOf(attributes.get(ATTRIBUTE_X)));
         element.setY       (Double.valueOf(attributes.get(ATTRIBUTE_Y)));
@@ -74,7 +82,14 @@ public abstract class XmlElementSerializer<T extends Element> implements XmlSeri
     @Override
     public void serialize(XMLStreamWriter writer, T serializable, XmlSerializationHelper helper) throws IOException {
         try {
-            writeAttributes(writer, serializable, helper);
+            helper.setAttributes(
+                    writer,
+                    saveAttributes(
+                            new HashMap<>(),
+                            serializable,
+                            helper
+                    )
+            );
 
         } catch (XMLStreamException e) {
             throw new IOException(e);
@@ -84,7 +99,12 @@ public abstract class XmlElementSerializer<T extends Element> implements XmlSeri
     @Override
     public T deserialize(XMLStreamReader reader, T serializable, XmlDeserializationHelper helper) throws IOException {
         try {
-            readAttributes(reader, serializable, helper);
+            loadAttributes(
+                    helper.getAttributes(reader),
+                    serializable,
+                    helper
+            );
+
             return serializable;
 
         } catch (XMLStreamException e) {

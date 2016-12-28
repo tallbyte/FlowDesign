@@ -24,21 +24,19 @@ import com.tallbyte.flowdesign.storage.xml.XmlElementSerializer;
 import com.tallbyte.flowdesign.storage.xml.XmlSerializationHelper;
 
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
+import java.util.Map;
 
 /**
  * Created by michael on 12.12.16.
  */
 public abstract class XmlEnvironmentDiagramElementSerializer<E extends EnvironmentDiagramElement> extends XmlElementSerializer<E> {
-
     @Override
-    protected void writeAttributes(XMLStreamWriter writer, E element, XmlSerializationHelper helper) throws XMLStreamException {
-        super.writeAttributes(writer, element, helper);
+    protected Map<String, String> saveAttributes(Map<String, String> attributes, E element, XmlSerializationHelper helper) throws XMLStreamException {
+        return super.saveAttributes(attributes, element, helper);
     }
 
     @Override
-    protected void readAttributes(XMLStreamReader reader, E element, XmlDeserializationHelper helper) throws XMLStreamException {
-        super.readAttributes(reader, element, helper);
+    protected void loadAttributes(Map<String, String> attributes, E element, XmlDeserializationHelper helper) throws XMLStreamException {
+        super.loadAttributes(attributes, element, helper);
     }
 }

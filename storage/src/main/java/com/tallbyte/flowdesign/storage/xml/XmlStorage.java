@@ -36,8 +36,8 @@ import com.tallbyte.flowdesign.storage.UnknownIdentifierException;
 import com.tallbyte.flowdesign.storage.xml.environment.*;
 import com.tallbyte.flowdesign.storage.xml.flow.*;
 import com.tallbyte.flowdesign.storage.xml.mask.XmlMaskCommentSerializer;
-import com.tallbyte.flowdesign.storage.xml.mask.XmlRectangleSerializer;
 import com.tallbyte.flowdesign.storage.xml.mask.XmlMaskDiagramSerializer;
+import com.tallbyte.flowdesign.storage.xml.mask.XmlRectangleSerializer;
 import com.tallbyte.flowdesign.storage.xml.mask.XmlSelfReferenceSerializer;
 
 import javax.xml.stream.*;
