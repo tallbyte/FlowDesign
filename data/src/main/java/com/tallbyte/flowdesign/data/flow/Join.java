@@ -106,13 +106,12 @@ public class Join extends FlowDiagramElement {
         });
 
         Tupel tupel = new Tupel(0, 0, false, list);
-        getOutputGroup().getJoints().stream().filter(j -> j instanceof FlowJoint).forEach(j -> {
-            ((FlowJoint) j).setDataType(tupel.toString());
-
-            j.getOutgoing().stream().filter(connection -> connection.getTarget() instanceof FlowJoint).forEach(connection -> {
-                ((FlowJoint) connection.getTarget()).setDataType(tupel.toString());
-            });
-        });
+        getOutputGroup().getJoints().stream()
+                .filter(j -> j instanceof FlowJoint)
+                .forEach(j -> j.getOutgoing().stream()
+                        .filter(connection -> connection.getTarget() instanceof FlowJoint)
+                        .forEach(connection -> connection.setText(tupel.toString()))
+        );
     }
 
     public JointGroup<?> getInputGroup() {
