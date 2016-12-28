@@ -56,6 +56,8 @@ public class FlowConnection extends Connection<FlowJoint> {
         };
         source.addPropertyChangeListener(listenerSource);
         target.addPropertyChangeListener(listenerTarget);
+
+        updateText();
     }
 
     private void updateText() {
@@ -63,7 +65,17 @@ public class FlowConnection extends Connection<FlowJoint> {
         String targetText = target.getDataType();
 
         if (sourceText.equals(targetText)) {
-            super.setText(sourceText);
+            try {
+                FlowAction action = source.getParser().parse(sourceText);
+
+                if (action instanceof Chain) {
+                    source.setDataType(((Chain) action).getFirst().toString());
+                    target.setDataType(((Chain) action).getSecond().toString());
+                }
+            } catch (FlowNotationParserException e) {
+                super.setText(sourceText);
+            }
+
         } else {
             FlowAction actionSource = null;
             FlowAction actionTarget = null;
@@ -85,6 +97,8 @@ public class FlowConnection extends Connection<FlowJoint> {
             if (setAuto) {
                 try {
                     super.setText(new Chain(0, 0, actionSource, actionTarget).toString());
+                    source.setDataType(actionSource.toString());
+                    target.setDataType(actionTarget.toString());
                 } catch (Exception e) {
                     setAuto = false;
                 }

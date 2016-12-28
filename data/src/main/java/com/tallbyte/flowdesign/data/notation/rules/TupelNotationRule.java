@@ -39,7 +39,7 @@ public class TupelNotationRule extends FlowNotationRuleBase {
 
     private boolean ended    = false;
     private boolean added    = false;
-    private boolean expected = true;
+    private boolean expected = false;
 
     private TupelNotationRule(int i) {
         super("[\\,\\)\\*]", i);
@@ -113,9 +113,9 @@ public class TupelNotationRule extends FlowNotationRuleBase {
             throw new IllegalNotationException("expecting child");
         }
 
-        if (childs.size()==0) {
+        /*if (childs.size()==0) {
             throw new IllegalNotationException("at least one containing element required");
-        }
+        }*/
 
         List<TupelContainment> list = new ArrayList<>();
         for (FlowNotationRule rule : childs) {

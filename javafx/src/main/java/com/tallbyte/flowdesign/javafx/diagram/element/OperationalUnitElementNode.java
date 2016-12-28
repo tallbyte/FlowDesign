@@ -78,7 +78,7 @@ public class OperationalUnitElementNode extends ElementNode {
             }
         });
         group.getShortcut(Shortcuts.SHORTCUT_ADD_FLOW).setAction(event -> {
-            double x = getRealX() + getRealWidth() + 300;
+            double x = getRealX() + getRealWidth() + 100;
             double y = getRealY();
 
             Operation operation = new Operation();

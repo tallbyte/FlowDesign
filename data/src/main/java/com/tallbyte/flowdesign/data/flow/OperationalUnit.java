@@ -83,7 +83,7 @@ public class OperationalUnit extends FlowDiagramElement {
     protected Iterable<JointGroup<?>> createJointGroups() {
         return new ArrayList<JointGroup<?>>() {{
             add(new JointGroup<>(OperationalUnit.this, JOINT_GROUP_IN     , 1, 1, element -> new FlowJoint(element, JointType.INPUT , 1, 0), 1));
-            add(new JointGroup<>(OperationalUnit.this, JOINT_GROUP_OUT    , 1, 1, element -> new FlowJoint(element, JointType.OUTPUT, 0, 2), 1));
+            add(new JointGroup<>(OperationalUnit.this, JOINT_GROUP_OUT    , 1, 1, element -> new FlowJoint(element, JointType.OUTPUT, 0, 0), 1));
             add(new JointGroup<>(OperationalUnit.this, JOINT_GROUP_DEP_IN , 1, 1, element -> new DependencyJoint(element, JointType.INPUT , 1, 0), 1));
             add(new JointGroup<>(OperationalUnit.this, JOINT_GROUP_DEP_OUT, 1, 1, element -> new DependencyJoint(element, JointType.OUTPUT, 0, 1), 1));
         }};
