@@ -18,11 +18,17 @@
 
 package com.tallbyte.flowdesign.data.flow;
 
-import com.tallbyte.flowdesign.data.FlowJoint;
-import com.tallbyte.flowdesign.data.JointGroup;
-import com.tallbyte.flowdesign.data.JointType;
+import com.tallbyte.flowdesign.data.*;
+import com.tallbyte.flowdesign.data.notation.FlowNotationParserException;
+import com.tallbyte.flowdesign.data.notation.actions.FlowAction;
+import com.tallbyte.flowdesign.data.notation.actions.Tupel;
+import com.tallbyte.flowdesign.data.notation.actions.TupelContainment;
 
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This file is part of project flowDesign.
@@ -31,6 +37,8 @@ import java.util.ArrayList;
  * - julian (2016-12-09)<br/>
  */
 public class Split extends FlowDiagramElement {
+
+    private final static Map<Joint, PropertyChangeListener> LISTENER_MAP = new HashMap<>();
 
     public static final String JOINT_GROUP_IN  = "in";
     public static final String JOINT_GROUP_OUT = "out";
@@ -43,10 +51,76 @@ public class Split extends FlowDiagramElement {
 
     @Override
     protected Iterable<JointGroup<?>> createJointGroups() {
+        JointGroup<FlowJoint> groupIn = new JointGroup<>(Split.this, JOINT_GROUP_IN , 1, 1, element -> new FlowJoint(element, JointType.INPUT , 1, 0), 1);
+
+        groupIn.addJointsChangedListener((joint, added) -> {
+            if (added) {
+                PropertyChangeListener listener = evt -> {
+                    if (evt.getPropertyName().equals("dataType")) {
+                        genOutput();
+                    }
+                };
+
+                joint.addPropertyChangeListener(listener);
+                LISTENER_MAP.put(joint, listener);
+
+            } else {
+                joint.removePropertyChangeListener(LISTENER_MAP.remove(joint));
+            }
+        });
+
+        for (Joint joint : groupIn.getJoints()) {
+            PropertyChangeListener listener = evt -> {
+                if (evt.getPropertyName().equals("dataType")) {
+                    genOutput();
+                }
+            };
+
+            joint.addPropertyChangeListener(listener);
+            LISTENER_MAP.put(joint, listener);
+        }
+
         return new ArrayList<JointGroup<?>>() {{
-            add(new JointGroup<>(Split.this, JOINT_GROUP_IN , 1, 1, element -> new FlowJoint(element, JointType.INPUT , 1, 0), 1));
-            add(new JointGroup<>(Split.this, JOINT_GROUP_OUT, 1, 1, element -> new FlowJoint(element, JointType.OUTPUT, 0, 0), 1));
+            add(groupIn);
+            add(new JointGroup<>(Split.this, JOINT_GROUP_OUT, 1, 1,
+                    element -> new FlowJoint(element, JointType.OUTPUT, 0, 0, new ConnectionTextExtractor() {
+                        @Override
+                        public String setConnection(FlowJoint joint, FlowConnection connection, String text) {
+                            System.out.println(("---" + text));
+                            try {
+                                FlowAction action = joint.getParser().parse(text);
+
+                                if (action instanceof Tupel) {
+                                    int index = joint.getOutgoingIndex(connection);
+
+                                    if (index >= 0 && index < ((Tupel) action).getTypeAmount()) {
+                                        return new Tupel(0, 0, false, ((Tupel) action).getType(index)).toString();
+                                    } else {
+                                        return new Tupel(0, 0, false).toString();
+                                    }
+                                }
+                            } catch (FlowNotationParserException e) {
+                                // ignore
+                            }
+
+                            return new Tupel(0, 0, false).toString();
+                        }
+
+                        @Override
+                        public String setJoint(FlowJoint joint, FlowConnection connection, String text) {
+                            return ((FlowJoint) getInputGroup().getJoint(0)).getDataType();
+                        }
+                    }
+                    ), 1)
+            );
         }};
+    }
+
+    private void genOutput() {
+        getOutputGroup().getJoints().stream()
+                .filter(j -> j instanceof FlowJoint)
+                .forEach(j -> ((FlowJoint)j).setDataType(((FlowJoint) getInputGroup().getJoint(0)).getDataType())
+                );
     }
 
     public JointGroup<?> getInputGroup() {

@@ -34,7 +34,8 @@ public class FlowJoint extends Joint {
 
     private final static FlowNotationParser PARSER = new SimpleFlowNotationParser();
 
-    private JointValidator validator;
+    private JointValidator          validator;
+    private ConnectionTextExtractor extractor;
 
     private String  dataType = "()";
     private boolean valid;
@@ -72,16 +73,70 @@ public class FlowJoint extends Joint {
      *                 connections or 0 for infinite
      * @param maxOut   the maximum amount of outgoing
      *                 connections or 0 for infinite
+     * @param extractor the {@link ConnectionTextExtractor} used
+     */
+    public FlowJoint(Element element, JointType type, int maxIn, int maxOut, ConnectionTextExtractor extractor) {
+        this(element, type, maxIn, maxOut, joint -> {
+            try {
+                FlowAction f = PARSER.parse(joint.getDataType());
+
+                return !(f instanceof Type);
+            } catch (FlowNotationParserException e) {
+                return false;
+            }
+        }, extractor);
+    }
+
+    /**
+     * Creates a new {@link Joint} based on given configuration.
+     *
+     * @param element  the containing {@link Element}
+     * @param type     the type
+     * @param maxIn    the maximum amount of incoming
+     *                 connections or 0 for infinite
+     * @param maxOut   the maximum amount of outgoing
+     *                 connections or 0 for infinite
      * @param validator the {@link JointValidator} used to check
      *                  if the content of this {@link Joint} matches
      *                  rules.
      */
     public FlowJoint(Element element, JointType type, int maxIn, int maxOut, JointValidator validator) {
+        this(element, type, maxIn, maxOut, validator, new ConnectionTextExtractor() {
+            @Override
+            public String setConnection(FlowJoint joint, FlowConnection connection, String text) {
+                return text;
+            }
+
+            @Override
+            public String setJoint(FlowJoint joint, FlowConnection connection, String text) {
+                return text;
+            }
+        });
+    }
+
+    /**
+     * Creates a new {@link Joint} based on given configuration.
+     *
+     * @param element  the containing {@link Element}
+     * @param type     the type
+     * @param maxIn    the maximum amount of incoming
+     *                 connections or 0 for infinite
+     * @param maxOut   the maximum amount of outgoing
+     *                 connections or 0 for infinite
+     * @param validator the {@link JointValidator} used to check
+     *                  if the content of this {@link Joint} matches
+     *                  rules.
+     * @param extractor the {@link ConnectionTextExtractor} used
+     */
+    public FlowJoint(Element element, JointType type, int maxIn, int maxOut, JointValidator validator, ConnectionTextExtractor extractor) {
         super(element, type, maxIn, maxOut);
 
         this.validator = validator;
         setValid(validator.isValid(this));
+
+        this.extractor = extractor;
     }
+
 
     /**
      * Gets a {@link FlowNotationParser} suitable for parsing this {@link FlowJoint}s
@@ -109,6 +164,15 @@ public class FlowJoint extends Joint {
         this.dataType = dataType;
         setValid(validator.isValid(this));
         changeSupport.firePropertyChange("dataType", old, dataType);
+    }
+
+    /**
+     * Gets the extractor used to convert text valus from and to
+     * {@link Joint} data-type.
+     * @return Returns the extractor.
+     */
+    public ConnectionTextExtractor getExtractor() {
+        return extractor;
     }
 
     /**

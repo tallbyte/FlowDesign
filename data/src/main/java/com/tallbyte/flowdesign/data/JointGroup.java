@@ -109,6 +109,10 @@ public class JointGroup<J extends Joint> {
         return joints.get(i);
     }
 
+    public int getIndex(J joint) {
+        return joints.indexOf(joint);
+    }
+
     public String getName() {
         return name;
     }

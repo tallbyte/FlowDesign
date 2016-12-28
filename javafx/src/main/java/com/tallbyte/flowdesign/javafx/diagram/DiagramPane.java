@@ -682,4 +682,8 @@ public class DiagramPane extends ScrollPane {
     public void onOpen() {
         reapplyShortcuts();
     }
+
+    public void requestSelection(SelectableNode node) {
+
+    }
 }

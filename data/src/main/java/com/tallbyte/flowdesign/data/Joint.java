@@ -211,11 +211,29 @@ public abstract class Joint {
     }
 
     /**
+     * Gets the index of an incoming {@link Connection}.
+     * @param connection the {@link Connection}
+     * @return Returns the index or -1 if connection is not registered.
+     */
+    public int getIncomingIndex(Connection connection) {
+        return incoming.indexOf(connection);
+    }
+
+    /**
      * Gets all incoming {@link Connection}s.
      * @return Returns the {@link Connection}s.
      */
     public List<Connection> getIncoming() {
         return Collections.unmodifiableList(incoming);
+    }
+
+    /**
+     * Gets the index of an outgoing {@link Connection}.
+     * @param connection the {@link Connection}
+     * @return Returns the index or -1 if connection is not registered.
+     */
+    public int getOutgoingIndex(Connection connection) {
+        return outgoing.indexOf(connection);
     }
 
     /**

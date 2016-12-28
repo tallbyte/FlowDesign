@@ -67,11 +67,10 @@ public class FlowConnection extends Connection<FlowJoint> {
             return;
         }
 
-        String sourceText = source.getDataType();
-        String targetText = target.getDataType();
+        String sourceText = source.getExtractor().setConnection(source, this, source.getDataType());
+        String targetText = target.getExtractor().setConnection(target, this, target.getDataType());
 
         if (sourceText.equals(targetText)) {
-            System.out.println(sourceText);
             try {
                 FlowAction action = source.getParser().parse(sourceText);
 
@@ -127,8 +126,8 @@ public class FlowConnection extends Connection<FlowJoint> {
     private void updateJoints(String first, String second) {
         try {
             enableUpdater = false;
-            source.setDataType(first);
-            target.setDataType(second);
+            source.setDataType(source.getExtractor().setJoint(source, this, first));
+            target.setDataType(target.getExtractor().setJoint(target, this, second));
         } finally {
             enableUpdater = true;
         }

@@ -50,6 +50,14 @@ public class Tupel extends TupelContainment {
         this.repeated = repeated;
     }
 
+    public TupelContainment getType(int i) {
+        return types.get(i);
+    }
+
+    public int getTypeAmount() {
+        return types.size();
+    }
+
     public List<TupelContainment> getTypes() {
         return Collections.unmodifiableList(types);
     }
