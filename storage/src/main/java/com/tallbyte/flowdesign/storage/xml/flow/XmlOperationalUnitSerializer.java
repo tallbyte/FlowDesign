@@ -23,8 +23,6 @@ import com.tallbyte.flowdesign.storage.xml.XmlDeserializationHelper;
 import com.tallbyte.flowdesign.storage.xml.XmlSerializationHelper;
 
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
 import java.util.Map;
 
 /**
@@ -35,18 +33,19 @@ public abstract class XmlOperationalUnitSerializer<O extends OperationalUnit> ex
     public static final String ATTRIBUTE_STATE = "state";
 
     @Override
-    protected void writeAttributes(XMLStreamWriter writer, O element, XmlSerializationHelper helper) throws XMLStreamException {
-        super.writeAttributes(writer, element, helper);
+    protected Map<String, String> saveAttributes(Map<String, String> attributes, O element, XmlSerializationHelper helper) throws XMLStreamException {
+        super.saveAttributes(attributes, element, helper);
 
-        writer.writeAttribute(ATTRIBUTE_STATE, element.getState());
+        attributes.put(ATTRIBUTE_STATE, element.getState());
+
+        return attributes;
     }
 
     @Override
-    protected void readAttributes(XMLStreamReader reader, O element, XmlDeserializationHelper helper) throws XMLStreamException {
-        super.readAttributes(reader, element, helper);
-
-        Map<String, String> attributes = helper.getAttributes(reader);
+    protected void loadAttributes(Map<String, String> attributes, O element, XmlDeserializationHelper helper) throws XMLStreamException {
+        super.loadAttributes(attributes, element, helper);
 
         element.setState(attributes.get(ATTRIBUTE_STATE));
     }
+
 }

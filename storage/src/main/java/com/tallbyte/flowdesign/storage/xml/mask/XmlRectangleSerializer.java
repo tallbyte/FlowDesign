@@ -19,27 +19,11 @@
 package com.tallbyte.flowdesign.storage.xml.mask;
 
 import com.tallbyte.flowdesign.data.mask.Rectangle;
-import com.tallbyte.flowdesign.storage.xml.XmlDeserializationHelper;
-import com.tallbyte.flowdesign.storage.xml.XmlSerializationHelper;
-
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
 
 /**
  * Created by michael on 21.12.16.
  */
 public class XmlRectangleSerializer extends XmlMaskDiagramElementSerializer<Rectangle> {
-
-    @Override
-    protected void writeAttributes(XMLStreamWriter writer, Rectangle element, XmlSerializationHelper helper) throws XMLStreamException {
-        super.writeAttributes(writer, element, helper);
-    }
-
-    @Override
-    protected void readAttributes(XMLStreamReader reader, Rectangle element, XmlDeserializationHelper helper) throws XMLStreamException {
-        super.readAttributes(reader, element, helper);
-    }
 
     @Override
     public Rectangle instantiate() {

@@ -21,7 +21,6 @@ package com.tallbyte.flowdesign.storage.xml.environment;
 import com.tallbyte.flowdesign.data.Connection;
 import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
 import com.tallbyte.flowdesign.data.environment.EnvironmentDiagramElement;
-import com.tallbyte.flowdesign.data.environment.System;
 import com.tallbyte.flowdesign.storage.xml.XmlDeserializationHelper;
 import com.tallbyte.flowdesign.storage.xml.XmlDiagramSerializer;
 import com.tallbyte.flowdesign.storage.xml.XmlSerializationHelper;
