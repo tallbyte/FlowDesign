@@ -145,6 +145,22 @@ public class FlowConnection extends Connection<FlowJoint> {
     public void setText(String text) {
         super.setText(text);
 
+        try {
+            FlowAction action = source.getParser().parse(text);
+
+            if (action instanceof Chain) {
+                System.out.println("found chain");
+                updateJoints(
+                        ((Chain) action).getFirst().toString(),
+                        ((Chain) action).getSecond().toString()
+                );
+
+                return;
+            }
+        } catch (FlowNotationParserException e) {
+            // ignore
+        }
+
         updateJoints(text);
     }
 }
