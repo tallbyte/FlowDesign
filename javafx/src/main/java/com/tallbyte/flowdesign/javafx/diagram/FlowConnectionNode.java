@@ -21,7 +21,12 @@ package com.tallbyte.flowdesign.javafx.diagram;
 import com.tallbyte.flowdesign.data.Connection;
 import com.tallbyte.flowdesign.data.FlowConnection;
 import com.tallbyte.flowdesign.data.FlowJoint;
+import com.tallbyte.flowdesign.data.notation.FlowNotationParserException;
+import com.tallbyte.flowdesign.data.notation.actions.Chain;
+import com.tallbyte.flowdesign.data.notation.actions.FlowAction;
+import com.tallbyte.flowdesign.javafx.Action;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
+import com.tallbyte.flowdesign.javafx.ResourceUtils;
 import com.tallbyte.flowdesign.javafx.popup.DataTypePopup;
 import javafx.css.PseudoClass;
 import javafx.geometry.Bounds;
@@ -30,6 +35,10 @@ import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
 
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.tallbyte.flowdesign.javafx.ResourceUtils.*;
 
 /**
  * This file is part of project flowDesign.
@@ -181,6 +190,46 @@ public class FlowConnectionNode extends ConnectionNode {
         arrow0.getTransforms().add(new Rotate(30, line.getEndX(), line.getEndY()));
         arrow1.getTransforms().clear();
         arrow1.getTransforms().add(new Rotate(-30, line.getEndX(), line.getEndY()));
+    }
+
+    @Override
+    public List<Action> getCurrentActions() {
+        ArrayList<Action> list = new ArrayList<>(super.getCurrentActions());
+
+        list.add(
+                new Action(getResourceString("popup.action.applySource"),
+                event -> {
+                    try {
+                        FlowAction action = target.getParser().parse(connection.getText());
+
+                        if (action instanceof Chain) {
+                            target.setDataType(((Chain) action).getFirst().toString());
+                        } else {
+                            target.setDataType(connection.getText());
+                        }
+                    } catch (FlowNotationParserException e) {
+                        target.setDataType(connection.getText());
+                    }
+                })
+        );
+        list.add(
+                new Action(getResourceString("popup.action.applyTarget"),
+                event -> {
+                    try {
+                        FlowAction action = source.getParser().parse(connection.getText());
+
+                        if (action instanceof Chain) {
+                            source.setDataType(((Chain) action).getSecond().toString());
+                        } else {
+                            source.setDataType(connection.getText());
+                        }
+                    } catch (FlowNotationParserException e) {
+                        source.setDataType(connection.getText());
+                    }
+                })
+        );
+
+        return list;
     }
 
     @Override

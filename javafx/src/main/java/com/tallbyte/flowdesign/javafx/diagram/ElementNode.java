@@ -53,7 +53,7 @@ import java.util.stream.Collectors;
  * Authors:<br/>
  * - julian (2016-10-28)<br/>
  */
-public class ElementNode extends Group implements SelectableNode {
+public class ElementNode extends SelectableNode {
 
     private static final List<CssMetaData<? extends Styleable, ?>> STYLABLES;
     private static final CssMetaData<ElementNode, Color>           DEFAULT_COLOR = new CssMetaData<ElementNode, Color>(

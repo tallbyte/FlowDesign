@@ -91,6 +91,9 @@ public class DataTypePopup extends Popup {
             }
         });
 
+        setAutoHide(true);
+        setHideOnEscape(true);
+
         VBox vBox = new VBox(list);
         vBox.getStyleClass().add("dataTypePopup");
 

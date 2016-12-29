@@ -18,10 +18,19 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
+import com.tallbyte.flowdesign.data.flow.FlowDiagram;
+import com.tallbyte.flowdesign.javafx.Action;
 import com.tallbyte.flowdesign.javafx.ShortcutGroup;
+import com.tallbyte.flowdesign.javafx.Shortcuts;
+import com.tallbyte.flowdesign.javafx.popup.ActionPopup;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.collections.ObservableList;
+import javafx.geometry.Bounds;
+import javafx.scene.Group;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This file is part of project flowDesign.
@@ -29,33 +38,50 @@ import javafx.collections.ObservableList;
  * Authors:<br/>
  * - julian (2016-12-19)<br/>
  */
-public interface SelectableNode {
+public abstract class SelectableNode extends Group {
 
     /**
      * Gets whether this {@link SelectableNode} is selected or not.
      * @return Returns true if it is, else false.
      */
-    boolean isSelected();
+    public abstract boolean isSelected();
 
     /**
      * Gets the selected property
      * @return Returns the property.
      */
-    ReadOnlyBooleanProperty selectedProperty();
+    public abstract ReadOnlyBooleanProperty selectedProperty();
 
     /**
      * Register all shortcuts.
      * @param group the containing group
      */
-    default void registerShortcuts(ShortcutGroup group) {
-        // do nothing
+    public void registerShortcuts(ShortcutGroup group) {
+        group.getShortcut(Shortcuts.SHORTCUT_APPLY_ACTION).setAction(event -> {
+            Bounds bounds = localToScreen(getBoundsInLocal());
+            if (bounds != null) {
+                List<Action> list = getCurrentActions();
+                if (list.size() > 0) {
+                    ActionPopup popup = new ActionPopup(list);
+                    popup.show(this, bounds.getMinX()+10, bounds.getMinY()-100);
+                }
+            }
+        });
+    }
+
+    /**
+     * Gets a list of {@link Action}s currently available for the element.
+     * @return Returns the list.
+     */
+    public List<Action> getCurrentActions() {
+        return new ArrayList<>();
     }
 
     /**
      * Gets the modifiable properties
      * @return Returns a list of such properties.
      */
-    ObservableList<Property<?>> getNodeProperties();
+    public abstract ObservableList<Property<?>> getNodeProperties();
 
 
 }

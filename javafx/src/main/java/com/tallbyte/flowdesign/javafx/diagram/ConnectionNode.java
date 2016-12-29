@@ -22,6 +22,7 @@ import com.sun.javafx.tk.FontMetrics;
 import com.sun.javafx.tk.Toolkit;
 import com.tallbyte.flowdesign.data.Joint;
 import com.tallbyte.flowdesign.data.Connection;
+import com.tallbyte.flowdesign.javafx.Action;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import com.tallbyte.flowdesign.javafx.control.AutoSizeTextField;
 import com.tallbyte.flowdesign.javafx.popup.DataTypePopup;
@@ -44,13 +45,16 @@ import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Popup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This file is part of project flowDesign.
  * <p/>
  * Authors:<br/>
  * - julian (2016-12-05)<br/>
  */
-public class ConnectionNode extends Group implements SelectableNode {
+public class ConnectionNode extends SelectableNode {
 
     protected final FlowDesignFxApplication application;
     protected       DiagramPane             diagramPane;
