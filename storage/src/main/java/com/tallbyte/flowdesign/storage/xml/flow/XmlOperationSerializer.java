@@ -23,7 +23,7 @@ import com.tallbyte.flowdesign.data.flow.Operation;
 /**
  * Created by michael on 12.12.16.
  */
-public class XmlOperationSerializer extends XmlFlowDiagramElementSerializer<Operation> {
+public class XmlOperationSerializer extends XmlOperationalUnitSerializer<Operation> {
 
     @Override
     public Operation instantiate() {
