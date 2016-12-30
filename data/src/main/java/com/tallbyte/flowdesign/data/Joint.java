@@ -34,7 +34,7 @@ import java.util.List;
  * {@link Element}s. Some {@link Joint}s may be defined as input, others
  * as output.
  */
-public abstract class Joint {
+public abstract class Joint implements DiagramContent {
 
     private final Element                       element;
 

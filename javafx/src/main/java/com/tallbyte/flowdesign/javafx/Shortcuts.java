@@ -32,6 +32,10 @@ public class Shortcuts {
     public static final String SHORTCUT_APPLY_ACTION     = "applyAction";
     public static final String SHORTCUT_ADD_FLOW         = "addFlow";
     public static final String SHORTCUT_ADD_DEPENDENCY   = "addDependency";
+    public static final String SHORTCUT_MOVE_UP          = "moveUp";
+    public static final String SHORTCUT_MOVE_RIGHT       = "moveRight";
+    public static final String SHORTCUT_MOVE_DOWN        = "moveDown";
+    public static final String SHORTCUT_MOVE_LEFT        = "moveLeft";
 
     public static final String GROUP_DIAGRAM             = "diagram";
     public static final String SHORTCUT_REMOVE_SELECTED  = "removeSelected";

@@ -22,8 +22,13 @@ import com.sun.javafx.tk.FontMetrics;
 import com.sun.javafx.tk.Toolkit;
 import com.tallbyte.flowdesign.data.Joint;
 import com.tallbyte.flowdesign.data.Connection;
+import com.tallbyte.flowdesign.data.notation.FlowNotationParserException;
+import com.tallbyte.flowdesign.data.notation.actions.Chain;
+import com.tallbyte.flowdesign.data.notation.actions.FlowAction;
 import com.tallbyte.flowdesign.javafx.Action;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
+import com.tallbyte.flowdesign.javafx.ShortcutGroup;
+import com.tallbyte.flowdesign.javafx.Shortcuts;
 import com.tallbyte.flowdesign.javafx.control.AutoSizeTextField;
 import com.tallbyte.flowdesign.javafx.popup.DataTypePopup;
 import javafx.application.Platform;
@@ -47,6 +52,8 @@ import javafx.stage.Popup;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.tallbyte.flowdesign.javafx.ResourceUtils.getResourceString;
 
 /**
  * This file is part of project flowDesign.
@@ -275,5 +282,18 @@ public class ConnectionNode extends SelectableNode {
     @Override
     public ObservableList<Property<?>> getNodeProperties() {
         return FXCollections.observableArrayList();
+    }
+
+    @Override
+    public void registerShortcuts(ShortcutGroup group) {
+        super.registerShortcuts(group);
+
+        group.getShortcut(Shortcuts.SHORTCUT_MOVE_LEFT).setAction(event -> {
+            diagramPane.requestSelection(connection.getSource().getElement());
+        });
+
+        group.getShortcut(Shortcuts.SHORTCUT_MOVE_RIGHT).setAction(event -> {
+            diagramPane.requestSelection(connection.getTarget().getElement());
+        });
     }
 }

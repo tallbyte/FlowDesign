@@ -97,6 +97,7 @@ public class DiagramPane extends ScrollPane {
      */
 
     protected final Map<Joint, JointNode>                                                             jointNodes       = new HashMap<>();
+    protected final Map<DiagramContent, SelectableNode>                                               nodes            = new HashMap<>();
     protected final Map<SelectableNode, List<Pair<EventType<MouseEvent>, EventHandler<MouseEvent>>>>  mouseHandlers    = new HashMap<>();
 
     /*
@@ -258,10 +259,11 @@ public class DiagramPane extends ScrollPane {
     private void addElement(Element element) {
         ElementNode node = diagramManager.createNode(getDiagram(), element);
         if (node != null) {
+            nodes.put(element, node);
+
             node.setDiagramPane(this, createSelectedProperty(node));
             node.addEventFilter(MouseEvent.MOUSE_PRESSED, addMouseHandler(node, MouseEvent.MOUSE_PRESSED, event -> {
-                this.selected.clear();
-                this.selected.add(node);
+                requestSelection(node);
 
                 offsetX = event.getX();
                 offsetY = event.getY();
@@ -269,8 +271,7 @@ public class DiagramPane extends ScrollPane {
                 node.requestFocus();
             }));
             node.addEventHandler(MouseEvent.MOUSE_PRESSED, addMouseHandler(node, MouseEvent.MOUSE_PRESSED, event -> {
-                this.selected.clear();
-                this.selected.add(node);
+                requestSelection(node);
 
                 offsetX = event.getX();
                 offsetY = event.getY();
@@ -307,6 +308,8 @@ public class DiagramPane extends ScrollPane {
      * @param element the {@link Element} to remove
      */
     private void removeElement(Element element) {
+        nodes.remove(element);
+
         for (Node node : groupContent.getChildrenUnmodifiable()) {
             if (node instanceof ElementNode && ((ElementNode) node).getElement().equals(element)) {
                 groupContent.getChildren().remove(node);
@@ -338,10 +341,11 @@ public class DiagramPane extends ScrollPane {
         }
 
         if (node != null) {
+            nodes.put(connection, node);
+
             node.setDiagramPane(this, createSelectedProperty(node));
             node.addEventHandler(MouseEvent.MOUSE_PRESSED, addMouseHandler(node, MouseEvent.MOUSE_PRESSED, event -> {
-                this.selected.clear();
-                this.selected.add(node);
+                requestSelection(node);
 
                 node.requestFocus();
                 node.toFront();
@@ -358,6 +362,8 @@ public class DiagramPane extends ScrollPane {
      * @param connection the {@link Connection} to remove
      */
     private void removeConnection(Connection connection) {
+        nodes.remove(connection);
+
         for (Node node : groupConnections.getChildrenUnmodifiable()) {
             if (node instanceof ConnectionNode && ((ConnectionNode) node).getConnection().equals(connection)) {
                 groupConnections.getChildren().remove(node);
@@ -683,8 +689,17 @@ public class DiagramPane extends ScrollPane {
         reapplyShortcuts();
     }
 
-    public void requestSelection(SelectableNode node) {
+    protected void requestSelection(SelectableNode node) {
+        this.node.set(node);
+        this.selected.clear();
 
+        if (node != null) {
+            this.selected.add(node);
+        }
+    }
+
+    public void requestSelection(DiagramContent content) {
+        requestSelection(nodes.get(content));
     }
 
     public FlowDesignFxApplication getApplication() {

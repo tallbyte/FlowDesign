@@ -77,6 +77,10 @@ public class FlowDesignFxApplication extends Application {
         groupElements.addShortcut(new Shortcut(SHORTCUT_APPLY_ACTION, SHORTCUT_APPLY_ACTION));
         groupElements.addShortcut(new Shortcut(SHORTCUT_ADD_FLOW, SHORTCUT_ADD_FLOW));
         groupElements.addShortcut(new Shortcut(SHORTCUT_ADD_DEPENDENCY, SHORTCUT_ADD_DEPENDENCY));
+        groupElements.addShortcut(new Shortcut(SHORTCUT_MOVE_UP, SHORTCUT_MOVE_UP));
+        groupElements.addShortcut(new Shortcut(SHORTCUT_MOVE_RIGHT, SHORTCUT_MOVE_RIGHT));
+        groupElements.addShortcut(new Shortcut(SHORTCUT_MOVE_DOWN, SHORTCUT_MOVE_DOWN));
+        groupElements.addShortcut(new Shortcut(SHORTCUT_MOVE_LEFT, SHORTCUT_MOVE_LEFT));
 
         ShortcutGroup groupDiagram = new ShortcutGroup(GROUP_DIAGRAM);
         groupDiagram.addShortcut(new Shortcut(SHORTCUT_REMOVE_SELECTED, SHORTCUT_REMOVE_SELECTED));

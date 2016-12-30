@@ -30,7 +30,7 @@ import java.beans.PropertyChangeSupport;
  * A {@link Connection} describes a connection between two {@link Joint}s, which
  * basically means a connection between two {@link Element}s.
  */
-public class Connection<J extends Joint> {
+public class Connection<J extends Joint> implements DiagramContent {
 
     protected final J source;
     protected final J target;

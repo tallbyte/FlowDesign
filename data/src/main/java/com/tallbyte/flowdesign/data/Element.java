@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
  * The {@link Element} is resizeable and movable. It may also contain {@link Joint}s
  * which can be used to connect it to other {@link Element}s.
  */
-public abstract class Element {
+public abstract class Element implements DiagramContent {
 
     protected Diagram                    diagram;
     protected Map<String, JointGroup<?>> jointGroups;
