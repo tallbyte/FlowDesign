@@ -43,9 +43,8 @@ public class ActionPopup extends Popup {
 
     /**
      * Creates a new {@link ActionPopup}.
-     * @param actions the list of available actions
      */
-    public ActionPopup(List<Action> actions) {
+    public ActionPopup() {
 
         list          = new ListView<>();
 
@@ -84,15 +83,13 @@ public class ActionPopup extends Popup {
             }
         });
 
-        VBox vBox = new VBox(list);
-        vBox.getStyleClass().add("dataTypePopup");
-
-        getContent().add(vBox);
-
         setAutoHide(true);
         setHideOnEscape(true);
 
-        list.setItems(FXCollections.observableArrayList(actions));
+        VBox vBox = new VBox(list);
+        vBox.getStyleClass().add("actionPopup");
+
+        getContent().add(vBox);
     }
     /**
      * Shows this popup.
@@ -100,8 +97,16 @@ public class ActionPopup extends Popup {
      * @param anchorX the x location in screen coordinates
      * @param anchorY the y location in screen coordinates
      */
-    public void show(Node ownerNode, double anchorX, double anchorY) {
-        super.show(ownerNode, anchorX, anchorY);
+    public void show(Node ownerNode, double anchorX, double anchorY, List<Action> actions) {
+        list.getItems().clear();
+
+        for (Action action : actions) {
+            list.getItems().add(action);
+        }
+
+        if (list.getItems().size() > 0) {
+            super.show(ownerNode, anchorX, anchorY);
+        }
     }
 
     /**

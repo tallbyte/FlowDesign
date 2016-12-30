@@ -20,6 +20,7 @@ package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.data.flow.FlowDiagram;
 import com.tallbyte.flowdesign.javafx.Action;
+import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import com.tallbyte.flowdesign.javafx.ShortcutGroup;
 import com.tallbyte.flowdesign.javafx.Shortcuts;
 import com.tallbyte.flowdesign.javafx.popup.ActionPopup;
@@ -39,6 +40,13 @@ import java.util.List;
  * - julian (2016-12-19)<br/>
  */
 public abstract class SelectableNode extends Group {
+
+    protected final ActionPopup             popup = new ActionPopup();
+    protected final FlowDesignFxApplication application;
+
+    protected SelectableNode(FlowDesignFxApplication application) {
+        this.application = application;
+    }
 
     /**
      * Gets whether this {@link SelectableNode} is selected or not.
@@ -60,11 +68,8 @@ public abstract class SelectableNode extends Group {
         group.getShortcut(Shortcuts.SHORTCUT_APPLY_ACTION).setAction(event -> {
             Bounds bounds = localToScreen(getBoundsInLocal());
             if (bounds != null) {
-                List<Action> list = getCurrentActions();
-                if (list.size() > 0) {
-                    ActionPopup popup = new ActionPopup(list);
-                    popup.show(this, bounds.getMinX()+10, bounds.getMinY()-100);
-                }
+                application.getPopupHandler().setupPopup(popup);
+                popup.show(this, bounds.getMinX()+10, bounds.getMinY()-100, getCurrentActions());
             }
         });
     }

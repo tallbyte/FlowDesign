@@ -346,7 +346,7 @@ SwitchPane .boxButtons {
     -fx-faint-focus-color: -fx-box-border;
 }
 
-.dataTypePopup {
+.dataTypePopup, .actionPopup {
     -fx-padding:          3px;
     -fx-background-color: -fx-control-pane-accent;
     -fx-border-color:     -fx-bar-border-accent;

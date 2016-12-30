@@ -22,6 +22,7 @@ import com.tallbyte.flowdesign.data.Element;
 import com.tallbyte.flowdesign.data.Joint;
 import com.tallbyte.flowdesign.data.JointGroup;
 import com.tallbyte.flowdesign.data.JointsChangedListener;
+import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import com.tallbyte.flowdesign.javafx.control.AutoSizeTextField;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import com.tallbyte.flowdesign.javafx.property.ColorProperty;
@@ -122,6 +123,8 @@ public class ElementNode extends SelectableNode {
 
 
     public ElementNode(Element element, DiagramImage content, Pos posLabel) {
+        super(null); // TODO
+
         this.content     = content;
         this.element     = element;
         this.posLabel    = posLabel;

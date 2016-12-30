@@ -56,7 +56,6 @@ import java.util.List;
  */
 public class ConnectionNode extends SelectableNode {
 
-    protected final FlowDesignFxApplication application;
     protected       DiagramPane             diagramPane;
 
     protected final Connection              connection;
@@ -73,7 +72,8 @@ public class ConnectionNode extends SelectableNode {
     protected       ReadOnlyBooleanProperty selected;
 
     public ConnectionNode(FlowDesignFxApplication application, Connection connection, String textLeft, String textRight) {
-        this.application = application;
+        super(application);
+        
         this.connection  = connection;
 
         try {
