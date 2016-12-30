@@ -18,8 +18,11 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.element;
 
+import com.tallbyte.flowdesign.data.Connection;
 import com.tallbyte.flowdesign.data.FlowJoint;
 import com.tallbyte.flowdesign.data.flow.Start;
+import com.tallbyte.flowdesign.javafx.ShortcutGroup;
+import com.tallbyte.flowdesign.javafx.Shortcuts;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import javafx.geometry.Pos;
@@ -49,5 +52,16 @@ public class StartElementNode extends ElementNode {
         /*JointNode output = addJoint(start.getJoint(Start.JOINT_OUTPUT));
         output.centerXProperty().bind(widthProperty().subtract(widthExtend));
         output.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));*/
+    }
+
+    @Override
+    public void registerShortcuts(ShortcutGroup group) {
+        super.registerShortcuts(group);
+
+        group.getShortcut(Shortcuts.SHORTCUT_MOVE_RIGHT).setAction(event -> {
+            for (Connection c : start.getOutputGroup().getJoint(0).getOutgoing()) {
+                diagramPane.requestSelection(c);
+            }
+        });
     }
 }

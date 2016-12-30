@@ -18,11 +18,17 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.element;
 
+import com.tallbyte.flowdesign.data.Connection;
 import com.tallbyte.flowdesign.data.FlowJoint;
 import com.tallbyte.flowdesign.data.flow.Join;
+import com.tallbyte.flowdesign.javafx.ShortcutGroup;
+import com.tallbyte.flowdesign.javafx.Shortcuts;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import javafx.geometry.Pos;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This file is part of project flowDesign.
@@ -60,5 +66,49 @@ public class JoinElementNode extends ElementNode {
         JointNode output = addJoint(join.getJoint(Join.JOINT_OUTPUT));
         output.centerXProperty().bind(widthProperty().subtract(widthExtend).multiply(0.5));
         output.centerYProperty().bind(heightProperty().subtract(heightExtend).multiply(0.5));*/
+    }
+
+    @Override
+    public void registerShortcuts(ShortcutGroup group) {
+        super.registerShortcuts(group);
+
+        group.getShortcut(Shortcuts.SHORTCUT_MOVE_LEFT).setAction(event -> {
+            List<Connection> list = join.getInputGroup().getJoint(0)
+                    .getIncoming().stream().collect(Collectors.toList());
+
+            if (list.size() > 0) {
+                list.sort((o1, o2) -> (int) (o1.getSource().getElement().getY() - o2.getSource().getElement().getY()));
+
+                diagramPane.requestSelection(list.get(Math.min(list.size()-1, 1)));
+            }
+        });
+
+        group.getShortcut(Shortcuts.SHORTCUT_MOVE_RIGHT).setAction(event -> {
+            for (Connection c : join.getOutputGroup().getJoint(0).getOutgoing()) {
+                diagramPane.requestSelection(c);
+            }
+        });
+
+        group.getShortcut(Shortcuts.SHORTCUT_MOVE_UP).setAction(event -> {
+            List<Connection> list = join.getInputGroup().getJoint(0)
+                    .getIncoming().stream().collect(Collectors.toList());
+
+            if (list.size() > 0) {
+                list.sort((o1, o2) -> (int) (o1.getSource().getElement().getY() - o2.getSource().getElement().getY()));
+
+                diagramPane.requestSelection(list.get(0));
+            }
+        });
+
+        group.getShortcut(Shortcuts.SHORTCUT_MOVE_DOWN).setAction(event -> {
+            List<Connection> list = join.getInputGroup().getJoint(0)
+                    .getIncoming().stream().collect(Collectors.toList());
+
+            if (list.size() > 0) {
+                list.sort((o1, o2) -> (int) (o2.getSource().getElement().getY() - o1.getSource().getElement().getY()));
+
+                diagramPane.requestSelection(list.get(0));
+            }
+        });
     }
 }

@@ -18,10 +18,7 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.element;
 
-import com.tallbyte.flowdesign.data.DependencyJoint;
-import com.tallbyte.flowdesign.data.Diagram;
-import com.tallbyte.flowdesign.data.FlowJoint;
-import com.tallbyte.flowdesign.data.JointJoinException;
+import com.tallbyte.flowdesign.data.*;
 import com.tallbyte.flowdesign.data.flow.FlowDiagram;
 import com.tallbyte.flowdesign.data.flow.Operation;
 import com.tallbyte.flowdesign.data.flow.OperationalUnit;
@@ -96,6 +93,18 @@ public class OperationalUnitElementNode extends ElementNode {
                 operation.getInputGroup().getJoint(0).setDataType(this.operation.getOutputGroup().getJoint(0).getDataType());
             } catch (JointJoinException e) {
                 // just try
+            }
+        });
+
+        group.getShortcut(Shortcuts.SHORTCUT_MOVE_LEFT).setAction(event -> {
+            for (Connection c : operation.getInputGroup().getJoint(0).getIncoming()) {
+                diagramPane.requestSelection(c);
+            }
+        });
+
+        group.getShortcut(Shortcuts.SHORTCUT_MOVE_RIGHT).setAction(event -> {
+            for (Connection c : operation.getOutputGroup().getJoint(0).getOutgoing()) {
+                diagramPane.requestSelection(c);
             }
         });
     }
