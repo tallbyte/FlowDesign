@@ -28,6 +28,7 @@ import com.tallbyte.flowdesign.javafx.Action;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import com.tallbyte.flowdesign.javafx.ResourceUtils;
 import com.tallbyte.flowdesign.javafx.popup.DataTypePopup;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.css.PseudoClass;
 import javafx.geometry.Bounds;
 import javafx.scene.input.KeyCode;
@@ -64,13 +65,12 @@ public class FlowConnectionNode extends ConnectionNode {
      * @param application the main application
      * @param connection the surrounding {@link Connection}
      */
-    public FlowConnectionNode(FlowDesignFxApplication application, FlowConnection connection) {
-        super(application, connection, null, null);
+    public FlowConnectionNode(FlowConnection connection) {
+        super( connection, null, null);
 
         popup = new DataTypePopup(textField.textProperty());
         popup.setAutoHide(true);
         popup.setHideOnEscape(true);
-        application.getPopupHandler().setupPopup(popup);
 
         source = connection.getSource();
         target = connection.getTarget();
@@ -92,6 +92,15 @@ public class FlowConnectionNode extends ConnectionNode {
 
     private void handleValid() {
         pseudoClassStateChanged(PseudoClass.getPseudoClass("invalid"), !source.isValid() || !target.isValid());
+    }
+
+    @Override
+    void setDiagramPane(DiagramPane diagramPane, ReadOnlyBooleanProperty selected) {
+        super.setDiagramPane(diagramPane, selected);
+
+        if (diagramPane != null) {
+            getApplication().getPopupHandler().setupPopup(popup);
+        }
     }
 
     @Override

@@ -123,8 +123,6 @@ public class ElementNode extends SelectableNode {
 
 
     public ElementNode(Element element, DiagramImage content, Pos posLabel) {
-        super(null); // TODO
-
         this.content     = content;
         this.element     = element;
         this.posLabel    = posLabel;
@@ -652,6 +650,11 @@ public class ElementNode extends SelectableNode {
     @Override
     public ReadOnlyBooleanProperty selectedProperty() {
         return selected;
+    }
+
+    @Override
+    protected FlowDesignFxApplication getApplication() {
+        return diagramPane.getApplication();
     }
 
     protected void remove() {

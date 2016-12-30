@@ -41,12 +41,7 @@ import java.util.List;
  */
 public abstract class SelectableNode extends Group {
 
-    protected final ActionPopup             popup = new ActionPopup();
-    protected final FlowDesignFxApplication application;
-
-    protected SelectableNode(FlowDesignFxApplication application) {
-        this.application = application;
-    }
+    protected final ActionPopup popup = new ActionPopup();
 
     /**
      * Gets whether this {@link SelectableNode} is selected or not.
@@ -68,11 +63,13 @@ public abstract class SelectableNode extends Group {
         group.getShortcut(Shortcuts.SHORTCUT_APPLY_ACTION).setAction(event -> {
             Bounds bounds = localToScreen(getBoundsInLocal());
             if (bounds != null) {
-                application.getPopupHandler().setupPopup(popup);
+                getApplication().getPopupHandler().setupPopup(popup);
                 popup.show(this, bounds.getMinX()+10, bounds.getMinY()-100, getCurrentActions());
             }
         });
     }
+
+    protected abstract FlowDesignFxApplication getApplication();
 
     /**
      * Gets a list of {@link Action}s currently available for the element.

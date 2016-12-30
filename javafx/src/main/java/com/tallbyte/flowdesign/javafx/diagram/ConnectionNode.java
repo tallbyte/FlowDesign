@@ -71,9 +71,7 @@ public class ConnectionNode extends SelectableNode {
     protected final StringProperty          realText;
     protected       ReadOnlyBooleanProperty selected;
 
-    public ConnectionNode(FlowDesignFxApplication application, Connection connection, String textLeft, String textRight) {
-        super(application);
-        
+    public ConnectionNode(Connection connection, String textLeft, String textRight) {
         this.connection  = connection;
 
         try {
@@ -267,6 +265,11 @@ public class ConnectionNode extends SelectableNode {
     @Override
     public ReadOnlyBooleanProperty selectedProperty() {
         return selected;
+    }
+
+    @Override
+    protected FlowDesignFxApplication getApplication() {
+        return diagramPane.getApplication();
     }
 
     @Override

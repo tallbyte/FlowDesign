@@ -25,6 +25,7 @@ import com.tallbyte.flowdesign.data.JointJoinException;
 import com.tallbyte.flowdesign.data.flow.FlowDiagram;
 import com.tallbyte.flowdesign.data.flow.Operation;
 import com.tallbyte.flowdesign.data.flow.OperationalUnit;
+import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import com.tallbyte.flowdesign.javafx.ShortcutGroup;
 import com.tallbyte.flowdesign.javafx.Shortcuts;
 import com.tallbyte.flowdesign.javafx.control.AutoSizeTextField;

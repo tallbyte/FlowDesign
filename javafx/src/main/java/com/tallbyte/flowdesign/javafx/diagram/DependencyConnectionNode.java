@@ -47,8 +47,8 @@ public class DependencyConnectionNode extends ConnectionNode {
     protected final Circle circle = new Circle();
     protected       ObjectProperty<?> reference;
 
-    public DependencyConnectionNode(FlowDesignFxApplication application, DependencyConnection connection) {
-        super(application, connection, null, null);
+    public DependencyConnectionNode(DependencyConnection connection) {
+        super(connection, null, null);
 
         try {
             reference = JavaBeanObjectPropertyBuilder.create().bean(connection).name("reference").build();

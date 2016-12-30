@@ -60,7 +60,7 @@ public class JointNode extends Circle {
 
         DiagramPane diagramPane = node.getDiagramPane();
         setOnDragDetected(event -> {
-            ConnectionNode line = new ConnectionNode(null, null, null, null);
+            ConnectionNode line = new ConnectionNode(null, null, null);
             line.startXProperty().bind(centerXProperty().add(node.realXProperty()));
             line.startYProperty().bind(centerYProperty().add(node.realYProperty()));
             line.setEndX(line.getStartX());

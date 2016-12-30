@@ -328,10 +328,10 @@ public class DiagramPane extends ScrollPane {
 
         // TODO make using factories and map lookup
         if (connection instanceof FlowConnection) {
-            node = new FlowConnectionNode(application, (FlowConnection) connection);
+            node = new FlowConnectionNode((FlowConnection) connection);
 
         } else if (connection instanceof DependencyConnection) {
-            node = new DependencyConnectionNode(application, (DependencyConnection) connection);
+            node = new DependencyConnectionNode((DependencyConnection) connection);
 
         } else {
             node = null;
@@ -685,5 +685,9 @@ public class DiagramPane extends ScrollPane {
 
     public void requestSelection(SelectableNode node) {
 
+    }
+
+    public FlowDesignFxApplication getApplication() {
+        return application;
     }
 }
