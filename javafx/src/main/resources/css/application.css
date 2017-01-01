@@ -346,11 +346,39 @@ SwitchPane .boxButtons {
     -fx-faint-focus-color: -fx-box-border;
 }
 
-.dataTypePopup, .actionPopup {
+.dataTypePopup, .actionPopup, .searchPopup {
     -fx-padding:          3px;
     -fx-background-color: -fx-control-pane-accent;
     -fx-border-color:     -fx-bar-border-accent;
     -fx-pref-height:      100px;
+}
+
+.searchPopup {
+    -fx-pref-height:      300px;
+    -fx-padding:          0px;
+    -fx-pref-width:       300px;
+}
+
+.searchPopup .searchHeader {
+    -fx-border-color: transparent transparent -fx-bar-border-accent transparent;
+    -fx-padding: 6px;
+}
+
+.searchPopup .list {
+    -fx-padding: 3px;
+}
+
+.searchPopup .text-field {
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+}
+
+.searchEntry {
+    -fx-spacing: 5px;
+}
+
+.searchEntry .labelType {
+    -fx-text-fill: #946746;
 }
 
 .iconButton {
@@ -364,6 +392,12 @@ SwitchPane .boxButtons {
 .iconButton:hover {
     -fx-background-color: rgba(128, 128, 128, 0.5);
     -fx-border-color:     gray;
+}
+
+.searchPopup .searchButton {
+    -fx-padding: 0 10 0 0;
+    -fx-background-color: transparent;
+    -fx-border-color:     transparent;
 }
 
 .darkStyleButton * {

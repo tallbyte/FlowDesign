@@ -31,15 +31,15 @@
         <VBox>
             <MenuBar useSystemMenuBar="true">
                 <Menu text="%menu.file">
-                    <MenuItem accelerator="Ctrl+N" text="%menu.file.newProject" onAction="#onCreateProject"/>
+                    <MenuItem accelerator="Ctrl+P" text="%menu.file.newProject" onAction="#onCreateProject"/>
 
                     <SeparatorMenuItem/>
 
-                    <MenuItem fx:id="menuItemLoad" accelerator="Ctrl+O" text="%menu.file.load"   onAction="#onLoad" />
+                    <MenuItem fx:id="menuItemLoad" accelerator="Ctrl+O" text="%menu.file.load" onAction="#onLoad" />
 
                     <SeparatorMenuItem/>
 
-                    <MenuItem fx:id="menuItemSave" accelerator="Ctrl+S" text="%menu.file.save"   onAction="#onSave" />
+                    <MenuItem fx:id="menuItemSave" accelerator="Ctrl+S" text="%menu.file.save" onAction="#onSave" />
                     <MenuItem fx:id="menuItemSaveAs" accelerator="Ctrl+Shift+S" text="%menu.file.saveAs" onAction="#onSaveAs"/>
 
                     <SeparatorMenuItem/>
@@ -47,6 +47,9 @@
                 </Menu>
                 <Menu fx:id="menuEdit" text="%menu.edit">
 
+                </Menu>
+                <Menu text="%menu.action">
+                    <MenuItem fx:id="menuItemSearch" accelerator="Ctrl+N" text="%menu.action.search" onAction="#onSearchDiagram"/>
                 </Menu>
                 <DiagramMenu fx:id="menuDiagram"/>
                 <Menu text="%menu.help">
@@ -82,7 +85,7 @@
                     </graphic>
                 </Button>
 
-                <Button styleClass="searchButton, iconButton">
+                <Button styleClass="searchButton, iconButton" onAction="#onSearchDiagram">
                     <graphic>
                         <Glyph textFill="white" fontFamily="FontAwesome" icon="SEARCH"/>
                     </graphic>

@@ -29,12 +29,14 @@ import com.tallbyte.flowdesign.javafx.ColorHandler;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import com.tallbyte.flowdesign.javafx.Shortcuts;
 import com.tallbyte.flowdesign.javafx.diagram.DiagramPane;
+import com.tallbyte.flowdesign.javafx.popup.SearchPopup;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.LoadException;
+import javafx.geometry.Bounds;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -70,8 +72,10 @@ public class ApplicationPane extends BorderPane {
     @FXML private MenuItem            menuItemLoad;
     @FXML private MenuItem            menuItemSave;
     @FXML private MenuItem            menuItemSaveAs;
+    @FXML private MenuItem            menuItemSearch;
 
     private final FlowDesignFxApplication  application;
+    private final SearchPopup              searchPopup;
 
     private ObjectProperty<Project>        project           = new SimpleObjectProperty<>(this, "project", null);
     private List<DiagramsChangedListener>  listenersDiagrams = new ArrayList<>();
@@ -95,6 +99,8 @@ public class ApplicationPane extends BorderPane {
             updateTitle();
         });
 
+        this.searchPopup = new SearchPopup(this, paneDiagrams);
+
         /*
          * Prepare
          */
@@ -110,6 +116,7 @@ public class ApplicationPane extends BorderPane {
         paneTypes.setup(this);
         menuItemSave.disableProperty().bind(projectProperty().isNull());
         menuItemSaveAs.disableProperty().bind(projectProperty().isNull());
+        menuItemSearch.disableProperty().bind(projectProperty().isNull());
 
         /*
          * Add listeners
@@ -389,6 +396,22 @@ public class ApplicationPane extends BorderPane {
                 e.printStackTrace();
                 // TODO temporary
             }
+        }
+    }
+
+    /**
+     * Opens the search popup.
+     */
+    @FXML
+    public void onSearchDiagram() {
+        Bounds bounds = localToScreen(getBoundsInLocal());
+        if (bounds != null) {
+            // TODO width and height are incorrect when displayed for the first time...
+            searchPopup.show(
+                    this,
+                    bounds.getMinX() + bounds.getWidth()/2-300/2,
+                    bounds.getMinY() + bounds.getHeight()/2-300/2
+            );
         }
     }
 
