@@ -73,6 +73,8 @@ public class SearchPopup extends Popup {
 
         textFieldSearch.textProperty().addListener(observable -> {
             filter.setPredicate(diagram -> diagram.getName().toLowerCase().startsWith(textFieldSearch.getText().toLowerCase()));
+
+            list.getSelectionModel().select(0);
         });
 
         list.setCellFactory(param -> {
@@ -122,6 +124,10 @@ public class SearchPopup extends Popup {
 
                 list.requestFocus();
                 list.fireEvent(event);
+            }  else if (event.getCode() == KeyCode.ENTER) {
+                close();
+                event.consume();
+
             }
         });
 
@@ -164,6 +170,8 @@ public class SearchPopup extends Popup {
      */
     public void show(Node ownerNode, double anchorX, double anchorY) {
         super.show(ownerNode, anchorX, anchorY);
+
+        textFieldSearch.requestFocus();
     }
 
     /**

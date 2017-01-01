@@ -79,15 +79,15 @@
 
                 <Separator orientation="VERTICAL"/>
 
-                <Button styleClass="reorderButton, iconButton">
+                <Button visible="false" styleClass="reorderButton, iconButton">
                     <graphic>
-                        <Glyph textFill="white" fontFamily="FontAwesome" icon="REORDER"/>
+                        <Glyph fontFamily="FontAwesome" icon="REORDER"/>
                     </graphic>
                 </Button>
 
                 <Button styleClass="searchButton, iconButton" onAction="#onSearchDiagram">
                     <graphic>
-                        <Glyph textFill="white" fontFamily="FontAwesome" icon="SEARCH"/>
+                        <Glyph fontFamily="FontAwesome" icon="SEARCH"/>
                     </graphic>
                 </Button>
             </HBox>
