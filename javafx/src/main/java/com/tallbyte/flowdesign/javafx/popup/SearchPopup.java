@@ -121,6 +121,7 @@ public class SearchPopup extends Popup {
                     || event.getCode() == KeyCode.DOWN) {
 
                 list.requestFocus();
+                list.fireEvent(event);
             }
         });
 
