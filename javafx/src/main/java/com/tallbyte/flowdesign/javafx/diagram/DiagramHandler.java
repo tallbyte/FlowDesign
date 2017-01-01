@@ -32,7 +32,7 @@ import java.util.Map;
  */
 public interface DiagramHandler<T extends Diagram> {
 
-    void createElement(T diagram, String element, double x, double y);
+    Element createElement(T diagram, String element, double x, double y);
 
     void removeElement(T diagram, Element element);
 

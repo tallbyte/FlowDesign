@@ -459,12 +459,15 @@ public class DiagramPane extends ScrollPane {
             if (diagram != null) {
                 Bounds b = localToScene(getBoundsInLocal());
 
-                diagramManager.createElement(getDiagram(), event.getDragboard().getString(),
+                Element e = diagramManager.createElement(getDiagram(), event.getDragboard().getString(),
                         mouseX-b.getMinX()-event.getDragboard().getDragViewOffsetX(),
                         mouseY-b.getMinY()-event.getDragboard().getDragViewOffsetY()
                 );
 
-                event.consume();
+                if (e != null) {
+                    requestSelection(e);
+                    event.consume();
+                }
             }
         });
 

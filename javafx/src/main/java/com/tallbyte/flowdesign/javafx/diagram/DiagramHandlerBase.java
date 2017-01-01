@@ -52,7 +52,7 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
     }
 
     @Override
-    public void createElement(T diagram, String element, double x, double y) {
+    public S createElement(T diagram, String element, double x, double y) {
         ElementFactory<? extends S> factory = elementFactories.get(element);
 
         if (factory != null) {
@@ -73,7 +73,11 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
             }
 
             diagram.addElement(e);
+
+            return e;
         }
+
+        return null;
     }
 
     @Override

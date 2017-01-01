@@ -62,11 +62,11 @@ public class DiagramManager {
         return getHandler(diagram) != null;
     }
 
-    public <T extends Diagram> void createElement(T diagram, String element, double x, double y) {
+    public <T extends Diagram> Element createElement(T diagram, String element, double x, double y) {
         DiagramHandler<T> handler = getHandler(diagram);
 
         if (handler != null) {
-            handler.createElement(diagram, element, x, y);
+            return handler.createElement(diagram, element, x, y);
         } else {
             throw new IllegalStateException("unsupported diagram type");
         }
