@@ -493,6 +493,12 @@ public class DiagramPane extends ScrollPane {
         });
 
         node.addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                newValue.requestFocus();
+            } else {
+                requestFocus();
+            }
+
             reapplyShortcuts();
         });
 

@@ -81,12 +81,14 @@ public class JoinElementNode extends ElementNode {
 
                 diagramPane.requestSelection(list.get(Math.min(list.size()-1, 1)));
             }
+            event.consume();
         });
 
         group.getShortcut(Shortcuts.SHORTCUT_MOVE_RIGHT).setAction(event -> {
             for (Connection c : join.getOutputGroup().getJoint(0).getOutgoing()) {
                 diagramPane.requestSelection(c);
             }
+            event.consume();
         });
 
         group.getShortcut(Shortcuts.SHORTCUT_MOVE_UP).setAction(event -> {
@@ -98,6 +100,7 @@ public class JoinElementNode extends ElementNode {
 
                 diagramPane.requestSelection(list.get(0));
             }
+            event.consume();
         });
 
         group.getShortcut(Shortcuts.SHORTCUT_MOVE_DOWN).setAction(event -> {
@@ -109,6 +112,7 @@ public class JoinElementNode extends ElementNode {
 
                 diagramPane.requestSelection(list.get(0));
             }
+            event.consume();
         });
     }
 }

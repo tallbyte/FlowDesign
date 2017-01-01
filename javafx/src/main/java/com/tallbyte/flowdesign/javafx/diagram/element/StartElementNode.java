@@ -62,6 +62,7 @@ public class StartElementNode extends ElementNode {
             for (Connection c : start.getOutputGroup().getJoint(0).getOutgoing()) {
                 diagramPane.requestSelection(c);
             }
+            event.consume();
         });
     }
 }

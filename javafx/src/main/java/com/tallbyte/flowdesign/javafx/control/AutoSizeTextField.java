@@ -52,7 +52,7 @@ public class AutoSizeTextField extends TextField {
         setPrefColumnCount(60);
         setMinWidth(10);
 
-        addEventHandler(KeyEvent.KEY_RELEASED, event -> {
+        addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (!event.getCode().isModifierKey()) {
                 Runnable r = getScene().getAccelerators().get(
                         new KeyCodeCombination(

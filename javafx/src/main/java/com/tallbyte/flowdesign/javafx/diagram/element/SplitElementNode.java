@@ -73,6 +73,7 @@ public class SplitElementNode extends ElementNode {
             for (Connection c : split.getInputGroup().getJoint(0).getIncoming()) {
                 diagramPane.requestSelection(c);
             }
+            event.consume();
         });
 
         group.getShortcut(Shortcuts.SHORTCUT_MOVE_RIGHT).setAction(event -> {
@@ -84,6 +85,7 @@ public class SplitElementNode extends ElementNode {
 
                 diagramPane.requestSelection(list.get(Math.min(list.size()-1, 1)));
             }
+            event.consume();
         });
 
         group.getShortcut(Shortcuts.SHORTCUT_MOVE_UP).setAction(event -> {
@@ -95,6 +97,7 @@ public class SplitElementNode extends ElementNode {
 
                 diagramPane.requestSelection(list.get(0));
             }
+            event.consume();
         });
 
         group.getShortcut(Shortcuts.SHORTCUT_MOVE_DOWN).setAction(event -> {
@@ -106,6 +109,7 @@ public class SplitElementNode extends ElementNode {
 
                 diagramPane.requestSelection(list.get(0));
             }
+            event.consume();
         });
     }
 }

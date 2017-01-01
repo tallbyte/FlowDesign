@@ -65,6 +65,7 @@ public abstract class SelectableNode extends Group {
                 getApplication().getPopupHandler().setupPopup(popup);
                 popup.show(this, bounds.getMinX()+10, bounds.getMinY()-100, getCurrentActions());
             }
+            event.consume();
         });
     }
 

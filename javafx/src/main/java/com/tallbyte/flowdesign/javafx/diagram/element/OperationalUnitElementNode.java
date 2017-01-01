@@ -74,6 +74,7 @@ public class OperationalUnitElementNode extends ElementNode {
             if (reference instanceof FlowDiagram) {
                 diagramPane.getDiagramsPane().addDiagram((FlowDiagram) reference);
             }
+            event.consume();
         });
         group.getShortcut(Shortcuts.SHORTCUT_ADD_FLOW).setAction(event -> {
             double x = getRealX() + getRealWidth() + 100;
@@ -89,23 +90,28 @@ public class OperationalUnitElementNode extends ElementNode {
             diagram.addElement(operation);
 
             try {
-                this.operation.getOutputGroup().getJoint(0).join(operation.getInputGroup().getJoint(0));
+                diagramPane.requestSelection(
+                        this.operation.getOutputGroup().getJoint(0).join(operation.getInputGroup().getJoint(0))
+                );
                 operation.getInputGroup().getJoint(0).setDataType(this.operation.getOutputGroup().getJoint(0).getDataType());
             } catch (JointJoinException e) {
                 // just try
             }
+            event.consume();
         });
 
         group.getShortcut(Shortcuts.SHORTCUT_MOVE_LEFT).setAction(event -> {
             for (Connection c : operation.getInputGroup().getJoint(0).getIncoming()) {
                 diagramPane.requestSelection(c);
             }
+            event.consume();
         });
 
         group.getShortcut(Shortcuts.SHORTCUT_MOVE_RIGHT).setAction(event -> {
             for (Connection c : operation.getOutputGroup().getJoint(0).getOutgoing()) {
                 diagramPane.requestSelection(c);
             }
+            event.consume();
         });
     }
 

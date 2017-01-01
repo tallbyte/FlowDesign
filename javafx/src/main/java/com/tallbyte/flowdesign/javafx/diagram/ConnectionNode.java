@@ -50,6 +50,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Popup;
 
+import java.awt.event.FocusEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,8 +112,11 @@ public class ConnectionNode extends SelectableNode {
         }
 
         paneMarker.setOnMousePressed(event -> textField.requestFocus());
+
         focusedProperty().addListener((observable, oldValue, newValue) -> {
-            textField.requestFocus();
+            if (newValue) {
+                textField.requestFocus();
+            }
         });
 
         getStyleClass().add("connectionNode");
@@ -290,10 +294,12 @@ public class ConnectionNode extends SelectableNode {
 
         group.getShortcut(Shortcuts.SHORTCUT_MOVE_LEFT).setAction(event -> {
             diagramPane.requestSelection(connection.getSource().getElement());
+            event.consume();
         });
 
         group.getShortcut(Shortcuts.SHORTCUT_MOVE_RIGHT).setAction(event -> {
             diagramPane.requestSelection(connection.getTarget().getElement());
+            event.consume();
         });
     }
 }
