@@ -406,7 +406,7 @@ public class ApplicationPane extends BorderPane {
     public void onSearchDiagram() {
         Bounds bounds = localToScreen(getBoundsInLocal());
         if (bounds != null) {
-            // TODO width and height are incorrect when displayed for the first time...
+            // TODO width and height are incorrect when displayed for the first time when using prefWidth()...
             searchPopup.show(
                     this,
                     bounds.getMinX() + bounds.getWidth()/2-300/2,
