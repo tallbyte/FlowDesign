@@ -75,8 +75,11 @@ public class JoinElementNode extends ElementNode {
         super.registerShortcuts(group);
 
         group.getShortcut(Shortcuts.SHORTCUT_MOVE_LEFT).setAction(event -> {
-            List<Connection> list = join.getInputGroup().getJoint(0)
-                    .getIncoming().stream().collect(Collectors.toList());
+            List<Connection> list = new ArrayList<>();
+
+            for (Joint j : join.getInputGroup().getJoints()) {
+                list.addAll(j.getIncoming());
+            }
 
             if (list.size() > 0) {
                 list.sort((o1, o2) -> (int) (o1.getSource().getElement().getY() - o2.getSource().getElement().getY()));
