@@ -69,14 +69,12 @@ public class FlowDiagram extends Diagram<FlowDiagramElement> {
 
         this.start.getOutputGroup().getJoint(0).addPropertyChangeListener(evt -> {
             if (evt.getPropertyName().equals("dataType")) {
-                System.out.println(("newIn " + evt.getNewValue()));
                 changeSupport.firePropertyChange("dataTypeIn", evt.getOldValue(), evt.getNewValue());
             }
         });
 
         this.end.getInputGroup().getJoint(0).addPropertyChangeListener(evt -> {
             if (evt.getPropertyName().equals("dataType")) {
-                System.out.println(("newOut " + evt.getNewValue()));
                 changeSupport.firePropertyChange("dataTypeOut", evt.getOldValue(), evt.getNewValue());
             }
         });
