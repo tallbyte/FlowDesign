@@ -324,7 +324,7 @@ ProjectEntry .closeButton:pressed .glyphClose {
 }
 
 .newProjectPane {
-    -fx-padding:          5px;
+    -fx-padding:          10px;
 }
 
 .newProjectPane .propertySheet {
