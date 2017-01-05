@@ -19,8 +19,10 @@
 package com.tallbyte.flowdesign.storage.xml.flow;
 
 import com.tallbyte.flowdesign.data.Connection;
+import com.tallbyte.flowdesign.data.flow.End;
 import com.tallbyte.flowdesign.data.flow.FlowDiagram;
 import com.tallbyte.flowdesign.data.flow.FlowDiagramElement;
+import com.tallbyte.flowdesign.data.flow.Start;
 import com.tallbyte.flowdesign.storage.xml.XmlDeserializationHelper;
 import com.tallbyte.flowdesign.storage.xml.XmlDiagramSerializer;
 import com.tallbyte.flowdesign.storage.xml.XmlSerializationHelper;
@@ -74,12 +76,28 @@ public class XmlFlowDiagramSerializer extends XmlDiagramSerializer implements Xm
                     helper
             );
 
-            FlowDiagram diagram = new FlowDiagram(
-                    attributes.get(ATTRIBUTE_NAME)
-            );
-
             // load all the elements with proper values
             deserializeElements(reader, queue, FlowDiagramElement.class, helper);
+
+            Start start = null;
+            End   end   = null;
+
+            for (Map.Entry<String, FlowDiagramElement> entry : queue) {
+                if (entry.getValue() instanceof Start) {
+                    start = (Start) entry.getValue();
+                }
+
+                if (entry.getValue() instanceof End) {
+                    end = (End) entry.getValue();
+                }
+            }
+
+            FlowDiagram diagram = new FlowDiagram(
+                    attributes.get(ATTRIBUTE_NAME),
+                    start,
+                    end
+            );
+
             queue.stream()
                     .map(Map.Entry::getValue)
                     .forEach(diagram::addElement);

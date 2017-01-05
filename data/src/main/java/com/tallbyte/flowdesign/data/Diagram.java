@@ -125,10 +125,15 @@ public abstract class Diagram<E extends Element> {
      * Adds the given {@link Element} to the internal list.
      * This will also call all {@link ElementsChangedListener}.
      * @param element the @{link Element} to add
+     * @return Returns true if the element was added else false.
      */
-    public void addElement(E element) {
+    public boolean addElement(E element) {
         if (element == null) {
-            return;
+            return false;
+        }
+
+        if (this.elements.contains(element)) {
+            return false;
         }
 
         this.elements.add(element);
@@ -137,6 +142,8 @@ public abstract class Diagram<E extends Element> {
         for (ElementsChangedListener listener : listenersElements) {
             listener.onElementsChanged(element, true);
         }
+
+        return true;
     }
     /**
      * Removes the given {@link Element} from the internal list.

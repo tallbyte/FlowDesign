@@ -40,16 +40,17 @@ public class FlowDiagram extends Diagram<FlowDiagramElement> {
      * @param name the desired name
      */
     public FlowDiagram(String name) {
-        this(name, new Start());
+        this(name, new Start(), new End());
     }
 
     /**
      * Creates a new {@link FlowDiagram} with a given {@link Start} as root.
      * @param name the desired name
      * @param root the desired root
+     * @param end the desired end
      * @throws IllegalArgumentException Is thrown if <code>root</code> is null.
      */
-    public FlowDiagram(String name, Start root) {
+    public FlowDiagram(String name, Start root, End end) {
         super(name, root);
 
         if (root == null) {
@@ -57,7 +58,7 @@ public class FlowDiagram extends Diagram<FlowDiagramElement> {
         }
 
         this.start = root;
-        this.end   = new End();
+        this.end   = end;
 
         addElement(end);
     }
@@ -68,8 +69,17 @@ public class FlowDiagram extends Diagram<FlowDiagramElement> {
     }
 
     @Override
+    public boolean addElement(FlowDiagramElement element) {
+        if ((element instanceof Start && element != start) || (element instanceof End && element != end)) {
+            return false;
+        }
+
+        return super.addElement(element);
+    }
+
+    @Override
     public void removeElement(FlowDiagramElement element) {
-        if (element != start && element != end ) {
+        if (element != start && element != end) {
             super.removeElement(element);
         }
     }
