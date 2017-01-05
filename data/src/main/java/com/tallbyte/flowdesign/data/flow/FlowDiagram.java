@@ -19,6 +19,7 @@
 package com.tallbyte.flowdesign.data.flow;
 
 import com.tallbyte.flowdesign.data.Diagram;
+import com.tallbyte.flowdesign.data.FlowJoint;
 
 import java.beans.PropertyChangeListener;
 
@@ -34,6 +35,8 @@ public class FlowDiagram extends Diagram<FlowDiagramElement> {
 
     private final Start start;
     private final End   end;
+
+    private       boolean ui;
 
     /**
      * Creates a new {@link FlowDiagram} using name only.
@@ -57,8 +60,26 @@ public class FlowDiagram extends Diagram<FlowDiagramElement> {
             throw new IllegalArgumentException("root can not be null");
         }
 
+        if (end == null) {
+            throw new IllegalArgumentException("end can not be null");
+        }
+
         this.start = root;
         this.end   = end;
+
+        this.start.getOutputGroup().getJoint(0).addPropertyChangeListener(evt -> {
+            if (evt.getPropertyName().equals("dataType")) {
+                System.out.println(("newIn " + evt.getNewValue()));
+                changeSupport.firePropertyChange("dataTypeIn", evt.getOldValue(), evt.getNewValue());
+            }
+        });
+
+        this.end.getInputGroup().getJoint(0).addPropertyChangeListener(evt -> {
+            if (evt.getPropertyName().equals("dataType")) {
+                System.out.println(("newOut " + evt.getNewValue()));
+                changeSupport.firePropertyChange("dataTypeOut", evt.getOldValue(), evt.getNewValue());
+            }
+        });
 
         addElement(end);
     }
@@ -99,4 +120,53 @@ public class FlowDiagram extends Diagram<FlowDiagramElement> {
     public End getEnd() {
         return end;
     }
+
+    /**
+     * Gets whether or not this {@link FlowDiagram} starts and ends with ui.
+     * @return Returns true if it starts and ends with ui, else false.
+     */
+    public boolean isUi() {
+        return ui;
+    }
+
+    /**
+     * Sets whether or not this {@link FlowDiagram} starts and ends with ui.
+     * @param ui does it start with ui or not?
+     */
+    public void setUi(boolean ui) {
+        this.ui = ui;
+    }
+
+    /**
+     * Gets the input type.
+     * @return Returns the input type.
+     */
+    public String getDataTypeIn() {
+        return ((FlowJoint) start.getOutputGroup().getJoint(0)).getDataType();
+    }
+
+    /**
+     * Sets the input type.
+     * @param dataTypeIn the new input type
+     */
+    public void setDataTypeIn(String dataTypeIn) {
+        ((FlowJoint) start.getOutputGroup().getJoint(0)).setDataType(dataTypeIn);
+    }
+
+    /**
+     * Gets the output type.
+     * @return Returns the output type.
+     */
+    public String getDataTypeOut() {
+        return ((FlowJoint) end.getInputGroup().getJoint(0)).getDataType();
+    }
+
+    /**
+     * Sets the output type.
+     * @param dataTypeOut the new output type
+     */
+    public void setDataTypeOut(String dataTypeOut) {
+        ((FlowJoint) end.getInputGroup().getJoint(0)).setDataType(dataTypeOut);
+    }
+
 }
