@@ -102,6 +102,16 @@ public class DiagramManager {
         }
     }
 
+    public boolean isUserCreateable(Diagram diagram, String name) {
+        DiagramHandler<?> handler = getHandler(diagram);
+
+        if (handler != null) {
+            return handler.isUserCreateable(name);
+        } else {
+            throw new IllegalStateException("unsupported diagram type");
+        }
+    }
+
     public Diagram createDiagram(String name, Class<? extends Diagram> clazz) {
         DiagramHandler<?> handler = getHandler(clazz);
 

@@ -36,12 +36,14 @@ public class FlowDiagramHandler extends DiagramHandlerBase<FlowDiagram, FlowDiag
         addEntries("Start", Start.class,
                 Start::new,
                 StartDiagramImage::new,
-                StartElementNode::new
+                StartElementNode::new,
+                false
         );
         addEntries("End", End.class,
                 End::new,
                 EndDiagramImage::new,
-                EndElementNode::new
+                EndElementNode::new,
+                false
         );
         addEntries("Join", Join.class,
                 Join::new,

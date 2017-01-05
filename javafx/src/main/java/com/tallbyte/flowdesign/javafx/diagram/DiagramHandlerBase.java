@@ -39,16 +39,26 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
     protected final Map<Class<? extends Element>, DiagramImageFactory>             imageFactories   = new HashMap<>();
     protected final Map<Class<? extends Element>, ElementNodeFactory<? extends S>> nodeFactories    = new HashMap<>();
     protected final Map<String, DiagramImageFactory>                               supportedElements= new HashMap<>();
+    protected final Map<String, Boolean>                                           userCreateable   = new HashMap<>();
 
     protected <E extends S> void addEntries(String string, Class<E> clazz,
                                             ElementFactory<E> elementFactory,
                                             DiagramImageFactory imageFactory,
                                             ElementNodeFactory<E> nodeFactory) {
+        addEntries(string, clazz, elementFactory, imageFactory, nodeFactory, true);
+    }
+
+    protected <E extends S> void addEntries(String string, Class<E> clazz,
+                                            ElementFactory<E> elementFactory,
+                                            DiagramImageFactory imageFactory,
+                                            ElementNodeFactory<E> nodeFactory,
+                                            boolean userCreateable) {
 
         elementFactories.put(string, elementFactory);
         imageFactories.put(clazz, imageFactory);
         nodeFactories.put(clazz, nodeFactory);
         supportedElements.put(string, imageFactory);
+        this.userCreateable.put(string, userCreateable);
     }
 
     @Override
@@ -113,6 +123,13 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
     }
 
     protected abstract T createNewDiagramInstance(String name);
+
+    @Override
+    public boolean isUserCreateable(String name) {
+        Boolean b = userCreateable.get(name);
+
+        return b == null ? false : b;
+    }
 
     @Override
     public T createDiagram(String name) {
