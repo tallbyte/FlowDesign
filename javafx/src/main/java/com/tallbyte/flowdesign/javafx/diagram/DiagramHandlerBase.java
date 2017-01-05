@@ -118,7 +118,12 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
     public T createDiagram(String name) {
         T diagram = createNewDiagramInstance(name);
 
-        Element e = diagram.getRoot();
+        setToPrefSize(diagram.getRoot());
+
+        return diagram;
+    }
+
+    protected void setToPrefSize(Element e) {
         if (e != null) {
             DiagramImageFactory factory = imageFactories.get(e.getClass());
             if (factory != null) {
@@ -127,7 +132,5 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
                 e.setHeight(image.getHeight());
             }
         }
-
-        return diagram;
     }
 }

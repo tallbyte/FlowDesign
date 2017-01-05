@@ -18,8 +18,10 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
+import com.tallbyte.flowdesign.data.Element;
 import com.tallbyte.flowdesign.data.flow.*;
 import com.tallbyte.flowdesign.javafx.diagram.element.*;
+import com.tallbyte.flowdesign.javafx.diagram.factory.DiagramImageFactory;
 import com.tallbyte.flowdesign.javafx.diagram.image.*;
 
 /**
@@ -76,5 +78,16 @@ public class FlowDiagramHandler extends DiagramHandlerBase<FlowDiagram, FlowDiag
     @Override
     protected FlowDiagram createNewDiagramInstance(String name) {
         return new FlowDiagram(name);
+    }
+
+    @Override
+    public FlowDiagram createDiagram(String name) {
+        FlowDiagram diagram = super.createDiagram(name);
+
+        setToPrefSize(diagram.getEnd());
+
+        diagram.getEnd().setX(300);
+
+        return diagram;
     }
 }

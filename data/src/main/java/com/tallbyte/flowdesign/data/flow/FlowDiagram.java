@@ -32,25 +32,61 @@ import java.beans.PropertyChangeListener;
  */
 public class FlowDiagram extends Diagram<FlowDiagramElement> {
 
+    private final Start start;
+    private final End   end;
+
     /**
      * Creates a new {@link FlowDiagram} using name only.
      * @param name the desired name
      */
     public FlowDiagram(String name) {
-        super(name, null);
+        this(name, new Start());
     }
 
     /**
      * Creates a new {@link FlowDiagram} with a given {@link Start} as root.
      * @param name the desired name
      * @param root the desired root
+     * @throws IllegalArgumentException Is thrown if <code>root</code> is null.
      */
     public FlowDiagram(String name, Start root) {
         super(name, root);
+
+        if (root == null) {
+            throw new IllegalArgumentException("root can not be null");
+        }
+
+        this.start = root;
+        this.end   = new End();
+
+        addElement(end);
     }
 
     @Override
     public Start getRoot() {
         return (Start) super.getRoot();
+    }
+
+    @Override
+    public void removeElement(FlowDiagramElement element) {
+        if (element != start && element != end ) {
+            super.removeElement(element);
+        }
+    }
+
+    /**
+     * Gets the starting element.
+     * @return Returns the start.
+     */
+    public Start getStart() {
+        return start;
+    }
+
+    /**
+     * Returns the ending element.
+     * @return Returns the end.
+     */
+    public End getEnd() {
+        return end;
     }
 }

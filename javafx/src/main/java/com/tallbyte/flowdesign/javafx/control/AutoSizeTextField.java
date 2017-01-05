@@ -21,6 +21,7 @@ package com.tallbyte.flowdesign.javafx.control;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
@@ -53,7 +54,7 @@ public class AutoSizeTextField extends TextField {
         setMinWidth(10);
 
         addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-            if (!event.getCode().isModifierKey()) {
+            if (!event.getCode().isModifierKey() && event.getCode() != KeyCode.UNDEFINED) {
                 Runnable r = getScene().getAccelerators().get(
                         new KeyCodeCombination(
                                 event.getCode(),
