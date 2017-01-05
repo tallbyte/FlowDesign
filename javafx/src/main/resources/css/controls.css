@@ -173,8 +173,8 @@
 }
 
 .menu {
+    -fx-padding: 0.06em 0.48em 0.06em 0.48em;
     -fx-background-color:   -fx-bar-accent;
-    -fx-padding:            3px 8px;
 }
 
 .menu-item {
