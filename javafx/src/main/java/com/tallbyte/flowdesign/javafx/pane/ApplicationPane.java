@@ -43,6 +43,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import org.controlsfx.glyphfont.FontAwesome;
+import org.controlsfx.glyphfont.Glyph;
 
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -233,6 +235,9 @@ public class ApplicationPane extends BorderPane {
         itemEdit.setText(getResourceString("menu.edit.new."+diagramClazz.getSimpleName()));
         itemEdit.disableProperty().bind(projectProperty().isNull());
         itemEdit.setOnAction(event -> createDiagram(diagramClazz));
+        Glyph graphic = new Glyph("FontAwesome", "\uf0f3");
+        graphic.getStyleClass().add("fakeIcon");
+        itemEdit.setGraphic(graphic);
         menuEdit.getItems().add(itemEdit);
 
         for (Diagram d : project.getDiagrams(diagramClazz)) {

@@ -501,3 +501,11 @@ SwitchPane .boxButtons {
 .changelogList .list-cell:filled:hover {
     -fx-background-color: transparent;
 }
+
+.directoryIcon {
+    -fx-text-fill: sandybrown;
+}
+
+.fakeIcon {
+    -fx-text-fill: -fx-control-pane-accent;
+}
