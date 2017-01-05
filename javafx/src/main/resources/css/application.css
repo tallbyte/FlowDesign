@@ -428,6 +428,10 @@ SwitchPane .boxButtons {
     -fx-text-fill: -fx-referenced-accent;
 }
 
+.elementNode:referenceMismatch {
+    -fx-default-color: red;
+}
+
 .nodeStateTextHolder, .elementNode:referenced .nodeStateTextHolder {
     -fx-text-fill: #8396b1;
 }

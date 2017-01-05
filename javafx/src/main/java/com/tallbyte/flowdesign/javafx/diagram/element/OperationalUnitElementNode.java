@@ -29,8 +29,10 @@ import com.tallbyte.flowdesign.javafx.control.AutoSizeTextField;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.property.adapter.JavaBeanBooleanPropertyBuilder;
 import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
 import javafx.css.PseudoClass;
@@ -55,6 +57,7 @@ public class OperationalUnitElementNode extends ElementNode {
     protected final OperationalUnit   operation;
 
     protected       StringProperty    state;
+    protected       BooleanProperty   referenceFit;
     protected       ObjectProperty<?> reference;
 
     public OperationalUnitElementNode(OperationalUnit element, DiagramImage content) {
@@ -117,8 +120,9 @@ public class OperationalUnitElementNode extends ElementNode {
 
     private void setupProperties() {
         try {
-            state     = JavaBeanStringPropertyBuilder.create().bean(element).name("state").build();
-            reference = JavaBeanObjectPropertyBuilder.create().bean(element).name("reference").build();
+            state        = JavaBeanStringPropertyBuilder.create().bean(element).name("state").build();
+            referenceFit = JavaBeanBooleanPropertyBuilder.create().bean(element).name("referenceFit").build();
+            reference    = JavaBeanObjectPropertyBuilder.create().bean(element).name("reference").build();
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("Could not create properties. This should never happen?!", e);
         }
@@ -127,6 +131,11 @@ public class OperationalUnitElementNode extends ElementNode {
             pseudoClassStateChanged(PseudoClass.getPseudoClass("referenced"), newValue != null);
         });
         pseudoClassStateChanged(PseudoClass.getPseudoClass("referenced"), reference.getValue() != null);
+
+        referenceFit.addListener((observable, oldValue, newValue) -> {
+            pseudoClassStateChanged(PseudoClass.getPseudoClass("referenceMismatch"), !newValue);
+        });
+        pseudoClassStateChanged(PseudoClass.getPseudoClass("referenceMismatch"), !referenceFit.getValue());
     }
 
     @Override

@@ -23,6 +23,7 @@ import javafx.fxml.LoadException;
 
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This file is part of project flowDesign.
@@ -64,8 +65,10 @@ public class OperationalUnit extends FlowDiagramElement {
         }
     });
 
-    protected Diagram reference;
-    protected String  state = "";
+    protected Diagram                reference;
+    protected boolean                referenceFit = true;
+    protected String                 state        = "";
+    protected PropertyChangeListener listener     = null;
 
     public static final String JOINT_GROUP_IN  = "in";
     public static final String JOINT_GROUP_OUT = "out";
@@ -77,6 +80,57 @@ public class OperationalUnit extends FlowDiagramElement {
      * Creats an new {@link OperationalUnit}.
      */
     public OperationalUnit() {
+        addPropertyChangeListener(evt -> {
+            if (evt.getPropertyName().equals("reference")) {
+                if (evt.getOldValue() != null) {
+                    ((Diagram) evt.getOldValue()).removePropertyChangeListener(listener);
+                }
+
+                if (evt.getOldValue() != evt.getNewValue()) {
+                    calculateReferenceFit();
+                }
+
+                if (evt.getNewValue() != null) {
+                    listener = evtData -> {
+                        if (evtData.getPropertyName().equals("dataTypeIn")) {
+                            calculateReferenceFit();
+                        }
+
+                        if (evtData.getPropertyName().equals("dataTypeOut")) {
+                            calculateReferenceFit();
+                        }
+                    };
+
+                    ((Diagram) evt.getNewValue()).addPropertyChangeListener(listener);
+                }
+            }
+        });
+
+        getInputGroup().getJoint(0).addPropertyChangeListener(evt -> {
+            if (evt.getPropertyName().equals("dataType")) {
+                calculateReferenceFit();
+            }
+        });
+
+        getOutputGroup().getJoint(0).addPropertyChangeListener(evt -> {
+            if (evt.getPropertyName().equals("dataType")) {
+                calculateReferenceFit();
+            }
+        });
+    }
+
+    private void calculateReferenceFit() {
+        boolean fit = false;
+
+        if (reference instanceof FlowDiagram) {
+            fit = ((FlowDiagram) reference).getDataTypeIn().equals(getInputGroup().getJoint(0).getDataType())
+                    && ((FlowDiagram) reference).getDataTypeOut().equals(getOutputGroup().getJoint(0).getDataType());
+
+        } else {
+            fit = true;
+        }
+
+        setReferenceFitInternal(fit);
     }
 
     @Override
@@ -126,6 +180,20 @@ public class OperationalUnit extends FlowDiagramElement {
 
     public Diagram getReference() {
         return reference;
+    }
+
+    public void setReferenceFitInternal(boolean referenceFit) {
+        boolean old = this.referenceFit;
+        this.referenceFit = referenceFit;
+        this.changeSupport.firePropertyChange("referenceFit", old, referenceFit);
+    }
+
+    public void setReferenceFit(boolean referenceFit) {
+        throw new UnsupportedOperationException("This method only exists because a setter is required (looking at you, JavaFX");
+    }
+
+    public boolean isReferenceFit() {
+        return referenceFit;
     }
 
     public void setState(String state) {
