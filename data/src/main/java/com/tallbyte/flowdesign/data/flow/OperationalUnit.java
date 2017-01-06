@@ -19,11 +19,9 @@
 package com.tallbyte.flowdesign.data.flow;
 
 import com.tallbyte.flowdesign.data.*;
-import javafx.fxml.LoadException;
 
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This file is part of project flowDesign.
@@ -67,6 +65,7 @@ public class OperationalUnit extends FlowDiagramElement {
 
     protected Diagram                reference;
     protected boolean                referenceFit = true;
+    protected boolean                stateAccess  = true;
     protected String                 state        = "";
     protected PropertyChangeListener listener     = null;
 
@@ -120,7 +119,7 @@ public class OperationalUnit extends FlowDiagramElement {
     }
 
     private void calculateReferenceFit() {
-        boolean fit = false;
+        boolean fit;
 
         if (reference instanceof FlowDiagram) {
             fit = ((FlowDiagram) reference).getDataTypeIn().equals(getInputGroup().getJoint(0).getDataType())
@@ -130,7 +129,7 @@ public class OperationalUnit extends FlowDiagramElement {
             fit = true;
         }
 
-        setReferenceFitInternal(fit);
+        setInternalReferenceFit(fit);
     }
 
     @Override
@@ -175,25 +174,35 @@ public class OperationalUnit extends FlowDiagramElement {
     }
 
     public void setReference(Diagram diagram) {
-        throw new UnsupportedOperationException("This method only exists because a setter is required (looking at you, JavaFX");
+        throw new UnsupportedOperationException("This method only exists because a setter is required (looking at you, JavaFX)");
     }
 
     public Diagram getReference() {
         return reference;
     }
 
-    public void setReferenceFitInternal(boolean referenceFit) {
+    private void setInternalReferenceFit(boolean referenceFit) {
         boolean old = this.referenceFit;
         this.referenceFit = referenceFit;
         this.changeSupport.firePropertyChange("referenceFit", old, referenceFit);
     }
 
     public void setReferenceFit(boolean referenceFit) {
-        throw new UnsupportedOperationException("This method only exists because a setter is required (looking at you, JavaFX");
+        throw new UnsupportedOperationException("This method only exists because a setter is required (looking at you, JavaFX)");
     }
 
     public boolean isReferenceFit() {
         return referenceFit;
+    }
+
+    public void setStateAccess(boolean stateAccess) {
+        boolean old = this.stateAccess;
+        this.stateAccess = stateAccess;
+        this.changeSupport.firePropertyChange("stateAccess", old, stateAccess);
+    }
+
+    public boolean isStateAccess() {
+        return stateAccess;
     }
 
     public void setState(String state) {

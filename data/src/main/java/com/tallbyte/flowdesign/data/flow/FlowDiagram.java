@@ -33,8 +33,8 @@ import java.beans.PropertyChangeListener;
  */
 public class FlowDiagram extends Diagram<FlowDiagramElement> {
 
-    private final Start start;
-    private final End   end;
+    private final Start   start;
+    private final End     end;
 
     private       boolean ui;
 
