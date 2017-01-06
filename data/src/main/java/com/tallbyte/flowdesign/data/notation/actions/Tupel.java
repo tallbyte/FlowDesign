@@ -58,18 +58,39 @@ public class Tupel extends TupelContainment {
         this.repeated = repeated;
     }
 
+    /**
+     * Gets the content at the specified index.
+     *
+     * @param i the index
+     * @return Returns the content.
+     */
     public TupelContainment getType(int i) {
         return types.get(i);
     }
 
+    /**
+     * Gets the number of elements of this {@link Tupel}.
+     *
+     * @return Returns the number.
+     */
     public int getTypeAmount() {
         return types.size();
     }
 
+    /**
+     * Gets the list of elements.
+     *
+     * @return Returns the list.
+     */
     public List<TupelContainment> getTypes() {
         return Collections.unmodifiableList(types);
     }
 
+    /**
+     * Checks whether or not this {@link Tupel} is repeated, i.e. a list.
+     *
+     * @return Returns true if it is, else false.
+     */
     public boolean isRepeated() {
         return repeated;
     }

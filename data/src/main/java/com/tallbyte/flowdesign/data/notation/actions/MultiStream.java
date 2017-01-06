@@ -41,14 +41,29 @@ public class MultiStream extends FlowAction {
         this.action = action;
     }
 
+    /**
+     * Gets the minimum number of occurrences.
+     *
+     * @return Returns the number.
+     */
     public int getMin() {
         return min;
     }
 
+    /**
+     * Gets the maximum number of occurrences.
+     *
+     * @return Returns the number.
+     */
     public int getMax() {
         return max;
     }
 
+    /**
+     * Gets the enclosed {@link FlowAction}.
+     *
+     * @return Returns the action.
+     */
     public FlowAction getAction() {
         return action;
     }

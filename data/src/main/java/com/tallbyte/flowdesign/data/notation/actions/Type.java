@@ -43,14 +43,29 @@ public class Type extends TupelContainment{
         this.repeated = repeated;
     }
 
+    /**
+     * Gets the actual {@link DataType}.
+     *
+     * @return Returns the type.
+     */
     public DataType getType() {
         return type;
     }
 
+    /**
+     * Gets the name.
+     *
+     * @return Returns the name.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Checks whether or not this {@link Type} is repeated, i.e. a list.
+     *
+     * @return Returns true if it is, else false.
+     */
     public boolean isRepeated() {
         return repeated;
     }

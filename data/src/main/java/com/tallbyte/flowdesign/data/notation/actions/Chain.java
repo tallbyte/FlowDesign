@@ -40,10 +40,20 @@ public class Chain extends FlowAction {
         this.second = second;
     }
 
+    /**
+     * Gets the first {@link FlowAction} of this {@link Chain}.
+     *
+     * @return Returns the action.
+     */
     public FlowAction getFirst() {
         return first;
     }
 
+    /**
+     * Gets the second {@link FlowAction} of this {@link Chain}.
+     *
+     * @return Returns the action.
+     */
     public FlowAction getSecond() {
         return second;
     }

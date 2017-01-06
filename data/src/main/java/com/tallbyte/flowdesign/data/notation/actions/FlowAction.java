@@ -34,10 +34,20 @@ public abstract class FlowAction {
         this.end   = end;
     }
 
+    /**
+     * Gets the starting index in the original string.
+     *
+     * @return Returns the index.
+     */
     public int getStart() {
         return start;
     }
 
+    /**
+     * Gets the ending index in the original string.
+     *
+     * @return Returns the index.
+     */
     public int getEnd() {
         return end;
     }
