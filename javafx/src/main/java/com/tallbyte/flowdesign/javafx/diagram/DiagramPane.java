@@ -398,7 +398,7 @@ public class DiagramPane extends ScrollPane {
             // add new
             if (newValue != null && diagramManager.isSupporting(newValue)) {
                 try {
-                    name = JavaBeanStringPropertyBuilder.create().bean(newValue).name("name").build();
+                    name = JavaBeanStringPropertyBuilder.create().bean(newValue).name(Diagram.PROPERTY_NAME).build();
                 } catch (NoSuchMethodException e) {
                     throw new RuntimeException("Could not create properties. This should never happen?!");
                 }
@@ -666,6 +666,9 @@ public class DiagramPane extends ScrollPane {
         return joint;
     }
 
+    /**
+     * Resets the shortcuts groups and re-registers all shortcuts.
+     */
     protected void reapplyShortcuts() {
         ShortcutGroup groupElements = application.getShortcutManager().getShortcutGroup(GROUP_DIAGRAM_ELEMENTS);
         groupElements.reset();
@@ -694,10 +697,17 @@ public class DiagramPane extends ScrollPane {
         });
     }
 
+    /**
+     * Handler method that is called when opening the diagram.
+     */
     public void onOpen() {
         reapplyShortcuts();
     }
 
+    /**
+     * Requests that a certain {@link SelectableNode} is being selected.
+     * @param node the node to select
+     */
     protected void requestSelection(SelectableNode node) {
         this.node.set(node);
         this.selected.clear();
@@ -707,10 +717,18 @@ public class DiagramPane extends ScrollPane {
         }
     }
 
+    /**
+     * Requests that a certain {@link DiagramContent} is being selected.
+     * @param content the content to select
+     */
     public void requestSelection(DiagramContent content) {
         requestSelection(nodes.get(content));
     }
 
+    /**
+     * Gets the application.
+     * @return Returns the application.
+     */
     public FlowDesignFxApplication getApplication() {
         return application;
     }

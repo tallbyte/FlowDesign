@@ -56,7 +56,7 @@ public class Split extends FlowDiagramElement {
         groupIn.addJointsChangedListener((joint, added) -> {
             if (added) {
                 PropertyChangeListener listener = evt -> {
-                    if (evt.getPropertyName().equals("dataType")) {
+                    if (evt.getPropertyName().equals(FlowJoint.PROPERTY_DATA_TYPE)) {
                         genOutput();
                     }
                 };
@@ -71,7 +71,7 @@ public class Split extends FlowDiagramElement {
 
         for (Joint joint : groupIn.getJoints()) {
             PropertyChangeListener listener = evt -> {
-                if (evt.getPropertyName().equals("dataType")) {
+                if (evt.getPropertyName().equals(FlowJoint.PROPERTY_DATA_TYPE)) {
                     genOutput();
                 }
             };
@@ -86,7 +86,6 @@ public class Split extends FlowDiagramElement {
                     element -> new FlowJoint(element, JointType.OUTPUT, 0, 0, new ConnectionTextExtractor() {
                         @Override
                         public String setConnection(FlowJoint joint, FlowConnection connection, String text) {
-                            System.out.println(("---" + text));
                             try {
                                 FlowAction action = joint.getParser().parse(text);
 

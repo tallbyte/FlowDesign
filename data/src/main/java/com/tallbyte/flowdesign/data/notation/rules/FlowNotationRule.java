@@ -30,14 +30,46 @@ import com.tallbyte.flowdesign.data.notation.actions.FlowAction;
  */
 public interface FlowNotationRule {
 
-    public boolean handleCharacter(char c, int i) throws IllegalCharacterException, IllegalNotationException;
+    /**
+     * Tries to add a new character to this {@link FlowNotationRule}.
+     *
+     * @param c the caracter to add
+     * @param i the index the parser is at
+     * @return Returns true if this {@link FlowNotationRule} ended with the given character.
+     * @throws IllegalCharacterException Is thrown if the given character is not allowed.
+     * @throws IllegalNotationException Is thrown if illegal syntax was detected.
+     */
+    boolean handleCharacter(char c, int i) throws IllegalCharacterException, IllegalNotationException;
 
-    public void insert(FlowNotationRule rule) throws IllegalNotationException;
+    /**
+     * Inserts an child {@link FlowNotationRule}.
+     *
+     * @param rule the child
+     * @throws IllegalNotationException Is thrown if illegal syntax was detected.
+     */
+    void insert(FlowNotationRule rule) throws IllegalNotationException;
 
-    public boolean canHaveChildren();
+    /**
+     * Checks whether or not this {@link FlowNotationRule} can have children.
+     * @return
+     */
+    boolean canHaveChildren();
 
-    public boolean isFinished(int i, int len);
+    /**
+     * Checks whether or not this {@link FlowNotationRule} is finished.
+     *
+     * @param i the current index of the parser
+     * @param len the total length of the parsed string
+     * @return Returns true if is finished, else false.
+     */
+    boolean isFinished(int i, int len);
 
-    public FlowAction build() throws IllegalNotationException;
+    /**
+     * Tries to build this {@link FlowNotationRule}.
+     *
+     * @return Returns the created {@link FlowAction}.
+     * @throws IllegalNotationException Is thrown if illegal syntax was detected.
+     */
+    FlowAction build() throws IllegalNotationException;
 
 }

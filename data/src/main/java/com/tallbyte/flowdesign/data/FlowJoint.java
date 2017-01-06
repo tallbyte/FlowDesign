@@ -32,6 +32,9 @@ import com.tallbyte.flowdesign.data.notation.actions.Type;
  */
 public class FlowJoint extends Joint {
 
+    public static final String PROPERTY_DATA_TYPE = "dataType";
+    public static final String PROPERTY_VALID     = "valid";
+
     private final static FlowNotationParser PARSER = new SimpleFlowNotationParser();
 
     private JointValidator          validator;
@@ -163,7 +166,7 @@ public class FlowJoint extends Joint {
         String old = this.dataType;
         this.dataType = dataType;
         setValid(validator.isValid(this));
-        changeSupport.firePropertyChange("dataType", old, dataType);
+        changeSupport.firePropertyChange(PROPERTY_DATA_TYPE, old, dataType);
     }
 
     /**
@@ -190,7 +193,7 @@ public class FlowJoint extends Joint {
     protected void setValid(boolean valid) {
         boolean old = this.valid;
         this.valid = valid;
-        changeSupport.firePropertyChange("valid", old, valid);
+        changeSupport.firePropertyChange(PROPERTY_VALID, old, valid);
     }
 
     @Override

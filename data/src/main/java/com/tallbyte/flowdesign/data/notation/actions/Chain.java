@@ -29,6 +29,10 @@ public class Chain extends FlowAction {
     protected FlowAction first;
     protected FlowAction second;
 
+    public Chain(FlowAction first, FlowAction second) {
+        this(0, 0, first, second);
+    }
+
     public Chain(int start, int end, FlowAction first, FlowAction second) {
         super(start, end);
 

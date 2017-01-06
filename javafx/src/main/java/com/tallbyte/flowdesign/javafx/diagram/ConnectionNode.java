@@ -84,7 +84,7 @@ public class ConnectionNode extends SelectableNode {
 
         try {
             if (connection != null) {
-                realText = JavaBeanStringPropertyBuilder.create().bean(connection).name("text").build();
+                realText = JavaBeanStringPropertyBuilder.create().bean(connection).name(Connection.PROPERTY_TEXT).build();
             } else {
                 realText = new SimpleStringProperty(this, "text", "");
             }

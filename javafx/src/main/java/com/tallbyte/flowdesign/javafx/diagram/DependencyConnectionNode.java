@@ -18,23 +18,15 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
-import com.tallbyte.flowdesign.data.Connection;
 import com.tallbyte.flowdesign.data.DependencyConnection;
 import com.tallbyte.flowdesign.data.Diagram;
-import com.tallbyte.flowdesign.data.Joint;
 import com.tallbyte.flowdesign.data.flow.FlowDiagram;
-import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.adapter.JavaBeanObjectPropertyBuilder;
 import javafx.css.PseudoClass;
-import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.transform.Rotate;
 
 /**
  * This file is part of project flowDesign.
@@ -44,6 +36,8 @@ import javafx.scene.transform.Rotate;
  */
 public class DependencyConnectionNode extends ConnectionNode {
 
+    public static final String PSEUDO_CLASS_REFERENCED = "referenced";
+
     protected final Circle circle = new Circle();
     protected       ObjectProperty<?> reference;
 
@@ -51,15 +45,15 @@ public class DependencyConnectionNode extends ConnectionNode {
         super(connection, null, null);
 
         try {
-            reference = JavaBeanObjectPropertyBuilder.create().bean(connection).name("reference").build();
+            reference = JavaBeanObjectPropertyBuilder.create().bean(connection).name(DependencyConnection.PROPERTY_REFERENCE).build();
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("Could not create properties. This should never happen?!", e);
         }
 
         reference.addListener((observable, oldValue, newValue) -> {
-            pseudoClassStateChanged(PseudoClass.getPseudoClass("referenced"), newValue != null);
+            pseudoClassStateChanged(PseudoClass.getPseudoClass(PSEUDO_CLASS_REFERENCED), newValue != null);
         });
-        pseudoClassStateChanged(PseudoClass.getPseudoClass("referenced"), reference.getValue() != null);
+        pseudoClassStateChanged(PseudoClass.getPseudoClass(PSEUDO_CLASS_REFERENCED), reference.getValue() != null);
 
         addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             Object ref = reference.get();

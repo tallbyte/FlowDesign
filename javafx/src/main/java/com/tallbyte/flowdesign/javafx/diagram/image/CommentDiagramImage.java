@@ -18,8 +18,6 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.image;
 
-import javafx.scene.canvas.GraphicsContext;
-
 /**
  * This file is part of project flowDesign.
  * <p/>

@@ -33,6 +33,14 @@ public class Tupel extends TupelContainment {
     private List<TupelContainment> types;
     private boolean                repeated;
 
+    public Tupel(boolean repeated, List<TupelContainment> types) {
+        this(0, 0, repeated, types);
+    }
+
+    public Tupel(boolean repeated, TupelContainment... types) {
+        this(0, 0, repeated, types);
+    }
+
     public Tupel(int start, int end, boolean repeated, List<TupelContainment> types) {
         super(start, end);
 

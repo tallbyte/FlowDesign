@@ -31,7 +31,21 @@ import java.util.ArrayList;
  */
 public class OperationalUnit extends FlowDiagramElement {
 
-    protected ReferenceHandler referenceHandler = new ReferenceHandler("text", "reference", "name", "project", new ReferenceHolder() {
+
+    public static final String JOINT_GROUP_IN  = "in";
+    public static final String JOINT_GROUP_OUT = "out";
+
+    public static final String JOINT_GROUP_DEP_IN  = "depIn";
+    public static final String JOINT_GROUP_DEP_OUT = "depOut";
+
+    public static final String PROPERTY_REFERENCE     = "reference";
+    public static final String PROPERTY_REFERENCE_FIT = "referenceFit";
+    public static final String PROPERTY_STATE_ACCESS  = "stateAccess";
+    public static final String PROPERTY_STATE         = "state";
+
+    protected ReferenceHandler referenceHandler = new ReferenceHandler(
+            PROPERTY_TEXT, PROPERTY_REFERENCE, Diagram.PROPERTY_NAME, Diagram.PROPERTY_PROJECT,
+            new ReferenceHolder() {
         @Override
         public void setText(String text) {
             OperationalUnit.this.setText(text);
@@ -63,24 +77,19 @@ public class OperationalUnit extends FlowDiagramElement {
         }
     });
 
-    protected Diagram                reference;
+    protected Diagram                reference    = null;
     protected boolean                referenceFit = true;
     protected boolean                stateAccess  = true;
     protected String                 state        = "";
+
     protected PropertyChangeListener listener     = null;
-
-    public static final String JOINT_GROUP_IN  = "in";
-    public static final String JOINT_GROUP_OUT = "out";
-
-    public static final String JOINT_GROUP_DEP_IN  = "depIn";
-    public static final String JOINT_GROUP_DEP_OUT = "depOut";
 
     /**
      * Creats an new {@link OperationalUnit}.
      */
     public OperationalUnit() {
         addPropertyChangeListener(evt -> {
-            if (evt.getPropertyName().equals("reference")) {
+            if (evt.getPropertyName().equals(PROPERTY_REFERENCE)) {
                 if (evt.getOldValue() != null) {
                     ((Diagram) evt.getOldValue()).removePropertyChangeListener(listener);
                 }
@@ -170,7 +179,7 @@ public class OperationalUnit extends FlowDiagramElement {
     private void setInternalReference(Diagram diagram) {
         Diagram old = this.reference;
         this.reference = diagram;
-        this.changeSupport.firePropertyChange("reference", old, diagram);
+        this.changeSupport.firePropertyChange(PROPERTY_REFERENCE, old, diagram);
     }
 
     public void setReference(Diagram diagram) {
@@ -184,7 +193,7 @@ public class OperationalUnit extends FlowDiagramElement {
     private void setInternalReferenceFit(boolean referenceFit) {
         boolean old = this.referenceFit;
         this.referenceFit = referenceFit;
-        this.changeSupport.firePropertyChange("referenceFit", old, referenceFit);
+        this.changeSupport.firePropertyChange(PROPERTY_REFERENCE_FIT, old, referenceFit);
     }
 
     public void setReferenceFit(boolean referenceFit) {
@@ -198,7 +207,7 @@ public class OperationalUnit extends FlowDiagramElement {
     public void setStateAccess(boolean stateAccess) {
         boolean old = this.stateAccess;
         this.stateAccess = stateAccess;
-        this.changeSupport.firePropertyChange("stateAccess", old, stateAccess);
+        this.changeSupport.firePropertyChange(PROPERTY_STATE_ACCESS, old, stateAccess);
     }
 
     public boolean isStateAccess() {
@@ -208,7 +217,7 @@ public class OperationalUnit extends FlowDiagramElement {
     public void setState(String state) {
         String old = this.state;
         this.state = state;
-        this.changeSupport.firePropertyChange("state", old, state);
+        this.changeSupport.firePropertyChange(PROPERTY_STATE, old, state);
     }
 
     public String getState() {

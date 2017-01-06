@@ -39,7 +39,7 @@ import javafx.scene.input.KeyEvent;
  */
 public class EnvironmentCommentElementNode extends ElementNode<DiagramImage> {
 
-    private final EnvironmentComment comment;
+    public static final String PSEUDO_CLASS_REFERENCED = "referenced";
 
     protected ObjectProperty<?> reference;
 
@@ -48,15 +48,15 @@ public class EnvironmentCommentElementNode extends ElementNode<DiagramImage> {
 
 
         try {
-            reference = JavaBeanObjectPropertyBuilder.create().bean(element).name("reference").build();
+            reference = JavaBeanObjectPropertyBuilder.create().bean(element).name(EnvironmentComment.PROPERTY_REFERENCE).build();
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("Could not create properties. This should never happen?!", e);
         }
 
         reference.addListener((observable, oldValue, newValue) -> {
-            pseudoClassStateChanged(PseudoClass.getPseudoClass("referenced"), newValue != null);
+            pseudoClassStateChanged(PseudoClass.getPseudoClass(PSEUDO_CLASS_REFERENCED), newValue != null);
         });
-        pseudoClassStateChanged(PseudoClass.getPseudoClass("referenced"), reference.getValue() != null);
+        pseudoClassStateChanged(PseudoClass.getPseudoClass(PSEUDO_CLASS_REFERENCED), reference.getValue() != null);
 
         addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             Object ref = reference.get();
@@ -67,8 +67,6 @@ public class EnvironmentCommentElementNode extends ElementNode<DiagramImage> {
         });
 
         setOnMousePressed(event -> requestFocus());
-
-        this.comment = element;
     }
 
     @Override

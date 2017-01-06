@@ -33,6 +33,9 @@ import java.beans.PropertyChangeListener;
  */
 public class FlowDiagram extends Diagram<FlowDiagramElement> {
 
+    public static final String PROPERTY_DATA_TYPE_IN  = "dataTypeIn";
+    public static final String PROPERTY_DATA_TYPE_OUT = "dataTypeOut";
+
     private final Start   start;
     private final End     end;
 
@@ -68,14 +71,14 @@ public class FlowDiagram extends Diagram<FlowDiagramElement> {
         this.end   = end;
 
         this.start.getOutputGroup().getJoint(0).addPropertyChangeListener(evt -> {
-            if (evt.getPropertyName().equals("dataType")) {
-                changeSupport.firePropertyChange("dataTypeIn", evt.getOldValue(), evt.getNewValue());
+            if (evt.getPropertyName().equals(FlowJoint.PROPERTY_DATA_TYPE)) {
+                changeSupport.firePropertyChange(PROPERTY_DATA_TYPE_IN, evt.getOldValue(), evt.getNewValue());
             }
         });
 
         this.end.getInputGroup().getJoint(0).addPropertyChangeListener(evt -> {
-            if (evt.getPropertyName().equals("dataType")) {
-                changeSupport.firePropertyChange("dataTypeOut", evt.getOldValue(), evt.getNewValue());
+            if (evt.getPropertyName().equals(FlowJoint.PROPERTY_DATA_TYPE)) {
+                changeSupport.firePropertyChange(PROPERTY_DATA_TYPE_OUT, evt.getOldValue(), evt.getNewValue());
             }
         });
 

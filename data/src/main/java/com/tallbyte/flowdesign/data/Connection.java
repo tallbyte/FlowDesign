@@ -32,6 +32,8 @@ import java.beans.PropertyChangeSupport;
  */
 public class Connection<J extends Joint> implements DiagramContent {
 
+    public static final String PROPERTY_TEXT = "text";
+
     protected final J source;
     protected final J target;
 
@@ -75,7 +77,7 @@ public class Connection<J extends Joint> implements DiagramContent {
         String old = this.text;
         this.text = text;
         System.out.println(text);
-        this.changeSupport.firePropertyChange("text", old, text);
+        this.changeSupport.firePropertyChange(PROPERTY_TEXT, old, text);
     }
 
     /**

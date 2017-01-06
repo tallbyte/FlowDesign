@@ -32,6 +32,10 @@ public class Type extends TupelContainment{
     private String   name;
     private boolean  repeated;
 
+    public Type(DataType type, String name, boolean repeated) {
+        this(0, 0, type, name, repeated);
+    }
+
     public Type(int start, int end, DataType type, String name, boolean repeated) {
         super(start, end);
         this.type     = type;

@@ -18,7 +18,6 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.image;
 
-import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.canvas.Canvas;

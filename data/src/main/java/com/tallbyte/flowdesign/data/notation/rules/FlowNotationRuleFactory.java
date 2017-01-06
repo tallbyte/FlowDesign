@@ -29,6 +29,15 @@ import com.tallbyte.flowdesign.data.notation.IllegalNotationException;
  */
 public interface FlowNotationRuleFactory {
 
-    public FlowNotationRule create(char c, int i) throws IllegalNotationException, IllegalCharacterException;
+    /**
+     * Create a new {@link FlowNotationRule} based on the given character.
+     *
+     * @param c the starting character
+     * @param i the current index
+     * @return Returns the created {@link FlowNotationRule}.
+     * @throws IllegalNotationException Is thrown if illegal syntax was detected.
+     * @throws IllegalCharacterException Is thrown if characters are disallowed.
+     */
+    FlowNotationRule create(char c, int i) throws IllegalNotationException, IllegalCharacterException;
 
 }

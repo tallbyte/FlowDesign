@@ -55,6 +55,9 @@ import javafx.scene.paint.Color;
  */
 public class OperationalUnitElementNode extends ElementNode<OperationalUnitDiagramImage> {
 
+    public static final String PSEUDO_CLASS_REFERENCED         = "referenced";
+    public static final String PSEUDO_CLASS_REFERENCE_MISMATCH = "referenceMismatch";
+
     protected final OperationalUnit   operation;
 
     protected       StringProperty    state;
@@ -122,23 +125,23 @@ public class OperationalUnitElementNode extends ElementNode<OperationalUnitDiagr
 
     private void setupProperties() {
         try {
-            state        = JavaBeanStringPropertyBuilder.create().bean(element).name("state").build();
-            stateAccess  = JavaBeanBooleanPropertyBuilder.create().bean(element).name("stateAccess").build();
-            referenceFit = JavaBeanBooleanPropertyBuilder.create().bean(element).name("referenceFit").build();
-            reference    = JavaBeanObjectPropertyBuilder.create().bean(element).name("reference").build();
+            state        = JavaBeanStringPropertyBuilder.create().bean(element).name(OperationalUnit.PROPERTY_STATE).build();
+            stateAccess  = JavaBeanBooleanPropertyBuilder.create().bean(element).name(OperationalUnit.PROPERTY_STATE_ACCESS).build();
+            referenceFit = JavaBeanBooleanPropertyBuilder.create().bean(element).name(OperationalUnit.PROPERTY_REFERENCE_FIT).build();
+            reference    = JavaBeanObjectPropertyBuilder.create().bean(element).name(OperationalUnit.PROPERTY_REFERENCE).build();
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("Could not create properties. This should never happen?!", e);
         }
 
         reference.addListener((observable, oldValue, newValue) -> {
-            pseudoClassStateChanged(PseudoClass.getPseudoClass("referenced"), newValue != null);
+            pseudoClassStateChanged(PseudoClass.getPseudoClass(PSEUDO_CLASS_REFERENCED), newValue != null);
         });
-        pseudoClassStateChanged(PseudoClass.getPseudoClass("referenced"), reference.getValue() != null);
+        pseudoClassStateChanged(PseudoClass.getPseudoClass(PSEUDO_CLASS_REFERENCED), reference.getValue() != null);
 
         referenceFit.addListener((observable, oldValue, newValue) -> {
-            pseudoClassStateChanged(PseudoClass.getPseudoClass("referenceMismatch"), !newValue);
+            pseudoClassStateChanged(PseudoClass.getPseudoClass(PSEUDO_CLASS_REFERENCE_MISMATCH), !newValue);
         });
-        pseudoClassStateChanged(PseudoClass.getPseudoClass("referenceMismatch"), !referenceFit.getValue());
+        pseudoClassStateChanged(PseudoClass.getPseudoClass(PSEUDO_CLASS_REFERENCE_MISMATCH), !referenceFit.getValue());
 
         content.stateProperty().bind(state);
         content.stateAccessProperty().bind(stateAccess);

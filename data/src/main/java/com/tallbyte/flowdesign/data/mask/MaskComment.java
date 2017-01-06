@@ -32,7 +32,11 @@ import java.beans.PropertyChangeListener;
  */
 public class MaskComment extends MaskDiagramElement {
 
-    protected ReferenceHandler referenceHandler = new ReferenceHandler("text", "reference", "name", "project", new ReferenceHolder() {
+    public static final String PROPERTY_REFERENCE = "reference";
+
+    protected ReferenceHandler referenceHandler = new ReferenceHandler(
+            PROPERTY_TEXT, PROPERTY_REFERENCE, Diagram.PROPERTY_NAME, Diagram.PROPERTY_PROJECT,
+            new ReferenceHolder() {
         @Override
         public void setText(String text) {
             MaskComment.this.setText(text);
@@ -80,7 +84,7 @@ public class MaskComment extends MaskDiagramElement {
     private void setInternalReference(Diagram diagram) {
         Diagram old = this.reference;
         this.reference = diagram;
-        this.changeSupport.firePropertyChange("reference", old, diagram);
+        this.changeSupport.firePropertyChange(PROPERTY_REFERENCE, old, diagram);
     }
 
     public void setReference(Diagram diagram) {

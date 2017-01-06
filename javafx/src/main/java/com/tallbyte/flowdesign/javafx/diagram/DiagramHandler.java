@@ -32,16 +32,48 @@ import java.util.Map;
  */
 public interface DiagramHandler<T extends Diagram> {
 
+    /**
+     * Creates a new {@link Element} based on the given name and its coordinates.
+     * @param diagram the {@link Diagram} to create the {@link Element} in
+     * @param element the base {@link Element}
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return Returns the created {@link Element} or null if none could be created.
+     */
     Element createElement(T diagram, String element, double x, double y);
 
+    /**
+     * Removes the given {@link Element} from the given {@link Diagram}.
+     * @param diagram the {@link Diagram} to remove from
+     * @param element the {@link Element} to remove
+     */
     void removeElement(T diagram, Element element);
 
+    /**
+     * Creates an {@link ElementNode} for a given {@link Element}.
+     * @param element the {@link Element} to create the node for
+     * @return Returns the created {@link ElementNode} or null if none could be created.
+     */
     ElementNode createNode(Element element);
 
+    /**
+     * Returns a map of all supported element "names" mapped to their image factory.
+     * @return Returns the map.
+     */
     public Map<String, DiagramImageFactory> getSupportedElements();
 
+    /**
+     * Checks if a certain element "name" is user-createable.
+     * @param name the name
+     * @return Returns true if it is user-createable, else false.
+     */
     public boolean isUserCreateable(String name);
 
+    /**
+     * Creates a new {@link Diagram} with a given name.
+     * @param name the supposed name
+     * @return Returns the created {@link Diagram}.
+     */
     public T createDiagram(String name);
 
 }

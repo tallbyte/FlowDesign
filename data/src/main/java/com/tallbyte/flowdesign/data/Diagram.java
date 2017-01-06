@@ -36,6 +36,9 @@ import java.util.List;
  */
 public abstract class Diagram<E extends Element> {
 
+    public static final String PROPERTY_NAME    = "name";
+    public static final String PROPERTY_PROJECT = "project";
+
     protected String                           name;
     protected List<E>                          elements    = new ArrayList<>();
     protected List<Connection>                 connections = new ArrayList<>();
@@ -82,7 +85,7 @@ public abstract class Diagram<E extends Element> {
 
         String old = this.name;
         this.name = name;
-        this.changeSupport.firePropertyChange("name", old, name);
+        this.changeSupport.firePropertyChange(PROPERTY_NAME, old, name);
     }
 
     /**
@@ -110,7 +113,7 @@ public abstract class Diagram<E extends Element> {
     void setProject(Project project) {
         Project old = this.project;
         this.project = project;
-        this.changeSupport.firePropertyChange("project", old, project);
+        this.changeSupport.firePropertyChange(PROPERTY_PROJECT, old, project);
     }
 
     /**

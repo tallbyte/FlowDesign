@@ -30,6 +30,10 @@ public class MultiStream extends FlowAction {
     private int max;
     private FlowAction action;
 
+    public MultiStream(int min, int max, FlowAction action) {
+        this(0, 0, min, max, action);
+    }
+
     public MultiStream(int start, int end, int min, int max, FlowAction action) {
         super(start, end);
         this.min = min;

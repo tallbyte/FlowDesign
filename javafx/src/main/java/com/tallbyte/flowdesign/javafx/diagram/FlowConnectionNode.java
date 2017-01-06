@@ -49,6 +49,8 @@ import static com.tallbyte.flowdesign.javafx.ResourceUtils.*;
  */
 public class FlowConnectionNode extends ConnectionNode {
 
+    public static final String PSEUDO_CLASS_INVALID = "invalid";
+
     private final DataTypePopup  popup;
 
     private final FlowJoint      source;
@@ -76,12 +78,12 @@ public class FlowConnectionNode extends ConnectionNode {
         target = connection.getTarget();
 
         listenerSource = evt -> {
-            if (evt.getPropertyName().equals("valid")) {
+            if (evt.getPropertyName().equals(FlowJoint.PROPERTY_VALID)) {
                 handleValid();
             }
         };
         listenerTarget = evt -> {
-            if (evt.getPropertyName().equals("valid")) {
+            if (evt.getPropertyName().equals(FlowJoint.PROPERTY_VALID)) {
                 handleValid();
             }
         };
@@ -91,7 +93,7 @@ public class FlowConnectionNode extends ConnectionNode {
     }
 
     private void handleValid() {
-        pseudoClassStateChanged(PseudoClass.getPseudoClass("invalid"), !source.isValid() || !target.isValid());
+        pseudoClassStateChanged(PseudoClass.getPseudoClass(PSEUDO_CLASS_INVALID), !source.isValid() || !target.isValid());
     }
 
     @Override

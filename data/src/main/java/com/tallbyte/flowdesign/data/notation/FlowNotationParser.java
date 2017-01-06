@@ -28,6 +28,14 @@ import com.tallbyte.flowdesign.data.notation.actions.FlowAction;
  */
 public interface FlowNotationParser {
 
+    /**
+     * Parses a string an tries to create a matching
+     * {@link FlowAction} out of it.
+     *
+     * @param string the string to parse
+     * @return Returns the parsed {@link FlowAction}.
+     * @throws FlowNotationParserException Is thrown if the given string does not match syntax.
+     */
     public FlowAction parse(String string) throws FlowNotationParserException;
 
 }

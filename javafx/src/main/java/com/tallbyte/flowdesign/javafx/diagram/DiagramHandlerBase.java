@@ -48,6 +48,22 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
         addEntries(string, clazz, elementFactory, imageFactory, nodeFactory, true);
     }
 
+    /**
+     * Adds all creation-dependencies for a certain {@link Element}.
+     *
+     * @param string         the "name" which shall be used to create the {@link Element}.
+     *                       This is also the text that will be compared when drag-dropping
+     *                       something onto the drawing pane.
+     * @param clazz          the {@link Class} of the {@link Element} to create
+     * @param elementFactory the {@link ElementFactory} to create the {@link Element}
+     * @param imageFactory   the {@link DiagramImageFactory} to create {@link DiagramImage}s
+     *                       for the {@link Element}
+     * @param nodeFactory    the {@link ElementNodeFactory} to create {@link ElementNode}s
+     *                       for the {@link Element}
+     * @param userCreateable is the entry user-createable?
+     * @param <E>            the type of {@link Element}
+     * @param <I>            the type of {@link DiagramImage}
+     */
     protected <E extends S, I extends DiagramImage> void addEntries(String string, Class<E> clazz,
                                             ElementFactory<E> elementFactory,
                                             DiagramImageFactory<I> imageFactory,
@@ -122,6 +138,12 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
         return Collections.unmodifiableMap(supportedElements);
     }
 
+    /**
+     * Creates an actual instance of a {@link Diagram}.
+     *
+     * @param name the supposed name
+     * @return Returns the newly {@link Diagram}.
+     */
     protected abstract T createNewDiagramInstance(String name);
 
     @Override
@@ -140,6 +162,11 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
         return diagram;
     }
 
+    /**
+     * Sets an {@link Element} to the size preffered by its mapped image.
+     *
+     * @param e the {@link Element} to set
+     */
     protected void setToPrefSize(Element e) {
         if (e != null) {
             DiagramImageFactory factory = imageFactories.get(e.getClass());

@@ -36,6 +36,15 @@ import java.util.stream.Collectors;
  */
 public abstract class Element implements DiagramContent {
 
+    public static final String PROPERTY_TEXT      = "text";
+    public static final String PROPERTY_COLOR     = "color";
+    public static final String PROPERTY_X         = "x";
+    public static final String PROPERTY_Y         = "y";
+    public static final String PROPERTY_Width     = "width";
+    public static final String PROPERTY_HEIGHT    = "height";
+    public static final String PROPERTY_DELETABLE = "deletable";
+
+
     protected Diagram                    diagram;
     protected Map<String, JointGroup<?>> jointGroups;
 
@@ -81,7 +90,7 @@ public abstract class Element implements DiagramContent {
     public void setText(String text) {
         String old = this.text;
         this.text = text;
-        this.changeSupport.firePropertyChange("text", old, text);
+        this.changeSupport.firePropertyChange(PROPERTY_TEXT, old, text);
     }
 
     /**
@@ -99,7 +108,7 @@ public abstract class Element implements DiagramContent {
     public void setColor(String color) {
         String old = this.color;
         this.color = color;
-        this.changeSupport.firePropertyChange("color", old, color);
+        this.changeSupport.firePropertyChange(PROPERTY_COLOR, old, color);
 
         // TODO check for format maybe?
     }
@@ -119,7 +128,7 @@ public abstract class Element implements DiagramContent {
     public void setX(double x) {
         double old = this.x;
         this.x = x;
-        this.changeSupport.firePropertyChange("x", old, x);
+        this.changeSupport.firePropertyChange(PROPERTY_X, old, x);
     }
 
     /**
@@ -137,7 +146,7 @@ public abstract class Element implements DiagramContent {
     public void setY(double y) {
         double old = this.y;
         this.y = y;
-        this.changeSupport.firePropertyChange("y", old, y);
+        this.changeSupport.firePropertyChange(PROPERTY_Y, old, y);
     }
 
     /**
@@ -155,7 +164,7 @@ public abstract class Element implements DiagramContent {
     public void setWidth(double width) {
         double old = this.width;
         this.width = width;
-        this.changeSupport.firePropertyChange("width", old, width);
+        this.changeSupport.firePropertyChange(PROPERTY_Width, old, width);
     }
 
     /**
@@ -173,7 +182,7 @@ public abstract class Element implements DiagramContent {
     public void setHeight(double height) {
         double old = this.height;
         this.height = height;
-        this.changeSupport.firePropertyChange("height", old, height);
+        this.changeSupport.firePropertyChange(PROPERTY_HEIGHT, old, height);
     }
 
     /**
@@ -191,7 +200,7 @@ public abstract class Element implements DiagramContent {
     public void setDeletable(boolean deletable) {
         boolean old = this.deletable;
         this.deletable = deletable;
-        this.changeSupport.firePropertyChange("deletable", old, deletable);
+        this.changeSupport.firePropertyChange(PROPERTY_DELETABLE, old, deletable);
     }
 
     /**

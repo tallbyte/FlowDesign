@@ -36,6 +36,8 @@ import java.util.Map;
  */
 public class Project {
 
+    public static final String PROPERTY_NAME = "name";
+
     private final Map<Class<? extends Diagram>, List<Diagram>> diagrams  = new HashMap<>();
     private final Map<String,                   Diagram>       nameMap   = new HashMap<>();
     private final List<DiagramsChangedListener>                listeners = new ArrayList<>();
@@ -86,7 +88,9 @@ public class Project {
      * @param name the new name
      */
     public void setName(String name) {
+        String old = this.name;
         this.name = name;
+        this.changeSupport.firePropertyChange(PROPERTY_NAME, old, name);
     }
 
     /**
