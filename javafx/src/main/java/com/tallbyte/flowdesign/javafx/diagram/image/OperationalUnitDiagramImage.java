@@ -79,7 +79,7 @@ public class OperationalUnitDiagramImage extends DiagramImage {
                 if (stateAccess) {
                     strokeCylinder(context, rx, ry, rw, rh);
                 } else {
-                    strokeTriangle(context, rx, ry, rw, rh);
+                    strokeTriangle(context, rx+rw*0.20, ry, rw, rh);
                 }
             }
         }
