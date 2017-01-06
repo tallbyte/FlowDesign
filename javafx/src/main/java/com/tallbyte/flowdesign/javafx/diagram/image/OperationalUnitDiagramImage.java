@@ -110,13 +110,13 @@ public class OperationalUnitDiagramImage extends DiagramImage {
 
     private void strokeTriangle(GraphicsContext context, double x, double y, double w, double h) {
         context.strokeLine(
-                x+((w-2*context.getLineWidth())*0.5), y+context.getLineWidth(),
+                x+w*0.5, y+context.getLineWidth(),
                 x+w-context.getLineWidth(), y+h-context.getLineWidth()
         );
 
         context.strokeLine(
                 x+context.getLineWidth(), y+h-context.getLineWidth(),
-                x+((w-2*context.getLineWidth())*0.5), y+context.getLineWidth()
+                x+w*0.5, y+context.getLineWidth()
         );
 
         context.strokeLine(

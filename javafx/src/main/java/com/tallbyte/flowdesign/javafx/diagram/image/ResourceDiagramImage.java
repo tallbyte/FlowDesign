@@ -19,8 +19,6 @@
 package com.tallbyte.flowdesign.javafx.diagram.image;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.ArcType;
 
 /**
  * This file is part of project flowDesign.
@@ -46,31 +44,18 @@ public class ResourceDiagramImage extends DiagramImage {
         context.clearRect(0, 0, width, height);
         context.setStroke(getColor());
         context.setLineWidth(1.5);
-        context.strokeOval(
-                context.getLineWidth(), context.getLineWidth(),
-                width - 2*context.getLineWidth(), height - 2*context.getLineWidth()
-        );
-
-        double rx = (1+Math.cos(2*Math.PI*0.125))*0.5*width;
-        double ry = (1+Math.sin(2*Math.PI*0.125))*0.5*height;
-        double rw = width*0.25;
-        double rh = height*0.25;
-
-        rx -= rw*0.75;
-        ry -= rh*0.75;
-
-        strokeRect(context, rx, ry, rw, rh);
+        strokeTriangle(context, 0, 0, width, height);
     }
 
-    private void strokeRect(GraphicsContext context, double x, double y, double w, double h) {
+    private void strokeTriangle(GraphicsContext context, double x, double y, double w, double h) {
         context.strokeLine(
-                x+((w-2*context.getLineWidth())*0.5), y+context.getLineWidth(),
+                x+w*0.5, y+context.getLineWidth(),
                 x+w-context.getLineWidth(), y+h-context.getLineWidth()
         );
 
         context.strokeLine(
                 x+context.getLineWidth(), y+h-context.getLineWidth(),
-                x+((w-2*context.getLineWidth())*0.5), y+context.getLineWidth()
+                x+w*0.5, y+context.getLineWidth()
         );
 
         context.strokeLine(
