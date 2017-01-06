@@ -291,8 +291,8 @@ public class DiagramPane extends ScrollPane {
                         //System.out.println(getHvalue());
                         //System.out.println(getViewportBounds().getWidth());
 
-                        ((ElementNode) child).realX.set(event.getX() - offsetX + bounds.getMinX() + getHvalue()*getViewportBounds().getWidth());
-                        ((ElementNode) child).realY.set(event.getY() - offsetY + bounds.getMinY() + getVvalue()*getViewportBounds().getHeight());
+                        ((ElementNode) child).realX.set(event.getX() - offsetX + bounds.getMinX());
+                        ((ElementNode) child).realY.set(event.getY() - offsetY + bounds.getMinY());
 
                         //System.out.println((event.getX() - offsetX + bounds.getMinX() + getHvalue() * getViewportBounds().getWidth()));
                     }
