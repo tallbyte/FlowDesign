@@ -63,14 +63,30 @@ public class JointGroup<J extends Joint> {
         }
     }
 
+    /**
+     * Checks if {@link Joint}s can be added.
+     *
+     * @return Returns true if they can, else false.
+     */
     public boolean canAdd() {
         return amount < maxJoints;
     }
 
+    /**
+     * Checks if {@link Joint}s can be removed.
+     *
+     * @return Returns true if they can, else false.
+     */
     public boolean canRemove() {
         return amount > minJoints;
     }
 
+    /**
+     * Adds an {@link Joint}.
+     *
+     * @return Returns the created {@link Joint}.
+     * @throws JointGroupModifyException Is thrown if no more {@link Joint}s can be added.
+     */
     public J addJoint() throws JointGroupModifyException {
         if (!canAdd()) {
             throw new JointGroupModifyException("max joint amount exceeded");
@@ -87,6 +103,12 @@ public class JointGroup<J extends Joint> {
         return joint;
     }
 
+    /**
+     * Removes an {@link Joint}.
+     *
+     * @return Returns the removed {@link Joint}.
+     * @throws JointGroupModifyException Is thrown if no more {@link Joint}s can be removed.
+     */
     public J removeJoint() throws JointGroupModifyException {
         if (!canRemove()) {
             throw new JointGroupModifyException("min joint amount reached");
@@ -101,6 +123,13 @@ public class JointGroup<J extends Joint> {
         return joint;
     }
 
+    /**
+     * Gets the {@link Joint} at the specified index.
+     *
+     * @param i the index
+     * @return Returns the {@link Joint}.
+     * @throws JointNotFoundException Is thrown if the index is unknown or out of range.
+     */
     public J getJoint(int i) throws JointNotFoundException {
         if (i < 0 || i >= amount) {
             throw new JointNotFoundException("joint at location "+i+" could not be found");
@@ -109,32 +138,68 @@ public class JointGroup<J extends Joint> {
         return joints.get(i);
     }
 
+    /**
+     * Gets the index of a certain {@link Joint}.
+     *
+     * @param joint the {@link Joint} to check
+     * @return Returns the index or -1 if the index does not belong to this {@link JointGroup}.
+     */
     public int getIndex(J joint) {
         return joints.indexOf(joint);
     }
 
+    /**
+     * Gets the name.
+     *
+     * @return Returns the name.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets amount of {@link Joint}s.
+     *
+     * @param amount the new amount
+     */
     private void setAmount(int amount) {
         int old = this.amount;
         this.amount = amount;
         changeSupport.firePropertyChange("amount", old, amount);
     }
 
+    /**
+     * Gets the amount of {@link Joint}s.
+     *
+     * @return Returns the amount.
+     */
     public int getAmount() {
         return amount;
     }
 
+    /**
+     * Gets the minimum amount of {@link Joint}s.
+     *
+     * @return Returns the amount.
+     */
     public int getMinJoints() {
         return minJoints;
     }
 
+    /**
+     * Gets the maximum amount of {@link Joint}s.
+     *
+     * @return Returns the amount.
+     */
     public int getMaxJoints() {
         return maxJoints;
     }
 
+    /**
+     * Gets the list of {@link Joint}s.
+     *
+     * @return Returns the list.
+     */
     public List<Joint> getJoints() {
         return Collections.unmodifiableList(joints);
     }

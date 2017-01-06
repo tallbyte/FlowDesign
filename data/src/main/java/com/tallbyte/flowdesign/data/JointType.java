@@ -27,7 +27,19 @@ package com.tallbyte.flowdesign.data;
  * An enum describing the type of a {@link Joint}.
  */
 public enum JointType {
+
+    /**
+     * Joint is input.
+     */
     INPUT,
+
+    /**
+     * Joint is output.
+     */
     OUTPUT,
+
+    /**
+     * Joint can be used as input and output.
+     */
     INPUT_OUTPUT
 }

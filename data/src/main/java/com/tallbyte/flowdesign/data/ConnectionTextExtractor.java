@@ -26,8 +26,24 @@ package com.tallbyte.flowdesign.data;
  */
 public interface ConnectionTextExtractor {
 
+    /**
+     * Create the text for the {@link FlowConnection} out of the type of the {@link FlowJoint}.
+     *
+     * @param joint the source {@link FlowJoint}
+     * @param connection the target {@link FlowConnection}
+     * @param text the text to apply
+     * @return Returns the generated text.
+     */
     String setConnection(FlowJoint joint, FlowConnection connection, String text);
 
+    /**
+     * Create the text for the {@link FlowJoint} out of the type of the {@link FlowConnection}.
+     *
+     * @param joint the target {@link FlowJoint}
+     * @param connection the source {@link FlowConnection}
+     * @param text the text to apply
+     * @return Returns the generated text.
+     */
     String setJoint(FlowJoint joint, FlowConnection connection, String text);
 
 }

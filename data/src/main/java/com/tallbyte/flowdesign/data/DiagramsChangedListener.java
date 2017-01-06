@@ -26,6 +26,11 @@ package com.tallbyte.flowdesign.data;
  */
 public interface DiagramsChangedListener {
 
+    /**
+     * Handler method that is to be called if {@link Diagram}s were changed.
+     * @param diagram the changed {@link Diagram}
+     * @param added was the {@link Diagram} added or removed?
+     */
     public void onDiagramsChanged(Diagram diagram, boolean added);
 
 }

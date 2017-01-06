@@ -72,6 +72,11 @@ public class ReferenceHandler {
         });
     }
 
+    /**
+     * Sets the {@link Diagram}.
+     *
+     * @param diagram the new diagram
+     */
     public void setDiagram(Diagram diagram) {
         if (this.diagram != null) {
             this.diagram.removePropertyChangeListener(listenerProject);
@@ -93,6 +98,12 @@ public class ReferenceHandler {
         }
     }
 
+    /**
+     * Handler for text changes.
+     *
+     * @param oldText the old text
+     * @param newText the new text
+     */
     private void initText(String oldText, String newText) {
         Diagram diagram = holder.getDiagram();
 
@@ -111,6 +122,12 @@ public class ReferenceHandler {
         }
     }
 
+    /**
+     * Handler for {@link Project} changes.
+     *
+     * @param oldValue the old {@link Project}
+     * @param newValue the new {@link Project}
+     */
     private void initProject(Project oldValue, Project newValue) {
         if (oldValue != null) {
             oldValue.removeDiagramsChangedListener(listenerDiagrams);

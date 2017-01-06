@@ -24,6 +24,12 @@
  */
 public interface JointValidator {
 
+    /**
+     * Checks if the dataType of the given {@link FlowJoint} is valid.
+     *
+     * @param joint the {@link FlowJoint} to check
+     * @return Returns true if valid, else false.
+     */
     boolean isValid(FlowJoint joint);
 
 }

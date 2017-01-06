@@ -26,6 +26,12 @@ package com.tallbyte.flowdesign.data;
  */
 public interface JointFactory<J extends Joint> {
 
+    /**
+     * Creates an {@link Joint}.
+     *
+     * @param element the parent
+     * @return Returns the created {@link Joint}.
+     */
     public J createJoint(Element element);
 
 }

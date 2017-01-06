@@ -28,16 +28,46 @@ import java.beans.PropertyChangeListener;
  */
 public interface ReferenceHolder {
 
-    public void setText(String text);
+    /**
+     * Sets the text.
+     *
+     * @param text the new text
+     */
+    void setText(String text);
 
-    public String getText();
+    /**
+     * Gets the current text.
+     *
+     * @return Returns the text.
+     */
+    String getText();
 
-    public Diagram getDiagram();
+    /**
+     * Gets the current {@link Diagram}.
+     *
+     * @return Returns the diagram.
+     */
+    Diagram getDiagram();
 
-    public void setReference(Diagram reference);
+    /**
+     * Sets the reference {@link Diagram}.
+     *
+     * @param reference the new reference
+     */
+    void setReference(Diagram reference);
 
-    public Diagram getReference();
+    /**
+     * Gets the reference {@link Diagram}.
+     *
+     * @return Returns the reference.
+     */
+    Diagram getReference();
 
-    public void addPropertyChangeListener(PropertyChangeListener listener);
+    /**
+     * Adds a {@link PropertyChangeListener}.
+     *
+     * @param listener the listener to add
+     */
+    void addPropertyChangeListener(PropertyChangeListener listener);
 
 }
