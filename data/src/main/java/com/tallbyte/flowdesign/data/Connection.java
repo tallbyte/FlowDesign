@@ -76,7 +76,6 @@ public class Connection<J extends Joint> implements DiagramContent {
     public void setText(String text) {
         String old = this.text;
         this.text = text;
-        System.out.println(text);
         this.changeSupport.firePropertyChange(PROPERTY_TEXT, old, text);
     }
 

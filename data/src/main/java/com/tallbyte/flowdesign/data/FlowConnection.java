@@ -149,7 +149,6 @@ public class FlowConnection extends Connection<FlowJoint> {
             FlowAction action = source.getParser().parse(text);
 
             if (action instanceof Chain) {
-                System.out.println("found chain");
                 updateJoints(
                         ((Chain) action).getFirst().toString(),
                         ((Chain) action).getSecond().toString()

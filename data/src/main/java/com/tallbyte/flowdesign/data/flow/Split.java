@@ -116,7 +116,6 @@ public class Split extends FlowDiagramElement {
     }
 
     private void genOutput() {
-        System.out.println("++++"+((FlowJoint) getInputGroup().getJoint(0)).getDataType());
         getOutputGroup().getJoints().stream()
                 .filter(j -> j instanceof FlowJoint)
                 .forEach(j -> ((FlowJoint)j).setDataType(((FlowJoint) getInputGroup().getJoint(0)).getDataType())

@@ -158,9 +158,7 @@ public class WelcomePane extends SwitchContentPane {
     @FXML
     private void onShowHistory() {
         try {
-            System.out.println("new content");
             switchPane.setContent(new ChangelogPane(application.getApplicationManager()));
-            System.out.println("new content");
         } catch (LoadException e) {
             e.printStackTrace();
         }

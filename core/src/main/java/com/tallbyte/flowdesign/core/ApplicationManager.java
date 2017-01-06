@@ -73,7 +73,6 @@ public class ApplicationManager {
 
     private void createApplicationStoragePath() throws IOException {
         if (!storageFile.exists() || !storageFile.isDirectory()) {
-            System.out.println(storageFile.getPath());
             if (!storageFile.mkdir()) {
                 throw new IOException("could not create "+storageFile.getPath());
             }
