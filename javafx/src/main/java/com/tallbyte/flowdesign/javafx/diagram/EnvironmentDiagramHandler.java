@@ -31,7 +31,7 @@ import com.tallbyte.flowdesign.javafx.diagram.image.*;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class EnvironmentDiagramHandler extends DiagramHandlerBase<EnvironmentDiagram, EnvironmentDiagramElement> {
+public class EnvironmentDiagramHandler extends DiagramHandlerBase<EnvironmentDiagram, EnvironmentDiagramElement, DiagramImage> {
 
     public EnvironmentDiagramHandler() {
         addEntries("System", System.class,

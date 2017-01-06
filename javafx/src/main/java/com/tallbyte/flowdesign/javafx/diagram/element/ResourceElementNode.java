@@ -30,7 +30,7 @@ import javafx.geometry.Pos;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class ResourceElementNode extends ElementNode {
+public class ResourceElementNode extends ElementNode<DiagramImage> {
 
     private final Resource resource;
 

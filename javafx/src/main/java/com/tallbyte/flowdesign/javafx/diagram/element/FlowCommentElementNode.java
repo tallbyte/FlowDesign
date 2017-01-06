@@ -37,7 +37,7 @@ import javafx.scene.input.KeyEvent;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class FlowCommentElementNode extends ElementNode {
+public class FlowCommentElementNode extends ElementNode<DiagramImage> {
 
     private final FlowComment comment;
 

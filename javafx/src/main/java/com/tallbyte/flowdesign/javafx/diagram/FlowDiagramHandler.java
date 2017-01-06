@@ -30,7 +30,7 @@ import com.tallbyte.flowdesign.javafx.diagram.image.*;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class FlowDiagramHandler extends DiagramHandlerBase<FlowDiagram, FlowDiagramElement> {
+public class FlowDiagramHandler extends DiagramHandlerBase<FlowDiagram, FlowDiagramElement, DiagramImage> {
 
     public FlowDiagramHandler() {
         addEntries("Start", Start.class,
@@ -53,11 +53,6 @@ public class FlowDiagramHandler extends DiagramHandlerBase<FlowDiagram, FlowDiag
         addEntries("Operation", Operation.class,
                 Operation::new,
                 OperationalUnitDiagramImage::new,
-                OperationalUnitElementNode::new
-        );
-        addEntries("ResourceAccess", ResourceAccess.class,
-                ResourceAccess::new,
-                ResourceDiagramImage::new,
                 OperationalUnitElementNode::new
         );
         addEntries("Split", Split.class,

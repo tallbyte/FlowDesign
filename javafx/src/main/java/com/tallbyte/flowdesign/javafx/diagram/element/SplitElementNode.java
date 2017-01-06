@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class SplitElementNode extends ElementNode {
+public class SplitElementNode extends ElementNode<DiagramImage> {
 
     private final Split split;
 

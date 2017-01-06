@@ -36,7 +36,7 @@ import javafx.scene.input.KeyEvent;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class SelfReferenceElementNode extends ElementNode {
+public class SelfReferenceElementNode extends ElementNode<DiagramImage> {
 
     private final SelfReference selfReference;
 

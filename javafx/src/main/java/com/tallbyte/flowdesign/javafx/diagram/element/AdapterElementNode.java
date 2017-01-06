@@ -30,7 +30,7 @@ import javafx.geometry.Pos;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class AdapterElementNode extends ElementNode {
+public class AdapterElementNode extends ElementNode<DiagramImage> {
 
     private final Adapter adapter;
 

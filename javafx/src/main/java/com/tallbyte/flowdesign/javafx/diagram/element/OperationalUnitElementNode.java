@@ -28,6 +28,7 @@ import com.tallbyte.flowdesign.javafx.Shortcuts;
 import com.tallbyte.flowdesign.javafx.control.AutoSizeTextField;
 import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
+import com.tallbyte.flowdesign.javafx.diagram.image.OperationalUnitDiagramImage;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -52,15 +53,16 @@ import javafx.scene.paint.Color;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class OperationalUnitElementNode extends ElementNode {
+public class OperationalUnitElementNode extends ElementNode<OperationalUnitDiagramImage> {
 
     protected final OperationalUnit   operation;
 
     protected       StringProperty    state;
+    protected       BooleanProperty   stateAccess;
     protected       BooleanProperty   referenceFit;
     protected       ObjectProperty<?> reference;
 
-    public OperationalUnitElementNode(OperationalUnit element, DiagramImage content) {
+    public OperationalUnitElementNode(OperationalUnit element, OperationalUnitDiagramImage content) {
         super(element, content, Pos.CENTER);
 
         setOnMousePressed(event -> requestFocus());
@@ -121,6 +123,7 @@ public class OperationalUnitElementNode extends ElementNode {
     private void setupProperties() {
         try {
             state        = JavaBeanStringPropertyBuilder.create().bean(element).name("state").build();
+            stateAccess  = JavaBeanBooleanPropertyBuilder.create().bean(element).name("stateAccess").build();
             referenceFit = JavaBeanBooleanPropertyBuilder.create().bean(element).name("referenceFit").build();
             reference    = JavaBeanObjectPropertyBuilder.create().bean(element).name("reference").build();
         } catch (NoSuchMethodException e) {
@@ -136,6 +139,9 @@ public class OperationalUnitElementNode extends ElementNode {
             pseudoClassStateChanged(PseudoClass.getPseudoClass("referenceMismatch"), !newValue);
         });
         pseudoClassStateChanged(PseudoClass.getPseudoClass("referenceMismatch"), !referenceFit.getValue());
+
+        content.stateProperty().bind(state);
+        content.stateAccessProperty().bind(stateAccess);
     }
 
     @Override
@@ -145,6 +151,7 @@ public class OperationalUnitElementNode extends ElementNode {
         setupProperties();
 
         properties.add(state);
+        properties.add(stateAccess);
     }
 
     public String getState() {

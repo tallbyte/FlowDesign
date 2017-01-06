@@ -18,8 +18,10 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.image;
 
-import com.tallbyte.flowdesign.javafx.diagram.ElementNode;
-import com.tallbyte.flowdesign.javafx.diagram.element.OperationalUnitElementNode;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.ArcType;
 
@@ -31,20 +33,19 @@ import javafx.scene.shape.ArcType;
  */
 public class OperationalUnitDiagramImage extends DiagramImage {
 
+    private StringProperty  state       = new SimpleStringProperty(this, "state", null);
+    private BooleanProperty stateAccess = new SimpleBooleanProperty(this, "stateAccess", false);
+
     /**
      * Creates a new {@link OperationalUnitDiagramImage} with default dimension.
      */
     public OperationalUnitDiagramImage() {
-
-    }
-
-    @Override
-    public void setElement(ElementNode element) {
-        super.setElement(element);
-
-        if (element instanceof OperationalUnitElementNode) {
-            ((OperationalUnitElementNode) element).stateProperty().addListener(observable -> repaint());
-        }
+        state.addListener((observable, oldValue, newValue) -> {
+            repaint();
+        });
+        stateAccess.addListener((observable, oldValue, newValue) -> {
+            repaint();
+        });
     }
 
     @Override
@@ -69,12 +70,17 @@ public class OperationalUnitDiagramImage extends DiagramImage {
         rx -= rw*0.75;
         ry -= rh*0.75;
 
-        if (element instanceof OperationalUnitElementNode) {
-            String state = ((OperationalUnitElementNode) element).getState();
+        if (this.state != null && this.stateAccess != null) {
+            String  state       = this.state.get();
+            boolean stateAccess = this.stateAccess.get();
 
             if (state != null && !state.isEmpty()) {
                 context.clearRect(rx, ry, rw-2, rh-2);
-                strokeCylinder(context, rx, ry, rw, rh);
+                if (stateAccess) {
+                    strokeCylinder(context, rx, ry, rw, rh);
+                } else {
+                    strokeTriangle(context, rx, ry, rw, rh);
+                }
             }
         }
     }
@@ -102,4 +108,44 @@ public class OperationalUnitDiagramImage extends DiagramImage {
         );
     }
 
+    private void strokeTriangle(GraphicsContext context, double x, double y, double w, double h) {
+        context.strokeLine(
+                x+((w-2*context.getLineWidth())*0.5), y+context.getLineWidth(),
+                x+w-context.getLineWidth(), y+h-context.getLineWidth()
+        );
+
+        context.strokeLine(
+                x+context.getLineWidth(), y+h-context.getLineWidth(),
+                x+((w-2*context.getLineWidth())*0.5), y+context.getLineWidth()
+        );
+
+        context.strokeLine(
+                x+context.getLineWidth(), y+h-context.getLineWidth(),
+                x+w-2*context.getLineWidth(), y+h-context.getLineWidth()
+        );
+    }
+
+    public String getState() {
+        return state.get();
+    }
+
+    public void setState(String state) {
+        this.state.set(state);
+    }
+
+    public StringProperty stateProperty() {
+        return state;
+    }
+
+    public boolean getStateAccess() {
+        return stateAccess.get();
+    }
+
+    public void setStateAccess(boolean stateAccess) {
+        this.stateAccess.set(stateAccess);
+    }
+
+    public BooleanProperty stateAccessProperty() {
+        return stateAccess;
+    }
 }

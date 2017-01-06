@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class JoinElementNode extends ElementNode {
+public class JoinElementNode extends ElementNode<DiagramImage> {
 
     private final Join join;
 

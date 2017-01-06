@@ -54,21 +54,21 @@ import java.util.stream.Collectors;
  * Authors:<br/>
  * - julian (2016-10-28)<br/>
  */
-public class ElementNode extends SelectableNode {
+public class ElementNode<T extends DiagramImage> extends SelectableNode {
 
     private static final List<CssMetaData<? extends Styleable, ?>> STYLABLES;
-    private static final CssMetaData<ElementNode, Color>           DEFAULT_COLOR = new CssMetaData<ElementNode, Color>(
+    private static final CssMetaData<ElementNode<?>, Color>           DEFAULT_COLOR = new CssMetaData<ElementNode<?>, Color>(
             "-fx-default-color",
             StyleConverter.getColorConverter(),
             Color.BLACK ) {
 
         @Override
-        public boolean isSettable(ElementNode styleable) {
+        public boolean isSettable(ElementNode<?> styleable) {
             return !styleable.defaultColorProperty().isBound();
         }
 
         @Override
-        public StyleableProperty<Color> getStyleableProperty(ElementNode styleable) {
+        public StyleableProperty<Color> getStyleableProperty(ElementNode<?> styleable) {
             return styleable.defaultColorProperty();
         }
     };
@@ -87,7 +87,7 @@ public class ElementNode extends SelectableNode {
     protected DiagramPane                 diagramPane = null;
     protected Pane                        wrap        = new Pane();
     protected Pos                         posLabel;
-    protected DiagramImage                content;
+    protected T                           content;
     protected Element                     element;
     protected List<JointGroupHandler> jointGroupHandlers = new ArrayList<>();
 
@@ -122,7 +122,7 @@ public class ElementNode extends SelectableNode {
     private   boolean           release  = true;
 
 
-    public ElementNode(Element element, DiagramImage content, Pos posLabel) {
+    public ElementNode(Element element, T content, Pos posLabel) {
         this.content     = content;
         this.element     = element;
         this.posLabel    = posLabel;
@@ -177,8 +177,6 @@ public class ElementNode extends SelectableNode {
         content.colorProperty().bind(Bindings.when(color.isNotNull()).then(color).otherwise(defaultColor));
 
         addDefaultProperties();
-
-        content.setElement(this);
     }
 
     /**
@@ -661,22 +659,22 @@ public class ElementNode extends SelectableNode {
         jointGroupHandlers.forEach(JointGroupHandler::remove);
     }
 
-    protected interface JointGroupLayoutHandler {
+    protected interface JointGroupLayoutHandler<T extends DiagramImage> {
 
-        void layout(JointGroupHandler group);
+        void layout(ElementNode<T>.JointGroupHandler group);
 
     }
 
     protected class JointGroupHandler {
 
-        protected final JointGroup<?>           group;
+        protected final JointGroup<?>              group;
 
-        protected final double                  offset;
-        protected final double                  range;
+        protected final double                     offset;
+        protected final double                     range;
 
-        protected       JointsChangedListener   listener;
-        protected       JointGroupLayoutHandler layoutHandler;
-        protected       List<JointNode>         nodes = new ArrayList<>();
+        protected       JointsChangedListener      listener;
+        protected       JointGroupLayoutHandler<T> layoutHandler;
+        protected       List<JointNode>            nodes = new ArrayList<>();
 
         public JointGroupHandler(JointGroup<?> group, double offset, double range) {
             this.group  = group;
@@ -714,13 +712,13 @@ public class ElementNode extends SelectableNode {
             return listener;
         }
 
-        private void setLayoutHandler(JointGroupLayoutHandler layoutHandler) {
+        private void setLayoutHandler(JointGroupLayoutHandler<T> layoutHandler) {
             this.layoutHandler = layoutHandler;
 
             layoutHandler.layout(this);
         }
 
-        private JointGroupLayoutHandler getLayoutHandler() {
+        private JointGroupLayoutHandler<T> getLayoutHandler() {
             return layoutHandler;
         }
 

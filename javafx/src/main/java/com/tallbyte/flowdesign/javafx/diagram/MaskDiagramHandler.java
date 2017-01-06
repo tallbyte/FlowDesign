@@ -29,7 +29,7 @@ import com.tallbyte.flowdesign.javafx.diagram.image.*;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class MaskDiagramHandler extends DiagramHandlerBase<MaskDiagram, MaskDiagramElement> {
+public class MaskDiagramHandler extends DiagramHandlerBase<MaskDiagram, MaskDiagramElement, DiagramImage> {
 
     public MaskDiagramHandler() {
         addEntries("Rectangle", Rectangle.class,

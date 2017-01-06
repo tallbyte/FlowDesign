@@ -329,3 +329,20 @@
 .pane {
     -fx-background-color: red;
 }
+
+/*
+ * Check Box
+ */
+
+.check-box .box {
+    -fx-padding: 0.16em;
+    -fx-background-radius: 0.16em;
+    -fx-border-radius: 0.16em;
+
+    -fx-background-color: -fx-input-accent;
+    -fx-border-color: -fx-input-border-accent;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: -fx-control-pane-accent;
+}
