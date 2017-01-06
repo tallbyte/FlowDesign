@@ -36,7 +36,7 @@ import javafx.scene.input.KeyEvent;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class MaskCommentElementNode extends ElementNode {
+public class MaskCommentElementNode extends ElementNode<DiagramImage> {
 
     private final MaskComment comment;
 

@@ -33,22 +33,32 @@ import java.util.Map;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element> implements DiagramHandler<T> {
+public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element, I extends DiagramImage> implements DiagramHandler<T> {
 
-    protected final Map<String, ElementFactory<? extends S>>                       elementFactories = new HashMap<>();
-    protected final Map<Class<? extends Element>, DiagramImageFactory>             imageFactories   = new HashMap<>();
-    protected final Map<Class<? extends Element>, ElementNodeFactory<? extends S>> nodeFactories    = new HashMap<>();
-    protected final Map<String, DiagramImageFactory>                               supportedElements= new HashMap<>();
+    protected final Map<String, ElementFactory<? extends S>>                          elementFactories = new HashMap<>();
+    protected final Map<Class<? extends Element>, DiagramImageFactory<?>>             imageFactories   = new HashMap<>();
+    protected final Map<Class<? extends Element>, ElementNodeFactory<? extends S, ?>> nodeFactories    = new HashMap<>();
+    protected final Map<String, DiagramImageFactory<?>>                               supportedElements= new HashMap<>();
+    protected final Map<String, Boolean>                                              userCreateable   = new HashMap<>();
 
-    protected <E extends S> void addEntries(String string, Class<E> clazz,
+    protected <E extends S, I extends DiagramImage> void addEntries(String string, Class<E> clazz,
                                             ElementFactory<E> elementFactory,
-                                            DiagramImageFactory imageFactory,
-                                            ElementNodeFactory<E> nodeFactory) {
+                                            DiagramImageFactory<I> imageFactory,
+                                            ElementNodeFactory<E, I> nodeFactory) {
+        addEntries(string, clazz, elementFactory, imageFactory, nodeFactory, true);
+    }
+
+    protected <E extends S, I extends DiagramImage> void addEntries(String string, Class<E> clazz,
+                                            ElementFactory<E> elementFactory,
+                                            DiagramImageFactory<I> imageFactory,
+                                            ElementNodeFactory<E, I> nodeFactory,
+                                            boolean userCreateable) {
 
         elementFactories.put(string, elementFactory);
         imageFactories.put(clazz, imageFactory);
         nodeFactories.put(clazz, nodeFactory);
         supportedElements.put(string, imageFactory);
+        this.userCreateable.put(string, userCreateable);
     }
 
     @Override
@@ -83,7 +93,7 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
     @Override
     @SuppressWarnings("unchecked") // should be safe because of addEntries()
     public void removeElement(T diagram, Element element) {
-        ElementNodeFactory<S> nodeFactory  = (ElementNodeFactory<S>) nodeFactories.get(element.getClass());
+        ElementNodeFactory<S, ?> nodeFactory  = (ElementNodeFactory<S, ?>) nodeFactories.get(element.getClass());
 
         if (nodeFactory != null) {
             diagram.removeElement((S) element);
@@ -93,8 +103,8 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
     @Override
     @SuppressWarnings("unchecked") // should be safe because of addEntries()
     public ElementNode createNode(Element element) {
-        DiagramImageFactory   imageFactory = imageFactories.get(element.getClass());
-        ElementNodeFactory<S> nodeFactory  = (ElementNodeFactory<S>) nodeFactories.get(element.getClass());
+        DiagramImageFactory<I>   imageFactory = (DiagramImageFactory<I>) imageFactories.get(element.getClass());
+        ElementNodeFactory<S, I> nodeFactory  = (ElementNodeFactory<S, I>) nodeFactories.get(element.getClass());
 
         if (imageFactory != null && nodeFactory != null) {
             /*
@@ -115,10 +125,22 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
     protected abstract T createNewDiagramInstance(String name);
 
     @Override
+    public boolean isUserCreateable(String name) {
+        Boolean b = userCreateable.get(name);
+
+        return b == null ? false : b;
+    }
+
+    @Override
     public T createDiagram(String name) {
         T diagram = createNewDiagramInstance(name);
 
-        Element e = diagram.getRoot();
+        setToPrefSize(diagram.getRoot());
+
+        return diagram;
+    }
+
+    protected void setToPrefSize(Element e) {
         if (e != null) {
             DiagramImageFactory factory = imageFactories.get(e.getClass());
             if (factory != null) {
@@ -127,7 +149,5 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
                 e.setHeight(image.getHeight());
             }
         }
-
-        return diagram;
     }
 }

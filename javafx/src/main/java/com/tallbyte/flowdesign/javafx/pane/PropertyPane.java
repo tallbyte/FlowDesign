@@ -25,10 +25,7 @@ import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -78,6 +75,14 @@ public class PropertyPane extends GridPane {
                 newPane.nodeProperty().addListener(listener);
             }
         });
+    }
+
+    private void createForBoolean(Property<?> property, List<Node> data) {
+        if (property instanceof BooleanProperty) {
+            CheckBox checkBox = new CheckBox();
+            checkBox.selectedProperty().bindBidirectional((BooleanProperty) property);
+            data.add(checkBox);
+        }
     }
 
     private void createForString(Property<?> property, List<Node> data) {
@@ -131,6 +136,7 @@ public class PropertyPane extends GridPane {
         List<Node> data  = new ArrayList<>();
 
         // TODO change to interface
+        createForBoolean(property, data);
         createForString(property, data);
         createForDouble(property, data);
         createForInteger(property, data);

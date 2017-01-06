@@ -19,7 +19,6 @@
 package com.tallbyte.flowdesign.data.flow;
 
 import com.tallbyte.flowdesign.data.*;
-import javafx.fxml.LoadException;
 
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -64,8 +63,11 @@ public class OperationalUnit extends FlowDiagramElement {
         }
     });
 
-    protected Diagram reference;
-    protected String  state = "";
+    protected Diagram                reference;
+    protected boolean                referenceFit = true;
+    protected boolean                stateAccess  = true;
+    protected String                 state        = "";
+    protected PropertyChangeListener listener     = null;
 
     public static final String JOINT_GROUP_IN  = "in";
     public static final String JOINT_GROUP_OUT = "out";
@@ -77,6 +79,57 @@ public class OperationalUnit extends FlowDiagramElement {
      * Creats an new {@link OperationalUnit}.
      */
     public OperationalUnit() {
+        addPropertyChangeListener(evt -> {
+            if (evt.getPropertyName().equals("reference")) {
+                if (evt.getOldValue() != null) {
+                    ((Diagram) evt.getOldValue()).removePropertyChangeListener(listener);
+                }
+
+                if (evt.getOldValue() != evt.getNewValue()) {
+                    calculateReferenceFit();
+                }
+
+                if (evt.getNewValue() != null) {
+                    listener = evtData -> {
+                        if (evtData.getPropertyName().equals("dataTypeIn")) {
+                            calculateReferenceFit();
+                        }
+
+                        if (evtData.getPropertyName().equals("dataTypeOut")) {
+                            calculateReferenceFit();
+                        }
+                    };
+
+                    ((Diagram) evt.getNewValue()).addPropertyChangeListener(listener);
+                }
+            }
+        });
+
+        getInputGroup().getJoint(0).addPropertyChangeListener(evt -> {
+            if (evt.getPropertyName().equals("dataType")) {
+                calculateReferenceFit();
+            }
+        });
+
+        getOutputGroup().getJoint(0).addPropertyChangeListener(evt -> {
+            if (evt.getPropertyName().equals("dataType")) {
+                calculateReferenceFit();
+            }
+        });
+    }
+
+    private void calculateReferenceFit() {
+        boolean fit;
+
+        if (reference instanceof FlowDiagram) {
+            fit = ((FlowDiagram) reference).getDataTypeIn().equals(getInputGroup().getJoint(0).getDataType())
+                    && ((FlowDiagram) reference).getDataTypeOut().equals(getOutputGroup().getJoint(0).getDataType());
+
+        } else {
+            fit = true;
+        }
+
+        setInternalReferenceFit(fit);
     }
 
     @Override
@@ -121,11 +174,35 @@ public class OperationalUnit extends FlowDiagramElement {
     }
 
     public void setReference(Diagram diagram) {
-        throw new UnsupportedOperationException("This method only exists because a setter is required (looking at you, JavaFX");
+        throw new UnsupportedOperationException("This method only exists because a setter is required (looking at you, JavaFX)");
     }
 
     public Diagram getReference() {
         return reference;
+    }
+
+    private void setInternalReferenceFit(boolean referenceFit) {
+        boolean old = this.referenceFit;
+        this.referenceFit = referenceFit;
+        this.changeSupport.firePropertyChange("referenceFit", old, referenceFit);
+    }
+
+    public void setReferenceFit(boolean referenceFit) {
+        throw new UnsupportedOperationException("This method only exists because a setter is required (looking at you, JavaFX)");
+    }
+
+    public boolean isReferenceFit() {
+        return referenceFit;
+    }
+
+    public void setStateAccess(boolean stateAccess) {
+        boolean old = this.stateAccess;
+        this.stateAccess = stateAccess;
+        this.changeSupport.firePropertyChange("stateAccess", old, stateAccess);
+    }
+
+    public boolean isStateAccess() {
+        return stateAccess;
     }
 
     public void setState(String state) {

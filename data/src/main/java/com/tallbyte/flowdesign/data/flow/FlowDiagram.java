@@ -19,6 +19,7 @@
 package com.tallbyte.flowdesign.data.flow;
 
 import com.tallbyte.flowdesign.data.Diagram;
+import com.tallbyte.flowdesign.data.FlowJoint;
 
 import java.beans.PropertyChangeListener;
 
@@ -32,25 +33,138 @@ import java.beans.PropertyChangeListener;
  */
 public class FlowDiagram extends Diagram<FlowDiagramElement> {
 
+    private final Start   start;
+    private final End     end;
+
+    private       boolean ui;
+
     /**
      * Creates a new {@link FlowDiagram} using name only.
      * @param name the desired name
      */
     public FlowDiagram(String name) {
-        super(name, null);
+        this(name, new Start(), new End());
     }
 
     /**
      * Creates a new {@link FlowDiagram} with a given {@link Start} as root.
      * @param name the desired name
      * @param root the desired root
+     * @param end the desired end
+     * @throws IllegalArgumentException Is thrown if <code>root</code> is null.
      */
-    public FlowDiagram(String name, Start root) {
+    public FlowDiagram(String name, Start root, End end) {
         super(name, root);
+
+        if (root == null) {
+            throw new IllegalArgumentException("root can not be null");
+        }
+
+        if (end == null) {
+            throw new IllegalArgumentException("end can not be null");
+        }
+
+        this.start = root;
+        this.end   = end;
+
+        this.start.getOutputGroup().getJoint(0).addPropertyChangeListener(evt -> {
+            if (evt.getPropertyName().equals("dataType")) {
+                changeSupport.firePropertyChange("dataTypeIn", evt.getOldValue(), evt.getNewValue());
+            }
+        });
+
+        this.end.getInputGroup().getJoint(0).addPropertyChangeListener(evt -> {
+            if (evt.getPropertyName().equals("dataType")) {
+                changeSupport.firePropertyChange("dataTypeOut", evt.getOldValue(), evt.getNewValue());
+            }
+        });
+
+        addElement(end);
     }
 
     @Override
     public Start getRoot() {
         return (Start) super.getRoot();
     }
+
+    @Override
+    public boolean addElement(FlowDiagramElement element) {
+        if ((element instanceof Start && element != start) || (element instanceof End && element != end)) {
+            return false;
+        }
+
+        return super.addElement(element);
+    }
+
+    @Override
+    public void removeElement(FlowDiagramElement element) {
+        if (element != start && element != end) {
+            super.removeElement(element);
+        }
+    }
+
+    /**
+     * Gets the starting element.
+     * @return Returns the start.
+     */
+    public Start getStart() {
+        return start;
+    }
+
+    /**
+     * Returns the ending element.
+     * @return Returns the end.
+     */
+    public End getEnd() {
+        return end;
+    }
+
+    /**
+     * Gets whether or not this {@link FlowDiagram} starts and ends with ui.
+     * @return Returns true if it starts and ends with ui, else false.
+     */
+    public boolean isUi() {
+        return ui;
+    }
+
+    /**
+     * Sets whether or not this {@link FlowDiagram} starts and ends with ui.
+     * @param ui does it start with ui or not?
+     */
+    public void setUi(boolean ui) {
+        this.ui = ui;
+    }
+
+    /**
+     * Gets the input type.
+     * @return Returns the input type.
+     */
+    public String getDataTypeIn() {
+        return ((FlowJoint) start.getOutputGroup().getJoint(0)).getDataType();
+    }
+
+    /**
+     * Sets the input type.
+     * @param dataTypeIn the new input type
+     */
+    public void setDataTypeIn(String dataTypeIn) {
+        ((FlowJoint) start.getOutputGroup().getJoint(0)).setDataType(dataTypeIn);
+    }
+
+    /**
+     * Gets the output type.
+     * @return Returns the output type.
+     */
+    public String getDataTypeOut() {
+        return ((FlowJoint) end.getInputGroup().getJoint(0)).getDataType();
+    }
+
+    /**
+     * Sets the output type.
+     * @param dataTypeOut the new output type
+     */
+    public void setDataTypeOut(String dataTypeOut) {
+        ((FlowJoint) end.getInputGroup().getJoint(0)).setDataType(dataTypeOut);
+    }
+
 }

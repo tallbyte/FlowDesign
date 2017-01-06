@@ -35,7 +35,11 @@
 
                     <SeparatorMenuItem/>
 
-                    <MenuItem fx:id="menuItemLoad" accelerator="Ctrl+O" text="%menu.file.load" onAction="#onLoad" />
+                    <MenuItem fx:id="menuItemLoad" accelerator="Ctrl+O" text="%menu.file.load" onAction="#onLoad">
+                        <graphic>
+                            <Glyph styleClass="directoryIcon" fontFamily="FontAwesome" icon="FOLDER_ALT"/>
+                        </graphic>
+                    </MenuItem>
 
                     <SeparatorMenuItem/>
 
@@ -49,12 +53,20 @@
 
                 </Menu>
                 <Menu text="%menu.action">
-                    <MenuItem fx:id="menuItemSearch" accelerator="Ctrl+N" text="%menu.action.search" onAction="#onSearchDiagram"/>
+                    <MenuItem fx:id="menuItemSearch" accelerator="Ctrl+N" text="%menu.action.search" onAction="#onSearchDiagram">
+                        <graphic>
+                            <Glyph styleClass="fakeIcon" fontFamily="FontAwesome" icon="FOLDER_ALT"/>
+                        </graphic>
+                    </MenuItem>
                 </Menu>
                 <DiagramMenu fx:id="menuDiagram"/>
                 <Menu text="%menu.help">
                     <MenuItem visible="false" text="Test" onAction="#onTest"/>
-                    <MenuItem accelerator="Ctrl+A" text="%menu.help.about" onAction="#onAbout"/>
+                    <MenuItem accelerator="Ctrl+A" text="%menu.help.about" onAction="#onAbout">
+                        <graphic>
+                            <Glyph styleClass="fakeIcon" fontFamily="FontAwesome" icon="FOLDER_ALT"/>
+                        </graphic>
+                    </MenuItem>
                 </Menu>
             </MenuBar>
             <HBox alignment="BASELINE_RIGHT" fx:id="paneTop">

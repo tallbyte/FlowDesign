@@ -33,6 +33,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
+import org.controlsfx.glyphfont.Glyph;
 
 import java.io.IOException;
 
@@ -77,6 +78,9 @@ public class DiagramMenu extends Menu {
                 shortcut.actionProperty().addListener((observable, oldValue, newValue) -> {
                     item.setOnAction(newValue);
                 });
+                Glyph graphic = new Glyph("FontAwesome", "\uf0f3");
+                graphic.getStyleClass().add("fakeIcon");
+                item.setGraphic(graphic);
 
                 getItems().add(item);
             }

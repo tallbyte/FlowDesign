@@ -20,6 +20,10 @@
  * General look of tree-view and list-view
  */
 
+.root {
+    -fx-font-size: 0.95em;
+}
+
 .list-view {
     -fx-padding:          0;
     -fx-background-color: transparent;
@@ -121,6 +125,7 @@
  */
 
 .text-field {
+    -fx-padding: 0.16em;
     -fx-background-color: -fx-input-accent;
     -fx-border-color: -fx-input-border-accent;
 }
@@ -150,6 +155,7 @@
  */
 
 .button {
+    -fx-padding: 0.16em;
     -fx-background-color: transparent, -fx-action-border-accent, -fx-action-accent;
 }
 
@@ -167,8 +173,12 @@
 }
 
 .menu {
+    -fx-padding: 0.06em 0.48em 0.06em 0.48em;
     -fx-background-color:   -fx-bar-accent;
-    -fx-padding:            3px 8px;
+}
+
+.menu-item {
+    -fx-padding: 0.16em;
 }
 
 .menu:showing {
@@ -318,4 +328,21 @@
 
 .pane {
     -fx-background-color: red;
+}
+
+/*
+ * Check Box
+ */
+
+.check-box .box {
+    -fx-padding: 0.16em;
+    -fx-background-radius: 0.16em;
+    -fx-border-radius: 0.16em;
+
+    -fx-background-color: -fx-input-accent;
+    -fx-border-color: -fx-input-border-accent;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: -fx-control-pane-accent;
 }

@@ -324,7 +324,7 @@ ProjectEntry .closeButton:pressed .glyphClose {
 }
 
 .newProjectPane {
-    -fx-padding:          5px;
+    -fx-padding:          10px;
 }
 
 .newProjectPane .propertySheet {
@@ -424,11 +424,15 @@ SwitchPane .boxButtons {
     -fx-default-color: -fx-draw-accent;
 }
 
-.elementNode:referenced .text-field {
+.elementNode:referenced .nodeTextHolder {
     -fx-text-fill: -fx-referenced-accent;
 }
 
-.nodeStateTextHolder {
+.elementNode:referenceMismatch {
+    -fx-default-color: red;
+}
+
+.nodeStateTextHolder, .elementNode:referenced .nodeStateTextHolder {
     -fx-text-fill: #8396b1;
 }
 
@@ -500,4 +504,12 @@ SwitchPane .boxButtons {
 
 .changelogList .list-cell:filled:hover {
     -fx-background-color: transparent;
+}
+
+.directoryIcon {
+    -fx-text-fill: sandybrown;
+}
+
+.fakeIcon {
+    -fx-text-fill: -fx-control-pane-accent;
 }

@@ -29,7 +29,7 @@ import javafx.geometry.Pos;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class RectangleElementNode extends ElementNode {
+public class RectangleElementNode extends ElementNode<DiagramImage> {
 
     private final Rectangle rectangle;
 

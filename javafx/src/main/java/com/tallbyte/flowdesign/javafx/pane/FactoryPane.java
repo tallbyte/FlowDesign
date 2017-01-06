@@ -97,6 +97,7 @@ public class FactoryPane extends GridPane {
                             List<FactoryNode> list = diagramManager
                                     .getSupportedElements(newValue)
                                     .entrySet().stream()
+                                    .filter(entry -> diagramManager.isUserCreateable(newValue, entry.getKey()))
                                     .map(factory
                                             -> new FactoryNode(
                                                 factory.getValue(),

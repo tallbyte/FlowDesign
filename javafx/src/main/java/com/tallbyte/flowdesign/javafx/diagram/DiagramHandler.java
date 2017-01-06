@@ -40,6 +40,8 @@ public interface DiagramHandler<T extends Diagram> {
 
     public Map<String, DiagramImageFactory> getSupportedElements();
 
+    public boolean isUserCreateable(String name);
+
     public T createDiagram(String name);
 
 }

@@ -28,12 +28,12 @@ import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
  * Authors:<br/>
  * - julian (2016-12-06)<br/>
  */
-public interface ElementNodeFactory<T extends Element> {
+public interface ElementNodeFactory<T extends Element, I extends DiagramImage> {
 
     /**
      * Creates a new {@link ElementNode} according to the internal rules.
      * @return Returns a new instance of an {@link ElementNode}.
      */
-    public ElementNode createDiagramNode(T element, DiagramImage image);
+    public ElementNode createDiagramNode(T element, I image);
 
 }

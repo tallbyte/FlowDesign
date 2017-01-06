@@ -34,7 +34,7 @@ import javafx.geometry.Pos;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class PortalElementNode extends ElementNode {
+public class PortalElementNode extends ElementNode<DiagramImage> {
 
     private final Portal portal;
 

@@ -26,12 +26,12 @@ import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
  * Authors:<br/>
  * - julian (2016-11-04)<br/>
  */
-public interface DiagramImageFactory {
+public interface DiagramImageFactory<I extends DiagramImage> {
 
     /**
      * Creates a new {@link DiagramImage} according to the internal rules.
      * @return Returns a new instance of an {@link DiagramImage}.
      */
-    public DiagramImage createDiagramImage();
+    public I createDiagramImage();
 
 }

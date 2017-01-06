@@ -18,8 +18,10 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
+import com.tallbyte.flowdesign.data.Element;
 import com.tallbyte.flowdesign.data.flow.*;
 import com.tallbyte.flowdesign.javafx.diagram.element.*;
+import com.tallbyte.flowdesign.javafx.diagram.factory.DiagramImageFactory;
 import com.tallbyte.flowdesign.javafx.diagram.image.*;
 
 /**
@@ -28,18 +30,20 @@ import com.tallbyte.flowdesign.javafx.diagram.image.*;
  * Authors:<br/>
  * - julian (2016-12-08)<br/>
  */
-public class FlowDiagramHandler extends DiagramHandlerBase<FlowDiagram, FlowDiagramElement> {
+public class FlowDiagramHandler extends DiagramHandlerBase<FlowDiagram, FlowDiagramElement, DiagramImage> {
 
     public FlowDiagramHandler() {
         addEntries("Start", Start.class,
                 Start::new,
                 StartDiagramImage::new,
-                StartElementNode::new
+                StartElementNode::new,
+                false
         );
         addEntries("End", End.class,
                 End::new,
                 EndDiagramImage::new,
-                EndElementNode::new
+                EndElementNode::new,
+                false
         );
         addEntries("Join", Join.class,
                 Join::new,
@@ -49,11 +53,6 @@ public class FlowDiagramHandler extends DiagramHandlerBase<FlowDiagram, FlowDiag
         addEntries("Operation", Operation.class,
                 Operation::new,
                 OperationalUnitDiagramImage::new,
-                OperationalUnitElementNode::new
-        );
-        addEntries("ResourceAccess", ResourceAccess.class,
-                ResourceAccess::new,
-                ResourceDiagramImage::new,
                 OperationalUnitElementNode::new
         );
         addEntries("Split", Split.class,
@@ -76,5 +75,16 @@ public class FlowDiagramHandler extends DiagramHandlerBase<FlowDiagram, FlowDiag
     @Override
     protected FlowDiagram createNewDiagramInstance(String name) {
         return new FlowDiagram(name);
+    }
+
+    @Override
+    public FlowDiagram createDiagram(String name) {
+        FlowDiagram diagram = super.createDiagram(name);
+
+        setToPrefSize(diagram.getEnd());
+
+        diagram.getEnd().setX(300);
+
+        return diagram;
     }
 }
