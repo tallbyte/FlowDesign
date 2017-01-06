@@ -33,6 +33,8 @@ import java.beans.PropertyChangeListener;
  */
 public class FlowDiagram extends Diagram<FlowDiagramElement> {
 
+    public static final String PROPERTY_UI            = "ui";
+
     public static final String PROPERTY_DATA_TYPE_IN  = "dataTypeIn";
     public static final String PROPERTY_DATA_TYPE_OUT = "dataTypeOut";
 
@@ -135,7 +137,9 @@ public class FlowDiagram extends Diagram<FlowDiagramElement> {
      * @param ui does it start with ui or not?
      */
     public void setUi(boolean ui) {
+        boolean old = this.ui;
         this.ui = ui;
+        changeSupport.firePropertyChange(PROPERTY_UI, old, ui);
     }
 
     /**

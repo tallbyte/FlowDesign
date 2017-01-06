@@ -18,6 +18,8 @@
 
 package com.tallbyte.flowdesign.javafx.diagram.image;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -29,11 +31,51 @@ import javafx.scene.paint.Color;
  */
 public class StartDiagramImage extends EllipseDiagramImage {
 
+    private BooleanProperty ui = new SimpleBooleanProperty(this, "ui", false);
+
     /**
      * Creates a new {@link StartDiagramImage} with default dimension.
      */
     public StartDiagramImage() {
         setWidth(25);
         setHeight(25);
+
+        ui.addListener((observable, oldValue, newValue) -> {
+            repaint();
+        });
+    }
+
+    @Override
+    public void repaint() {
+        super.repaint();
+
+        if (this.ui != null) {
+            GraphicsContext context = getGraphicsContext2D();
+            double width  = getWidth();
+            double height = getHeight();
+
+            if (this.ui.get()) {
+                context.clearRect(0, 0, width, height);
+                context.setStroke(getColor());
+                context.setLineWidth(1.5);
+
+                context.strokeRect(
+                        context.getLineWidth(), context.getLineWidth(),
+                        width - 2*context.getLineWidth(), height - 2*context.getLineWidth()
+                );
+            }
+        }
+    }
+
+    public boolean getUi() {
+        return ui.get();
+    }
+
+    public void setUi(boolean ui) {
+        this.ui.set(ui);
+    }
+
+    public BooleanProperty uiProperty() {
+        return ui;
     }
 }
