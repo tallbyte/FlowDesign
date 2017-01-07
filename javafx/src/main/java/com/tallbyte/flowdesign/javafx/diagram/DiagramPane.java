@@ -190,10 +190,11 @@ public class DiagramPane extends ScrollPane {
 
         // TODO dirty, cleanup >> start
         Pane  outer = new Pane();
-        Pane  inner = new Pane();
+        Pane  inner = new Pane(); // zero size -> coordinate being translated
 
-        inner.setMaxSize(0, 0);
+        inner.setMinSize (0, 0);
         inner.setPrefSize(0, 0);
+        inner.setMaxSize (0, 0);
 
         outer.setMaxSize    (Double.MAX_VALUE, Double.MAX_VALUE);
         outer.setPrefSize   (Control.USE_COMPUTED_SIZE, Control.USE_COMPUTED_SIZE);
