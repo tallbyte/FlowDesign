@@ -20,13 +20,10 @@ package com.tallbyte.flowdesign.javafx.diagram;
 
 import com.tallbyte.flowdesign.data.*;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
-import com.tallbyte.flowdesign.javafx.Shortcut;
 import com.tallbyte.flowdesign.javafx.ShortcutGroup;
-import com.tallbyte.flowdesign.javafx.Shortcuts;
 import com.tallbyte.flowdesign.javafx.pane.DiagramsPane;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
-import javafx.beans.property.adapter.JavaBeanBooleanPropertyBuilder;
 import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -37,10 +34,13 @@ import javafx.event.EventType;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Control;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Pair;
 
@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import static com.tallbyte.flowdesign.javafx.Shortcuts.*;
 
@@ -58,6 +59,8 @@ import static com.tallbyte.flowdesign.javafx.Shortcuts.*;
  * - julian (2016-11-05)<br/>
  */
 public class DiagramPane extends ScrollPane {
+
+    public static final double ZOOM_CHANGE_FACTOR = 1.1;
 
     /*
      * ===============================================
@@ -162,6 +165,18 @@ public class DiagramPane extends ScrollPane {
     protected EventHandler<? super MouseEvent> listenerRelease = null;
 
 
+    /*
+     * ===============================================
+     * Zoom and movement variables
+     * ===============================================
+     */
+    protected BooleanProperty scaleEnabled = new SimpleBooleanProperty(false);
+    protected DoubleProperty  scale        = new SimpleDoubleProperty(1);
+    protected DoubleProperty  translateX   = new SimpleDoubleProperty(0);
+    protected DoubleProperty  translateY   = new SimpleDoubleProperty(0);
+
+
+
     /**
      * Creates a new {@link DiagramPane} with a default set of factories.
      * @param application the {@link FlowDesignFxApplication}
@@ -172,13 +187,177 @@ public class DiagramPane extends ScrollPane {
         this.application    = application;
         this.diagramsPane   = pane;
         this.diagramManager = diagramManager;
-        Group group = new Group();
-        group.getChildren().addAll(groupConnections, groupContent, groupMarker);
 
-        setContent(group);
+        // TODO dirty, cleanup >> start
+        Pane  outer = new Pane();
+        Pane  inner = new Pane(); // zero size -> coordinate being translated
+
+        inner.setMinSize (0, 0);
+        inner.setPrefSize(0, 0);
+        inner.setMaxSize (0, 0);
+
+        outer.setMaxSize    (Double.MAX_VALUE, Double.MAX_VALUE);
+        outer.setPrefSize   (Control.USE_COMPUTED_SIZE, Control.USE_COMPUTED_SIZE);
+
+        inner.getChildren().addAll(groupConnections, groupContent, groupMarker);
+        outer.getChildren().add(inner);
+
+
+
+        DoubleProperty mouseX = new SimpleDoubleProperty(getWidth()  / 2.);
+        DoubleProperty mouseY = new SimpleDoubleProperty(getHeight() / 2.);
+
+        Consumer<Double> setInnerTranslateX = newX -> {
+            inner.setTranslateX(
+                    getWidth() / 2.
+                - inner.getWidth() / 2. // zero
+                + newX
+            );
+        };
+
+        Consumer<Double> setInnerTranslateY = newY -> {
+            inner.setTranslateY(
+                    getHeight() / 2.
+                - inner.getHeight() / 2. // zero
+                + newY
+            );
+        };
+
+        translateX.addListener((observable, oldValue, newValue) -> setInnerTranslateX.accept(newValue.doubleValue()));
+        translateY.addListener((observable, oldValue, newValue) -> setInnerTranslateY.accept(newValue.doubleValue()));
+
+        inner.scaleXProperty().bind(scale);
+        inner.scaleYProperty().bind(scale);
+
+
+        DoubleProperty x = new SimpleDoubleProperty();
+        DoubleProperty y = new SimpleDoubleProperty();
+
+        EventHandler<MouseEvent> eventHandlerPressed = event -> {
+            x.set(event.getSceneX());
+            y.set(event.getSceneY());
+        };
+
+        EventHandler<MouseEvent> eventHandlerDragged = event -> {
+            if (event.isSecondaryButtonDown()) {
+                double dx = x.get() - event.getSceneX();
+                double dy = y.get() - event.getSceneY();
+
+                x.set(event.getSceneX());
+                y.set(event.getSceneY());
+
+                translateX.set(translateX.get() - dx);
+                translateY.set(translateY.get() - dy);
+            }
+        };
+
+        outer.addEventHandler(MouseEvent.MOUSE_PRESSED, eventHandlerPressed);
+        outer.addEventHandler(MouseEvent.MOUSE_DRAGGED, eventHandlerDragged);
+
+
+
+        addEventHandler(ScrollEvent.SCROLL, event -> {
+            if (scaleEnabled.getValue()) {
+                double scaleChange;
+
+                if (event.getDeltaY() > 0) {
+                    scaleChange = ZOOM_CHANGE_FACTOR;
+                } else {
+                    scaleChange = 1. / ZOOM_CHANGE_FACTOR;
+                }
+
+                System.out.println("mouseX="+mouseX.get()+", to-center-x="+(mouseX.get() - (getWidth()  / 2.)));
+
+                double tx = translateX.get();
+                double ty = translateY.get();
+
+                double mcx = mouseX.get() - getWidth()  / 2.;
+                double mcy = mouseY.get() - getHeight() / 2.;
+
+                double dmx = (mcx * scaleChange) - mcx;
+                double dmy = (mcy * scaleChange) - mcy;
+
+                translateX  .set(tx * scaleChange - dmx);
+                translateY  .set(ty * scaleChange - dmy);
+
+
+
+
+                scale       .set(scale      .get() * scaleChange);
+            }
+        });
+
+        addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.SHIFT) {
+                scaleEnabled.set(true);
+            }
+
+            if (event.isShiftDown() && event.getCode() == KeyCode.SPACE) {
+                translateX.set(0);
+                translateY.set(0);
+                scale.set(1);
+            }
+        });
+
+        addEventHandler(KeyEvent.KEY_RELEASED, event -> {
+            if (event.getCode() == KeyCode.SHIFT) {
+                scaleEnabled.set(false);
+            }
+        });
+
+        outer.addEventHandler(MouseEvent.MOUSE_MOVED, event -> {
+            mouseX.set(event.getX());
+            mouseY.set(event.getY());
+        });
+
+        translateX.set(0);
+        translateY.set(0);
+        scale.set(1);
+
+        setInnerTranslateX.accept(0.);
+        setInnerTranslateY.accept(0.);
+
+        widthProperty().addListener((observable, oldValue, newValue) -> {
+            setInnerTranslateX.accept(translateX.get());
+        });
+
+        heightProperty().addListener((observable, oldValue, newValue) -> {
+            setInnerTranslateY.accept(translateY.get());
+        });
+
+        parentProperty().addListener((observable, oldValue, newValue) -> {
+            setInnerTranslateX.accept(translateX.get());
+            setInnerTranslateY.accept(translateY.get());
+        });
+
+        outer.prefWidthProperty ().bind(widthProperty ());
+        outer.prefHeightProperty().bind(heightProperty());
+        outer.maxWidthProperty  ().bind(widthProperty ());
+        outer.maxHeightProperty ().bind(heightProperty());
+        // TODO dirty, cleanup >> end
+
+
+        setContent(outer);
         setPannable(true);
 
+
         setup();
+    }
+
+    /**
+     * @param paneSpaceX X coordinate on the {@link DiagramPane}
+     * @return The x coordinate on the {@link Diagram}
+     */
+    public double toDiagramSpaceX(double paneSpaceX) {
+        return (paneSpaceX - translateX.get() - getWidth() / 2.) / scale.get();
+    }
+
+    /**
+     * @param paneSpaceY Y coordinate on the {@link DiagramPane}
+     * @return The y coordinate on the {@link Diagram}
+     */
+    public double toDiagramSpaceY(double paneSpaceY) {
+        return (paneSpaceY - translateY.get() - getHeight() / 2.) / scale.get();
     }
 
     /**
@@ -448,8 +627,8 @@ public class DiagramPane extends ScrollPane {
 
         addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
             groupMarker.getChildren().stream().filter(node -> node instanceof ConnectionNode).forEach(node -> {
-                ((ConnectionNode) node).setEndX(event.getX());
-                ((ConnectionNode) node).setEndY(event.getY());
+                ((ConnectionNode) node).setEndX(toDiagramSpaceX(event.getX()));
+                ((ConnectionNode) node).setEndY(toDiagramSpaceY(event.getY()));
             });
         });
 
@@ -465,8 +644,8 @@ public class DiagramPane extends ScrollPane {
                 Bounds b = localToScene(getBoundsInLocal());
 
                 Element e = diagramManager.createElement(getDiagram(), event.getDragboard().getString(),
-                        mouseX-b.getMinX()-event.getDragboard().getDragViewOffsetX(),
-                        mouseY-b.getMinY()-event.getDragboard().getDragViewOffsetY()
+                        toDiagramSpaceX(mouseX-b.getMinX()-event.getDragboard().getDragViewOffsetX()),
+                        toDiagramSpaceY(mouseY-b.getMinY()-event.getDragboard().getDragViewOffsetY())
                 );
 
                 if (e != null) {
