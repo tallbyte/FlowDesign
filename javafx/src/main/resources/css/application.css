@@ -408,7 +408,7 @@ SwitchPane .boxButtons {
 }
 
 .lightStyleButton * {
-
+    -fx-text-fill:        white;
 }
 
 .searchButton * {
