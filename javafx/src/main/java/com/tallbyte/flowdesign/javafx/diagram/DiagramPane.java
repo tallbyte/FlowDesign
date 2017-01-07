@@ -414,6 +414,7 @@ public class DiagramPane extends ScrollPane {
      * @param element the {@link Element} to add
      */
     private void addElement(Element element) {
+        // TODO people will hate me but this converts it from screen space to diagram space
         element.setX((element.getX() - translateX.get() - getWidth() / 2.) / scale.get());
         element.setY((element.getY() - translateY.get() - getHeight()/ 2.) / scale.get() );
 
