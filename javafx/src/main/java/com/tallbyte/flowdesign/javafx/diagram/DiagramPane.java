@@ -179,9 +179,9 @@ public class DiagramPane extends ScrollPane {
      * ===============================================
      */
     protected BooleanProperty scaleEnabled = new SimpleBooleanProperty(false);
-    protected DoubleProperty  scale        = new SimpleDoubleProperty(1);
-    protected DoubleProperty  translateX   = new SimpleDoubleProperty(0);
-    protected DoubleProperty  translateY   = new SimpleDoubleProperty(0);
+    protected DoubleProperty  scale        = new SimpleDoubleProperty(2); // wrong initial value required to fire change event on initialization
+    protected DoubleProperty  translateX   = new SimpleDoubleProperty(1); // wrong initial value required to fire change event on initialization
+    protected DoubleProperty  translateY   = new SimpleDoubleProperty(1); // wrong initial value required to fire change event on initialization
 
 
 
@@ -196,7 +196,7 @@ public class DiagramPane extends ScrollPane {
         this.diagramsPane   = pane;
         this.diagramManager = diagramManager;
 
-
+        // TODO dirty, cleanup start
         Pane  outer = new Pane();
         Pane  inner = new Pane();
 
@@ -233,9 +233,6 @@ public class DiagramPane extends ScrollPane {
 
         inner.scaleXProperty().bind(scale);
         inner.scaleYProperty().bind(scale);
-
-        translateX.set(0);
-        translateY.set(0);
 
 
         DoubleProperty x = new SimpleDoubleProperty();
@@ -321,16 +318,27 @@ public class DiagramPane extends ScrollPane {
             mouseY.set(event.getY());
         });
 
+        translateX.set(0);
+        translateY.set(0);
+        scale.set(1);
 
+        widthProperty().addListener((observable, oldValue, newValue) -> {
+            translateX.set(translateX.get() + (newValue.doubleValue() - oldValue.doubleValue()) / 4.);
+        });
 
-        setContent(outer);
-        setPannable(true);
+        heightProperty().addListener((observable, oldValue, newValue) -> {
+            translateY.set(translateY.get() + (newValue.doubleValue() - oldValue.doubleValue()) / 4.);
+        });
 
         outer.prefWidthProperty() .bind(widthProperty());
         outer.prefHeightProperty().bind(heightProperty());
         outer.maxWidthProperty ().bind(widthProperty());
         outer.maxHeightProperty().bind(heightProperty());
+        // TODO dirty, cleanup end
 
+
+        setContent(outer);
+        setPannable(true);
 
 
         setup();
@@ -414,9 +422,10 @@ public class DiagramPane extends ScrollPane {
      * @param element the {@link Element} to add
      */
     private void addElement(Element element) {
-        // TODO people will hate me but this converts it from screen space to diagram space
+        // TODO find better location for: people will hate me but this converts it from screen space to diagram space
         element.setX((element.getX() - translateX.get() - getWidth() / 2.) / scale.get());
         element.setY((element.getY() - translateY.get() - getHeight()/ 2.) / scale.get() );
+        // TODO find better location end
 
         ElementNode node = diagramManager.createNode(getDiagram(), element);
         if (node != null) {
@@ -607,8 +616,8 @@ public class DiagramPane extends ScrollPane {
 
         addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
             groupMarker.getChildren().stream().filter(node -> node instanceof ConnectionNode).forEach(node -> {
-                ((ConnectionNode) node).setEndX(event.getX());
-                ((ConnectionNode) node).setEndY(event.getY());
+                ((ConnectionNode) node).setEndX((event.getX() - translateX.get() - getWidth() / 2.) / scale.get());
+                ((ConnectionNode) node).setEndY((event.getY() - translateY.get() - getHeight() / 2.) / scale.get());
             });
         });
 
