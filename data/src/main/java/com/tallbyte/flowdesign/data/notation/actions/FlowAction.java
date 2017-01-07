@@ -51,4 +51,12 @@ public abstract class FlowAction {
     public int getEnd() {
         return end;
     }
+
+    /**
+     * Gets an child at the specified location of the origin string.
+     *
+     * @param location the location in the original string
+     * @return Returns the {@link FlowAction} or null if none was found.
+     */
+    public abstract FlowAction getChildAt(int location);
 }

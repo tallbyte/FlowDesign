@@ -87,4 +87,13 @@ public class Type extends TupelContainment{
 
         return builder.toString();
     }
+
+    @Override
+    public FlowAction getChildAt(int location) {
+        if (location >= start && location <= end+1) {
+            return this;
+        }
+
+        return null;
+    }
 }

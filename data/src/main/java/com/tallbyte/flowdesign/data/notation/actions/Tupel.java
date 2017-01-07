@@ -113,4 +113,21 @@ public class Tupel extends TupelContainment {
 
         return builder.toString();
     }
+
+    @Override
+    public FlowAction getChildAt(int location) {
+        if (location >= start && location <= end+1) {
+            for (TupelContainment containment : this.types) {
+                FlowAction child = containment.getChildAt(location);
+
+                if (child != null) {
+                    return child;
+                }
+            }
+
+            return this;
+        }
+
+        return null;
+    }
 }
