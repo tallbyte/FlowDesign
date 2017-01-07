@@ -23,7 +23,9 @@ import com.tallbyte.flowdesign.javafx.pane.ApplicationPane;
 import com.tallbyte.flowdesign.javafx.pane.SwitchPane;
 import com.tallbyte.flowdesign.javafx.pane.WelcomePane;
 import javafx.application.Application;
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -46,8 +48,12 @@ public class FlowDesignFxApplication extends Application {
     private PopupHandler        popupHandler;
     private List<Stage>         mainStages = new ArrayList<>();
 
+    protected Point2D totalCenter;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
+        calculateTotalCenter();
+
         this.shortcutManager    = new ShortcutManager();
         this.applicationManager = new ApplicationManager();
         this.colorHandler       = new ColorHandler(this);
@@ -68,6 +74,31 @@ public class FlowDesignFxApplication extends Application {
         popupHandler.setupStage(primaryStage);
 
         primaryStage.show();
+        totalCenter(primaryStage);
+    }
+
+    protected void calculateTotalCenter() {
+
+        // dont trust for linux
+        // Screen primary = Screen.getPrimary();
+        double maxX = 0;
+        double maxY = 0;
+
+        for (Screen screen : Screen.getScreens()) {
+            maxX = Math.max(maxX, screen.getVisualBounds().getMaxX());
+            maxY = Math.max(maxY, screen.getVisualBounds().getMaxY());
+        }
+
+        double centerX = maxX / 2; // primary.getVisualBounds().getMinX() + primary.getBounds().getWidth()  / 2;
+        double centerY = maxY / 2; // primary.getVisualBounds().getMinY() + primary.getBounds().getHeight() / 2;
+
+        this.totalCenter = new Point2D(centerX, centerY);
+    }
+
+    protected void totalCenter(Stage stage) {
+        stage.setX(totalCenter.getX() - stage.getWidth()  / 2);
+        stage.setY(totalCenter.getY() - stage.getHeight() / 2);
+        stage.centerOnScreen();
     }
 
     private void setupShortcuts() {
@@ -116,6 +147,7 @@ public class FlowDesignFxApplication extends Application {
         stage.setHeight(900);
         popupHandler.setupStage(stage);
         stage.show();
+        totalCenter(stage);
 
         mainStages.add(stage);
         stage.setOnCloseRequest(event -> mainStages.remove(stage));
