@@ -22,6 +22,10 @@ import com.tallbyte.flowdesign.data.Diagram;
 import com.tallbyte.flowdesign.data.Element;
 import com.tallbyte.flowdesign.javafx.diagram.factory.*;
 import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
+import javafx.beans.property.Property;
+import javafx.beans.property.adapter.JavaBeanDoublePropertyBuilder;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -176,5 +180,10 @@ public abstract class DiagramHandlerBase<T extends Diagram<S>, S extends Element
                 e.setHeight(image.getHeight());
             }
         }
+    }
+
+    @Override
+    public ObservableList<Property<?>> getDiagramProperties(T diagram) {
+        return FXCollections.observableArrayList();
     }
 }

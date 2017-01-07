@@ -192,7 +192,6 @@ PropertyPane {
     -fx-padding:           10px;
     -fx-vgap:              3px;
     -fx-hgap:              10px;
-    -fx-min-height:        200px;
 }
 
 PropertyPane > TextField {
@@ -444,7 +443,7 @@ SwitchPane .boxButtons {
     -fx-pref-width: 80px;
 }
 
-.propertyColorResetButton {
+.propertyColorResetButton * {
     -fx-text-fill: red;
 }
 

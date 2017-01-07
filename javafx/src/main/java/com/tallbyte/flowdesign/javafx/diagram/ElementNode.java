@@ -35,7 +35,6 @@ import javafx.collections.ObservableList;
 import javafx.css.*;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Group;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -131,12 +130,12 @@ public class ElementNode<T extends DiagramImage> extends SelectableNode {
         getChildren().add(wrap);
 
         try {
-            realX      = JavaBeanDoublePropertyBuilder.create().bean(element).name("x").build();
-            realY      = JavaBeanDoublePropertyBuilder.create().bean(element).name("y").build();
-            realWidth  = JavaBeanDoublePropertyBuilder.create().bean(element).name("width").build();
-            realHeight = JavaBeanDoublePropertyBuilder.create().bean(element).name("height").build();
-            text       = JavaBeanStringPropertyBuilder.create().bean(element).name("text").build();
-            colorString= JavaBeanStringPropertyBuilder.create().bean(element).name("color").build();
+            realX      = JavaBeanDoublePropertyBuilder.create().bean(element).name(Element.PROPERTY_X).build();
+            realY      = JavaBeanDoublePropertyBuilder.create().bean(element).name(Element.PROPERTY_Y).build();
+            realWidth  = JavaBeanDoublePropertyBuilder.create().bean(element).name(Element.PROPERTY_WIDTH).build();
+            realHeight = JavaBeanDoublePropertyBuilder.create().bean(element).name(Element.PROPERTY_HEIGHT).build();
+            text       = JavaBeanStringPropertyBuilder.create().bean(element).name(Element.PROPERTY_TEXT).build();
+            colorString= JavaBeanStringPropertyBuilder.create().bean(element).name(Element.PROPERTY_COLOR).build();
             color      = new ColorProperty(this, "color", null);
 
             StringConverter<Color> converter = new StringConverter<Color>() {

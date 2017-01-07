@@ -18,11 +18,8 @@
 
 package com.tallbyte.flowdesign.data;
 
-import com.tallbyte.flowdesign.data.flow.Join;
-
 import java.beans.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * This file is part of project flowDesign.
@@ -40,7 +37,7 @@ public abstract class Element implements DiagramContent {
     public static final String PROPERTY_COLOR     = "color";
     public static final String PROPERTY_X         = "x";
     public static final String PROPERTY_Y         = "y";
-    public static final String PROPERTY_Width     = "width";
+    public static final String PROPERTY_WIDTH     = "width";
     public static final String PROPERTY_HEIGHT    = "height";
     public static final String PROPERTY_DELETABLE = "deletable";
 
@@ -164,7 +161,7 @@ public abstract class Element implements DiagramContent {
     public void setWidth(double width) {
         double old = this.width;
         this.width = width;
-        this.changeSupport.firePropertyChange(PROPERTY_Width, old, width);
+        this.changeSupport.firePropertyChange(PROPERTY_WIDTH, old, width);
     }
 
     /**

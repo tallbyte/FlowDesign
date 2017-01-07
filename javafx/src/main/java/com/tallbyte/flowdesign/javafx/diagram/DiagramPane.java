@@ -121,6 +121,7 @@ public class DiagramPane extends ScrollPane {
      * The diagrams name bound to the internal representation. Will be null if no diagram was registered.
      */
     protected       StringProperty                 name;
+    protected       ObservableList<Property<?>>    properties;
 
     /**
      * The last actively selected node.
@@ -223,10 +224,10 @@ public class DiagramPane extends ScrollPane {
     private void removeMouseHandlers(SelectableNode node) {
         List<Pair<EventType<MouseEvent>, EventHandler<MouseEvent>>> list = mouseHandlers.get(node);
 
-        if (list != null && node instanceof Node) {
+        if (list != null && node != null) {
             for (Pair<EventType<MouseEvent>, EventHandler<MouseEvent>> pair : list) {
-                ((Node) node).removeEventHandler(pair.getKey(), pair.getValue());
-                ((Node) node).removeEventFilter(pair.getKey(), pair.getValue());
+                node.removeEventHandler(pair.getKey(), pair.getValue());
+                node.removeEventFilter(pair.getKey(), pair.getValue());
             }
         }
 
@@ -243,8 +244,8 @@ public class DiagramPane extends ScrollPane {
         BooleanProperty selected = new SimpleBooleanProperty();
         selected.bind(Bindings.createBooleanBinding(() -> this.selected.contains(node), this.selected));
         selected.addListener((observable, oldValue, newValue) -> {
-            if (node instanceof Node) {
-                ((Node) node).pseudoClassStateChanged(PseudoClass.getPseudoClass("activeSelected"), newValue);
+            if (node != null) {
+                node.pseudoClassStateChanged(PseudoClass.getPseudoClass("activeSelected"), newValue);
             }
         });
 
@@ -403,6 +404,9 @@ public class DiagramPane extends ScrollPane {
                 } catch (NoSuchMethodException e) {
                     throw new RuntimeException("Could not create properties. This should never happen?!");
                 }
+
+                // set the properties
+                properties = diagramManager.getDiagramProperties(newValue);
 
                 listenerElements = (element, added) -> {
                     if (added) {
@@ -665,6 +669,15 @@ public class DiagramPane extends ScrollPane {
      */
     ObjectProperty<Joint> jointProperty() {
         return joint;
+    }
+
+    /**
+     * Gets the diagram current properties.
+     *
+     * @return Retruns a list of them.
+     */
+    public ObservableList<Property<?>> getDiagramProperties() {
+        return properties;
     }
 
     /**

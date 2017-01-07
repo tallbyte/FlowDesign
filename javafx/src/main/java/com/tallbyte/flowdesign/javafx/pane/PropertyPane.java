@@ -24,6 +24,7 @@ import com.tallbyte.flowdesign.javafx.property.ColorProperty;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -33,6 +34,7 @@ import javafx.scene.paint.Color;
 import javafx.util.converter.NumberStringConverter;
 import org.controlsfx.control.PropertySheet;
 import org.controlsfx.glyphfont.FontAwesome;
+import org.controlsfx.glyphfont.Glyph;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -67,6 +69,11 @@ public class PropertyPane extends GridPane {
                         for (Property<?> property : newValue.getNodeProperties()) {
                             row += addProperty(property, row) ? 1 : 0;
                         }
+                    } else {
+                        int row = 0;
+                        for (Property<?> property : newPane.getDiagramProperties()) {
+                            row += addProperty(property, row) ? 1 : 0;
+                        }
                     }
                 };
 
@@ -75,11 +82,14 @@ public class PropertyPane extends GridPane {
                 newPane.nodeProperty().addListener(listener);
             }
         });
+
+        setAlignment(Pos.TOP_LEFT);
     }
 
     private void createForBoolean(Property<?> property, List<Node> data) {
         if (property instanceof BooleanProperty) {
             CheckBox checkBox = new CheckBox();
+            checkBox.setPrefWidth(100);
             checkBox.selectedProperty().bindBidirectional((BooleanProperty) property);
             data.add(checkBox);
         }
@@ -88,6 +98,7 @@ public class PropertyPane extends GridPane {
     private void createForString(Property<?> property, List<Node> data) {
         if (property instanceof StringProperty) {
             TextField textField = new TextField();
+            textField.setPrefWidth(100);
             textField.textProperty().bindBidirectional((StringProperty) property);
             data.add(textField);
         }
@@ -96,6 +107,7 @@ public class PropertyPane extends GridPane {
     private void createForDouble(Property<?> property, List<Node> data) {
         if (property instanceof DoubleProperty) {
             TextField textField = new TextField();
+            textField.setPrefWidth(100);
             textField.textProperty().bindBidirectional((DoubleProperty) property, new NumberStringConverter());
             data.add(textField);
         }
@@ -104,6 +116,7 @@ public class PropertyPane extends GridPane {
     private void createForInteger(Property<?> property, List<Node> data) {
         if (property instanceof IntegerProperty) {
             TextField textField = new TextField();
+            textField.setPrefWidth(100);
             textField.textProperty().bindBidirectional((IntegerProperty) property, new NumberStringConverter());
             data.add(textField);
         }
@@ -114,6 +127,7 @@ public class PropertyPane extends GridPane {
             HBox hBox = new HBox();
             hBox.getStyleClass().add("propertyColorBox");
             ColorPicker picker = new ColorPicker();
+            hBox.setPrefWidth(100);
             picker.getStyleClass().add("propertyColorPicker");
             picker.valueProperty().bindBidirectional((ColorProperty) property);
             HBox.setHgrow(picker, Priority.ALWAYS);
@@ -121,7 +135,7 @@ public class PropertyPane extends GridPane {
             Button reset = new Button();
             reset.getStyleClass().add("propertyColorResetButton");
             reset.getStyleClass().add("iconButton");
-            reset.setText("\uf00d"); // TODO can this be applied differently?
+            reset.setGraphic(new Glyph("FontAwesome", FontAwesome.Glyph.REMOVE));
             reset.setOnAction(event -> picker.setValue(null));
 
             hBox.getChildren().addAll(picker, reset);
@@ -143,6 +157,7 @@ public class PropertyPane extends GridPane {
         createForColor(property, data);
 
         if (data.size() > 0) {
+            label.setPrefWidth(75);
             GridPane.setColumnIndex(label, 0);
             GridPane.setRowIndex(label, row);
             getChildren().add(label);

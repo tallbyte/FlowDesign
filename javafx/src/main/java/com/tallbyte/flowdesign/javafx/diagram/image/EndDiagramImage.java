@@ -39,6 +39,9 @@ public class EndDiagramImage extends DiagramImage {
     public EndDiagramImage() {
         setWidth(25);
         setHeight(25);
+        ui.addListener((observable, oldValue, newValue) -> {
+            repaint();
+        });
     }
 
     @Override

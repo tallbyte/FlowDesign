@@ -18,11 +18,12 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
-import com.tallbyte.flowdesign.data.Element;
 import com.tallbyte.flowdesign.data.flow.*;
 import com.tallbyte.flowdesign.javafx.diagram.element.*;
-import com.tallbyte.flowdesign.javafx.diagram.factory.DiagramImageFactory;
 import com.tallbyte.flowdesign.javafx.diagram.image.*;
+import javafx.beans.property.Property;
+import javafx.beans.property.adapter.JavaBeanBooleanPropertyBuilder;
+import javafx.collections.ObservableList;
 
 /**
  * This file is part of project flowDesign.
@@ -86,5 +87,18 @@ public class FlowDiagramHandler extends DiagramHandlerBase<FlowDiagram, FlowDiag
         diagram.getEnd().setX(300);
 
         return diagram;
+    }
+
+    @Override
+    public ObservableList<Property<?>> getDiagramProperties(FlowDiagram diagram) {
+        ObservableList<Property<?>> list = super.getDiagramProperties(diagram);
+
+        try {
+            list.add(JavaBeanBooleanPropertyBuilder.create().bean(diagram).name(FlowDiagram.PROPERTY_UI).build());
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException("Could not create properties. This should never happen?!", e);
+        }
+
+        return list;
     }
 }

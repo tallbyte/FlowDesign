@@ -127,10 +127,10 @@
                 <BorderPane fx:id="paneRight">
                     <top>
                         <VBox>
-                            <TitledPane collapsible="false" text="%pane.title.elements">
+                            <TitledPane collapsible="false" text="%pane.title.elements" alignment="TOP_LEFT">
                                 <FactoryPane fx:id="paneFactory"/>
                             </TitledPane>
-                            <TitledPane collapsible="false" text="%pane.title.properties">
+                            <TitledPane collapsible="false" text="%pane.title.properties" alignment="TOP_LEFT">
                                 <PropertyPane fx:id="paneProperty"/>
                             </TitledPane>
                         </VBox>

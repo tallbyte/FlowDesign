@@ -21,7 +21,10 @@ package com.tallbyte.flowdesign.javafx.diagram;
 import com.tallbyte.flowdesign.data.Diagram;
 import com.tallbyte.flowdesign.data.Element;
 import com.tallbyte.flowdesign.javafx.diagram.factory.DiagramImageFactory;
+import javafx.beans.property.Property;
+import javafx.collections.ObservableList;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -60,20 +63,27 @@ public interface DiagramHandler<T extends Diagram> {
      * Returns a map of all supported element "names" mapped to their image factory.
      * @return Returns the map.
      */
-    public Map<String, DiagramImageFactory> getSupportedElements();
+    Map<String, DiagramImageFactory> getSupportedElements();
 
     /**
      * Checks if a certain element "name" is user-createable.
      * @param name the name
      * @return Returns true if it is user-createable, else false.
      */
-    public boolean isUserCreateable(String name);
+    boolean isUserCreateable(String name);
 
     /**
      * Creates a new {@link Diagram} with a given name.
      * @param name the supposed name
      * @return Returns the created {@link Diagram}.
      */
-    public T createDiagram(String name);
+    T createDiagram(String name);
+
+    /**
+     * Gets the modifiable properties
+     * @param diagram the {@link Diagram} to create for
+     * @return Returns a list of such properties.
+     */
+    ObservableList<Property<?>> getDiagramProperties(T diagram);
 
 }

@@ -24,6 +24,8 @@ import com.tallbyte.flowdesign.data.environment.EnvironmentDiagram;
 import com.tallbyte.flowdesign.data.flow.FlowDiagram;
 import com.tallbyte.flowdesign.data.mask.MaskDiagram;
 import com.tallbyte.flowdesign.javafx.diagram.factory.DiagramImageFactory;
+import javafx.beans.property.Property;
+import javafx.collections.ObservableList;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -117,6 +119,16 @@ public class DiagramManager {
 
         if (handler != null) {
             return handler.createDiagram(name);
+        } else {
+            throw new IllegalStateException("unsupported diagram type");
+        }
+    }
+
+    public <T extends Diagram> ObservableList<Property<?>> getDiagramProperties(T diagram) {
+        DiagramHandler<T> handler = getHandler(diagram);
+
+        if (handler != null) {
+            return handler.getDiagramProperties(diagram);
         } else {
             throw new IllegalStateException("unsupported diagram type");
         }
