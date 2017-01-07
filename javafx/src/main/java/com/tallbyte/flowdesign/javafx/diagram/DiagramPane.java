@@ -18,6 +18,7 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
+import com.sun.javafx.css.CalculatedValue;
 import com.tallbyte.flowdesign.data.*;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import com.tallbyte.flowdesign.javafx.Shortcut;
@@ -35,15 +36,25 @@ import javafx.css.PseudoClass;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Bounds;
+import javafx.scene.AccessibleAttribute;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Control;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.*;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Translate;
 import javafx.util.Pair;
+import sun.plugin.javascript.navig.Anchor;
+import sun.security.krb5.internal.APOptions;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -162,6 +173,18 @@ public class DiagramPane extends ScrollPane {
     protected EventHandler<? super MouseEvent> listenerRelease = null;
 
 
+    /*
+     * ===============================================
+     * Zoom and movement variables
+     * ===============================================
+     */
+    protected BooleanProperty scaleEnabled = new SimpleBooleanProperty(false);
+    protected DoubleProperty  scale        = new SimpleDoubleProperty(1);
+    protected DoubleProperty  translateX   = new SimpleDoubleProperty(0);
+    protected DoubleProperty  translateY   = new SimpleDoubleProperty(0);
+
+
+
     /**
      * Creates a new {@link DiagramPane} with a default set of factories.
      * @param application the {@link FlowDesignFxApplication}
@@ -172,11 +195,143 @@ public class DiagramPane extends ScrollPane {
         this.application    = application;
         this.diagramsPane   = pane;
         this.diagramManager = diagramManager;
-        Group group = new Group();
-        group.getChildren().addAll(groupConnections, groupContent, groupMarker);
 
-        setContent(group);
+
+        Pane  outer = new Pane();
+        Pane  inner = new Pane();
+
+        inner.setMaxSize(0, 0);
+        inner.setPrefSize(0, 0);
+
+        outer.setMaxSize    (Double.MAX_VALUE, Double.MAX_VALUE);
+        outer.setPrefSize   (Control.USE_COMPUTED_SIZE, Control.USE_COMPUTED_SIZE);
+
+        outer.setBackground(new Background(new BackgroundFill(Color.YELLOW, null, null)));
+
+        inner.getChildren().addAll(groupConnections, groupContent, groupMarker);
+        outer.getChildren().add(inner);
+
+
+
+        DoubleProperty mouseX = new SimpleDoubleProperty(getWidth()  / 2.);
+        DoubleProperty mouseY = new SimpleDoubleProperty(getHeight() / 2.);
+
+        translateX.addListener((observable, oldValue, newValue) -> {
+            inner.setTranslateX(
+                    getWidth() / 2.
+                - inner.getWidth() / 2. // zero
+                + newValue.doubleValue()
+            );
+        });
+        translateY.addListener((observable, oldValue, newValue) -> {
+            inner.setTranslateY(
+                    getHeight() / 2.
+                - inner.getHeight() / 2. // zero
+                + newValue.doubleValue()
+            );
+        });
+
+        inner.scaleXProperty().bind(scale);
+        inner.scaleYProperty().bind(scale);
+
+        translateX.set(0);
+        translateY.set(0);
+
+
+        DoubleProperty x = new SimpleDoubleProperty();
+        DoubleProperty y = new SimpleDoubleProperty();
+
+        EventHandler<MouseEvent> eventHandlerPressed = event -> {
+            System.out.println("mouse pressed");
+            x.set(event.getSceneX());
+            y.set(event.getSceneY());
+        };
+
+        EventHandler<MouseEvent> eventHandlerDragged = event -> {
+            System.out.println("mouse dragged, "+event.isSecondaryButtonDown());
+            if (event.isSecondaryButtonDown()) {
+                double dx = x.get() - event.getSceneX();
+                double dy = y.get() - event.getSceneY();
+
+                x.set(event.getSceneX());
+                y.set(event.getSceneY());
+
+                translateX.set(translateX.get() - dx);
+                translateY.set(translateY.get() - dy);
+            }
+        };
+
+        outer.addEventHandler(MouseEvent.MOUSE_PRESSED, eventHandlerPressed);
+        outer.addEventHandler(MouseEvent.MOUSE_DRAGGED, eventHandlerDragged);
+
+
+        final double SCALE_FACTOR = 1.1;
+
+        addEventHandler(ScrollEvent.SCROLL, event -> {
+            if (scaleEnabled.getValue()) {
+                double scaleChange;
+
+                if (event.getDeltaY() > 0) {
+                    scaleChange = SCALE_FACTOR;
+                } else {
+                    scaleChange = 1. / SCALE_FACTOR;
+                }
+
+                System.out.println("mouseX="+mouseX.get()+", to-center-x="+(mouseX.get() - (getWidth()  / 2.)));
+
+                double tx = translateX.get();
+                double ty = translateY.get();
+
+                double mcx = mouseX.get() - getWidth()  / 2.;
+                double mcy = mouseY.get() - getHeight() / 2.;
+
+                double dmx = (mcx * scaleChange) - mcx;
+                double dmy = (mcy * scaleChange) - mcy;
+
+                translateX  .set(tx * scaleChange - dmx);
+                translateY  .set(ty * scaleChange - dmy);
+
+
+
+
+                scale       .set(scale      .get() * scaleChange);
+            }
+        });
+
+        addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.SHIFT) {
+                scaleEnabled.set(true);
+            }
+
+            if (event.isShiftDown() && event.getCode() == KeyCode.SPACE) {
+                translateX.set(0);
+                translateY.set(0);
+                scale.set(1);
+            }
+        });
+
+        addEventHandler(KeyEvent.KEY_RELEASED, event -> {
+            if (event.getCode() == KeyCode.SHIFT) {
+                scaleEnabled.set(false);
+            }
+        });
+
+        outer.addEventHandler(MouseEvent.MOUSE_MOVED, event -> {
+            mouseX.set(event.getX());
+            mouseY.set(event.getY());
+        });
+
+
+
+        setContent(outer);
         setPannable(true);
+
+        outer.prefWidthProperty() .bind(widthProperty());
+        outer.prefHeightProperty().bind(heightProperty());
+        outer.maxWidthProperty ().bind(widthProperty());
+        outer.maxHeightProperty().bind(heightProperty());
+
+
 
         setup();
     }
@@ -259,6 +414,9 @@ public class DiagramPane extends ScrollPane {
      * @param element the {@link Element} to add
      */
     private void addElement(Element element) {
+        element.setX((element.getX() - translateX.get() - getWidth() / 2.) / scale.get());
+        element.setY((element.getY() - translateY.get() - getHeight()/ 2.) / scale.get() );
+
         ElementNode node = diagramManager.createNode(getDiagram(), element);
         if (node != null) {
             nodes.put(element, node);
