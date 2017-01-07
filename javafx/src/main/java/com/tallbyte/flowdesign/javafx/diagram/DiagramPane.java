@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import static com.tallbyte.flowdesign.javafx.Shortcuts.*;
 
@@ -170,9 +171,9 @@ public class DiagramPane extends ScrollPane {
      * ===============================================
      */
     protected BooleanProperty scaleEnabled = new SimpleBooleanProperty(false);
-    protected DoubleProperty  scale        = new SimpleDoubleProperty(2); // wrong initial value required to fire change event on initialization
-    protected DoubleProperty  translateX   = new SimpleDoubleProperty(1); // wrong initial value required to fire change event on initialization
-    protected DoubleProperty  translateY   = new SimpleDoubleProperty(1); // wrong initial value required to fire change event on initialization
+    protected DoubleProperty  scale        = new SimpleDoubleProperty(1);
+    protected DoubleProperty  translateX   = new SimpleDoubleProperty(0);
+    protected DoubleProperty  translateY   = new SimpleDoubleProperty(0);
 
 
 
@@ -205,20 +206,24 @@ public class DiagramPane extends ScrollPane {
         DoubleProperty mouseX = new SimpleDoubleProperty(getWidth()  / 2.);
         DoubleProperty mouseY = new SimpleDoubleProperty(getHeight() / 2.);
 
-        translateX.addListener((observable, oldValue, newValue) -> {
+        Consumer<Double> setInnerTranslateX = newX -> {
             inner.setTranslateX(
                     getWidth() / 2.
                 - inner.getWidth() / 2. // zero
-                + newValue.doubleValue()
+                + newX
             );
-        });
-        translateY.addListener((observable, oldValue, newValue) -> {
+        };
+
+        Consumer<Double> setInnerTranslateY = newY -> {
             inner.setTranslateY(
                     getHeight() / 2.
                 - inner.getHeight() / 2. // zero
-                + newValue.doubleValue()
+                + newY
             );
-        });
+        };
+
+        translateX.addListener((observable, oldValue, newValue) -> setInnerTranslateX.accept(newValue.doubleValue()));
+        translateY.addListener((observable, oldValue, newValue) -> setInnerTranslateY.accept(newValue.doubleValue()));
 
         inner.scaleXProperty().bind(scale);
         inner.scaleYProperty().bind(scale);
@@ -308,12 +313,20 @@ public class DiagramPane extends ScrollPane {
         translateY.set(0);
         scale.set(1);
 
+        setInnerTranslateX.accept(0.);
+        setInnerTranslateY.accept(0.);
+
         widthProperty().addListener((observable, oldValue, newValue) -> {
             translateX.set(translateX.get() + (newValue.doubleValue() - oldValue.doubleValue()) / 4.);
         });
 
         heightProperty().addListener((observable, oldValue, newValue) -> {
             translateY.set(translateY.get() + (newValue.doubleValue() - oldValue.doubleValue()) / 4.);
+        });
+
+        parentProperty().addListener((observable, oldValue, newValue) -> {
+            setInnerTranslateX.accept(translateX.get());
+            setInnerTranslateY.accept(translateY.get());
         });
 
         outer.prefWidthProperty() .bind(widthProperty());
@@ -328,6 +341,22 @@ public class DiagramPane extends ScrollPane {
 
 
         setup();
+    }
+
+    /**
+     * @param paneSpaceX X coordinate on the {@link DiagramPane}
+     * @return The x coordinate on the {@link Diagram}
+     */
+    public double toDiagramSpaceX(double paneSpaceX) {
+        return (paneSpaceX - translateX.get() - getWidth() / 2.) / scale.get();
+    }
+
+    /**
+     * @param paneSpaceY Y coordinate on the {@link DiagramPane}
+     * @return The y coordinate on the {@link Diagram}
+     */
+    public double toDiagramSpaceY(double paneSpaceY) {
+        return (paneSpaceY - translateY.get() - getHeight() / 2.) / scale.get();
     }
 
     /**
@@ -408,11 +437,6 @@ public class DiagramPane extends ScrollPane {
      * @param element the {@link Element} to add
      */
     private void addElement(Element element) {
-        // TODO find better location for: people will hate me but this converts it from screen space to diagram space
-        element.setX((element.getX() - translateX.get() - getWidth() / 2.) / scale.get());
-        element.setY((element.getY() - translateY.get() - getHeight()/ 2.) / scale.get() );
-        // TODO find better location end
-
         ElementNode node = diagramManager.createNode(getDiagram(), element);
         if (node != null) {
             nodes.put(element, node);
@@ -619,8 +643,8 @@ public class DiagramPane extends ScrollPane {
                 Bounds b = localToScene(getBoundsInLocal());
 
                 Element e = diagramManager.createElement(getDiagram(), event.getDragboard().getString(),
-                        mouseX-b.getMinX()-event.getDragboard().getDragViewOffsetX(),
-                        mouseY-b.getMinY()-event.getDragboard().getDragViewOffsetY()
+                        toDiagramSpaceX(mouseX-b.getMinX()-event.getDragboard().getDragViewOffsetX()),
+                        toDiagramSpaceY(mouseY-b.getMinY()-event.getDragboard().getDragViewOffsetY())
                 );
 
                 if (e != null) {
