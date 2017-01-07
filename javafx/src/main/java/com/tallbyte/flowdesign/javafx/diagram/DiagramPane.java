@@ -626,8 +626,8 @@ public class DiagramPane extends ScrollPane {
 
         addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
             groupMarker.getChildren().stream().filter(node -> node instanceof ConnectionNode).forEach(node -> {
-                ((ConnectionNode) node).setEndX((event.getX() - translateX.get() - getWidth() / 2.) / scale.get());
-                ((ConnectionNode) node).setEndY((event.getY() - translateY.get() - getHeight() / 2.) / scale.get());
+                ((ConnectionNode) node).setEndX(toDiagramSpaceX(event.getX()));
+                ((ConnectionNode) node).setEndY(toDiagramSpaceY(event.getY()));
             });
         });
 
