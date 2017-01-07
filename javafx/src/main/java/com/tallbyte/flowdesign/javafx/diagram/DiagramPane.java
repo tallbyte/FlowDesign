@@ -330,10 +330,10 @@ public class DiagramPane extends ScrollPane {
             setInnerTranslateY.accept(translateY.get());
         });
 
-        outer.prefWidthProperty() .bind(widthProperty());
+        outer.prefWidthProperty ().bind(widthProperty ());
         outer.prefHeightProperty().bind(heightProperty());
-        outer.maxWidthProperty ().bind(widthProperty());
-        outer.maxHeightProperty().bind(heightProperty());
+        outer.maxWidthProperty  ().bind(widthProperty ());
+        outer.maxHeightProperty ().bind(heightProperty());
         // TODO dirty, cleanup >> end
 
 
