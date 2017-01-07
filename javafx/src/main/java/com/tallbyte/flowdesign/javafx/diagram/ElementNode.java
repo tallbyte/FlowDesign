@@ -409,7 +409,11 @@ public class ElementNode<T extends DiagramImage> extends SelectableNode {
                         }, diagramPane.jointProperty())
                 ).otherwise(
                         selected.or(hoverProperty()).and(
-                                Bindings.createBooleanBinding(joint::canOutput, diagramPane.jointProperty())
+                                Bindings.createBooleanBinding(joint::canOutput,
+                                        diagramPane.jointProperty(),
+                                        selectedProperty(),
+                                        hoverProperty()
+                                )
                         )
                 )
         );
