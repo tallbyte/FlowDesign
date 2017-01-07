@@ -64,13 +64,12 @@ public class FlowConnectionNode extends ConnectionNode {
 
     /**
      * Creates a new {@link FlowConnectionNode}.
-     * @param application the main application
      * @param connection the surrounding {@link Connection}
      */
     public FlowConnectionNode(FlowConnection connection) {
         super( connection, null, null);
 
-        popup = new DataTypePopup(textField.textProperty());
+        popup = new DataTypePopup(textField);
         popup.setAutoHide(true);
         popup.setHideOnEscape(true);
 
@@ -117,8 +116,21 @@ public class FlowConnectionNode extends ConnectionNode {
 
         getChildren().addAll(arrow0, arrow1);
 
-        textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            showPopup();
+        /**
+         * The following two listener are required as javafx does updated
+         * the caret location AFTER the text change, but correct caret
+         * location is required to properly insert / update the text.
+         */
+        boolean[] textChange = {false};
+        textField.textProperty().addListener(observable -> {
+            textChange[0] = true;
+        });
+        textField.caretPositionProperty().addListener((observable, oldValue, newValue) -> {
+            if (textChange[0]) {
+                textChange[0] = false;
+                showPopup();
+            }
+
         });
 
         popup.setKeyHandler(event -> {
@@ -147,15 +159,9 @@ public class FlowConnectionNode extends ConnectionNode {
     private void attemptAutoResolve() {
         Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
         if (bounds != null) {
-            String auto = popup.attemptAutoResolve(this, bounds.getMinX()+10, bounds.getMinY()-100,
-                    sourceNode.getJoint().getElement().getDiagram().getProject(),
-                    textField.getText()
+            popup.attemptAutoResolve(this, bounds.getMinX()+10, bounds.getMinY()-100,
+                    sourceNode.getJoint().getElement().getDiagram().getProject()
             );
-
-            if (auto != null) {
-                textField.setText(auto);
-                popup.hide();
-            }
         }
     }
 
@@ -170,8 +176,7 @@ public class FlowConnectionNode extends ConnectionNode {
                             .getJoint()
                             .getElement()
                             .getDiagram()
-                            .getProject(),
-                    textField.getText()
+                            .getProject()
             );
         }
     }

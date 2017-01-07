@@ -62,4 +62,24 @@ public class Chain extends FlowAction {
     public String toString() {
         return first.toString()+"/"+second.toString();
     }
+
+    @Override
+    public FlowAction getChildAt(int location) {
+        if (location >= start && location <= end+1) {
+            FlowAction first  = this.first.getChildAt(location);
+            FlowAction second = this.second.getChildAt(location);
+
+            if (first != null) {
+                return first;
+            }
+
+            if (second != null) {
+                return second;
+            }
+
+            return this;
+        }
+
+        return null;
+    }
 }

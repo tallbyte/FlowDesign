@@ -20,13 +20,20 @@ package com.tallbyte.flowdesign.javafx.popup;
 
 import com.tallbyte.flowdesign.data.DataType;
 import com.tallbyte.flowdesign.data.Project;
+import com.tallbyte.flowdesign.data.notation.FlowNotationParser;
+import com.tallbyte.flowdesign.data.notation.FlowNotationParserException;
+import com.tallbyte.flowdesign.data.notation.SimpleFlowNotationParser;
+import com.tallbyte.flowdesign.data.notation.actions.FlowAction;
+import com.tallbyte.flowdesign.data.notation.actions.Type;
 import com.tallbyte.flowdesign.javafx.pane.DataTypeEntry;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -42,17 +49,20 @@ public class DataTypePopup extends Popup {
 
     private       EventHandler<KeyEvent>    eventHandler;
 
+    private final FlowNotationParser        parser;
     private final ListView<DataType>        list;
-    private final StringProperty            property;
+    private final TextField                 textField;
 
     /**
      * Creates a new {@link DataTypePopup}.
-     * @param property the property that should be set
+     *
+     * @param textField the backed field
      */
-    public DataTypePopup(StringProperty property) {
+    public DataTypePopup(TextField textField) {
 
-        list          = new ListView<>();
-        this.property = property;
+        parser         = new SimpleFlowNotationParser();
+        list           = new ListView<>();
+        this.textField = textField;
 
         list.setCellFactory(param -> {
             ListCell<DataType> cell = new ListCell<DataType>() {
@@ -103,50 +113,147 @@ public class DataTypePopup extends Popup {
     /**
      * Attempts to find a suitable value for the given string.
      * This will onOpen this popup if expansion as not successful.
+     *
      * @param ownerNode the owning {@link Node} of the shown popup
      * @param anchorX the x location in screen coordinates
      * @param anchorY the y location in screen coordinates
      * @param project the containing {@link Project}
-     * @param start the string that should be expanded
-     * @return Returns the expanded value or null if multiple choices were present.
      */
-    public String attemptAutoResolve(Node ownerNode, double anchorX, double anchorY, Project project, String start) {
-        String text = null;
+    public void attemptAutoResolve(Node ownerNode, double anchorX, double anchorY, Project project) {
+        if (!attemptAutoResolve(project, textField.getText(), textField.getCaretPosition())) {
+            show(ownerNode, anchorX, anchorY, project);
+        }
+    }
 
-        for (DataType type : project.getDataTypeHolder()
-                .getDataTypes(start)) {
+    /**
+     * Tries to automatically set the text. This is only
+     * possible if only one choice is given.
+     *
+     * @param project the {@link Project}
+     * @param start the text
+     * @param caret the current caret location
+     * @return Returns true if a value was set, else false.
+     */
+    private boolean attemptAutoResolve(Project project, String start, int caret) {
+        Type type = getType(start, caret);
 
-            if (text == null) {
-                text = type.getClassName();
-            } else {
-                show(ownerNode, anchorX, anchorY, project, start);
-                return null;
+        if (type != null) {
+            String base = start.substring(type.getStart(), caret);
+            String text = null;
+
+            for (DataType dataType : project.getDataTypeHolder()
+                    .getDataTypes(base)) {
+
+                if (text == null) {
+                    text = dataType.getClassName();
+                } else {
+                    text = null;
+                    break;
+                }
+            }
+
+            if (text != null) {
+                set(start, caret, text);
+                return true;
             }
         }
 
-        return text;
+        return false;
+    }
+
+    /**
+     * Gets the string that is to be expanded.
+     *
+     * @param start the text
+     * @param caret the current caret location
+     * @return Returns the text or null if none could be found.
+     */
+    private String getToExpand(String start, int caret) {
+        Type type = getType(start, caret);
+
+        if (type != null) {
+            return start.substring(type.getStart(), caret);
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets the type at the given caret location.
+     *
+     * @param start the text
+     * @param caret the current caret location
+     * @return Returns the type or null if none can be found.
+     */
+    private Type getType(String start, int caret) {
+        try {
+            FlowAction action = parser.parse(start);
+
+            if (action != null) {
+                action = action.getChildAt(caret);
+
+                if (action != null && action instanceof Type) {
+                    return (Type) action;
+                }
+            }
+        } catch (FlowNotationParserException e) {
+            // ignore
+        }
+
+        return null;
+    }
+
+    /**
+     * Sets the fields value to the specified one and updates the caret accordingly.
+     *
+     * @param start the current text
+     * @param caret the current caret location
+     * @param to the value to insert
+     */
+    private void set(String start, int caret, String to) {
+        Type type = getType(start, caret);
+
+        if (type != null) {
+            String before = "";
+            String after  = "";
+
+            if (caret > 0) {
+                before = start.substring(0, type.getStart());
+            }
+
+            if (caret < start.length()) {
+                after = start.substring(caret, start.length());
+            }
+
+            textField.setText(before+to+after);
+            textField.positionCaret(type.getStart()+to.length());
+        }
     }
 
     /**
      * Shows this popup with all matching values.
+     *
      * @param ownerNode the owning {@link Node} of the shown popup
      * @param anchorX the x location in screen coordinates
      * @param anchorY the y location in screen coordinates
      * @param project the containing {@link Project}
-     * @param start the string that serves as base for the content.
      */
-    public void show(Node ownerNode, double anchorX, double anchorY, Project project, String start) {
+    public void show(Node ownerNode, double anchorX, double anchorY, Project project) {
         list.getItems().clear();
 
-        for (DataType type : project.getDataTypeHolder().getDataTypes(start)) {
+        String expand = getToExpand(textField.getText(), textField.getCaretPosition());
+
+        for (DataType type : project.getDataTypeHolder().getDataTypes(expand)) {
             list.getItems().add(type);
         }
 
         if (list.getItems().size() > 0) {
             DataType first = list.getItems().get(0);
 
-            if (!first.getClassName().equals(start)) {
+            if (!first.getClassName().equals(expand)) {
                 show(ownerNode, anchorX, anchorY);
+            } else {
+                close();
             }
         }
 
@@ -159,7 +266,7 @@ public class DataTypePopup extends Popup {
         DataType selected = list.getSelectionModel().getSelectedItem();
 
         if (selected != null) {
-            property.setValue(selected.getClassName());
+            set(textField.getText(), textField.getCaretPosition(), selected.getClassName());
         }
 
         hide();
@@ -167,6 +274,7 @@ public class DataTypePopup extends Popup {
 
     /**
      * Registeres an additional handler for key events.
+     *
      * @param eventHandler the handler
      */
     public void setKeyHandler(EventHandler<KeyEvent> eventHandler) {

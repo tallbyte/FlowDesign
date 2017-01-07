@@ -80,4 +80,19 @@ public class MultiStream extends FlowAction {
 
         return builder.toString();
     }
+
+    @Override
+    public FlowAction getChildAt(int location) {
+        if (location >= start && location <= end+1) {
+            FlowAction child  = this.action.getChildAt(location);
+
+            if (child != null) {
+                return child;
+            }
+
+            return this;
+        }
+
+        return null;
+    }
 }
