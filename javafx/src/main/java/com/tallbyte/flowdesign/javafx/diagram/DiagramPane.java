@@ -318,11 +318,11 @@ public class DiagramPane extends ScrollPane {
         setInnerTranslateY.accept(0.);
 
         widthProperty().addListener((observable, oldValue, newValue) -> {
-            translateX.set(translateX.get() + (newValue.doubleValue() - oldValue.doubleValue()) / 4.);
+            setInnerTranslateX.accept(translateX.get());
         });
 
         heightProperty().addListener((observable, oldValue, newValue) -> {
-            translateY.set(translateY.get() + (newValue.doubleValue() - oldValue.doubleValue()) / 4.);
+            setInnerTranslateY.accept(translateY.get());
         });
 
         parentProperty().addListener((observable, oldValue, newValue) -> {
