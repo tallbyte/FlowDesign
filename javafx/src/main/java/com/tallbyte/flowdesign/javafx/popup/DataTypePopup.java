@@ -24,6 +24,7 @@ import com.tallbyte.flowdesign.data.notation.FlowNotationParser;
 import com.tallbyte.flowdesign.data.notation.FlowNotationParserException;
 import com.tallbyte.flowdesign.data.notation.SimpleFlowNotationParser;
 import com.tallbyte.flowdesign.data.notation.actions.FlowAction;
+import com.tallbyte.flowdesign.data.notation.actions.Tupel;
 import com.tallbyte.flowdesign.data.notation.actions.Type;
 import com.tallbyte.flowdesign.javafx.pane.DataTypeEntry;
 import javafx.beans.property.IntegerProperty;
@@ -192,8 +193,11 @@ public class DataTypePopup extends Popup {
             if (action != null) {
                 action = action.getChildAt(caret);
 
-                if (action != null && action instanceof Type) {
+                if (action instanceof Type) {
                     return (Type) action;
+
+                } else if (action instanceof Tupel) {
+                    return new Type(caret, caret, new DataType(""), "", false);
                 }
             }
         } catch (FlowNotationParserException e) {
