@@ -84,7 +84,9 @@ public class FlowDiagram extends Diagram<FlowDiagramElement> {
             }
         });
 
+        addElement(root); // required as start and end elements are refused by default
         addElement(end);
+
     }
 
     @Override

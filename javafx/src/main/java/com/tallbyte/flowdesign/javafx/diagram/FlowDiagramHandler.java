@@ -18,6 +18,7 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
+import com.tallbyte.flowdesign.data.Element;
 import com.tallbyte.flowdesign.data.flow.*;
 import com.tallbyte.flowdesign.javafx.diagram.element.*;
 import com.tallbyte.flowdesign.javafx.diagram.image.*;
