@@ -18,16 +18,12 @@
 
 package com.tallbyte.flowdesign.javafx.diagram;
 
-import com.sun.javafx.css.CalculatedValue;
 import com.tallbyte.flowdesign.data.*;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
-import com.tallbyte.flowdesign.javafx.Shortcut;
 import com.tallbyte.flowdesign.javafx.ShortcutGroup;
-import com.tallbyte.flowdesign.javafx.Shortcuts;
 import com.tallbyte.flowdesign.javafx.pane.DiagramsPane;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
-import javafx.beans.property.adapter.JavaBeanBooleanPropertyBuilder;
 import javafx.beans.property.adapter.JavaBeanStringPropertyBuilder;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -36,25 +32,18 @@ import javafx.css.PseudoClass;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Bounds;
-import javafx.scene.AccessibleAttribute;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.*;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.transform.Translate;
 import javafx.util.Pair;
-import sun.plugin.javascript.navig.Anchor;
-import sun.security.krb5.internal.APOptions;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,6 +58,8 @@ import static com.tallbyte.flowdesign.javafx.Shortcuts.*;
  * - julian (2016-11-05)<br/>
  */
 public class DiagramPane extends ScrollPane {
+
+    public static final double ZOOM_CHANGE_FACTOR = 1.1;
 
     /*
      * ===============================================
@@ -196,7 +187,7 @@ public class DiagramPane extends ScrollPane {
         this.diagramsPane   = pane;
         this.diagramManager = diagramManager;
 
-        // TODO dirty, cleanup start
+        // TODO dirty, cleanup >> start
         Pane  outer = new Pane();
         Pane  inner = new Pane();
 
@@ -205,8 +196,6 @@ public class DiagramPane extends ScrollPane {
 
         outer.setMaxSize    (Double.MAX_VALUE, Double.MAX_VALUE);
         outer.setPrefSize   (Control.USE_COMPUTED_SIZE, Control.USE_COMPUTED_SIZE);
-
-        outer.setBackground(new Background(new BackgroundFill(Color.YELLOW, null, null)));
 
         inner.getChildren().addAll(groupConnections, groupContent, groupMarker);
         outer.getChildren().add(inner);
@@ -239,13 +228,11 @@ public class DiagramPane extends ScrollPane {
         DoubleProperty y = new SimpleDoubleProperty();
 
         EventHandler<MouseEvent> eventHandlerPressed = event -> {
-            System.out.println("mouse pressed");
             x.set(event.getSceneX());
             y.set(event.getSceneY());
         };
 
         EventHandler<MouseEvent> eventHandlerDragged = event -> {
-            System.out.println("mouse dragged, "+event.isSecondaryButtonDown());
             if (event.isSecondaryButtonDown()) {
                 double dx = x.get() - event.getSceneX();
                 double dy = y.get() - event.getSceneY();
@@ -262,16 +249,15 @@ public class DiagramPane extends ScrollPane {
         outer.addEventHandler(MouseEvent.MOUSE_DRAGGED, eventHandlerDragged);
 
 
-        final double SCALE_FACTOR = 1.1;
 
         addEventHandler(ScrollEvent.SCROLL, event -> {
             if (scaleEnabled.getValue()) {
                 double scaleChange;
 
                 if (event.getDeltaY() > 0) {
-                    scaleChange = SCALE_FACTOR;
+                    scaleChange = ZOOM_CHANGE_FACTOR;
                 } else {
-                    scaleChange = 1. / SCALE_FACTOR;
+                    scaleChange = 1. / ZOOM_CHANGE_FACTOR;
                 }
 
                 System.out.println("mouseX="+mouseX.get()+", to-center-x="+(mouseX.get() - (getWidth()  / 2.)));
@@ -334,7 +320,7 @@ public class DiagramPane extends ScrollPane {
         outer.prefHeightProperty().bind(heightProperty());
         outer.maxWidthProperty ().bind(widthProperty());
         outer.maxHeightProperty().bind(heightProperty());
-        // TODO dirty, cleanup end
+        // TODO dirty, cleanup >> end
 
 
         setContent(outer);
