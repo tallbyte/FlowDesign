@@ -509,6 +509,10 @@ SwitchPane .boxButtons {
     -fx-text-fill: sandybrown;
 }
 
+.menu-item:focused .fakeIcon {
+    -fx-text-fill: -fx-focus-color;
+}
+
 .menu-item:hover .fakeIcon {
     -fx-text-fill: -fx-focus-color;
 }

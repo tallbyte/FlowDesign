@@ -85,7 +85,8 @@ public class FlowDiagramHandler extends DiagramHandlerBase<FlowDiagram, FlowDiag
 
         setToPrefSize(diagram.getEnd());
 
-        diagram.getEnd().setX(300);
+        diagram.getStart().setX(-200-diagram.getStart().getWidth());
+        diagram.getEnd().setX(200);
 
         return diagram;
     }
