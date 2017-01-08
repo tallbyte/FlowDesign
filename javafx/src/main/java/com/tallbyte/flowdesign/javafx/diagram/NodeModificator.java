@@ -59,12 +59,17 @@ public class NodeModificator extends Rectangle {
 
                 double minY = trans.getMinY();
                 double maxY = minY + node.getRealHeight();
+
+                DiagramPane diagramPane = node.getDiagramPane();
                 
                 switch (location) {
 
                     case TOP_LEFT:
                         dx = Math.min(maxX-20, minX+dx) - minX;
                         dy = Math.min(maxY-20, minY+dy) - minY;
+
+                        dx = diagramPane.toDiagramSpaceWidth (dx);
+                        dy = diagramPane.toDiagramSpaceHeight(dy);
 
                         node.setRealX(node.getRealX()+dx);
                         node.setRealY(node.getRealY()+dy);
@@ -77,6 +82,9 @@ public class NodeModificator extends Rectangle {
                         dx = Math.max(minX+20, maxX+dx-trans.getWidth()) - maxX;
                         dy = Math.min(maxY-20, minY+dy) - minY;
 
+                        dx = diagramPane.toDiagramSpaceWidth (dx);
+                        dy = diagramPane.toDiagramSpaceHeight(dy);
+
                         node.setRealY(node.getRealY()+dy);
 
                         node.setRealWidth(node.getRealWidth()+dx);
@@ -87,6 +95,9 @@ public class NodeModificator extends Rectangle {
                         dx = Math.min(maxX-20, minX+dx) - minX;
                         dy = Math.max(minY+20, maxY+dy-trans.getHeight()) - maxY;
 
+                        dx = diagramPane.toDiagramSpaceWidth (dx);
+                        dy = diagramPane.toDiagramSpaceHeight(dy);
+
                         node.setRealX(node.getRealX()+dx);
 
                         node.setRealWidth(node.getRealWidth()-dx);
@@ -96,6 +107,9 @@ public class NodeModificator extends Rectangle {
                     case BOTTOM_RIGHT:
                         dx = Math.max(minX+20, maxX+dx-trans.getWidth()) - maxX;
                         dy = Math.max(minY+20, maxY+dy-trans.getHeight()) - maxY;
+
+                        dx = diagramPane.toDiagramSpaceWidth (dx);
+                        dy = diagramPane.toDiagramSpaceHeight(dy);
 
                         node.setRealWidth(node.getRealWidth()+dx);
                         node.setRealHeight(node.getRealHeight()+dy);
