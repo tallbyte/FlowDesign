@@ -41,6 +41,24 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
+            <!-- copy required libraries into this jar -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>com.tallbyte.flowdesign,org.apache.logging.log4j</includeGroupIds>
+                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 

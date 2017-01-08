@@ -66,7 +66,7 @@
                             <goal>unpack-dependencies</goal>
                         </goals>
                         <configuration>
-                            <includeGroupIds>com.tallbyte.flowdesign</includeGroupIds>
+                            <includeGroupIds>com.tallbyte.flowdesign,org.controlsfx</includeGroupIds>
                             <outputDirectory>${project.build.directory}/classes</outputDirectory>
                         </configuration>
                     </execution>
