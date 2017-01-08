@@ -21,6 +21,7 @@ package com.tallbyte.flowdesign.javafx.diagram;
 import com.tallbyte.flowdesign.data.*;
 import com.tallbyte.flowdesign.javafx.FlowDesignFxApplication;
 import com.tallbyte.flowdesign.javafx.ShortcutGroup;
+import com.tallbyte.flowdesign.javafx.diagram.image.DiagramImage;
 import com.tallbyte.flowdesign.javafx.pane.DiagramsPane;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
@@ -43,6 +44,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Pair;
+import sun.java2d.pipe.DrawImage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -279,10 +281,6 @@ public class DiagramPane extends ScrollPane {
 
                 translateX  .set(tx * scaleChange - dmx);
                 translateY  .set(ty * scaleChange - dmy);
-
-
-
-
                 scale       .set(scale      .get() * scaleChange);
             }
         });
@@ -345,6 +343,9 @@ public class DiagramPane extends ScrollPane {
     }
 
     /**
+     * Converts a x coordinate on the {@link DiagramPane} to
+     * the corresponding x coordinate on the {@link Diagram}
+     *
      * @param paneSpaceX X coordinate on the {@link DiagramPane}
      * @return The x coordinate on the {@link Diagram}
      */
@@ -353,11 +354,36 @@ public class DiagramPane extends ScrollPane {
     }
 
     /**
+     * Converts a y coordinate on the {@link DiagramPane} to
+     * the corresponding y coordinate on the {@link Diagram}
+     *
      * @param paneSpaceY Y coordinate on the {@link DiagramPane}
      * @return The y coordinate on the {@link Diagram}
      */
     public double toDiagramSpaceY(double paneSpaceY) {
         return (paneSpaceY - translateY.get() - getHeight() / 2.) / scale.get();
+    }
+
+    /**
+     * Converts width from {@link DiagramPane}-space to
+     * {@link Diagram}-space width
+     *
+     * @param paneSpaceWidth The width on the {@link DiagramPane}
+     * @return The width on the {@link Diagram}
+     */
+    public double toDiagramSpaceWidth(double paneSpaceWidth) {
+        return paneSpaceWidth / scale.get();
+    }
+
+    /**
+     * Converts height from {@link DiagramPane}-space to
+     * {@link Diagram}-space height
+     *
+     * @param paneSpaceHeight The height on the {@link DiagramPane}
+     * @return The height on the {@link Diagram}
+     */
+    public double toDiagramSpaceHeight(double paneSpaceHeight) {
+        return paneSpaceHeight / scale.get();
     }
 
     /**
