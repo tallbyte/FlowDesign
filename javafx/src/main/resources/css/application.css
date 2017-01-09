@@ -46,6 +46,7 @@
 }
 
 #paneRight {
+    -fx-min-width:          220px;
     -fx-border-width:       0 0 0 1;
     -fx-background-color:   -fx-control-pane-accent;
     -fx-border-color:       transparent transparent transparent -fx-main-divider-accent;

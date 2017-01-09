@@ -344,5 +344,5 @@
 }
 
 .check-box:selected .mark {
-    -fx-background-color: -fx-control-pane-accent;
+    -fx-background-color: -fx-check-accent;
 }

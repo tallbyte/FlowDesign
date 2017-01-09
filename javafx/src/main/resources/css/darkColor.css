@@ -76,4 +76,5 @@
     -fx-accent:              #4a84ff;
     -fx-diabled-accent:      transparent;
     -fx-focus-color:         -fx-accent;
+    -fx-check-accent: #3b3b3b;
 }
