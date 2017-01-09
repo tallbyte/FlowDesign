@@ -65,6 +65,8 @@ public class PopupHandler {
             preparer.prepare(dialog);
         }
 
+        dialog.initOwner(application.getMainStages().get(0));
+
         return dialog;
     }
 
@@ -76,6 +78,8 @@ public class PopupHandler {
             preparer.prepare(dialog);
         }
 
+        dialog.initOwner(application.getMainStages().get(0));
+
         return dialog;
     }
 
@@ -84,6 +88,8 @@ public class PopupHandler {
         stage.setScene(new Scene(root));
         stage.setTitle(getResourceString(title));
         stage.setHeight(height);
+
+        stage.initOwner(application.getMainStages().get(0));
 
         return setupStage(stage);
     }
