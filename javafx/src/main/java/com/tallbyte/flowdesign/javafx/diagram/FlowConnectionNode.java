@@ -133,6 +133,12 @@ public class FlowConnectionNode extends ConnectionNode {
 
         });
 
+        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                popup.hide();
+            }
+        });
+
         popup.setKeyHandler(event -> {
             if (event.getCode() == KeyCode.SPACE && event.isControlDown()) {
                 attemptAutoResolve();
