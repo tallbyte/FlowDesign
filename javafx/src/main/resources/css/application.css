@@ -353,6 +353,10 @@ SwitchPane .boxButtons {
     -fx-pref-height:      100px;
 }
 
+.dataTypePopup, .actionPopup {
+    -fx-pref-width: 200px;
+}
+
 .searchPopup {
     -fx-pref-height:      300px;
     -fx-padding:          0px;
