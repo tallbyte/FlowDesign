@@ -111,7 +111,18 @@ public class ConnectionNode extends SelectableNode {
             boxText.getChildren().add(labelRight);
         }
 
-        paneMarker.setOnMousePressed(event -> textField.requestFocus());
+        paneMarker.setOnMousePressed(event -> {
+            textField.requestFocus();
+        });
+
+        textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                diagramPane.requestSelection(connection);
+                textField.requestFocus();
+                textField.deselect();
+                textField.positionCaret(0);
+            }
+        });
 
         focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
