@@ -4,18 +4,33 @@
 Programmierprinzipien sind essentiell für die Wartbarkeit, Korrektheit und vor allem die Verständlichkeit eines Programmcodes. Die wachsende Komplexität von Programmen und der damit steigende Entwicklungsaufwand erfordern sauberes und strukturiertes arbeiten mehr den je. 
 
 
-[[ Jeweils mit Code-Beispiel ]]
+[[ Jeweils mit Code-Beispiel ? ]]
 
 \subsection{SOLID}
+
+
 \subsubsection{\textPrincipleSingleResponsibility}
 \label{\textPrincipleSingleResponsibility}
-Storage serializer
+Das Single-Responsibility-Prinzip besagt, dass eine Klasse, Methode oder Funktion
+nur einer Aufgabe verschrieben sein soll. So soll die Funktion zu Berechnung einer
+Potenz nur dies tun und nicht gleichzeitig das Ergebnis zbsp auf einer GUI ausgeben.
+Dadurch entwickelt sich ein Art Baukastenprinzip bei dem die unterschiedlichen 
+Funktionen einfach miteinander verknüpft und oder ausgetauscht werden können, da
+keine unnötigen Abhängigkeiten aufgebaut werden.
 
 \subsubsection{\textPrincipleOpenClosed}
 \label{\textPrincipleOpenClosed}
+Das Open-Closed-Prinzip besagt, dass eine Klasse, Methode oder Funktion offen
+für Erweiterungen aber geschlossen für Veränderungen sein soll. So soll es möglich
+sein die Klasse Drucker um ein weiteres Papierformat zu erweitern, jedoch soll sich
+das Verhalten von verschiedenen von Drucker abgeleiteten Klassen nicht unterscheiden.
 
 \subsubsection{\textPrincipleLiskovSubstitution}
 \label{\textPrincipleLiskovSubstitution}
+Das Liskovsche Substitutionsprinzip besagt, dass ein Programm so geschrieben sein soll,
+dass eine Instanz auf eine Basisklasse durch eine Instanz einer von der Basisklasse
+abgeleiteten Klasse ausgetauscht werden können soll. Dadurch wird auch das
+\refLongP{\textPrincipleOpenClosed} impliziert.
 
 
 \subsubsection{\textPrincipleInterfaceSegregation}
@@ -23,6 +38,7 @@ Storage serializer
 
 \subsubsection{\textPrincipleDependencyInversion}
 \label{\textPrincipleDependencyInversion}
+
 
 \subsection{hier}
 \subsection{weiter}
