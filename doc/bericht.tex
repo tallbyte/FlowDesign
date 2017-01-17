@@ -30,6 +30,7 @@
 \usepackage{amsmath}
 
 \usepackage{pdfpages}
+\usepackage{graphicx}
 
 \usepackage{tikz-uml}
 \usepackage{adjustbox}
@@ -147,6 +148,7 @@
 
 
 \newcommand{\textMeetingFirst}{Protokoll zum Kundentreffen am 13. Dezember 2016}
+\newcommand{\textMeetingSecond}{Protokoll zum Kundentreffen am 22. Dezember 2016}
 
 
 
@@ -199,10 +201,18 @@
 		\includegraphics[width=0.95\textwidth]{meeting_2016-12-13.pdf}
 	\end{figure}
 	
+	\clearpage
+	\section{\textMeetingSecond}
+	\label{\textMeetingSecond}
 	\begin{figure}[h!]
 		\centering
-		\includegraphics[width=0.95\textwidth]{meeting_2016-12-22.pdf}
-	\end{figure}  
+		\includegraphics[page=1,width=0.95\textwidth]{meeting_2016-12-22_fixed.pdf}
+	\end{figure}  	
+	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[page=2,width=0.95\textwidth]{meeting_2016-12-22_fixed.pdf}
+	\end{figure}  	
 	
 	\clearpage
 	\addcontentsline{toc}{section}{\listfigurename}
