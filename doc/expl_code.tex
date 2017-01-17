@@ -1,5 +1,38 @@
 
 \section{Erweiterung}
+Beim Architekturentwurf wurde darauf geachtet das Programm so einfach wie möglich erweiterbar zu machen.
+Dieses Kapitel zeigt wie der vorhandene Code erweitert und um Inhalt ergänzt werden kann.
 
-\subsection{Erweiterung um ein Diagramtyp}
-\subsection{Erweiterung um ein Diagram-Element}
+\subsection{Erweiterung um einen Diagrammtyp}
+Im Folgenden soll ein neuer Diagrammtyp mit dem Namen ''Example'' beispielhaft erstellt werden.
+
+\subsubsection{Datenmodell}
+Für alle bisherigen Diagramme wurde ein eigenes Paket erstellt. Das ist keine Voraussetzung, hilft allerdings bei der
+Strukturierung. Im Folgenden wird deshalb davon ausgegangen, dass das Paket \textit{com.tallbyte.flowdesign.data.example}
+verwendet wird.
+Hier muss eine Klasse ''ExampleDiagram'' erstellt werden, welche von \textit{Diagram} erbt. Sollte es erwünscht sein,
+dass Elemente des Diagramms von einer bestimmten Art sind, so kann dies über den generischen Parameter von 
+\textit{Diagram} angegeben werden.
+
+
+\subsubsection{View}
+Das Diagramm hat keine eigentliche View. Diese Aufgabe wird direkt von der Klasse \textit{DiagramPane} im Modul 
+\textit{javafx} umgesetzt. Hier ist Diagramm-spezifisch nichts zu verändern.
+
+\subsubsection{Handler}
+Der \textit{DiagramHandler} ist die Diagramm-spezifische Schnittstelle, die Aufgaben wie die Erstellung von neuen
+Diagramm-Instanzen oder die Bereitstellung verfügbarer Properties übernimmt.
+
+\subsubsection{Strings}
+Da der Projektbaum und andere UI-Elemente automatisch für alle verfügbaren Diagrammtypen erstellt werden müssen
+die angezeigten Texte extern verwaltet werden. Hierfür wird das Java-eigene Ressourcensystem verwendet. Im Ressourcen-
+Verzeichnis in der Maven-Struktur befindet sich das Resource-Bundle ''MessagesBundle''. Hier müssen folgende Strings
+bereitgestellt werden:
+
+machsch du liste
+
+\subsection{Erweiterung um ein Diagramm-Element}
+\subsubsection{Datenmodell}
+\subsubsection{View}
+\subsubsection{Image}
+\subsubsection{Factory}
