@@ -3,6 +3,7 @@
 
 \subsection{Joint}
 
+\pagebreak
 \section{Erweiterung}
 Beim Architekturentwurf wurde darauf geachtet das Programm so einfach wie möglich erweiterbar zu machen.
 Dieses Kapitel zeigt wie der vorhandene Code erweitert und um Inhalt ergänzt werden kann.
@@ -119,6 +120,7 @@ bereitgestellt werden:
 	\item context.new.ExampleDiagram=New...
 \end{itemize}
 
+\pagebreak
 \subsection{Erweiterung um ein Diagramm-Element}
 \label{add_element}
 Im Folgenden soll ein neues Diagramm-Element mit dem Namen ''ExampleElement'' beispielhaft erstellt werden.
@@ -192,15 +194,24 @@ Durch den Methodenaufruf \textit{addJointsAccrossCircle} werden alle Joints der 
 ExampleElements komplett über den Umfang einer Ellipse verteilt, der sich durch Höhe und Breite des Elements
 ergibt. Die \textit{0} steht hier für den Offset im Kreis (Intervall [0;1]), die \textit{1} steht für den
 verwendeten Umfang (Intervall [0;1]) in Prozent.
+\\
+\\
+Es stehen hier folgende Funktionen zur Verfügung:
+\begin{itemize}
+	\item addJointsAccrossRectangle
+	\item addJointsAccrossRectangleCentered
+	\item addJointsAccrossCircle
+	\item addJointsAccrossCircleCentered
+\end{itemize}
 Der dritte Parameter beim Super-Konstruktoraufruf steht für die Position des Textfelds für den Namen. Gültige
 Werte sind \textit{Pos.CENTER} und \textit{Pos.BOTTOM\_CENTER}.
-
 
 \subsubsection{Image}
 \subsubsection{Factory}
 \subsubsection{Serialisierung}
 // TODO Michael
 
+\pagebreak
 \subsection{Weitere Referenzen}
 Auf Grund der Offenheit des Systems sind eine Vielzahl von Modifikationen möglich, die nicht alle in dieser
 Dokumentation behandelt werden können. Allerdings sind bereits einige Beispiele im Programmcode vorhanden.
@@ -208,4 +219,5 @@ Die folgende Liste zeigt einige Referenzen für \textit{erweiterte} Funktionen:
 
 \begin{itemize}
 	\item Extra Textfeld im View (\textit{OperationalUnitElementNode\#setup()}
+	\item Property-Verbindung mit dem Image (\textit{EndElementNode\#EndElementNode()})
 \end{itemize}
