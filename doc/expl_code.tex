@@ -1,10 +1,14 @@
+\section{Aufbau Diagramm-Element}
+\subsection{Joint-Group}
+
+\subsection{Joint}
 
 \section{Erweiterung}
 Beim Architekturentwurf wurde darauf geachtet das Programm so einfach wie möglich erweiterbar zu machen.
 Dieses Kapitel zeigt wie der vorhandene Code erweitert und um Inhalt ergänzt werden kann.
 
 \subsection{Erweiterung um einen Diagrammtyp}
-Im Folgenden soll ein neuer Diagrammtyp mit dem Namen ''Example'' beispielhaft erstellt werden.
+Im Folgenden soll ein neuer Diagramm-Typ mit dem Namen ''Example'' beispielhaft erstellt werden.
 
 \subsubsection{Datenmodell}
 Für alle bisherigen Diagramme wurde ein eigenes Paket erstellt. Das ist keine Voraussetzung, hilft allerdings bei der
@@ -14,6 +18,22 @@ Hier muss eine Klasse ''ExampleDiagram'' erstellt werden, welche von \textit{Dia
 dass Elemente des Diagramms von einer bestimmten Art sind, so kann dies über den generischen Parameter von 
 \textit{Diagram} angegeben werden.
 
+\begin{figure}[h!]
+	\centering
+	\begin{lstlisting}
+public class ExampleDiagram extends Diagram<DiagramElement> {
+
+    public ExampleDiagram(String name) {
+        super(name, null);
+    }
+
+    public EnvironmentDiagram(String name, DiagramElement root) {
+        super(name, root);
+    }
+}
+	\end{lstlisting}
+	\caption{Beispiel Diagramm-Klasse}
+\end{figure}
 
 \subsubsection{View}
 Das Diagramm hat keine eigentliche View. Diese Aufgabe wird direkt von der Klasse \textit{DiagramPane} im Modul 
@@ -21,18 +41,171 @@ Das Diagramm hat keine eigentliche View. Diese Aufgabe wird direkt von der Klass
 
 \subsubsection{Handler}
 Der \textit{DiagramHandler} ist die Diagramm-spezifische Schnittstelle, die Aufgaben wie die Erstellung von neuen
-Diagramm-Instanzen oder die Bereitstellung verfügbarer Properties übernimmt.
+Diagramm-Instanzen oder die Bereitstellung verfügbarer Properties übernimmt. Zur Vereinfachung gibt es bereits eine
+abstrakte Klasse, die die komplexesten Aspekte des Intefaces \textit{DiagramHandler} verbirgt. Diese kann erweitert
+werden womit folgende Klasse im Kontext des Beispiels zu erstellen ist.
+
+\begin{figure}[h!]
+	\centering
+	\begin{lstlisting}
+public class ExampleDiagramHandler extends DiagramHandlerBase<ExampleDiagram, DiagramElement, DiagramImage> {
+
+    public ExampleDiagram() {
+        addEntries("System", System.class,
+                System::new,
+                EllipseDiagramImage::new,
+                SystemElementNode::new
+        );
+    }
+
+    @Override
+    protected ExampleDiagram createNewDiagramInstance(String name) {
+        return new ExampleDiagram(name);
+    }
+    
+    @Override
+    public ObservableList<Property<?>> getDiagramProperties(ExampleDiagram diagram) {
+        ObservableList<Property<?>> list = super.getDiagramProperties(diagram);
+
+		// add properties
+
+        return list;
+    }
+}
+	\end{lstlisting}
+	\label{diagram_handler}
+	\caption{Beispiel Diagramm-Handler-Klasse}
+\end{figure}
+Der Methodenaufruf von \textit{addEntries} wird später noch im Kapitel zum Hinzufügen neuer Diagramm-Element
+erklärt (\ref{add_element}). Ansonsten kann in der Methode \textit{getDiagramProperties} eine Liste mit verfügbaren
+Properties für ein Diagramm erstellt werden. Diese Liste wird verwendet, um auf der Oberfläche Optionen für das
+jeweilige Diagramm einzublenden.
+\\r Diagrammtyp
+\\
+Damit der Handler auch aktiv genutzt wird, muss noch ein Methodenaufruf in der Klasse \textit{DiagramHandler} gemacht
+werden.
+
+\begin{figure}[h!]
+	\centering
+	\begin{lstlisting}
+static {
+    addHandler(EnvironmentDiagram.class, new EnvironmentDiagramHandler());
+    addHandler(FlowDiagram.class, new FlowDiagramHandler());
+    addHandler(MaskDiagram.class, new MaskDiagramHandler());
+        
+    // diese Zeile muss eingefuegt werden
+    addHandler(ExampleDiagram.class, new ExampleDiagramHandler());
+}
+	\end{lstlisting}
+	\label{diagram_handler}
+	\caption{Diagramm-Handler verfügbar machen}
+\end{figure}
+\subsubsection{Serialisierung}
+Damit der neu-erstellte Diagramm-Typ nun auch gespeichert werden kann muss ein (XML-)Serializer erstellt werden.
+\\
+// TODO Michael
 
 \subsubsection{Strings}
 Da der Projektbaum und andere UI-Elemente automatisch für alle verfügbaren Diagrammtypen erstellt werden müssen
 die angezeigten Texte extern verwaltet werden. Hierfür wird das Java-eigene Ressourcensystem verwendet. Im Ressourcen-
-Verzeichnis in der Maven-Struktur befindet sich das Resource-Bundle ''MessagesBundle''. Hier müssen folgende Strings
+Verzeichnis in der Maven-Struktur befindet sich das Resource-Bundle \textit{MessagesBundle}. Hier müssen folgende Strings
 bereitgestellt werden:
 
-machsch du liste
+\begin{itemize}
+	\item tree.overview.ExampleDiagram = Example
+	\item menu.edit.new.ExampleDiagram = New Example-Diagram...
+	\item popup.new.ExampleDiagram.title = New Example Diagram
+	\item popup.new.ExampleDiagram.field.name = Name
+	\item context.new.ExampleDiagram=New...
+\end{itemize}
 
 \subsection{Erweiterung um ein Diagramm-Element}
+\label{add_element}
+Im Folgenden soll ein neues Diagramm-Element mit dem Namen ''ExampleElement'' beispielhaft erstellt werden.
+
 \subsubsection{Datenmodell}
+// TODO Michael
+Zuerst muss das entsprechende Datenmodell erstellt werden. Nach bisheriger Konvention gehören die Diagramm-Elemente
+für ein spezielles Diagramm in das gleiche Paket wie die entsprechende Diagramm-Klasse. Das ist allerdings keine
+Voraussetzung.
+
+\begin{figure}[h!]
+	\centering
+	\begin{lstlisting}
+public class ExampleElement extends DiagramElement {
+
+    public static final String JOINT_GROUP = "io";
+
+    public ExampleDiagramElement() {
+    }
+
+    @Override
+    protected Iterable<JointGroup<?>> createJointGroups() {
+        return new ArrayList<JointGroup<?>>() {{
+            add(new JointGroup<>(System.this, JOINT_GROUP , 4, 4, element -> new DependencyJoint(element, JointType.INPUT_OUTPUT, 0, 0), 4));
+        }};
+    }
+
+    public JointGroup<?> getJointGroup() {
+        return getJointGroup(JOINT_GROUP);
+    }
+
+}
+	\end{lstlisting}
+	\label{diagram_handler}
+	\caption{Beispiel Diagramm-Element-Klasse}
+\end{figure}
+Hier wird ein einfaches Element erstellt, dass eine einzige Joint-Gruppe bereitstellt, die minimal und maximal
+vier Joints zur Verfügung stellt, wobei einzelne Joints sowohl als Eingang als auch als Ausgang verwendet werden
+können. Zudem ist die Art der Verbindung, welche von den Joints erstellt werden kann eine Abhängigkeitsverbindung
+(ein Kreis am Ziel).
 \subsubsection{View}
+Damit das neue Element später auch auf der Zeichenfläche angezeigt werden kann, muss erst eine View dafür erstellt
+werden. Alle View müssen die Basis-Klasse \textit{ElementNode} erweitern. Diese stellt bereits einige wichtig
+Funktionen wie das verteilen von Joints auf der Oberfläche oder das vergrößern / verkleinern zur Verfügung.
+
+\begin{figure}[h!]
+	\centering
+	\begin{lstlisting}
+public class ExampleElementNode extends ElementNode<DiagramImage> {
+
+    private final ExampleElement example;
+
+    public SystemElementNode(ExampleElement element, DiagramImage content) {
+        super(element, content, Pos.CENTER);
+
+        this.example = element;
+    }
+
+    @Override
+    protected void setup() {
+        super.setup();
+
+        addJointsAcrossCircle(new JointGroupHandler(example.getJointGroup(), 0, 1));
+    }
+}
+	\end{lstlisting}
+	\label{diagram_handler}
+	\caption{Beispiel Diagramm-Element-Node}
+\end{figure}
+Durch den Methodenaufruf \textit{addJointsAccrossCircle} werden alle Joints der Joint-Group des übergeben
+ExampleElements komplett über den Umfang einer Ellipse verteilt, der sich durch Höhe und Breite des Elements
+ergibt. Die \textit{0} steht hier für den Offset im Kreis (Intervall [0;1]), die \textit{1} steht für den
+verwendeten Umfang (Intervall [0;1]) in Prozent.
+Der dritte Parameter beim Super-Konstruktoraufruf steht für die Position des Textfelds für den Namen. Gültige
+Werte sind \textit{Pos.CENTER} und \textit{Pos.BOTTOM\_CENTER}.
+
+
 \subsubsection{Image}
 \subsubsection{Factory}
+\subsubsection{Serialisierung}
+// TODO Michael
+
+\subsection{Weitere Referenzen}
+Auf Grund der Offenheit des Systems sind eine Vielzahl von Modifikationen möglich, die nicht alle in dieser
+Dokumentation behandelt werden können. Allerdings sind bereits einige Beispiele im Programmcode vorhanden.
+Die folgende Liste zeigt einige Referenzen für \textit{erweiterte} Funktionen:
+
+\begin{itemize}
+	\item Extra Textfeld im View (\textit{OperationalUnitElementNode\#setup()}
+\end{itemize}

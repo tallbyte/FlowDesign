@@ -49,11 +49,34 @@ oder die Logik anderweitig benötigt wird, sollte auf dieses Modul die Abhängig
 \end{figure}
 \depBox{Keine}
 
-Modulerklräung hier
+Das Modul \textit{data} enthält die Haupt-Geschäftslogik und alle Datenmodelle. Da viel Logik nur darin besteht
+die referentielle Integrität bzw. Vollständigkeit der Daten zu gewährleisten ist dieses Modul im Gegensatz zum
+Modul \textit{core} relativ schwergewichtig.
 
+\subsubsection{Flow Notation Parser}
+Dieser Parser ist für die Umsetzung von textueller Flow-Notation in eine auswertbare Form zuständig. Hierbei können
+beispielsweise folgende Konstruke verarbeitet werden:
 
+\begin{itemize}
+	\item \{name:string\}
+	\item \{int\}
+	\item \{(name:string, amount:int)\}
+	\item (name:string)
+	\item (float)*
+	\item (float*, int)
+	\item (float*, int)/(double*, int)
+\end{itemize}
+Vom Parser wird ein generisches \textit{FlowAction} Objekt zurückgegeben, wenn der Vorgang erfolgreich war. Dieses
+Objekt kann eines der folgenden Klassen sein:
 
-
+\begin{itemize}
+	\item MultiStream ( \textbf{\{}test\textbf{\}} )
+	\item Tupel ( \textbf{(}test\textbf{)} )
+	\item Type ( \textbf{name:test} )
+	\item Chain ( \textbf{test/int} )
+\end{itemize}
+Objekte dieser Klassen enthalten entsprechend Möglichkeiten auf die Kind-Elemente (wenn vorhanden) oder
+Eigenschaften zuzugreifen.
 \subsection{\textModDataUI}
 \label{\textModDataUI}
 \begin{figure}[h!]
@@ -62,10 +85,12 @@ Modulerklräung hier
 \end{figure}
 \depBox{Keine}
 
-Modulerklräung hier
+Im Modul \textit{data-ui} befinden sich Datenmodelle, die nicht direkt in die eigentliche Geschäftslogik
+eingebaut werden können / sollen, sondern eigentlich nur für die Oberfläche selbst benötigt werden.
 
-
-
+Ein Beispiel hierfür ist das Changelog, welches beim Start der Anwendung geöffnet werden kann.
+Sollte in Zukunft beispielsweise die Möglichkeit eingebaut werden, Oberflächeneinstellungen zu speichern, 
+so wäre das Modul \textit{data-ui} der entsprechende Platz für die Datenmodelle.
 
 \subsection{\textModJavaFX}
 \label{\textModJavaFX}
@@ -88,7 +113,9 @@ Modulerklräung hier
 \end{figure}
 \depBox{\refLongP{\textModCore}}
 
-Modulerklräung hier
+Dieses Modul wurde erst spät im Entwicklungsprozess mit einbezogen und beinhaltet bisher noch keine Klassen.
+Es ist allerdings dafür vorgesehen, Klassen zu enthalten, die für die Oberfläche gebraucht werden, allerdings
+unabhängig vom verwendeten Windowing-Toolkit sind.
 
 
 
