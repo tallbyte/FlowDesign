@@ -1,7 +1,14 @@
 \section{Aufbau Diagramm-Element}
 \subsection{Joint-Group}
+Eine Joint-Group ist die Implementierte Art und Weise wie gleichartige Joints gruppiert werden.
+Eine solche Gruppe besitzt Maximal- bzw. Minimalzahlen von Joints, wobei neue Joints durch eine
+Factory erstellt werden. Alle diese Informationen werden beim Konstruktoraufruf übergeben.
+Elemente wie die Operation haben beispielsweise view Joint-Groups. Zwei für Flow- bzw. Abhängigkeits-Eingang
+und zwei für Flow- bzw. Abhängigkeits-Ausgang.
 
 \subsection{Joint}
+Ein Joint ist ein Verbindungsknoten. Je nach Konfiguration kann ein Joint als Eingang, Ausgang oder beides dienen.
+Bisher gibt es sowohl einen \textit{FlowJoint} als auch einen \textit{DependencyJoint}.
 
 \pagebreak
 \section{Erweiterung}
