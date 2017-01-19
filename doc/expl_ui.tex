@@ -226,14 +226,43 @@ Das Programm startet mit einem Auswahlfenster für Projekte. Hier haben Sie die 
 	\includegraphics[width=.4\textwidth]{Zeichenflaeche_Basics4.png}
 	\caption{Zeichenfläche - Erstellen einer Verbindung IV}	
 \begin{itemize}	
-\item Sie sehen eine vollständige Verbindung mit Datenfluss. Mit einem Doppelklick auf das Element können Sie dieses ebenfalls umbenennen.
+\item Sie sehen eine vollständige Verbindung mit Datenfluss. Mit einem Doppelklick auf das Element können Sie dieses ebenfalls umbenennen. Um die Zeichenfläche nun zu verschieben, halten Sie die rechte Maustaste gedrückt und bewegen Sie die Maus. Zum Zoomen halten Sie Shift gedrückt und nutzen das Mausrad oder Touchpad.
 \end{itemize}
 \end{figure}
 
-
+\begin{figure}[h!]
+\subsubsection{Fortgeschrittene Programmfunktionen}
+	\centering
+	\includegraphics[width=1\textwidth]{Advanced.png}
+	\caption{Zeichenfläche - Fortgeschrittene Funktionen}	
+\begin{itemize}	
+\item Sie kennen nun bereits die grundlegenden Funktionen und Navigation. Bei einem vollständig modellierten Projekt sind folgende Funktionen besonders hilfreich. 
+\item Um in größeren Diagrammen schnell zwischen Elementen wechseln zu können, verwenden Sie die Tastenkombination Strg+Shift+Pfeiltaste rechts/links. 
+\item Wenn Sie, etwa eine Operation in einem Flow-Diagramm,  identisch zu einem Diagramm benennen, wird dieses automatisch referenziert. Dies erkennen Sie an der Grau-Färbung des Texts innerhalb des Elements.
+\end{itemize}
+\end{figure}
 
 \begin{figure}[h!]
-\subsubsection{Ändern des Programmdesigns}
+	\centering
+	\includegraphics[width=1\textwidth]{Advanced2.png}
+	\caption{Zeichenfläche - Fortgeschrittene Funktionen - Quick
+	 Jump}
+\begin{itemize}	
+\item Nutzen Sie Strg+B nach der Auswahl eines referenzierten Elements um direkt in das dazugehörige Diagramm zu springen. In diesem Fall die Referenz der Operation ''toDate'' in das dazugehörige gleichnamige Diagramm.
+\end{itemize}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.6\textwidth]{Advanced3.png}
+	\caption{Zeichenfläche - Fortgeschrittene Funktionen - Eingabe/Ausgabe Typ}
+\begin{itemize}	
+\item Das Programm überprüft, ob der Eingabe und Ausgabe Typ dem entspricht, was auch im referenzierten Diagramm hinterlegt ist.In diesem Beispiel erfordert ''toDate'' einen String-Pointer. Wird nur ein String übergeben, markiert sich das Element rot um auf einen Typemismatch aufmerksam zu machen. Wird der Fehler korrigiert oder die dahinter liegende Referenz angepasst, verschwindet der Fehler und damit auch die Färbung.
+\end{itemize}
+\end{figure}
+
+\begin{figure}[h!]
+\subsubsection{Ändern des Programmdesigns und Suche}
 	\centering
 	\includegraphics[width=.4\textwidth]{Design_Aendern.png}
 	\caption{Designauswahl und Suche}
@@ -244,9 +273,17 @@ Das Programm startet mit einem Auswahlfenster für Projekte. Hier haben Sie die 
 
 \begin{figure}[h!]
 	\centering
+	\includegraphics[width=.45\textwidth]{Search.png}
+	\caption{Suchfenster}
+\begin{itemize}	
+\item Nach betätigen des Lupensymbols erscheint ein Suchfenster. Es zeigt alle aktuell verfügbaren Diagramme innerhalb Ihres Projekts an. Dabei ist der Name eines Diagramms weiß und dessen Typ orange hervorgehoben. Sie können nun nach einem beliebigen Diagramm suchen, nutzen Sie dabei die Pfeiltasten zur Auswahl und bestätigen Sie mit Enter um direkt in das Diagramm zu gelangen.
+\end{itemize}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
 	\includegraphics[width=.45\textwidth]{Design_Dark.png}
 	\includegraphics[width=.45\textwidth]{Design_Medium.png}
 	\includegraphics[width=.45\textwidth]{Design_Bright.png}
 	\caption{Design - Dark, Medium, Bright}
-
 \end{figure}
