@@ -26,7 +26,7 @@ Hier muss eine Klasse ''ExampleDiagram'' erstellt werden, welche von \textit{Dia
 dass Elemente des Diagramms von einer bestimmten Art sind, so kann dies über den generischen Parameter von 
 \textit{Diagram} angegeben werden.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\begin{lstlisting}
 public class ExampleDiagram extends Diagram<DiagramElement> {
@@ -53,7 +53,7 @@ Diagramm-Instanzen oder die Bereitstellung verfügbarer Properties übernimmt. Z
 abstrakte Klasse, die die komplexesten Aspekte des Intefaces \textit{DiagramHandler} verbirgt. Diese kann erweitert
 werden womit folgende Klasse im Kontext des Beispiels zu erstellen ist.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\begin{lstlisting}
 public class ExampleDiagramHandler extends DiagramHandlerBase<ExampleDiagram, DiagramElement, DiagramImage> {
@@ -88,12 +88,12 @@ Der Methodenaufruf von \textit{addEntries} wird später noch im Kapitel zum Hinz
 erklärt (\ref{add_element}). Ansonsten kann in der Methode \textit{getDiagramProperties} eine Liste mit verfügbaren
 Properties für ein Diagramm erstellt werden. Diese Liste wird verwendet, um auf der Oberfläche Optionen für das
 jeweilige Diagramm einzublenden.
-\\r Diagrammtyp TODO Julian huh?
+\\
 \\
 Damit der Handler auch aktiv genutzt wird, muss noch ein Methodenaufruf in der Klasse \textit{DiagramHandler} gemacht
 werden.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\begin{lstlisting}
 static {
@@ -242,12 +242,11 @@ bereitgestellt werden:
 Im Folgenden soll ein neues Diagramm-Element mit dem Namen ''ExampleElement'' beispielhaft erstellt werden.
 
 \subsubsection{Datenmodell}
-// TODO Michael
 Zuerst muss das entsprechende Datenmodell erstellt werden. Nach bisheriger Konvention gehören die Diagramm-Elemente
 für ein spezielles Diagramm in das gleiche Paket wie die entsprechende Diagramm-Klasse. Das ist allerdings keine
 Voraussetzung.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\begin{lstlisting}
 public class ExampleElement extends DiagramElement {
@@ -281,7 +280,7 @@ Damit das neue Element später auch auf der Zeichenfläche angezeigt werden kann
 werden. Alle Views müssen die Basis-Klasse \textit{ElementNode} erweitern. Diese stellt bereits einige wichtig
 Funktionen wie das verteilen von Joints auf der Oberfläche oder das vergrößern / verkleinern zur Verfügung.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\begin{lstlisting}
 public class ExampleElementNode extends ElementNode<DiagramImage> {
@@ -325,7 +324,7 @@ Das \textit{DiagramImage} stellt den Teil des Views dar, der für das eigentlich
 also z.B. ein Kreis bzw. Oval bei der Operation. Beim Erweitern des DiagramImages muss lediglich die \textit{repaint()}
 Methode überschrieben werden. Zusätzlich ist es allerdings auch möglich eigene Properties zu definieren, um das
 Verhalten des Images zu steuern (\ref{code_extra_references}).
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\begin{lstlisting}
 public class ExampleDiagramImage extends DiagramImage {
@@ -359,7 +358,7 @@ Um das neue Element nun endgültig in der Oberfläche verfügbar zu machen muss 
 erstellt werden. Dies ist im entsprechenden \textit{DiagramHandler} für den jeweiligen Diagramm-Typ zu machen.
 Für Flow-Diagramme also im \textit{FlowDiagramHandler}. In diesem Fall ist es der \textit{ExampleDiagramHandler}.
 Hier muss im Konstruktor folgende Zeile eingefügt werden.
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\begin{lstlisting}
 addEntries("ExampleElement", ExampleElement.class,
