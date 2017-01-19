@@ -44,8 +44,8 @@ public class ExampleDiagram extends Diagram<DiagramElement> {
 \end{figure}
 
 \subsubsection{View}
-Das Diagramm hat keine eigentliche View. Diese Aufgabe wird direkt von der Klasse \textit{DiagramPane} im Modul 
-\textit{javafx} umgesetzt. Hier ist Diagramm-spezifisch nichts zu verändern.
+Das Diagramm hat keine eigentliche View. Diese Aufgabe wird direkt von der Klasse \textit{DiagramPane} im
+\textit{\refLongP{\textModJavaFX}} umgesetzt. Hier ist Diagramm-spezifisch nichts zu verändern.
 
 \subsubsection{Handler}
 Der \textit{DiagramHandler} ist die Diagramm-spezifische Schnittstelle, die Aufgaben wie die Erstellung von neuen
@@ -88,7 +88,7 @@ Der Methodenaufruf von \textit{addEntries} wird später noch im Kapitel zum Hinz
 erklärt (\ref{add_element}). Ansonsten kann in der Methode \textit{getDiagramProperties} eine Liste mit verfügbaren
 Properties für ein Diagramm erstellt werden. Diese Liste wird verwendet, um auf der Oberfläche Optionen für das
 jeweilige Diagramm einzublenden.
-\\r Diagrammtyp
+\\r Diagrammtyp TODO Julian huh?
 \\
 Damit der Handler auch aktiv genutzt wird, muss noch ein Methodenaufruf in der Klasse \textit{DiagramHandler} gemacht
 werden.
@@ -170,7 +170,7 @@ können. Zudem ist die Art der Verbindung, welche von den Joints erstellt werden
 (ein Kreis am Ziel).
 \subsubsection{View}
 Damit das neue Element später auch auf der Zeichenfläche angezeigt werden kann, muss erst eine View dafür erstellt
-werden. Alle View müssen die Basis-Klasse \textit{ElementNode} erweitern. Diese stellt bereits einige wichtig
+werden. Alle Views müssen die Basis-Klasse \textit{ElementNode} erweitern. Diese stellt bereits einige wichtig
 Funktionen wie das verteilen von Joints auf der Oberfläche oder das vergrößern / verkleinern zur Verfügung.
 
 \begin{figure}[h!]
