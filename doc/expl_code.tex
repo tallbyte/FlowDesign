@@ -53,7 +53,7 @@ Diagramm-Instanzen oder die Bereitstellung verfügbarer Properties übernimmt. Z
 abstrakte Klasse, die die komplexesten Aspekte des Intefaces \textit{DiagramHandler} verbirgt. Diese kann erweitert
 werden womit folgende Klasse im Kontext des Beispiels zu erstellen ist.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\begin{lstlisting}
 public class ExampleDiagramHandler extends DiagramHandlerBase<ExampleDiagram, DiagramElement, DiagramImage> {
@@ -88,7 +88,7 @@ Der Methodenaufruf von \textit{addEntries} wird später noch im Kapitel zum Hinz
 erklärt (\ref{add_element}). Ansonsten kann in der Methode \textit{getDiagramProperties} eine Liste mit verfügbaren
 Properties für ein Diagramm erstellt werden. Diese Liste wird verwendet, um auf der Oberfläche Optionen für das
 jeweilige Diagramm einzublenden.
-\\r Diagrammtyp TODO Julian huh?
+\\
 \\
 Damit der Handler auch aktiv genutzt wird, muss noch ein Methodenaufruf in der Klasse \textit{DiagramHandler} gemacht
 werden.
@@ -265,7 +265,6 @@ bereitgestellt werden:
 Im Folgenden soll ein neues Diagramm-Element mit dem Namen ''ExampleElement'' beispielhaft erstellt werden.
 
 \subsubsection{Datenmodell}
-// TODO Michael ??
 Zuerst muss das entsprechende Datenmodell erstellt werden. Nach bisheriger Konvention gehören die Diagramm-Elemente
 für ein spezielles Diagramm in das gleiche Paket wie die entsprechende Diagramm-Klasse. Das ist allerdings keine
 Voraussetzung.
