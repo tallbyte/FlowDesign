@@ -53,6 +53,36 @@ Das Modul \textit{data} enthält die Haupt-Geschäftslogik und alle Datenmodelle
 die referentielle Integrität bzw. Vollständigkeit der Daten zu gewährleisten ist dieses Modul im Gegensatz zum
 Modul \textit{core} relativ schwergewichtig.
 
+\subsubsection{Bindings}
+Zur Kommunikation innerhalb dieses Moduls wird größtenteils das ObservableValue-Pattern verwendet. Hierbei wird auf
+die Java-eigene Klasse \textit{PropertyChangeSupport} zurückgegriffen. Diese Klasse ermöglicht das Registrieren
+von Handlern bzw. das Auslösen von Events. Zudem unterstützt JavaFX diese Art von ObservableValue, wodurch es
+möglich ist, im \textit{javafx} Modul Properties von JavaFX mit Properties des Datenmodells zu verbinden. Beispielhaft
+sieht eine solche Klasse folgendermaßen aus.
+
+\begin{figure}[h!]
+	\centering
+	\begin{lstlisting}
+public class Bean {
+    private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+    private String name;
+
+    public String getName() {
+    	return name;
+    }
+    public void setName(String name) {
+    	String old = this.name;
+    	this.name = name;
+    	pcs.firePropertyChange("name", old, name);
+    }
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+    	pcs.addPropertyChangeListener(listener);
+    }
+}
+	\end{lstlisting}
+	\caption{Beispiel Java Bean}
+\end{figure}
+
 \subsubsection{Flow Notation Parser}
 Dieser Parser ist für die Umsetzung von textueller Flow-Notation in eine auswertbare Form zuständig. Hierbei können
 beispielsweise folgende Konstruke verarbeitet werden:
