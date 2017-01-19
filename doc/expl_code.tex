@@ -26,7 +26,7 @@ Hier muss eine Klasse ''ExampleDiagram'' erstellt werden, welche von \textit{Dia
 dass Elemente des Diagramms von einer bestimmten Art sind, so kann dies über den generischen Parameter von 
 \textit{Diagram} angegeben werden.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\begin{lstlisting}
 public class ExampleDiagram extends Diagram<DiagramElement> {
@@ -44,8 +44,8 @@ public class ExampleDiagram extends Diagram<DiagramElement> {
 \end{figure}
 
 \subsubsection{View}
-Das Diagramm hat keine eigentliche View. Diese Aufgabe wird direkt von der Klasse \textit{DiagramPane} im Modul 
-\textit{javafx} umgesetzt. Hier ist Diagramm-spezifisch nichts zu verändern.
+Das Diagramm hat keine eigentliche View. Diese Aufgabe wird direkt von der Klasse \textit{DiagramPane} im
+\textit{\refLongP{\textModJavaFX}} umgesetzt. Hier ist Diagramm-spezifisch nichts zu verändern.
 
 \subsubsection{Handler}
 Der \textit{DiagramHandler} ist die Diagramm-spezifische Schnittstelle, die Aufgaben wie die Erstellung von neuen
@@ -53,7 +53,7 @@ Diagramm-Instanzen oder die Bereitstellung verfügbarer Properties übernimmt. Z
 abstrakte Klasse, die die komplexesten Aspekte des Intefaces \textit{DiagramHandler} verbirgt. Diese kann erweitert
 werden womit folgende Klasse im Kontext des Beispiels zu erstellen ist.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\begin{lstlisting}
 public class ExampleDiagramHandler extends DiagramHandlerBase<ExampleDiagram, DiagramElement, DiagramImage> {
@@ -88,12 +88,12 @@ Der Methodenaufruf von \textit{addEntries} wird später noch im Kapitel zum Hinz
 erklärt (\ref{add_element}). Ansonsten kann in der Methode \textit{getDiagramProperties} eine Liste mit verfügbaren
 Properties für ein Diagramm erstellt werden. Diese Liste wird verwendet, um auf der Oberfläche Optionen für das
 jeweilige Diagramm einzublenden.
-\\r Diagrammtyp
+\\
 \\
 Damit der Handler auch aktiv genutzt wird, muss noch ein Methodenaufruf in der Klasse \textit{DiagramHandler} gemacht
 werden.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\begin{lstlisting}
 static {
@@ -109,9 +109,141 @@ static {
 	\caption{Diagramm-Handler verfügbar machen}
 \end{figure}
 \subsubsection{Serialisierung}
-Damit der neu-erstellte Diagramm-Typ nun auch gespeichert werden kann muss ein (XML-)Serializer erstellt werden.
-\\
-// TODO Michael
+\label{expl_code_serialize_diagram}
+Damit der neu erstellte Diagramm-Typ nun auch gespeichert werden kann muss ein (XML-)Serializer erstellt
+werden. Bisher wurde für jeden Diagram-Typ ein eigenes Paket angelegt, in dem sich sowohl der 
+\textit{Serializer} für das \textit{Diagram} als auch für dessen \textit{Element}e befinden. Das ist
+allerdings keine Voraussetzung. 
+Für dieses Beispiel wird das Paket \textit{com.tallbyte.flowdesign.storage.xml.example} angelegt.
+Die neue Klasse \textit{XmlExampleDiagramSerializer} erbt von \textit{XmlDiagramSerializer} in der
+schon viele rudimentäre Methoden zum de-/serialisieren von Diagrammen und deren Attribute existieren.
+
+\begin{figure}[H]
+	\centering
+	\begin{lstlisting}
+public class XmlExampleDiagramSerializer extends XmlDiagramSerializer implements XmlSerializer<ExampleDiagram> {
+
+    @Override
+    public void serialize(XMLStreamWriter writer, ExampleDiagram diagram, XmlSerializationHelper helper) throws IOException {
+        // see other figure
+    }
+
+    @Override
+    public ExampleDiagram instantiate() {
+        // not happening here for diagrams
+        return null;
+    }
+
+    @Override
+    public ExampleDiagram deserialize(XMLStreamReader reader, ExampleDiagram serializable, XmlDeserializationHelper helper) throws IOException {
+        // see other figure
+    }
+}
+	\end{lstlisting}
+	\caption{Beispiel XML-ExampleDiagram-Serializer-Klasse}
+\end{figure}
+
+Verwirrend mag vermutlich die \textit{instatiate()} Implementation aussehen. Je nach zu serialisierender
+Klasse, muss evtl. eine gültige und damit referenzierbare Instanz vor dem Laden dessen Inhalts verfügbar
+sein (zbsp. bei komplexeren Verknüpfungen). Falls dies der Fall sein kann (wie bei den \textit{Element}en),
+muss hier eine gültige neue Instanz zurückgegeben werden. Bei den Diagrammen ist dies jedoch nicht der
+Fall, somit kann hier \textit{null} zurückgegeben werden. Das bedeutet aber auch, dass der Parameter
+\textit{serializable} in \textit{deserialize(...)} den Wert \textit{null} hat.
+
+
+\begin{figure}[H]
+	\centering
+	\begin{lstlisting}
+    @Override
+    public void serialize(XMLStreamWriter writer, ExampleDiagram diagram, XmlSerializationHelper helper) throws IOException {
+        try {
+            // write diagram related attributes
+            serializeAttributes(writer, diagram, helper);
+            // serialize more diagram specific attributes here...
+
+            // write elements
+            helper.getAssignedIdMap().clear();
+            serializeElements(writer, diagram.getElements(), helper);
+
+            // write connections (remove if no connnections available)
+            serializeConnections(writer, diagram.getConnections(), helper);
+
+        } catch (XMLStreamException e) {
+            throw new IOException(e);
+        }
+    }
+	\end{lstlisting}
+	\caption{Generische Implementation für serialize}
+\end{figure}
+Die generischen Methoden von \textit{XmlDiagramSerializer} sollten die meiste Arbeit bereits erledigen
+können. Weitere Anpassungen sind jedoch einfach möglich. \\
+Da in \textit{instantiate()} darauf verzichtet wurde eine neue Instanz zu erstellen, muss dies nun in
+\textit{deserialize(...)} erledigt werden.
+
+\begin{figure}[H]
+	\centering
+	\begin{lstlisting}
+    @Override
+    public ExampleDiagram deserialize(XMLStreamReader reader, ExampleDiagram serializable, XmlDeserializationHelper helper) throws IOException {
+        try {
+            // load the diagram attributes
+            Map<String, String> attributes = helper.getAttributes(reader);
+
+            helper.getAssignedIdMap().clear();
+            Queue<Map.Entry<String, MaskDiagramElement>> queue = deserializeElementTypes(
+                    reader,
+                    MaskDiagramElement.class,
+                    helper
+            );
+
+            // process more diagram specific attributes somewhere around here
+            ExampleDiagram diagram = new ExampleDiagram(
+                    attributes.get(ATTRIBUTE_NAME)
+            );
+
+            // fill all the elements with proper values
+            deserializeElements(
+                    reader, queue, MaskDiagramElement.class, helper
+            );
+            
+            queue.stream()
+                    .map(Map.Entry::getValue)
+                    .forEach(diagram::addElement);
+
+            // build all the connections
+            deserializeConnections(reader, Connection.class, helper);
+            return diagram;
+
+        } catch (XMLStreamException e) {
+            throw new IOException(e);
+        }
+    }
+	\end{lstlisting}
+	\caption{Generische Implementation für deserialize}
+\end{figure}
+
+Der neue \textit{Serializer} muss nun in dem entsprechenden Storage (in diesem Fall im \textit{XmlStorage}) registriert
+werden. Sowohl der \textit{Serializer} für das \textit{Diagram} als auch für dessen \textit{Element}e werden bisher in
+Blöcken zusammengefasst, wie für \textit{MaskDiagram} beispielhaft zu sehen ist.
+
+\begin{figure}[H]
+	\centering
+	\begin{lstlisting}
+	    // ...
+	
+        // MaskDiagram and elements
+        register(MaskDiagram   .class, new XmlMaskDiagramSerializer());
+        register(MaskComment   .class, new XmlMaskCommentSerializer());
+        register(Rectangle     .class, new XmlRectangleSerializer());
+        register(SelfReference .class, new XmlSelfReferenceSerializer());
+        
+        // ExampleDiagram and elements
+        register(ExampleDiagram.class, new XmlExampleDiagramSerializer());
+        // further element-serializer-registrations shall be placed here
+	\end{lstlisting}
+	\caption{Registrieren des neuen Diagramm-Serializers}
+\end{figure}
+
 
 \subsubsection{Strings}
 Da der Projektbaum und andere UI-Elemente automatisch für alle verfügbaren Diagrammtypen erstellt werden müssen
@@ -133,12 +265,11 @@ bereitgestellt werden:
 Im Folgenden soll ein neues Diagramm-Element mit dem Namen ''ExampleElement'' beispielhaft erstellt werden.
 
 \subsubsection{Datenmodell}
-// TODO Michael
 Zuerst muss das entsprechende Datenmodell erstellt werden. Nach bisheriger Konvention gehören die Diagramm-Elemente
 für ein spezielles Diagramm in das gleiche Paket wie die entsprechende Diagramm-Klasse. Das ist allerdings keine
 Voraussetzung.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\begin{lstlisting}
 public class ExampleElement extends DiagramElement {
@@ -169,10 +300,10 @@ können. Zudem ist die Art der Verbindung, welche von den Joints erstellt werden
 (ein Kreis am Ziel).
 \subsubsection{View}
 Damit das neue Element später auch auf der Zeichenfläche angezeigt werden kann, muss erst eine View dafür erstellt
-werden. Alle View müssen die Basis-Klasse \textit{ElementNode} erweitern. Diese stellt bereits einige wichtig
+werden. Alle Views müssen die Basis-Klasse \textit{ElementNode} erweitern. Diese stellt bereits einige wichtig
 Funktionen wie das verteilen von Joints auf der Oberfläche oder das vergrößern / verkleinern zur Verfügung.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\begin{lstlisting}
 public class ExampleElementNode extends ElementNode<DiagramImage> {
@@ -216,7 +347,7 @@ Das \textit{DiagramImage} stellt den Teil des Views dar, der für das eigentlich
 also z.B. ein Kreis bzw. Oval bei der Operation. Beim Erweitern des DiagramImages muss lediglich die \textit{repaint()}
 Methode überschrieben werden. Zusätzlich ist es allerdings auch möglich eigene Properties zu definieren, um das
 Verhalten des Images zu steuern (\ref{code_extra_references}).
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\begin{lstlisting}
 public class ExampleDiagramImage extends DiagramImage {
@@ -250,7 +381,7 @@ Um das neue Element nun endgültig in der Oberfläche verfügbar zu machen muss 
 erstellt werden. Dies ist im entsprechenden \textit{DiagramHandler} für den jeweiligen Diagramm-Typ zu machen.
 Für Flow-Diagramme also im \textit{FlowDiagramHandler}. In diesem Fall ist es der \textit{ExampleDiagramHandler}.
 Hier muss im Konstruktor folgende Zeile eingefügt werden.
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\begin{lstlisting}
 addEntries("ExampleElement", ExampleElement.class,
@@ -263,8 +394,60 @@ addEntries("ExampleElement", ExampleElement.class,
 	\caption{Beispiel Element Factory}
 \end{figure}
 Um unnötige Klassen bzw. riesige Code-Konstrukte zu vermeiden werden hier Lambda-Ausdrücke eingesetzt.
+
+
 \subsubsection{Serialisierung}
-// TODO Michael
+Für die Serialisierung muss im Prinzip das gleiche wie bereits in der Serialisierung für das neue Diagramm
+(\ref{expl_code_serialize_diagram}) umgesetzt werden, dh. einen neuen Serializer  erstellen und im \textit{XmlStorage}
+registrieren. Auch hier steht eine nützliche Basisklasse bereit: \textit{XmlElementSerializer}.
+\begin{figure}[H]
+	\centering
+	\begin{lstlisting}
+public class XmlExampleElementSerializer extends XmlElementSerializer<ExampleElement> {
+
+    @Override
+    public ExampleElement instantiate() {
+        // new empty instance of ExampleElement making it referencable
+        return new ExampleElement();
+    }
+
+    @Override
+    protected Map<String, String> saveAttributes(Map<String, String> attributes, ExampleElement element, XmlSerializationHelper helper) throws XMLStreamException {
+        // add element specific attributes to the map before returning
+        return super.saveAttributes(attributes, element, helper);
+    }
+
+    @Override
+    protected void loadAttributes(Map<String, String> attributes, ExampleElement element, XmlDeserializationHelper helper) throws XMLStreamException {
+        super.loadAttributes(attributes, element, helper);
+        // load more element specific attributes from the map here
+    }
+}
+	\end{lstlisting}
+	\label{diagram_handler}
+	\caption{Beispiel Serializer für ein Element}
+\end{figure}
+
+Nach Implementation das Registrieren nicht vergessen:
+\begin{figure}[H]
+	\centering
+	\begin{lstlisting}
+	    // ...
+	
+        // MaskDiagram and elements
+        register(MaskDiagram   .class, new XmlMaskDiagramSerializer());
+        register(MaskComment   .class, new XmlMaskCommentSerializer());
+        register(Rectangle     .class, new XmlRectangleSerializer());
+        register(SelfReference .class, new XmlSelfReferenceSerializer());
+        
+        // ExampleDiagram and elements
+        register(ExampleDiagram.class, new XmlExampleDiagramSerializer());
+        register(ExampleElement.class, new XmlExampleElementSerializer());
+        // further element-serializer-registrations shall be placed here
+	\end{lstlisting}
+	\caption{Registrieren des neuen Element-Serializers}
+\end{figure}
+
 
 \pagebreak
 \subsection{Weitere Referenzen}

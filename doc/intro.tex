@@ -4,8 +4,11 @@
 Für das Konstruieren benötigt jeder Ingenieur ein strukturiertes Vorgehen. \textFlowDesign{}
 soll genau dort unterstützend wirken.
 Zusammen mit der Firma IT-Designers GmbH hat sich unser Team im Wintersemester 2016/17 im
-Rahmen des Projekts Softwaretechnik an die Entwicklung eins Programms, dass diesen Ansatz
+Rahmen des Projekts Softwaretechnik an die Entwicklung eines Programms, dass diesen Ansatz
 nutzt, gewagt.
+
+\subsection{Motivation}
+// TODO
 
 \subsection{Rollenverteilung}
 Die Rollenverteilung für das Projekt sah dabei wie folgt aus:
@@ -24,6 +27,8 @@ Die Rollenverteilung für das Projekt sah dabei wie folgt aus:
 	\end{tabular}
 \end{center}
 
+\pagebreak
+\section{Umsetzung}
 
 \subsection{Entwicklungsansatz}
 Wir haben uns entschieden eine völlig neue Entwicklung zu beginn, da uns die gewählte
@@ -34,3 +39,15 @@ realisieren wären. \newline
 Unsere Implementierung ist demnach in Java geschrieben und benutzt das UI-Toolkit JavaFX
 für die Gestaltung der Oberfläche. \newline
 Einzig das Konzept des UI wurde von uns grob dem vorherigem Team nachempfunden.
+
+\subsection{Versionsverwaltung}
+Für die Versionverwaltung haben wir uns für Git entschieden. Hierbei haben wir auf einen
+bereits bestehenden, eigenen Git-Server auf Basis von Gitblit gesetzt. Hierdurch hatten
+wir zu jeder Zeit einen Überblick über die Aktivitäten an der Repository und konnten
+uns schnell über die letzten Änderungen informieren.
+
+\subsection{Entwicklungsumgebung}
+Als Entwicklungsumgebung haben wir IntelliJ IDEA eingesetzt. Nichtsdestotrotz wurde das Projekt
+als Maven-Projekt erstellt, wodurch die Maven-Ordnerstruktur als Grundaufbau verwendet wurde.
+Auch alle Abhängigkeiten wurden durch Maven aufgelöst. Somit ist es grundsätzlich möglich das
+Projekt auch ohne Entwicklungsumgebung zu übersetzen und auszuführen.
