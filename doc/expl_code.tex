@@ -161,7 +161,6 @@ public class ExampleElement extends DiagramElement {
 
 }
 	\end{lstlisting}
-	\label{diagram_handler}
 	\caption{Beispiel Diagramm-Element-Klasse}
 \end{figure}
 Hier wird ein einfaches Element erstellt, dass eine einzige Joint-Gruppe bereitstellt, die minimal und maximal
@@ -194,7 +193,6 @@ public class ExampleElementNode extends ElementNode<DiagramImage> {
     }
 }
 	\end{lstlisting}
-	\label{diagram_handler}
 	\caption{Beispiel Diagramm-Element-Node}
 \end{figure}
 Durch den Methodenaufruf \textit{addJointsAccrossCircle} werden alle Joints der Joint-Group des übergeben
@@ -214,12 +212,63 @@ Der dritte Parameter beim Super-Konstruktoraufruf steht für die Position des Te
 Werte sind \textit{Pos.CENTER} und \textit{Pos.BOTTOM\_CENTER}.
 
 \subsubsection{Image}
+Das \textit{DiagramImage} stellt den Teil des Views dar, der für das eigentliche Erscheinungsbild verantwortlich ist,
+also z.B. ein Kreis bzw. Oval bei der Operation. Beim Erweitern des DiagramImages muss lediglich die \textit{repaint()}
+Methode überschrieben werden. Zusätzlich ist es allerdings auch möglich eigene Properties zu definieren, um das
+Verhalten des Images zu steuern (\ref{code_extra_references}).
+\begin{figure}[h!]
+	\centering
+	\begin{lstlisting}
+public class ExampleDiagramImage extends DiagramImage {
+
+    public EllipseDiagramImage() {
+
+    }
+
+    @Override
+    public void repaint() {
+        GraphicsContext context = getGraphicsContext2D();
+        double width  = getWidth();
+        double height = getHeight();
+
+        context.clearRect(0, 0, width, height);
+        context.setStroke(getColor());
+        context.setLineWidth(1.5);
+        context.strokeOval(
+                context.getLineWidth(), context.getLineWidth(),
+                width - 2*context.getLineWidth(), height - 2*context.getLineWidth()
+        );
+    }
+
+}
+	\end{lstlisting}
+	\label{diagram_handler}
+	\caption{Beispiel Diagram-Image}
+\end{figure}
 \subsubsection{Factory}
+Um das neue Element nun endgültig in der Oberfläche verfügbar zu machen muss schlussendlich noch eine Factory
+erstellt werden. Dies ist im entsprechenden \textit{DiagramHandler} für den jeweiligen Diagramm-Typ zu machen.
+Für Flow-Diagramme also im \textit{FlowDiagramHandler}. In diesem Fall ist es der \textit{ExampleDiagramHandler}.
+Hier muss im Konstruktor folgende Zeile eingefügt werden.
+\begin{figure}[h!]
+	\centering
+	\begin{lstlisting}
+addEntries("ExampleElement", ExampleElement.class,
+        ExampleElement::new,
+        ExampleDiagramImage::new,
+        ExampleElementNode::new
+);
+	\end{lstlisting}
+	\label{diagram_handler}
+	\caption{Beispiel Element Factory}
+\end{figure}
+Um unnötige Klassen bzw. riesige Code-Konstrukte zu vermeiden werden hier Lambda-Ausdrücke eingesetzt.
 \subsubsection{Serialisierung}
 // TODO Michael
 
 \pagebreak
 \subsection{Weitere Referenzen}
+\label{code_extra_references}
 Auf Grund der Offenheit des Systems sind eine Vielzahl von Modifikationen möglich, die nicht alle in dieser
 Dokumentation behandelt werden können. Allerdings sind bereits einige Beispiele im Programmcode vorhanden.
 Die folgende Liste zeigt einige Referenzen für \textit{erweiterte} Funktionen:
