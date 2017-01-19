@@ -221,6 +221,26 @@ Da in \textit{instantiate()} darauf verzichtet wurde eine neue Instanz zu erstel
 	\caption{Generische Implementation für deserialize}
 \end{figure}
 
+Der neue \textit{Serializer} muss nun in dem entsprechenden Storage (in diesem Fall im \textit{XmlStorage}) registriert
+werden. Sowohl der \textit{Serializer} für das \textit{Diagram} als auch für dessen \textit{Element}e werden bisher in
+Blöcken zusammengefasst, wie für \textit{MaskDiagram} beispielhaft zu sehen ist.
+
+\begin{figure}[H]
+	\centering
+	\begin{lstlisting}
+        // MaskDiagram and elements
+        register(MaskDiagram   .class, new XmlMaskDiagramSerializer());
+        register(MaskComment   .class, new XmlMaskCommentSerializer());
+        register(Rectangle     .class, new XmlRectangleSerializer());
+        register(SelfReference .class, new XmlSelfReferenceSerializer());
+        
+        // ExampleDiagram and elements
+        register(ExampleDiagram.class, new XmlExampleDiagramSerializer());
+        // further element-serializer-registrations shall be placed here
+	\end{lstlisting}
+	\caption{Registrieren des neuen Diagramm-Serializers}
+\end{figure}
+
 
 \subsubsection{Strings}
 Da der Projektbaum und andere UI-Elemente automatisch für alle verfügbaren Diagrammtypen erstellt werden müssen
