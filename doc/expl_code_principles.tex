@@ -4,9 +4,11 @@
 Programmierprinzipien sind essentiell für die Wartbarkeit, Korrektheit und vor allem die Verständlichkeit eines Programmcodes. Die wachsende Komplexität von Programmen und der damit steigende Entwicklungsaufwand erfordern sauberes und strukturiertes arbeiten mehr den je. 
 
 
-[[ Jeweils mit Code-Beispiel ? ]]
+// TODO [[ Jeweils mit Code-Beispiel ? ]]
 
 \subsection{SOLID}
+Bei SOLID handelt es sich um grundlegende Prinzipien der objektorientierten Programmierung, welche von Robert C. Martin in den frühen 2000ern formuliert wurden.  Alle dieser Prinzipien dienen zur Verbesserung der Wartbarkeit und Erweiterbarkeit von Computerprogrammen. 
+
 
 
 \subsubsection{\textPrincipleSingleResponsibility}
@@ -16,25 +18,36 @@ nur einer Aufgabe verschrieben sein soll. So soll die Funktion zu Berechnung ein
 Potenz nur dies tun und nicht gleichzeitig das Ergebnis zbsp auf einer GUI ausgeben.
 Dadurch entwickelt sich ein Art Baukastenprinzip bei dem die unterschiedlichen 
 Funktionen einfach miteinander verknüpft und oder ausgetauscht werden können, da
-keine unnötigen Abhängigkeiten aufgebaut werden.
+keine unnötigen Abhängigkeiten aufgebaut werden. ''Gottklassen'', die viele
+verschiedene Funktionalitäten vereinen, sind nicht erlaubt.
 
 \subsubsection{\textPrincipleOpenClosed}
 \label{\textPrincipleOpenClosed}
 Das Open-Closed-Prinzip besagt, dass eine Klasse, Methode oder Funktion offen
 für Erweiterungen aber geschlossen für Veränderungen sein soll. So soll es möglich
-sein die Klasse Drucker um ein weiteres Papierformat zu erweitern, jedoch soll sich
+sein die Klasse Drucker um ein weiteres Papierformat zu erweitern, jedoch darf sich
 das Verhalten von verschiedenen von Drucker abgeleiteten Klassen nicht unterscheiden.
 
 \subsubsection{\textPrincipleLiskovSubstitution}
 \label{\textPrincipleLiskovSubstitution}
-Das Liskovsche Substitutionsprinzip besagt, dass ein Programm so geschrieben sein soll,
-dass eine Instanz auf eine Basisklasse durch eine Instanz einer von der Basisklasse
-abgeleiteten Klasse ausgetauscht werden können soll. Dadurch wird auch das
-\refLongP{\textPrincipleOpenClosed} impliziert.
+Das Liskovsche Substitutionsprinzip besagt, dass ein Computerprogramm weiter funktionsfähig bleiben muss, auch wenn Objekte vom Typ T durch Objekte vom Typ S ersetzt werden, wobei S eine Unterklasse von T darstellt (vgl. \cite{wiki:lsp}, Z. 5). Oder kurz gesagt \glqq Subclasses should be substitutable for their base classes\grqq(\cite{knoernschild2002java}, S. 11).
+
+Bei einer solchen Vorgehensweise ist es außerordentlich wichtig, dass das Prinzip \textbf{Design by Contract} eingehalten wird (vgl. \cite{goll2014architektur}, S. 5), damit das Computerprogramm weiterhin richtig funktioniert. Nach außen hin müssen die Operationen beider Klassen in allen Fällen gleich funktionieren.
+
+Die logische Konsequenz dieses Prinzips ist eine verbesserte Erweiterbarkeit und Korrektheit (vgl. \cite{itDesignersSOLID}, S. 2), da Funktionalität relativ einfach angepasst werden kann, ohne bestehenden Code zu verändern. 
+Dadurch wird auch das \refLongP{\textPrincipleOpenClosed} impliziert.
 
 
 \subsubsection{\textPrincipleInterfaceSegregation}
 \label{\textPrincipleInterfaceSegregation}
+Das Interface Segregation Principle (ISP), oder zu deutsch ''Schnittstellenaufteilungsprinzip'' (\cite{wiki:isp}, Zeile 1), verlangt, dass Schnittstellen jeweils auf einen Aufgabenbereich zugeschnitten sind.
+Anstatt einer großen Schnittstelle soll für jeden Aufgabenbereich eine eigene
+Schnittstelle definiert werden, die keine Abhängigkeiten zu anderen Teilen des Programms 
+aufbaut, die für die eine Aufgabe nicht benötigt werden.
+Im Grunde genommen entspricht dies dem  \refLongP{\textPrincipleSingleResponsibility} für Schnittstellen.
+
+Anderen Programmteilen wird dadurch ermöglicht mit Schnittstellen arbeiten zu können, ohne andere nicht benötigte Abhängigkeiten zu bilden: ''Clients [oder andere Programmteile] sollten nicht dazu gezwungen werden, von Interfaces abzuhängen, die sie gar nicht brauchen'' (vgl. \cite{goll2014architektur} S. 10).
+
 
 \subsubsection{\textPrincipleDependencyInversion}
 \label{\textPrincipleDependencyInversion}
