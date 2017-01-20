@@ -56,6 +56,7 @@
 	]{biblatex}
 \makeatletter % se great overlord fix http://tex.stackexchange.com/questions/311426/bibliography-error-use-of-blxbblverbaddi-doesnt-match-its-definition-ve
 \def\blx@maxline{77}
+\def\maxwidth#1{\ifdim\Gin@nat@width>#1 #1\else\Gin@nat@width\fi}
 \makeatother
 % add our bibliography source file
 \addbibresource{lit.bib}
@@ -150,6 +151,9 @@
 
 \newcommand{\textMeetingFirst}{Protokoll zum Kundentreffen am 13. Dezember 2016}
 \newcommand{\textMeetingSecond}{Protokoll zum Kundentreffen am 22. Dezember 2016}
+
+\newcommand{\textFlowElements}{Elemente}
+\newcommand{\textFlowNotation}{Notation}
 
 
 
