@@ -18,7 +18,7 @@ Die Teilbereiche des Projekts wurden in verschieden Module aufgeteilt.
 
 Der in Abbildung \ref{mod_dep_view} gezeigte Graph enthält keine Abhängigkeiten nach JUnit und
 dem JDK aus Gründen der Übersicht. Zudem ist ControlsFX \cite{controlsfx} kein eigen
-entwickeltes Modul und wird lediglich aus gründen der Vollständigkeit aufgeführt.
+entwickeltes Modul und wird lediglich aus Gründen der Vollständigkeit aufgeführt.
 
 Anzumerken ist auch, dass bis in das \refLongP{\textModCore} keine Abhängigkeiten
 gegenüber einer UI-Bibliothek existieren. Das Modul \hyperref[mod_data-ui]{Data-UI} stellt
@@ -34,8 +34,7 @@ bleibt jedoch Benutzeroberflächenunabhängig.
 \end{figure}
 \depBox{\refLongP{\textModData}, \refLongP{\textModDataUI}, \refLongP{\textModStorage}}
 
-Modulerklräung hier
-Core inklusive Abhängigkeiten enthalten alle Logik. Falls eine ander Benutzeroberfläche erstellt,
+Das Modul \textit{core} (inklusive Abhängigkeiten) enthält alle Logik. Falls eine andere Benutzeroberfläche erstellt,
 oder die Logik anderweitig benötigt wird, sollte auf dieses Modul die Abhängigkeit aufgebaut werden.
 
 
@@ -130,10 +129,18 @@ so wäre das Modul \textit{data-ui} der entsprechende Platz für die Datenmodell
 \end{figure}
 \depBox{\refLongP{\textModModel}, ControlsFX (ext. \cite{controlsfx})}
 
-Modulerklräung hier
+Das \textit{javafx} Modul enthält die Implementierung der Benutzteroberfläche. Hierbei enthält es Abhängigkeiten
+zu den Datenmodellen und weiterer Geschäftslogik. Neben der Benutzeroberfläche sind hier auch einige Ressourcen
+enthalten, beispielsweise Bilder, Stylesheets oder die Resource-Bundles, die die übersetzten Texte enthalten.
+Das Programm kann über die main-Methode in der Klasse \textit{Main} gestartet werden.
+
+\subsubsection{Erscheinungsbild}
+Um \textFlowDesign{} von anderen JavaFX-Applikationen zu differenzieren wurde das Aussehen der Oberflächenelemente
+komplett überarbeitet. Hierfür wurden alle verwendeten Elemente über entsprechende CSS-Regeln bearbeitet.
+Ansonsten
 
 
-
+\subsubsection{•}
 
 \subsection{\textModModel}
 \label{\textModModel}
@@ -145,10 +152,7 @@ Modulerklräung hier
 
 Dieses Modul wurde erst spät im Entwicklungsprozess mit einbezogen und beinhaltet bisher noch keine Klassen.
 Es ist allerdings dafür vorgesehen, Klassen zu enthalten, die für die Oberfläche gebraucht werden, allerdings
-unabhängig vom verwendeten Windowing-Toolkit sind.
-
-
-
+unabhängig vom verwendeten UI-Toolkit sind.
 
 \subsection{\textModStorage}
 \label{\textModStorage}
