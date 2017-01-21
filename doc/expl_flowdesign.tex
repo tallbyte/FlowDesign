@@ -122,9 +122,9 @@ Tabelle aufgelistet. Wie bereits in \refShort{\textFlowElements} erwähnt, werde
 	\hline
 	(x, y) & Ein Parameter vom Typ ''x'' und ein weiterer vom Typ ''y'' \\
 	\hline
-	(y)* & Liste vom Typ ''y'' \\
+	(y*) & Liste vom Typ ''y'' \\
 	\hline
-	(x, (y)*) & Ein Parameter vom Typ ''x'' und eine Liste vom Typ ''y'' \\
+	(x, y*) & Ein Parameter vom Typ ''x'' und eine Liste vom Typ ''y'' \\
 	\hline
 	\{y\} & Mehrfachaufruf mit einem Parameter vom Typ ''y'' \\
 	\hline
@@ -132,5 +132,5 @@ Tabelle aufgelistet. Wie bereits in \refShort{\textFlowElements} erwähnt, werde
 \end{center}
 
 Abbildungen \ref{flowElementConnectedComment} und \ref{flowElementConnectedDep} zeigen wie die Operation ''printf'' mit
-der folgenden Datentyp Notation aufgerufen wird: ''(char*, (void)*)''. Dies bedeutet, dass ein char-Pointer und eine Liste
-von void-Pointern übergeben werden.
+der folgenden Datentyp Notation aufgerufen wird: ''(String, Object*)''. Dies bedeutet, dass ein String und eine Liste
+von Objecten übergeben wird.
