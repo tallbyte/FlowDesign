@@ -56,7 +56,7 @@ die referentielle Integrität bzw. Vollständigkeit der Daten zu gewährleisten 
 Zur Kommunikation innerhalb dieses Moduls wird größtenteils das ObservableValue-Pattern verwendet. Hierbei wird auf
 die Java-eigene Klasse \textit{PropertyChangeSupport} zurückgegriffen. Diese Klasse ermöglicht das Registrieren
 von Handlern bzw. das Auslösen von Events. Zudem unterstützt JavaFX diese Art von ObservableValue, wodurch es
-möglich ist, im \textit{javafx} Modul Properties von JavaFX mit Properties des Datenmodells zu verbinden. Beispielhaft
+möglich ist, im \refLongP{\textModJavaFX} Properties von JavaFX mit Properties des Datenmodells zu verbinden. Beispielhaft
 sieht eine solche Klasse folgendermaßen aus.
 
 \begin{figure}[H]
@@ -114,12 +114,12 @@ Eigenschaften zuzugreifen.
 \end{figure}
 \depBox{Keine}
 
-Im Modul \textit{data-ui} befinden sich Datenmodelle, die nicht direkt in die eigentliche Geschäftslogik
+Im diesem Modul befinden sich Datenmodelle, die nicht direkt in die eigentliche Geschäftslogik
 eingebaut werden können / sollen, sondern eigentlich nur für die Oberfläche selbst benötigt werden.
 
 Ein Beispiel hierfür ist das Changelog, welches beim Start der Anwendung geöffnet werden kann.
 Sollte in Zukunft beispielsweise die Möglichkeit eingebaut werden, Oberflächeneinstellungen zu speichern, 
-so wäre das Modul \textit{data-ui} der entsprechende Platz für die Datenmodelle.
+so wäre dieses Modul der entsprechende Platz für die Datenmodelle.
 
 \subsection{\textModJavaFX}
 \label{\textModJavaFX}
@@ -129,7 +129,7 @@ so wäre das Modul \textit{data-ui} der entsprechende Platz für die Datenmodell
 \end{figure}
 \depBox{\refLongP{\textModModel}, ControlsFX (ext. \cite{controlsfx})}
 
-Das \textit{javafx} Modul enthält die Implementierung der Benutzteroberfläche. Hierbei enthält es Abhängigkeiten
+Dieses Modul enthält die Implementierung der Benutzteroberfläche. Hierbei enthält es Abhängigkeiten
 zu den Datenmodellen und weiterer Geschäftslogik. Neben der Benutzeroberfläche sind hier auch einige Ressourcen
 enthalten, beispielsweise Bilder, Stylesheets oder die Resource-Bundles, die die übersetzten Texte enthalten.
 Das Programm kann über die main-Methode in der Klasse \textit{Main} gestartet werden.
@@ -165,12 +165,12 @@ unabhängig vom verwendeten UI-Toolkit sind.
 \end{figure}
 \depBox{\refLongP{\textModData}, \refLongP{\textModDataUI}}
 
-Das Storage Modul enthält sowohl eine abstrake Definition von \textit{Serializern} und \textit{StorageHandlern}
-als auch eine Implementation für XML inklusive \textit{Serializer} für Komponenten in \refLongP{\textModData} und
+Dieses Modul enthält sowohl eine abstrake Definition von \textit{Serializer}n und \textit{StorageHandler}n
+als auch eine Implementation für XML inklusive \textit{Serializer} für Komponenten im \refLongP{\textModData} und
 \refLongP{\textModDataUI}.
 
 \subsubsection{StorageHandler}
-Die Klasse \textit{StorageHandler} ist hält \textit{Storage}s und verteilt Serialisierungsaufgaben an
+Die Klasse \textit{StorageHandler} hält \textit{Storage}s und verteilt Serialisierungsaufgaben an
 das entsprechende \textit{Storage} anhand eines Textidentifikators (für XML lautet dieser 'xml').
 Eine weitere \textit{Storage} Implementation kann anhand eines neuen Textidentifkators registriert werden,
 wodurch ein Umstieg von XML auf JSON, SQL oder eine andere Implementation vereinfacht wird.
