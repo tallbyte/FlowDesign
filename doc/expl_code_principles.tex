@@ -15,7 +15,7 @@ Das Single-Responsibility-Prinzip besagt, dass eine Klasse, Methode oder Funktio
 nur einer Aufgabe verschrieben sein soll. So soll die Funktion zu Berechnung einer
 Potenz nur dies tun und nicht gleichzeitig das Ergebnis zbsp auf einer GUI ausgeben.
 Dadurch entwickelt sich ein Art Baukastenprinzip bei dem die unterschiedlichen 
-Funktionen einfach miteinander verknüpft und oder ausgetauscht werden können, da
+Funktionen einfach miteinander verknüpft und / oder ausgetauscht werden können, da
 keine unnötigen Abhängigkeiten aufgebaut werden. ''Gottklassen'', die viele
 verschiedene Funktionalitäten vereinen, sind nicht erlaubt.
 
@@ -38,7 +38,7 @@ Dadurch wird auch das \refLongP{\textPrincipleOpenClosed} impliziert.
 
 \subsubsection{\textPrincipleInterfaceSegregation}
 \label{\textPrincipleInterfaceSegregation}
-Das Interface Segregation Principle (ISP), oder zu deutsch ''Schnittstellenaufteilungsprinzip'' (\cite{wiki:isp}, Zeile 1), verlangt, dass Schnittstellen jeweils auf einen Aufgabenbereich zugeschnitten sind.
+Das Interface Segregation Principle verlangt, dass Schnittstellen jeweils auf einen Aufgabenbereich zugeschnitten sind.
 Anstatt einer großen Schnittstelle soll für jeden Aufgabenbereich eine eigene
 Schnittstelle definiert werden, die keine Abhängigkeiten zu anderen Teilen des Programms 
 aufbaut, die für die eine Aufgabe nicht benötigt werden.
@@ -49,8 +49,8 @@ Anderen Programmteilen wird dadurch ermöglicht mit Schnittstellen arbeiten zu k
 
 \subsubsection{\textPrincipleDependencyInversion}
 \label{\textPrincipleDependencyInversion}
-Das Dependency Inversion Principle, oder zu deutsch ''Abhängigkeits-Umkehr-Prinzip'' (\cite{wiki:dip}, Zeile 1),
-beschreibt das bei hierarchischer Verteilung von Modulen, Module niedrigerer Ebenen von Modulen höherer Ebenen abhängen.
+Das Dependency Inversion Principle beschreibt das bei hierarchischer Verteilung von Modulen,
+Module niedrigerer Ebenen von Modulen höherer Ebenen abhängen.
 Module höherer Ebenen stellen somit Anforderungen durch Interfaces, die Module niedrigerer Ebenen zu implementieren haben.
 Meist sind diese Interfaces dabei in eigene Module aufgeteilt. Die Abhängigkeit ist somit umgekehrt wie traditionell
 zuerst zu vermuten sei.
