@@ -1,10 +1,23 @@
 \section{Aufbau Diagramm-Element}
+\subsection{Properties}
+Ein Diagramm-Element hat mindestens sechs Properties:
+\begin{itemize}
+\item X-Koordinate
+\item Y-Koordinate
+\item Breite
+\item Höhe
+\item Text
+\item Farbe
+\end{itemize}
+
 \subsection{Joint-Group}
-Eine Joint-Group ist die Implementierte Art und Weise wie gleichartige Joints gruppiert werden.
+Eine Joint-Group ist die implementierte Art und Weise wie gleichartige Joints gruppiert werden.
 Eine solche Gruppe besitzt Maximal- bzw. Minimalzahlen von Joints, wobei neue Joints durch eine
 Factory erstellt werden. Alle diese Informationen werden beim Konstruktoraufruf übergeben.
-Elemente wie die Operation haben beispielsweise view Joint-Groups. Zwei für Flow- bzw. Abhängigkeits-Eingang
-und zwei für Flow- bzw. Abhängigkeits-Ausgang.
+Elemente wie die Operation haben beispielsweise vier Joint-Groups. Zwei für Flow- bzw. Abhängigkeits-Eingang
+und zwei für Flow- bzw. Abhängigkeits-Ausgang.\\
+Solange Maximal- bzw. Minmalanzahl der Joints eingehalten werden können dynamisch Joints hinzugefügt bzw.
+entfernt werden (von der Oberfläche allerdings noch nicht unterstützt).
 
 \subsection{Joint}
 Ein Joint ist ein Verbindungsknoten. Je nach Konfiguration kann ein Joint als Eingang, Ausgang oder beides dienen.
@@ -50,7 +63,7 @@ Das Diagramm hat keine eigentliche View. Diese Aufgabe wird direkt von der Klass
 \subsubsection{Handler}
 Der \textit{DiagramHandler} ist die Diagramm-spezifische Schnittstelle, die Aufgaben wie die Erstellung von neuen
 Diagramm-Instanzen oder die Bereitstellung verfügbarer Properties übernimmt. Zur Vereinfachung gibt es bereits eine
-abstrakte Klasse, die die komplexesten Aspekte des Intefaces \textit{DiagramHandler} verbirgt. Diese kann erweitert
+abstrakte Klasse, die die komplexesten Aspekte des Interfaces \textit{DiagramHandler} verbirgt. Diese kann erweitert
 werden womit folgende Klasse im Kontext des Beispiels zu erstellen ist.
 
 \begin{figure}[H]
@@ -300,8 +313,8 @@ können. Zudem ist die Art der Verbindung, welche von den Joints erstellt werden
 (ein Kreis am Ziel).
 \subsubsection{View}
 Damit das neue Element später auch auf der Zeichenfläche angezeigt werden kann, muss erst eine View dafür erstellt
-werden. Alle Views müssen die Basis-Klasse \textit{ElementNode} erweitern. Diese stellt bereits einige wichtig
-Funktionen wie das verteilen von Joints auf der Oberfläche oder das vergrößern / verkleinern zur Verfügung.
+werden. Alle Views müssen die Basis-Klasse \textit{ElementNode} erweitern. Diese stellt bereits einige wichtige
+Funktionen wie das verteilen von Joints auf der Oberfläche oder das Vergrößern / Verkleinern zur Verfügung.
 
 \begin{figure}[H]
 	\centering
