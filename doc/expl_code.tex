@@ -10,18 +10,18 @@ Ein Diagramm-Element hat mindestens sechs Properties:
 \item Farbe
 \end{itemize}
 
+\subsection{Joint}
+Ein Joint ist ein Verbindungsknoten. Je nach Konfiguration kann ein Joint als Eingang, Ausgang oder beides dienen.
+Bisher gibt es sowohl einen \textit{FlowJoint} als auch einen \textit{DependencyJoint}.
+
 \subsection{Joint-Group}
 Eine Joint-Group ist die implementierte Art und Weise wie gleichartige Joints gruppiert werden.
 Eine solche Gruppe besitzt Maximal- bzw. Minimalzahlen von Joints, wobei neue Joints durch eine
 Factory erstellt werden. Alle diese Informationen werden beim Konstruktoraufruf übergeben.
 Elemente wie die Operation haben beispielsweise vier Joint-Groups. Zwei für Flow- bzw. Abhängigkeits-Eingang
 und zwei für Flow- bzw. Abhängigkeits-Ausgang.\\
-Solange Maximal- bzw. Minmalanzahl der Joints eingehalten werden können dynamisch Joints hinzugefügt bzw.
+Solange Maximal- bzw. Minmalanzahl der Joints eingehalten werden, können dynamisch Joints hinzugefügt bzw.
 entfernt werden (von der Oberfläche allerdings noch nicht unterstützt).
-
-\subsection{Joint}
-Ein Joint ist ein Verbindungsknoten. Je nach Konfiguration kann ein Joint als Eingang, Ausgang oder beides dienen.
-Bisher gibt es sowohl einen \textit{FlowJoint} als auch einen \textit{DependencyJoint}.
 
 \pagebreak
 \section{Erweiterung}
@@ -157,7 +157,7 @@ public class XmlExampleDiagramSerializer extends XmlDiagramSerializer implements
 \end{figure}
 
 Verwirrend mag vermutlich die \textit{instatiate()} Implementation aussehen. Je nach zu serialisierender
-Klasse, muss evtl. eine gültige und damit referenzierbare Instanz vor dem Laden dessen Inhalts verfügbar
+Klasse muss evtl. eine gültige und damit referenzierbare Instanz vor dem Laden dessen Inhalts verfügbar
 sein (zbsp. bei komplexeren Verknüpfungen). Falls dies der Fall sein kann (wie bei den \textit{Element}en),
 muss hier eine gültige neue Instanz zurückgegeben werden. Bei den Diagrammen ist dies jedoch nicht der
 Fall, somit kann hier \textit{null} zurückgegeben werden. Das bedeutet aber auch, dass der Parameter
@@ -259,7 +259,7 @@ Blöcken zusammengefasst, wie für \textit{MaskDiagram} beispielhaft zu sehen is
 
 
 \subsubsection{Strings}
-Da der Projektbaum und andere UI-Elemente automatisch für alle verfügbaren Diagrammtypen erstellt werden müssen
+Da der Projektbaum und andere UI-Elemente automatisch für alle verfügbaren Diagrammtypen erstellt werden, müssen
 die angezeigten Texte extern verwaltet werden. Hierfür wird das Java-eigene Ressourcensystem verwendet. Im Ressourcen-
 Verzeichnis in der Maven-Struktur befindet sich das Resource-Bundle \textit{MessagesBundle}. Hier müssen folgende Strings
 bereitgestellt werden:
@@ -397,7 +397,9 @@ Hier muss im Konstruktor folgende Zeile eingefügt werden.
 \begin{figure}[H]
 	\centering
 	\begin{lstlisting}
-addEntries("ExampleElement", ExampleElement.class,
+addEntries(
+        "ExampleElement",
+        ExampleElement.class,
         ExampleElement::new,
         ExampleDiagramImage::new,
         ExampleElementNode::new
@@ -425,13 +427,21 @@ public class XmlExampleElementSerializer extends XmlElementSerializer<ExampleEle
     }
 
     @Override
-    protected Map<String, String> saveAttributes(Map<String, String> attributes, ExampleElement element, XmlSerializationHelper helper) throws XMLStreamException {
+    protected Map<String, String> saveAttributes(
+            Map<String, String> attributes,
+            ExampleElement element,
+            XmlSerializationHelper helper) throws XMLStreamException {
+            
         // add element specific attributes to the map before returning
         return super.saveAttributes(attributes, element, helper);
     }
 
     @Override
-    protected void loadAttributes(Map<String, String> attributes, ExampleElement element, XmlDeserializationHelper helper) throws XMLStreamException {
+    protected void loadAttributes(
+            Map<String, String> attributes,
+            ExampleElement element,
+            XmlDeserializationHelper helper) throws XMLStreamException {
+            
         super.loadAttributes(attributes, element, helper);
         // load more element specific attributes from the map here
     }
