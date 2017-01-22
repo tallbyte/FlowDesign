@@ -9,7 +9,7 @@
 \subsection{Modulübersicht}
 Die Teilbereiche des Projekts wurden in verschieden Module aufgeteilt.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth]{module_dependencies.png}
 	\caption{Abhängigkeitsgraph der Module}
@@ -28,7 +28,7 @@ bleibt jedoch Benutzeroberflächenunabhängig.
 
 \subsection{\textModCore}
 \label{\textModCore}
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth]{module_dependencies_core.png}
 \end{figure}
@@ -42,15 +42,15 @@ oder die Logik anderweitig benötigt wird, sollte auf dieses Modul die Abhängig
 
 \subsection{\textModData}
 \label{\textModData}
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth]{module_dependencies_data.png}
 \end{figure}
 \depBox{Keine}
 
-Das Modul \textit{data} enthält die Haupt-Geschäftslogik und alle Datenmodelle. Da viel Logik nur darin besteht
+Das Modul enthält die Haupt-Geschäftslogik und alle Datenmodelle. Da viel Logik nur darin besteht
 die referentielle Integrität bzw. Vollständigkeit der Daten zu gewährleisten ist dieses Modul im Gegensatz zum
-Modul \textit{core} relativ schwergewichtig.
+\refLongP{\textModCore} relativ schwergewichtig.
 
 \subsubsection{Bindings}
 Zur Kommunikation innerhalb dieses Moduls wird größtenteils das ObservableValue-Pattern verwendet. Hierbei wird auf
@@ -59,7 +59,7 @@ von Handlern bzw. das Auslösen von Events. Zudem unterstützt JavaFX diese Art 
 möglich ist, im \textit{javafx} Modul Properties von JavaFX mit Properties des Datenmodells zu verbinden. Beispielhaft
 sieht eine solche Klasse folgendermaßen aus.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\begin{lstlisting}
 public class Bean {
@@ -108,7 +108,7 @@ Objekte dieser Klassen enthalten entsprechend Möglichkeiten auf die Kind-Elemen
 Eigenschaften zuzugreifen.
 \subsection{\textModDataUI}
 \label{\textModDataUI}
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth]{module_dependencies_data-ui.png}
 \end{figure}
@@ -123,7 +123,7 @@ so wäre das Modul \textit{data-ui} der entsprechende Platz für die Datenmodell
 
 \subsection{\textModJavaFX}
 \label{\textModJavaFX}
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth]{module_dependencies_javafx.png}
 \end{figure}
@@ -147,7 +147,7 @@ einfachen Textdateien mit Key-Value Paaren (durch ein Gleichzeichen getrennt).
 
 \subsection{\textModModel}
 \label{\textModModel}
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth]{module_dependencies_model.png}
 \end{figure}
@@ -159,7 +159,7 @@ unabhängig vom verwendeten UI-Toolkit sind.
 
 \subsection{\textModStorage}
 \label{\textModStorage}
-\begin{figure}[h!]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=.8\textwidth]{module_dependencies_storage.png}
 \end{figure}
